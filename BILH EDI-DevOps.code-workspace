@@ -1,0 +1,119 @@
+{
+    "folders": [
+        {
+            "name": "FILES",
+            "path": "/files"
+        },
+        {
+            "name": "HOME",
+            "path": "/home/theflyingape"
+        },
+        {
+            "name": "bilh-edi-devops",
+            "path": "."
+        }
+    ],
+    "settings": {
+        "editor.cursorBlinking": "blink",
+        "editor.cursorStyle": "block",
+        "editor.fontFamily": "'Victor Mono','Noto Sans Mono','Noto Color Emoji',Consolas,monospace",
+        "editor.fontLigatures": true,
+        "editor.fontSize": 16,
+        "editor.formatOnSave": false,
+        "editor.minimap.enabled": false,
+        "editor.quickSuggestions": {
+        	"strings": true
+        },
+        "editor.quickSuggestionsDelay": 100,
+        "editor.tabSize": 4,
+        "editor.wordWrap": "on",
+        "files.associations": {
+        	"*.css": "tailwindcss"
+        },
+        "intersystems.servers": {
+            "hcdev~iris": {
+                "webServer": {
+                    "scheme": "https",
+                    "host": "hciedev.laheyhealth.org",
+                    "port": 443
+                },
+                "description": "BILH HCDEV"
+            },
+            "hctest~iris": {
+                "webServer": {
+                    "scheme": "https",
+                    "host": "hcietst.laheyhealth.org",
+                    "port": 443
+                },
+                "description": "BILH HCTEST"
+            },
+            "hclive~iris": {
+                "webServer": {
+                    "scheme": "https",
+                    "host": "hcieprd.laheyhealth.org",
+                    "port": 443
+                },
+                "description": "BILH HCLIVE"
+            },
+            "/default": "hcdev~iris"
+        },
+        "objectscript.conn": {
+            "active": false,
+            "links": {
+                "SOAP Wizard": "${serverUrl}/isc/studio/templates/%25ZEN.Template.AddInWizard.SOAPWizard.cls?Namespace=${namespace}",
+                "XML Schema Wizard": "${serverUrl}/isc/studio/templates/%25ZEN.Template.AddInWizard.XMLSchemaWizard.cls?Namespace=${namespace}"
+            }
+        },
+        "objectscript.showExplorer": false,
+        "tailwindCSS.includeLanguages": {
+        	"plaintext": "vue"
+        },
+        "terminal.integrated.cursorBlinking": true,
+        "terminal.integrated.copyOnSelection": true,
+        "terminal.integrated.fontFamily": "'Noto Sans Mono','Noto Color Emoji','Lucida Console',Consolas,monospace",
+        "terminal.integrated.fontSize": 16,
+        "terminal.integrated.fontWeight": "400",
+        "terminal.integrated.fontWeightBold": "500",
+        "terminal.integrated.tabs.enabled": false,
+        "workbench.colorCustomizations": {
+            "terminal.background": "#000000",
+            "terminal.foreground": "#C0C0C0",
+            "terminal.ansiBlack": "#000000",
+            "terminal.ansiRed": "#8B0000",
+            "terminal.ansiGreen": "#228B22",
+            "terminal.ansiYellow": "#F4A460",
+            "terminal.ansiBlue": "#0000CD",
+            "terminal.ansiMagenta": "#BA55D3",
+            "terminal.ansiCyan": "#008B8B",
+            "terminal.ansiWhite": "#C0C0C0",
+            "terminal.ansiBrightBlack": "#696969",
+            "terminal.ansiBrightRed": "#FF0000",
+            "terminal.ansiBrightGreen": "#90EE90",
+            "terminal.ansiBrightYellow": "#FFD700",
+            "terminal.ansiBrightBlue": "#4169E1",
+            "terminal.ansiBrightMagenta": "#EE82EE",
+            "terminal.ansiBrightCyan": "#00FFFF",
+            "terminal.ansiBrightWhite": "#FFFAFA",
+            "terminalCursor.foreground": "#B0E0E6"
+        },
+        "workbench.colorTheme": "Solarized Dark",
+        "workbench.iconTheme": "vscode-icons",
+        "workbench.productIconTheme": "Default",
+        "workbench.sideBar.location": "right",
+        "terminal.integrated.sendKeybindingsToShell": true,
+        "accessibility.signals.terminalBell": {
+            "sound": "on"
+        },
+        "terminal.integrated.enableVisualBell": true,
+        "terminal.integrated.fontLigatures.enabled": true,
+    },
+    "extensions": {
+        "recommendations": [
+            "hediet.vscode-drawio",
+            "humao.rest-client",
+            "intersystems-community.objectscript-pack",
+            "ms-vscode.hexeditor",
+            "vscode-icons-team.vscode-icons"
+        ]
+    }
+}
