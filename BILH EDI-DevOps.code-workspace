@@ -1,12 +1,12 @@
 {
     "folders": [
         {
-            "name": "FILES",
-            "path": "/files"
+            "name": "HOME",
+            "path": "../.."
         },
         {
-            "name": "HOME",
-            "path": "/home/theflyingape"
+            "name": "FILES",
+            "path": "../../../../files"
         },
         {
             "name": "bilh-edi-devops",

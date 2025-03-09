@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     baseURL: '/dev-ops',
   },
   auth: {
-    baseURL: `http://hciedev.laheyhealth.org:${process.env.PORT || 3000}/dev-ops/api/auth`,
+    baseURL: `http://${process.env.HOST || 'hciedev.laheyhealth.org'}:${process.env.PORT || 3000}/dev-ops/api/auth`,
     isEnabled: true,
     disableServerSideAuth: false,
     globalAppMiddleware: true,
@@ -76,6 +76,11 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
+  ui: {
+    theme: {
+      colors: [ 'action' ]
+    }
+  },
 
   devtools: {
     enabled: true,
@@ -89,12 +94,11 @@ export default defineNuxtConfig({
     autoImport: true,
   },
   modules: ['@nuxt/ui', '@nuxt/eslint', '@sidebase/nuxt-auth', '@vueuse/nuxt'],
+
   build: {
     transpile: ['jsonwebtoken']
   },
-
-  compatibilityDate: '2024-11-27',
-
+  compatibilityDate: '2025-03-09',
   future: {
     compatibilityVersion: 4
   },

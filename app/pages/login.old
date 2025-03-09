@@ -1,3 +1,4 @@
+// replaced by SideMenu
 <script setup lang="ts">
 const { signIn } = useAuth()
 
