@@ -84,7 +84,7 @@ const items = ref([
                     label: 'Enterprise Monitor',
                     icon: 'i-lucide-building-2',
                     description: 'Displays the overall status of all running productions.',
-                    to: 'https://hcieprd.laheyhealth.org/csp/healthshare/hscustom/Ens.Enterprise.Portal.MonitorStatus.zen',
+                    to: 'https://hciedev.laheyhealth.org/csp/healthshare/hscustom/Ens.Enterprise.Portal.MonitorStatus.zen',
                     target: '_blank'
                 },
                 {
