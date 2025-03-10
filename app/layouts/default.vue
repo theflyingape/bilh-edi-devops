@@ -70,6 +70,33 @@ const items = ref([
             ],
         },
         {
+            label: 'Dasboards',
+            icon: 'i-lucide-chart-bar-stacked',
+            children: [
+                {
+                    label: 'Activity Monitor',
+                    icon: 'i-lucide-chart-no-axes-column',
+                    description: 'Trend counts and delivery service levels: by any Message Type and aggregated by an elapsed Time Period: minute to yearly',
+                    to: 'https://hcieprd.laheyhealth.org/csp/healthshare/hscustom/EDI.ActivityVolumeAndDuration.zen',
+                    target: '_blank'
+                },
+                {
+                    label: 'Enterprise Monitor',
+                    icon: 'i-lucide-building-2',
+                    description: 'Displays the overall status of all running productions.',
+                    to: 'https://hcieprd.laheyhealth.org/csp/healthshare/hscustom/Ens.Enterprise.Portal.MonitorStatus.zen',
+                    target: '_blank'
+                },
+                {
+                    label: 'Workday Payroll Ops',
+                    icon: 'i-lucide-list-collapse',
+                    description: 'The Workday interfaces showing the Prior and Current payroll cycles for SLA trending and comparison',
+                    to: 'https://hcieprd.laheyhealth.org/csp/healthshare/hscustom/EDI.WorkdayDashboard.zen',
+                    target: '_blank'
+                },
+            ]
+        },
+        {
             label: 'Productions',
             icon: 'i-lucide-database',
             children: [
