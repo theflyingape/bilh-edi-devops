@@ -1,5 +1,8 @@
 <template>
-    <UNavigationMenu orientation="horizontal" content-orientation="vertical" :items="items" class="w-full" />
+    <div class="flex flex-rows justify-items-center">
+        <div class="pl-4 w-11/12"><UNavigationMenu orientation="horizontal" content-orientation="vertical" :items="items" /></div>
+        <div class="m-auto"><ColorMode /></div>
+    </div>
     <SideMenu v-model:open="sideMenu" />
     <slot />
     {{ data }}
