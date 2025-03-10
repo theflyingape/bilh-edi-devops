@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     baseURL: '/dev-ops',
   },
   auth: {
-    baseURL: `http://${process.env.HOST || 'hciedev.laheyhealth.org'}:${process.env.PORT || 3000}/dev-ops/api/auth`,
+    baseURL: `http://${process.env.HOST || 'hciedev.laheyhealth.org'}:${process.env.PORT || 6500}/dev-ops/api/auth`,
     isEnabled: true,
     disableServerSideAuth: false,
     globalAppMiddleware: true,
