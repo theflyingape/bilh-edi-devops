@@ -1,6 +1,4 @@
-# Nuxt UI v3 Starter
-
-Look at [Nuxt docs](https://nuxt.com/docs/getting-started/introduction) and [Nuxt UI docs](https://ui3.nuxt.dev) to learn more.
+![screenshot](https://raw.githubusercontent.com/theflyingape/bilh-edi-devops/master/screenshot.png "DevOps portal")
 
 ## Setup
 
