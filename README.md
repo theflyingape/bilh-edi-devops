@@ -1,4 +1,4 @@
-![screenshot](https://raw.githubusercontent.com/theflyingape/bilh-edi-devops/master/screenshot.png "DevOps portal")
+![screenshot](https://github.com/theflyingape/bilh-edi-devops/blob/16ea6c0e7baf8bbc1f4d53086e0e6fd82c6cda85/screenshot.png "DevOps portal")
 
 ## Setup
 
