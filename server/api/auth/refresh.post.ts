@@ -2,11 +2,6 @@ import { createError, eventHandler, getRequestHeader, readBody } from 'h3'
 import { sign, verify } from 'jsonwebtoken'
 import { type JwtPayload, SECRET, extractToken, tokensByUser } from './login.post'
 
-/*
- * DISCLAIMER!
- * This is a demo implementation, please create your own handlers
- */
-
 export default eventHandler(async (event) => {
   const body = await readBody<{ refreshToken: string }>(event)
   const authorizationHeader = getRequestHeader(event, 'Authorization')

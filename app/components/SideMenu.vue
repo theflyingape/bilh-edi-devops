@@ -16,9 +16,8 @@
             </div>
         </div>
         <div v-else>
-            <!--UButton  to="/login">Login</UButton-->
             <UCard class="w-full">
-            <UForm :state="credentials" @submit.prevent="signIn(credentials)">
+            <UForm :state="credentials" @submit.prevent="login">
                 <div class="flex flex-col items-center justify-center gap-4">
                     <UFormField label="Username" name="username"><UInput v-model="credentials.username" type="string" placeholder="jsmith" /></UFormField>
                     <UFormField label="Password" name="password"><UInput v-model="credentials.password" type="password" /></UFormField>
@@ -38,7 +37,7 @@
                 <div><UButton label="Documentation" icon="i-lucide-square-play" to="https://ui3.nuxt.dev/getting-started/installation/nuxt" target="_blank" /></div>
             </div>
             <div class="justify-items-center">
-                <div><img src="~/assets/images/footer.png" class="filter drop-shadow-lg" /></div>
+                <div><img src="~/assets/images/footer.png" class="drop-shadow-lg" /></div>
             </div>
             <div class="justify-items-end">
                 <div class="pr-16"><em>value-add by Robert Hurst</em></div>
@@ -50,16 +49,34 @@
 </template>
 
 <script setup lang="ts">
+import { ModalInfo } from '#components'
 const { status, data, signIn, signOut } = useAuth()
+const overlay = useOverlay()
 const toast = useToast()
+const alert = ref('')
 
 const credentials = ref({
     username: '',
     password: '',
 })
 
+async function login() {
+    await signIn(credentials.value, {external: true}).catch(async (err) => {
+        open(`${err.statusCode}: ${err.statusMessage}`)
+    })
+}
+
 function logout() {
-    signOut()
-    toast.add({ title: 'Good-bye!', description: `logged off at ${new Date().toTimeString()} on ${new Date().toDateString()}`})
+    signOut({external: true})
+    //toast.add({ title: 'Good-bye!', description: `logged off at ${new Date().toTimeString()} on ${new Date().toDateString()}`})
+}
+
+const modal = overlay.create(ModalInfo, { props: { title: "" } })
+
+function open(title: string) {
+    modal.open()
+    modal.patch({
+        title: title,
+    })
 }
 </script>

@@ -5,3 +5,4 @@
 definePageMeta({ auth: false })
 const { token, refreshToken, data, status, lastRefreshedAt, signOut } = useAuth()
 </script>
+  

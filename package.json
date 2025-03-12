@@ -25,7 +25,7 @@
   "dependencies": {
     "@iconify-json/lucide": "^1.2.26",
     "@iconify-json/simple-icons": "^1.2.26",
-    "@nuxt/ui": "3.0.0-alpha.13",
+    "@nuxt/ui": "^3.0.0-beta.3",
     "@sidebase/nuxt-auth": "^0.10.0",
     "@vueuse/nuxt": "^12.8.2",
     "@xterm/addon-fit": "^0.10.0",

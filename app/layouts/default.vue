@@ -137,7 +137,7 @@ const items = ref([
                     label: 'Visual Studio Code',
                     icon: 'i-lucide-file-text',
                     description: 'IDE for Files & ObjectScript programming',
-                    to: '/code/'
+                    to: '/code'
                 },
             ]
         }

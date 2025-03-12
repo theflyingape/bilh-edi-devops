@@ -1,0 +1,7 @@
+# edit and rename to .env for production use
+AUTH_ORIGIN=https://hciedev.laheyhealth.org
+NUXT_APP_BASE_URL=/devops/
+NUXT_BASE_URL=https://hciedev.laheyhealth.org
+NUXT_JWT_ACCESS=60
+NUXT_JWT_REFRESH=43200
+NUXT_JWT_PASSWORD=AllowMe2elaborateYIThinkURana$$!

@@ -1,23 +1,23 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
-    baseURL: '/dev-ops',
+    baseURL: '/devops',
   },
   auth: {
-    baseURL: `http://${process.env.HOST || 'hciedev.laheyhealth.org'}:${process.env.PORT || 6500}/dev-ops/api/auth`,
+    baseURL: `http://${process.env.HOST || 'hciedev.laheyhealth.org'}:${process.env.PORT || 6500}/devops/api/auth`,
     isEnabled: true,
-    disableServerSideAuth: false,
     globalAppMiddleware: true,
-    originEnvKey: 'NUXT_BASE_URL',
+    //disableServerSideAuth: false,
+    //originEnvKey: 'AUTH_ORIGIN',
     provider: {
       type: 'local',
-      endpoints: {
-        signIn: { path: '/login', method: 'post' },
-        signOut: { path: '/logout', method: 'post' },
-        getSession: { path: '/session', method: 'get' },
-      },
+      //endpoints: {
+      //  signIn: { path: '/login', method: 'post' },
+      //  signOut: { path: '/logout', method: 'post' },
+      //  getSession: { path: '/session', method: 'get' },
+      //},
       pages: {
-        login: '/login'
+        login: '/'
       },
       session: {
         dataResponsePointer: "/",
@@ -32,7 +32,7 @@ export default defineNuxtConfig({
       },
       refresh: {
         isEnabled: true,
-        endpoint: { path: '/refresh', method: 'post' },
+        //endpoint: { path: '/refresh', method: 'post' },
         token: {
           signInResponseRefreshTokenPointer: '/token/refreshToken',
           refreshResponseTokenPointer: '',
@@ -55,7 +55,7 @@ export default defineNuxtConfig({
       // Whether to refresh the session every time the browser window is refocused.
       enableOnWindowFocus: true,
       // Whether to refresh the session every `X` milliseconds. Set this to `false` to turn it off. The session will only be refreshed if a session already exists.
-      enablePeriodically: 30000,
+      enablePeriodically: 20000,
       // Custom refresh handler - uncomment to use
       // handler: './config/AuthRefreshHandler'
     },

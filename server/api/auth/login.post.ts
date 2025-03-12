@@ -2,8 +2,11 @@ import { createError, eventHandler, readBody } from 'h3'
 import { sign } from 'jsonwebtoken'
 import { z } from 'zod'
 
-export const SECRET = process.env.NUXT_SESSION_PASSWORD || '!$ecure!'
-export const ACCESS_TOKEN_TTL = 60
+//  supply trivial values for testing -- make .env to better secure your site implementation
+const dev = process.dev
+export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || 30
+export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || 4 * 60 * 60
+export const SECRET = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
 
 export interface User {
   id: string,
@@ -15,7 +18,7 @@ export interface User {
 }
 
 export interface JwtPayload extends User {
-  scope: Array<'guest' | 'analyst' | 'developer' | 'admin'>
+  scope: Array<'guest' | 'user' | 'analyst' | 'developer' | 'admin'>
   exp?: number
 }
 
@@ -25,14 +28,13 @@ interface TokensByUser {
 }
 
 /**
- * Tokens storage
- * You will need to implement your own, connect with DB/etc.
+ * Tokens storage :: TO DO harden and stress-test
  */
 export const tokensByUser: Map<string, TokensByUser> = new Map()
 
 const credentialsSchema = z.object({
   username: z.string().min(3),
-  password: z.string().min(6)
+  password: z.string().min(dev ? 6 : 8)
 })
 
 export default defineEventHandler(async (event) => {
@@ -41,32 +43,65 @@ export default defineEventHandler(async (event) => {
   let session: JwtPayload = { id:username, enabled:false, scope:[] }
   let token = { token:{} }
 
-  if ( username == 'admin') {
-    if (password !== 'joshua') {
-      throw createError({
-        statusCode: 401,
-        message: 'Bad credentials'
-      })
+  //  this allows me to test out-of-band
+  if (dev) {
+    let name, comment, roles, valid = ''
+    let scope = session.scope
+    switch(username) {
+      case 'admin':
+        name = 'Professor Falken'
+        comment = 'Witness Protection'
+        roles = '%All'
+        scope = [ username ]
+        valid = 'joshua'
+        break
+      case 'dev':
+        name = 'Linus Torvalds'
+        comment = 'Linux moderator'
+        roles = '%Developer'
+        scope = [ 'developer' ]
+        valid = 'creator'
+        break
+      case 'ops':
+        name = 'Indiana Jones'
+        comment = 'Smooth operator'
+        roles = '%Operator'
+        scope = [ 'analyst' ]
+        valid = 'worker'
+        break
+      case 'user':
+        name = 'Snoopy'
+        comment = 'know-it-all'
+        roles = 'Training'
+        scope = [ username ]
+        valid = 'browser'
+        break
     }
+    if (valid && password !== valid) {
+        throw createError({
+          statusCode: 401,
+          message: 'bad credentials'
+        })
+    }
+    // TO DO: move to a generalized set of functions
     session = {
       id: username,
       enabled: true,
-      roles: '%All',
-      name: 'Professor Falken',
-      comment: 'Witness Protection',
+      roles: roles,
+      name: name,
+      comment: comment,
       loggedInAt: Date.now(),
-      scope: ['admin']
+      scope: scope
     }
 
     const tokenData: JwtPayload = session
     const accessToken = sign(tokenData, SECRET, {
-      expiresIn: ACCESS_TOKEN_TTL
+      expiresIn: <number>ACCESS_TOKEN_TTL
     })
     const refreshToken = sign(tokenData, SECRET, {
-      expiresIn: 60 * 60 * 12
+      expiresIn: <number>REFRESH_TOKEN_TTL
     })
   
-    // Naive implementation - please implement properly yourself!
     const userTokens: TokensByUser = tokensByUser.get(username) ?? {
       access: new Map(),
       refresh: new Map()
@@ -87,7 +122,7 @@ export default defineEventHandler(async (event) => {
       if (res.status == 401)
         throw createError({
           statusCode: 401,
-          message: 'Bad credentials'
+          message: 'bad credentials'
         })
       await res.json().then(async (hcie) => {
         session = {
@@ -102,10 +137,10 @@ export default defineEventHandler(async (event) => {
 
         const tokenData: JwtPayload = session
         const accessToken = sign(tokenData, SECRET, {
-          expiresIn: ACCESS_TOKEN_TTL
+          expiresIn: <number>ACCESS_TOKEN_TTL
         })
         const refreshToken = sign(tokenData, SECRET, {
-          expiresIn: 60 * 60 * 12
+          expiresIn: <number>REFRESH_TOKEN_TTL
         })
       
         // Naive implementation - please implement properly yourself!
@@ -126,13 +161,14 @@ export default defineEventHandler(async (event) => {
       console.error('login() error', err)
       throw createError({
         statusCode: 401,
-        message: 'Mishandled credentials'
+        message: 'mishandled credentials'
       })
     }
   })
   return token
 })
 
+//  TO DO: determine purpose, unclear why their playground had this here
 export function extractToken(authorizationHeader: string) {
   return authorizationHeader.startsWith('Bearer ')
     ? authorizationHeader.slice(7)

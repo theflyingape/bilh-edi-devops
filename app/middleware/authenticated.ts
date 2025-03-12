@@ -1,9 +1,9 @@
 export default defineNuxtRouteMiddleware(() => {
-    // redirect the user to the login screen if they're not authenticated
+    // redirect the user to the home page if they're not authenticated
     definePageMeta({
       auth: {
-        unauthenticatedOnly: false,
-        navigateAuthenticatedTo: '/login'
+        unauthenticatedOnly: true,
+        navigateAuthenticatedTo: '/help'
       }
     })
   })

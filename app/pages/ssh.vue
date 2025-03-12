@@ -1,5 +1,5 @@
 <template>
-    <Placeholder class="h-full" />
+    <!--Placeholder class="h-full" /-->
     <div id="monitor" style="align-items: center; background: #3f3933; border-radius: 1rem; height: 100%; margin: 12px auto; overflow: hidden; padding: 12px; width: 1000px">
         <div id="terminal" style="position:relative;"></div>
     </div>
