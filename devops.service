@@ -1,0 +1,20 @@
+[Unit]
+Description=EDI DevOps team portal
+After=local-fs.target network-online.target
+
+[Service]
+Type=simple
+#User=root
+#Group=wheel
+#Environment=TERM=xterm-256color
+ExecStartPre=/bin/npm run build
+ExecStart=/bin/npm run preview
+KillMode=process
+Restart=on-failure
+RestartSec=15
+SyslogIdentifier=DevOps
+WorkingDirectory=/opt/devops
+#TasksMax=200
+
+[Install]
+WantedBy=multi-user.target

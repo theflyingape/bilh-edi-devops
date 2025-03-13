@@ -7,7 +7,7 @@
   "homepage": "https://hciedev.laheyhealth.org/devops",
   "repository": {
     "type": "github",
-    "url": "https://github.com/theflyingape/edi-devops"
+    "url": "https://github.com/theflyingape/bilh-edi-devops"
   },
   "engines": {
     "node": ">=18"

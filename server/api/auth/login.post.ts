@@ -4,8 +4,8 @@ import { z } from 'zod'
 
 //  supply trivial values for testing -- make .env to better secure your site implementation
 const dev = process.dev
-export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || 30
-export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || 4 * 60 * 60
+export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || '30s'
+export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '1h'
 export const SECRET = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
 
 export interface User {
@@ -96,10 +96,10 @@ export default defineEventHandler(async (event) => {
 
     const tokenData: JwtPayload = session
     const accessToken = sign(tokenData, SECRET, {
-      expiresIn: <number>ACCESS_TOKEN_TTL
+      expiresIn: ACCESS_TOKEN_TTL
     })
     const refreshToken = sign(tokenData, SECRET, {
-      expiresIn: <number>REFRESH_TOKEN_TTL
+      expiresIn: REFRESH_TOKEN_TTL
     })
   
     const userTokens: TokensByUser = tokensByUser.get(username) ?? {
@@ -138,10 +138,10 @@ export default defineEventHandler(async (event) => {
 
         const tokenData: JwtPayload = session
         const accessToken = sign(tokenData, SECRET, {
-          expiresIn: <number>ACCESS_TOKEN_TTL
+          expiresIn: ACCESS_TOKEN_TTL
         })
         const refreshToken = sign(tokenData, SECRET, {
-          expiresIn: <number>REFRESH_TOKEN_TTL
+          expiresIn: REFRESH_TOKEN_TTL
         })
       
         // Naive implementation - please implement properly yourself!
