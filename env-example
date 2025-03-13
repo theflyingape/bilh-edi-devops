@@ -5,3 +5,4 @@ NUXT_BASE_URL=https://hciedev.laheyhealth.org
 NUXT_JWT_ACCESS=30s
 NUXT_JWT_REFRESH=10h
 NUXT_JWT_PASSWORD=AllowMe2elaborateYIThinkURana$$!
+NUXT_UI_PRO_LICENSE=

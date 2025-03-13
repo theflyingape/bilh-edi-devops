@@ -116,9 +116,12 @@ export default defineEventHandler(async (event) => {
     return token
   }
 
-  await fetch(`https://hciedev.laheyhealth.org/api/hcie/user/${username}`,
-    { headers: { Authorization: `Basic ${auth}` } }
-  ).then(async (res) => {
+  await fetch(`https://hciedev.laheyhealth.org/api/hcie/user/${username}`, {
+    headers: {
+      Authorization: `Basic ${auth}`,
+      mode: 'no-cors',
+    }
+  }).then(async (res) => {
     try {
       if (res.status == 401)
         throw createError({

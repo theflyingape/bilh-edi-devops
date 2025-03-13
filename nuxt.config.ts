@@ -4,11 +4,11 @@ export default defineNuxtConfig({
     baseURL: '/devops',
   },
   auth: {
-    baseURL: `http://${process.env.HOST || 'hciedev.laheyhealth.org'}:${process.env.PORT || 6500}/devops/api/auth`,
+    baseURL: 'api/auth',
     isEnabled: true,
     globalAppMiddleware: true,
     //disableServerSideAuth: false,
-    //originEnvKey: 'AUTH_ORIGIN',
+    originEnvKey: 'AUTH_ORIGIN',
     provider: {
       type: 'local',
       //endpoints: {
@@ -55,7 +55,7 @@ export default defineNuxtConfig({
       // Whether to refresh the session every time the browser window is refocused.
       enableOnWindowFocus: true,
       // Whether to refresh the session every `X` milliseconds. Set this to `false` to turn it off. The session will only be refreshed if a session already exists.
-      enablePeriodically: 20000,
+      enablePeriodically: 40000,
       // Custom refresh handler - uncomment to use
       // handler: './config/AuthRefreshHandler'
     },
@@ -86,14 +86,26 @@ export default defineNuxtConfig({
     enabled: true,
   },
   devServer: {
-    host: 'hciedev.laheyhealth.org',
+    host: '0.0.0.0',
     port: 6500,
+  },
+  vite: {
+    preview: {
+      allowedHosts: ['hciedev.laheyhealth.org']
+    },
+    server: {
+      allowedHosts: ['hciedev.laheyhealth.org'],
+      hmr: {
+        protocol: 'ws',
+        host: 'localhost'
+      }
+    }
   },
 
   imports: {
     autoImport: true,
   },
-  modules: ['@nuxt/ui', '@nuxt/eslint', '@sidebase/nuxt-auth', '@vueuse/nuxt'],
+  modules: ['@nuxt/ui-pro', '@nuxt/eslint', '@sidebase/nuxt-auth', '@vueuse/nuxt'],
 
   build: {
     transpile: ['jsonwebtoken']
