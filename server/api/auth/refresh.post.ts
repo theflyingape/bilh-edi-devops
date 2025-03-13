@@ -53,6 +53,7 @@ export default eventHandler(async (event) => {
   const user: JwtPayload = {
     id: decoded.id,
     enabled: decoded.enabled,
+    groups: decoded.groups,
     roles: decoded.roles,
     name: decoded.name,
     comment: decoded.comment,

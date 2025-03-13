@@ -11,6 +11,7 @@ export const SECRET = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
 export interface User {
   id: string,
   enabled: boolean,
+  groups?: string,
   roles?: string,
   name?: string,
   comment?: string,
@@ -45,12 +46,13 @@ export default defineEventHandler(async (event) => {
 
   //  this allows me to test out-of-band
   if (dev) {
-    let name, comment, roles, valid = ''
+    let name, comment, groups, roles, valid = ''
     let scope = session.scope
     switch(username) {
       case 'admin':
         name = 'Professor Falken'
         comment = 'Witness Protection'
+        groups = 'irisadm'
         roles = '%All'
         scope = [ username ]
         valid = 'joshua'
@@ -58,6 +60,7 @@ export default defineEventHandler(async (event) => {
       case 'dev':
         name = 'Linus Torvalds'
         comment = 'Linux moderator'
+        groups = 'irisdev'
         roles = '%Developer'
         scope = [ 'developer' ]
         valid = 'creator'
@@ -65,6 +68,7 @@ export default defineEventHandler(async (event) => {
       case 'ops':
         name = 'Indiana Jones'
         comment = 'Smooth operator'
+        groups = 'irisdev'
         roles = '%Operator'
         scope = [ 'analyst' ]
         valid = 'worker'
@@ -72,6 +76,7 @@ export default defineEventHandler(async (event) => {
       case 'user':
         name = 'Snoopy'
         comment = 'know-it-all'
+        groups = 'domain user'
         roles = 'Training'
         scope = [ username ]
         valid = 'browser'
@@ -88,6 +93,7 @@ export default defineEventHandler(async (event) => {
     session = {
       id: username,
       enabled: true,
+      groups: groups,
       roles: roles,
       name: name,
       comment: comment,
@@ -123,11 +129,13 @@ export default defineEventHandler(async (event) => {
       mode: 'no-cors',
     }
   }).then(async (res) => {
+    console.log(res)
     try {
       await res.json().then(async (hcie) => {
         session = {
           id: username,
           enabled: hcie.Enabled,
+          groups: hcie.Groups,
           roles: hcie.Roles,
           name: hcie.FullName,
           comment: hcie.Comment,

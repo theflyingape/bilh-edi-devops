@@ -52,8 +52,6 @@
 import { ModalInfo } from '#components'
 const { status, data, signIn, signOut } = useAuth()
 const overlay = useOverlay()
-const toast = useToast()
-const alert = ref('')
 
 const credentials = ref({
     username: '',
