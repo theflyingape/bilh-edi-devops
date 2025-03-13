@@ -34,7 +34,7 @@ export const tokensByUser: Map<string, TokensByUser> = new Map()
 
 const credentialsSchema = z.object({
   username: z.string().min(3),
-  password: z.string().min(dev ? 6 : 8)
+  password: z.string().min(6)
 })
 
 export default defineEventHandler(async (event) => {
@@ -76,12 +76,13 @@ export default defineEventHandler(async (event) => {
         scope = [ username ]
         valid = 'browser'
         break
-    }
+      default:
+        setResponseStatus(event, 401, 'invalid user')
+        return
+      }
     if (valid && password !== valid) {
-        throw createError({
-          statusCode: 401,
-          message: 'bad credentials'
-        })
+      setResponseStatus(event, 401, 'invalid credentials')
+      return
     }
     // TO DO: move to a generalized set of functions
     session = {
@@ -123,11 +124,6 @@ export default defineEventHandler(async (event) => {
     }
   }).then(async (res) => {
     try {
-      if (res.status == 401)
-        throw createError({
-          statusCode: 401,
-          message: 'bad credentials'
-        })
       await res.json().then(async (hcie) => {
         session = {
           id: username,
@@ -162,11 +158,7 @@ export default defineEventHandler(async (event) => {
       })
     }
     catch(err) {
-      console.error('login() error', err)
-      throw createError({
-        statusCode: 401,
-        message: 'mishandled credentials'
-      })
+      setResponseStatus(event, 401, `${err}`)
     }
   })
   return token

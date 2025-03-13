@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     baseURL: '/devops',
   },
   auth: {
-    baseURL: 'api/auth',
+    baseURL: '/api/auth',
     isEnabled: true,
     globalAppMiddleware: true,
     //disableServerSideAuth: false,

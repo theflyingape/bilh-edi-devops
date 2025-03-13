@@ -1,8 +1,8 @@
 # edit and rename to .env for production use
-AUTH_ORIGIN=https://hciedev.laheyhealth.org/devops/api/auth
+#AUTH_ORIGIN=
 NUXT_APP_BASE_URL=/devops
-NUXT_BASE_URL=https://hciedev.laheyhealth.org
+NUXT_BASE_URL=https://www.domain.com
 NUXT_JWT_ACCESS=30s
 NUXT_JWT_REFRESH=10h
-NUXT_JWT_PASSWORD=AllowMe2elaborateYIThinkURana$$!
-NUXT_UI_PRO_LICENSE=
+NUXT_JWT_PASSWORD=[your password]
+NUXT_UI_PRO_LICENSE=[your license]
