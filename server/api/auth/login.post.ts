@@ -11,7 +11,7 @@ export const SECRET = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
 export interface User {
   id: string,
   enabled: boolean,
-  groups?: string,
+  groups?: string[],
   roles?: string,
   name?: string,
   comment?: string,
@@ -46,13 +46,14 @@ export default defineEventHandler(async (event) => {
 
   //  this allows me to test out-of-band
   if (dev) {
-    let name, comment, groups, roles, valid = ''
+    let name, comment, roles, valid = ''
+    let groups = []
     let scope = session.scope
     switch(username) {
       case 'admin':
         name = 'Professor Falken'
         comment = 'Witness Protection'
-        groups = 'irisadm'
+        groups = ['irisadm', 'irisdev']
         roles = '%All'
         scope = [ username ]
         valid = 'joshua'
@@ -60,7 +61,7 @@ export default defineEventHandler(async (event) => {
       case 'dev':
         name = 'Linus Torvalds'
         comment = 'Linux moderator'
-        groups = 'irisdev'
+        groups = ['irisdev']
         roles = '%Developer'
         scope = [ 'developer' ]
         valid = 'creator'
@@ -68,7 +69,7 @@ export default defineEventHandler(async (event) => {
       case 'ops':
         name = 'Indiana Jones'
         comment = 'Smooth operator'
-        groups = 'irisdev'
+        groups = ['irisdev']
         roles = '%Operator'
         scope = [ 'analyst' ]
         valid = 'worker'
@@ -76,7 +77,7 @@ export default defineEventHandler(async (event) => {
       case 'user':
         name = 'Snoopy'
         comment = 'know-it-all'
-        groups = 'domain user'
+        groups = ['domain user']
         roles = 'Training'
         scope = [ username ]
         valid = 'browser'
