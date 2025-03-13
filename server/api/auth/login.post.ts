@@ -141,8 +141,14 @@ export default defineEventHandler(async (event) => {
           name: hcie.FullName,
           comment: hcie.Comment,
           loggedInAt: Date.now(),
-          scope: ['admin']
+          scope: []
         }
+
+        if (session.groups?.includes('irisadm')) session.scope.push('admin')
+        if (session.groups?.includes('irisdev')) session.scope.push('developer')
+        if (session.groups?.includes('os-shell-access')) session.scope.push('analyst')
+        if (session.groups?.includes('lahey')) session.scope.push('user')
+        session.scope.push('guest')
 
         const tokenData: JwtPayload = session
         const accessToken = sign(tokenData, SECRET, {
