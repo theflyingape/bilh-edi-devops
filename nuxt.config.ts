@@ -19,7 +19,7 @@ export default defineNuxtConfig({
       //  getSession: { path: '/session', method: 'get' },
       },
       pages: {
-        login: '/'
+        login: '/home'
       },
       session: {
         dataResponsePointer: "/",

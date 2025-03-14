@@ -20,7 +20,7 @@ const items = ref([
         {
             label: 'Home',
             icon: 'i-lucide-house',
-            to: '/'
+            to: '/home'
         },
         {
             label: 'Guides',
@@ -137,6 +137,14 @@ const items = ref([
                 },
             ]
         }
+    ],
+    [
+        {
+            label: 'Help',
+            icon: 'i-lucide-circle-help',
+            to: '/help',
+            disabled: false
+        },
     ]
 ])
 </script>
