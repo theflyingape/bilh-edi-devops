@@ -1,12 +1,12 @@
 //import { createError, eventHandler, readBody } from 'h3'
-import { sign } from 'jsonwebtoken'
+import { PrivateKey, sign, SignOptions } from 'jsonwebtoken'
 import { z } from 'zod'
 
 //  supply trivial values for testing -- make .env to better secure your site implementation
 const dev = process.dev
 export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || '30s'
 export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '2m'
-export const SECRET = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
+export const SECRET:PrivateKey = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
 
 export interface User {
   id: string,
@@ -103,10 +103,10 @@ export default defineEventHandler(async (event) => {
     }
 
     const tokenData: JwtPayload = session
-    const accessToken = sign(tokenData, SECRET, {
+    const accessToken = sign(tokenData, SECRET, <SignOptions>{
       expiresIn: ACCESS_TOKEN_TTL
     })
-    const refreshToken = sign(tokenData, SECRET, {
+    const refreshToken = sign(tokenData, SECRET, <SignOptions>{
       expiresIn: REFRESH_TOKEN_TTL
     })
   
@@ -153,10 +153,10 @@ export default defineEventHandler(async (event) => {
         session.scope.push('guest')
 
         const tokenData: JwtPayload = session
-        const accessToken = sign(tokenData, SECRET, {
+        const accessToken = sign(tokenData, SECRET, <SignOptions>{
           expiresIn: ACCESS_TOKEN_TTL
         })
-        const refreshToken = sign(tokenData, SECRET, {
+        const refreshToken = sign(tokenData, SECRET, <SignOptions>{
           expiresIn: REFRESH_TOKEN_TTL
         })
       

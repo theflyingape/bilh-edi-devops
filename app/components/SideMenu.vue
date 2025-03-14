@@ -52,6 +52,7 @@
 import { ModalInfo } from '#components'
 const { status, data, signIn, signOut } = useAuth()
 const overlay = useOverlay()
+const toast = useToast()
 
 const credentials = ref({
     username: '',
@@ -59,7 +60,10 @@ const credentials = ref({
 })
 
 async function login() {
-    await signIn(credentials.value, {external: true}).catch(async (err) => {
+    await signIn(credentials.value, {external: true}).then((reason) => {
+        toast.add({ title: 'Hello!', description: `logged on at ${new Date().toTimeString()} on ${new Date().toDateString()} with ${reason}`})
+    })
+    .catch(async (err) => {
         open(`${err.statusCode}: ${err.statusMessage}`)
     })
 }

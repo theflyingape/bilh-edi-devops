@@ -1,12 +1,13 @@
-import { createError, eventHandler, getRequestHeader, readBody, sendRedirect } from 'h3'
-import { sign, verify } from 'jsonwebtoken'
+import { createError, deleteCookie, eventHandler, getRequestHeader, readBody } from 'h3'
+import { sign, Secret, SignOptions, verify } from 'jsonwebtoken'
 import { type JwtPayload, ACCESS_TOKEN_TTL, SECRET, extractToken, tokensByUser } from './login.post'
 
 export default eventHandler(async (event) => {
-  const body = await readBody<{ refreshToken: string }>(event)
+  const body = await readBody<{ accessToken: string, refreshToken: string }>(event)
   const authorizationHeader = getRequestHeader(event, 'Authorization')
+  const accessToken = body.accessToken
   const refreshToken = body.refreshToken
-  let token = { token:{} }
+  let token = { token: { accessToken:accessToken, refreshToken:refreshToken } }
 
   if (!refreshToken || !authorizationHeader) {
     throw createError({
@@ -17,18 +18,10 @@ export default eventHandler(async (event) => {
 
   // Verify
   try {
-    const decoded = verify(refreshToken, SECRET) as JwtPayload | undefined
+    const decoded = verify(refreshToken, <Secret>SECRET) as JwtPayload | undefined
     if (!decoded) {
-      //const session = await useSession(event);
-      //await session.clear();
-      setResponseStatus(event, 303, 'expired')
-      return null
-      /**
-      throw createError({
-        statusCode: 401,
-        statusMessage: 'Unauthorized, refreshToken can\'t be verified'
-      })
-      */
+      setResponseStatus(event, 401, `Unauthorized, refreshToken can't be verified`)
+      return token
     }
 
     // Get tokens
@@ -60,7 +53,7 @@ export default eventHandler(async (event) => {
       scope: decoded.scope
     }
 
-    const accessToken = sign({ ...user }, SECRET, {
+    const accessToken = sign({ ...user }, SECRET, <SignOptions>{
       expiresIn: ACCESS_TOKEN_TTL
     })
     userTokens.refresh.set(refreshToken, accessToken)
@@ -74,5 +67,8 @@ export default eventHandler(async (event) => {
   catch (err) {
     console.error('refresh:', err)
     setResponseStatus(event, 401, 'Unauthorized')
+    deleteCookie(event, 'auth.refresh-token'); // Delete the cookie
+    deleteCookie(event, 'auth.token'); // Delete the cookie
+    return { message: 'Logged out' };
   }
 })

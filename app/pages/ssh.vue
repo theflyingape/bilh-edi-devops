@@ -6,6 +6,7 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({ auth:true, middleware: ["get-session"]})
 const { status, data } = useAuth()
 
 import { onMounted } from 'vue';
