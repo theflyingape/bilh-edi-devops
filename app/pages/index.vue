@@ -25,7 +25,8 @@ const links = ref([
   },
   {
     label: 'Learn more',
-    to: '/help',
+    to: '/BILH Interface Engine.pdf',
+    target: '_blank',
     color: 'neutral',
     variant: 'subtle',
     trailingIcon: 'i-lucide-arrow-right'
