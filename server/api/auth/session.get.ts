@@ -7,7 +7,7 @@ export default eventHandler((event) => {
   if (typeof authorizationHeader === 'undefined') {
     throw createError({ statusCode: 403, statusMessage: 'Need to pass valid Bearer-authorization header to access this endpoint' })
   }
-
+  
   const extractedToken = extractToken(authorizationHeader)
   let decoded: JwtPayload
   try {
@@ -18,6 +18,8 @@ export default eventHandler((event) => {
       msg: 'Login failed. Here\'s the raw error:',
       error
     })
+    setResponseStatus(event, 303, 'expired')
+    return null
     throw createError({ statusCode: 403, statusMessage: 'You must be logged in to use this endpoint' })
   }
 

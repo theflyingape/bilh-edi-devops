@@ -1,18 +1,18 @@
-import { createError, eventHandler, readBody } from 'h3'
+//import { createError, eventHandler, readBody } from 'h3'
 import { sign } from 'jsonwebtoken'
 import { z } from 'zod'
 
 //  supply trivial values for testing -- make .env to better secure your site implementation
 const dev = process.dev
 export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || '30s'
-export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '1h'
+export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '2m'
 export const SECRET = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
 
 export interface User {
   id: string,
   enabled: boolean,
   groups?: string[],
-  roles?: string,
+  roles?: string[],
   name?: string,
   comment?: string,
   loggedInAt?: number,
@@ -46,40 +46,40 @@ export default defineEventHandler(async (event) => {
 
   //  this allows me to test out-of-band
   if (dev) {
-    let name, comment, roles, valid = ''
-    let groups = []
+    let name, comment, valid = ''
+    let groups, roles = []
     let scope = session.scope
     switch(username) {
       case 'admin':
         name = 'Professor Falken'
         comment = 'Witness Protection'
         groups = ['irisadm', 'irisdev']
-        roles = '%All'
-        scope = [ username ]
+        roles = ['%All']
+        scope = [username]
         valid = 'joshua'
         break
       case 'dev':
         name = 'Linus Torvalds'
         comment = 'Linux moderator'
         groups = ['irisdev']
-        roles = '%Developer'
-        scope = [ 'developer' ]
+        roles = ['%Developer']
+        scope = ['developer']
         valid = 'creator'
         break
       case 'ops':
         name = 'Indiana Jones'
         comment = 'Smooth operator'
         groups = ['irisdev']
-        roles = '%Operator'
-        scope = [ 'analyst' ]
+        roles = ['%Operator']
+        scope = ['analyst']
         valid = 'worker'
         break
       case 'user':
         name = 'Snoopy'
         comment = 'know-it-all'
         groups = ['domain user']
-        roles = 'Training'
-        scope = [ username ]
+        roles = ['Training']
+        scope = [username]
         valid = 'browser'
         break
       default:
@@ -144,10 +144,12 @@ export default defineEventHandler(async (event) => {
           scope: []
         }
 
-        if (session.groups?.includes('irisadm')) session.scope.push('admin')
-        if (session.groups?.includes('irisdev')) session.scope.push('developer')
-        if (session.groups?.includes('os-shell-access')) session.scope.push('analyst')
-        if (session.groups?.includes('lahey')) session.scope.push('user')
+        if (session.enabled) {
+          if (session.groups?.includes('irisadm')) session.scope.push('admin')
+          if (session.groups?.includes('irisdev')) session.scope.push('developer')
+          if (session.groups?.includes('os-shell-access')) session.scope.push('analyst')
+          if (session.groups?.includes('lahey')) session.scope.push('user')
+        }
         session.scope.push('guest')
 
         const tokenData: JwtPayload = session
@@ -168,7 +170,6 @@ export default defineEventHandler(async (event) => {
         tokensByUser.set(username, userTokens)
 
         setResponseStatus(event, 200, 'logged in')
-
         token = { token: { accessToken, refreshToken } }
       })
     }
