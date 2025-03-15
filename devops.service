@@ -9,7 +9,7 @@ Type=simple
 #Environment=TERM=xterm-256color
 ExecStartPre=/bin/npm run build
 ExecStart=/bin/npm run preview
-KillMode=process
+KillMode=mixed
 Restart=on-failure
 RestartSec=15
 SyslogIdentifier=DevOps
