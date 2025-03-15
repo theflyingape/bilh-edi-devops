@@ -151,6 +151,7 @@ const items = ref([
 
 <template>
   <UApp>
+    <UBanner color="warning" icon="i-lucide-construction" title="Under construction -- check back for updates" close close-icon="i-lucide-x-circle" id="wip" />
     <UHeader>
       <template #title>
         <Logo class="h-6 w-auto" />
@@ -164,7 +165,7 @@ const items = ref([
         <UBadge :color="online" variant="outline">{{scope}}</UBadge>
         <div class="m-auto">
             <UChip class="mt-2" :color="online" inset>
-                <UButton class="pl-4 pr-4" color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
+                <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
             </UChip>
         </div>
       </template>

@@ -9,6 +9,11 @@ export default defineAppConfig({
     },
     colors: {
       primary: 'teal',
+      secondary: 'blue',
+      success: 'green',
+      info: 'blue',
+      warning: 'yellow',
+      error: 'red',
       neutral: 'slate',
       action: 'pink',
     },
