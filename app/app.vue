@@ -124,7 +124,7 @@ const items = ref([
             icon: 'i-lucide-box',
             children: [
                 {
-                    label: 'Console',
+                    label: 'Terminal',
                     icon: 'i-vscode-icons-file-type-shell',
                     description: 'Secure shell access into these hosts',
                     to: '/ssh'
