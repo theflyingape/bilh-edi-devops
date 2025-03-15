@@ -1,6 +1,5 @@
 <template>
     <slot />
-    {{ data }}
 </template>
 
 <script setup lang="ts">

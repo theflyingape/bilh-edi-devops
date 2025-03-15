@@ -30,21 +30,21 @@ const items = ref([
             children: [
                 {
                     label: 'Class Reference',
-                    icon: 'i-lucide-cog',
+                    icon: 'i-vscode-icons-file-type-manifest',
                     description: 'The Documatic rendered pages off our class definitions',
                     to: 'https://hciedev.laheyhealth.org/csp/documatic/%25CSP.Documatic.cls?LIBRARY=HSCUSTOM',
                     target: '_blank',
                 },
                 {
                     label: 'Interoperability production adapters',
-                    icon: 'i-lucide-swatch-book',
+                    icon: 'i-vscode-icons-file-type-rake',
                     description: 'The built-in business services and operations with adapters',
                     to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=PAGE_interop_protocols',
                     target: '_blank',
                 },
                 {
                     label: 'Healthcare Data Formats',
-                    icon: 'i-lucide-smile',
+                    icon: 'i-vscode-icons-file-type-funding',
                     description: 'Ingest and transform healthcare data in your application using built-in standard-compliant tools',
                     to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=PAGE_healthcare',
                     target: '_blank',
@@ -98,21 +98,21 @@ const items = ref([
             children: [
                 {
                     label: 'Development',
-                    icon: 'i-lucide-file-text',
+                    icon: 'i-vscode-icons-file-type-apib',
                     description: 'Prototyping & Training environment',
                     to: 'https://hciedev.laheyhealth.org/csp/sys/UtilHome.csp',
                     target: '_blank'
                 },
                 {
                     label: 'Test',
-                    icon: 'i-lucide-file-text',
+                    icon: 'i-vscode-icons-file-type-light-todo',
                     description: 'Testing & Staging environment',
                     to: 'https://hcietst.laheyhealth.org/csp/sys/UtilHome.csp',
                     target: '_blank'
                 },
                 {
                     label: 'LIVE',
-                    icon: 'i-lucide-file-text',
+                    icon: 'i-vscode-icons-file-type-plsql-package',
                     description: 'Production environment',
                     to: 'https://hcieprd.laheyhealth.org/csp/sys/UtilHome.csp',
                     target: '_blank'
@@ -125,14 +125,14 @@ const items = ref([
             children: [
                 {
                     label: 'Console',
-                    icon: 'i-lucide-file-text',
-                    description: 'secure shell into host',
+                    icon: 'i-vscode-icons-file-type-shell',
+                    description: 'Secure shell access into these hosts',
                     to: '/ssh'
                 },
                 {
                     label: 'Visual Studio Code',
-                    icon: 'i-lucide-file-text',
-                    description: 'IDE for Files & ObjectScript programming',
+                    icon: 'i-vscode-icons-file-type-vscode',
+                    description: 'The IDE standard for IRIS ObjectScript, scripting, and data file manipulation',
                     to: '/code'
                 },
             ]
@@ -161,11 +161,11 @@ const items = ref([
 
       <template #right>
         <div class="m-auto"><UColorModeButton /></div>
+        <UBadge :color="online" variant="outline">{{scope}}</UBadge>
         <div class="m-auto">
-          <UBadge color="neutral" variant="outline">{{scope}}</UBadge>
-          <UChip :color="online" inset>
-            <UButton color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
-          </UChip>
+            <UChip class="mt-2" :color="online" inset>
+                <UButton class="pl-4 pr-4" color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
+            </UChip>
         </div>
       </template>
 
@@ -178,6 +178,9 @@ const items = ref([
         <NuxtPage />
       </NuxtLayout>
     </UMain>
-    <UFooter />
-  </UApp>
+    <UFooter>
+        <template #body>
+        </template>
+    </UFooter>
+    </UApp>
 </template>
