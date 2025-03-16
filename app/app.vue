@@ -1,9 +1,47 @@
+<template>
+<UApp>
+    <UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close close-icon="i-lucide-x-circle" id="wip" />
+
+    <UHeader>
+    <template #title>
+        <Logo class="h-6 w-auto" />
+    </template>
+    <UNavigationMenu :items="items" content-orientation="vertical" />
+    <SideMenu v-model:open="sideMenu" />
+    <template #right>
+        <div class="m-auto"><UColorModeSelect /></div>
+        <UBadge :color="online" variant="outline">{{scope}}</UBadge>
+        <div class="m-auto">
+            <UChip class="mt-2" :color="online" inset>
+                <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
+            </UChip>
+        </div>
+    </template>
+    <template #body>
+    </template>
+    </UHeader>
+
+    <UMain>
+        <NuxtLayout>
+            <NuxtPage />
+        </NuxtLayout>
+    </UMain>
+
+    <UFooter>
+        <template #left>
+        </template>
+        <template #right>
+        </template>
+    </UFooter>
+</UApp>
+</template>
+  
 <script setup lang="ts">
 //const { $api } = useNuxtApp()
 import { watchImmediate } from '@vueuse/core'
 
 const { status, data } = useAuth()
-const online = computed(() => status.value == 'authenticated' ? 'primary' : 'action' )
+const online = computed(() => status.value == 'unauthenticated' ? 'action' : 'success')
 const scope = ref('Guest')
 const sideMenu = ref(false)
 
@@ -12,7 +50,7 @@ function toggleSideMenu() {
 }
 
 watchImmediate(data, (updated) => {
-  scope.value = status.value == 'authenticated' ? data.value?.scope[0] || 'Member' : 'Guest'
+  scope.value = status.value == 'unauthenticated' ? 'Guest' : data.value?.scope[0] || 'Associate'
 })
 
 const items = ref([
@@ -148,40 +186,3 @@ const items = ref([
     ]
 ])
 </script>
-
-<template>
-  <UApp>
-    <UBanner color="warning" icon="i-lucide-construction" title="Under construction -- check back for updates" close close-icon="i-lucide-x-circle" id="wip" />
-    <UHeader>
-      <template #title>
-        <Logo class="h-6 w-auto" />
-      </template>
-
-      <UNavigationMenu :items="items" content-orientation="vertical" />
-      <SideMenu v-model:open="sideMenu" />
-
-      <template #right>
-        <div class="m-auto"><UColorModeButton /></div>
-        <UBadge :color="online" variant="outline">{{scope}}</UBadge>
-        <div class="m-auto">
-            <UChip class="mt-2" :color="online" inset>
-                <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
-            </UChip>
-        </div>
-      </template>
-
-      <template #body>
-        <!-- UNavigationMenu :items="items" orientation="vertical" class="-mx-2.5" / -->
-      </template>
-    </UHeader>
-    <UMain>
-      <NuxtLayout>
-        <NuxtPage />
-      </NuxtLayout>
-    </UMain>
-    <UFooter>
-        <template #body>
-        </template>
-    </UFooter>
-    </UApp>
-</template>

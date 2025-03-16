@@ -1,53 +1,63 @@
 <template>
-    <div class="bezel"><div ref="terminalContainer" class="terminal"></div></div>
+  <div ref="terminalContainer" :style="{ height: '100%' }"></div>
 </template>
 
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { Terminal } from '@xterm/xterm'
-  //import 'xterm/css/xterm.css'
+  import { Terminal, type ITerminalOptions } from '@xterm/xterm'
+  import { FitAddon } from '@xterm/addon-fit'
+  import { Unicode11Addon } from '@xterm/addon-unicode11'
+  import { WebglAddon } from '@xterm/addon-webgl'
+  import { ClipboardAddon } from '@xterm/addon-clipboard'
 
+  interface client extends ITerminalOptions {
+    title?: string
+    bgColor?: string
+    keymap?: [{
+      key: string
+      shiftKey: boolean
+      mapCode: number
+    }]
+  }
+  let startup: client = {
+    allowProposedApi: true, cursorBlink: true,
+    fontFamily: 'Consolas,Lucida Console,monospace', fontSize: 20, fontWeight: 'normal', fontWeightBold: 'bold',
+  }
   const terminalContainer = ref<HTMLElement | null>(null)
-  let terminal: Terminal | null = null
+  //let terminal: Terminal | null = null
+
+  const term = new Terminal({ ...startup, rows:30, cols:100 })
+  const fit = new FitAddon()
+  term.loadAddon(new Unicode11Addon())
+  term.loadAddon(new ClipboardAddon())
+  term.loadAddon(fit)
+  term.unicode.activeVersion = '11'
 
   onMounted(() => {
+    console.log('onMounted')
     if (terminalContainer.value) {
-      terminal = new Terminal()
-      terminal.open(terminalContainer.value)
-      terminal.write('Hello from xterm.js in Nuxt 3!\r\n')
+      term.open(terminalContainer.value)
+      term.loadAddon(new WebglAddon())
+      fit.fit()
+      let xy = fit.proposeDimensions()
+      term.resize(100, xy!.rows)
 
-      terminal.onData((data) => {
+      term.write('Hello from xterm.js in Nuxt 3!\r\n')
+
+      term.onData((data) => {
         if (data === '\r') {
-          terminal?.write('\r\n')
+          term.write('\r\n')
         } else {
-          terminal?.write(data)
+          term.write(data)
         }
       })
     }
-    console.log('terminal mounted')
   })
 
   onBeforeUnmount(() => {
-    console.log('terminal dispose')
-    terminal?.dispose()
+    fit.dispose()
+    term.dispose()
   })
 </script>
 
 <style scoped>
-  .bezel {
-      align-items: center;
-      background: #3f3933;
-      border-radius: 1rem;
-      height: 100%;
-      margin: 12px auto;
-      overflow: hidden;
-      padding: 12px;
-      width: 100%;
-  }
-  .terminal {
-      width: 100%;
-      height: 600px;
-      background-color: black;
-      color: white;
-  }
 </style>
