@@ -69,8 +69,8 @@ async function login() {
 }
 
 function logout() {
-    signOut({external: true})
-    //toast.add({ title: 'Good-bye!', description: `logged off at ${new Date().toTimeString()} on ${new Date().toDateString()}`})
+    signOut({callbackUrl: '/logout', external: true})
+    toast.add({ title: 'Good-bye!', description: `logged off at ${new Date().toTimeString()} on ${new Date().toDateString()}`})
 }
 
 const modal = overlay.create(ModalInfo, { props: { title: "" } })

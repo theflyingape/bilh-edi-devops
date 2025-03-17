@@ -1,14 +1,5 @@
 <script setup lang="ts">
-const { signOut } = useAuth()
-/*
-definePageMeta({
-  auth: {
-    unauthenticatedOnly: true,
-    navigateAuthenticatedTo: '/'
-  }
-})
-*/
-signOut()
+definePageMeta({ auth:false })
 </script>
 
 <template>

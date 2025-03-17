@@ -1,5 +1,5 @@
 <template>
-  <div ref="terminalContainer" class="aspect-4/3 h-11/12"></div>
+  <div ref="terminalContainer"></div>
 </template>
 
 <script setup lang="ts">
