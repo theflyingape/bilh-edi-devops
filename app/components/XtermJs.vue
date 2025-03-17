@@ -1,5 +1,5 @@
 <template>
-  <div ref="terminalContainer" :style="{ height: '100%' }"></div>
+  <div ref="terminalContainer" class="aspect-4/3 h-11/12"></div>
 </template>
 
 <script setup lang="ts">
@@ -39,7 +39,7 @@
       term.loadAddon(new WebglAddon())
       fit.fit()
       let xy = fit.proposeDimensions()
-      term.resize(100, xy!.rows)
+      term.resize(xy!.cols > 80 ? xy!.cols : 80, xy!.rows > 25 ? xy!.rows : 25)
 
       term.write('Hello from xterm.js in Nuxt 3!\r\n')
 
@@ -57,6 +57,13 @@
     fit.dispose()
     term.dispose()
   })
+
+  function resize() {
+    fit.fit()
+    let xy = fit.proposeDimensions()
+    term.resize(100, xy!.rows)
+}
+
 </script>
 
 <style scoped>
