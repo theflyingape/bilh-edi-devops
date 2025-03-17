@@ -1,5 +1,5 @@
 <template>
-  <div ref="terminalContainer"></div>
+  <div ref="terminalContainer" class="h-full w-full"></div>
 </template>
 
 <script setup lang="ts">
@@ -37,11 +37,10 @@
     if (terminalContainer.value) {
       term.open(terminalContainer.value)
       term.loadAddon(new WebglAddon())
-      fit.fit()
-      let xy = fit.proposeDimensions()
-      term.resize(xy!.cols > 80 ? xy!.cols : 80, xy!.rows > 25 ? xy!.rows : 25)
+      resize()
 
       term.write('Hello from xterm.js in Nuxt 3!\r\n')
+      //window.addEventListener('resize', resize)
 
       term.onData((data) => {
         if (data === '\r') {
@@ -61,9 +60,9 @@
   function resize() {
     fit.fit()
     let xy = fit.proposeDimensions()
-    term.resize(100, xy!.rows)
-}
-
+    term.write(`\r\nresize: ${xy!.rows}x${xy!.cols} \r\n`)
+    term.resize(xy!.cols > 80 ? xy!.cols : 100, xy!.rows > 25 ? xy!.rows - 1 : 25)
+  }
 </script>
 
 <style scoped>

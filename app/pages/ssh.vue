@@ -1,7 +1,7 @@
 <template>
-    <div class="flex justify-center">
+    <div class="flex justify-center h-full w-full">
         <!-- monitor with a thin bezel -->
-        <div class="bg-zinc-800 p-3 rounded-md aspect-4/3 h-full">
+        <div class="bg-zinc-800 p-3 rounded-md aspect-4/3">
             <XtermJs v-show="value == 'Development'" @vue:mounted="" />
             <XtermJs v-show="value == 'Test'" />
             <XtermJs v-show="value == 'LIVE'" />

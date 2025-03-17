@@ -63,42 +63,42 @@ const items = ref([
         {
             label: 'Guides',
             icon: 'i-lucide-book-open',
-            to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls',
+            to: '../csp/docbook/DocBook.UI.Page.cls',
             target: '_blank',
             children: [
                 {
                     label: 'Class Reference',
                     icon: 'i-vscode-icons-file-type-manifest',
                     description: 'The Documatic rendered pages off our class definitions',
-                    to: 'https://hciedev.laheyhealth.org/csp/documatic/%25CSP.Documatic.cls?LIBRARY=HSCUSTOM',
+                    to: '../csp/documatic/%25CSP.Documatic.cls?LIBRARY=HSCUSTOM',
                     target: '_blank',
                 },
                 {
                     label: 'Interoperability production adapters',
                     icon: 'i-vscode-icons-file-type-rake',
                     description: 'The built-in business services and operations with adapters',
-                    to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=PAGE_interop_protocols',
+                    to: '../csp/docbook/DocBook.UI.Page.cls?KEY=PAGE_interop_protocols',
                     target: '_blank',
                 },
                 {
                     label: 'Healthcare Data Formats',
                     icon: 'i-vscode-icons-file-type-funding',
                     description: 'Ingest and transform healthcare data in your application using built-in standard-compliant tools',
-                    to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=PAGE_healthcare',
+                    to: '../csp/docbook/DocBook.UI.Page.cls?KEY=PAGE_healthcare',
                     target: '_blank',
                 },
                 {
                     label: 'Introducing Productions',
                     description: 'Production basics, settings, and message flow',
                     icon: 'i-lucide-house',
-                    to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=EGIN_intro',
+                    to: '../csp/docbook/DocBook.UI.Page.cls?KEY=EGIN_intro',
                     target: '_blank',
                 },
                 {
                     label: 'Production Best Practices',
                     description: 'Project goals, delivery and documentation',
                     icon: 'i-lucide-cloud-download',
-                    to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=EGBP_development_overview',
+                    to: '../csp/docbook/DocBook.UI.Page.cls?KEY=EGBP_development_overview',
                     target: '_blank',
                 },
             ],
@@ -118,7 +118,7 @@ const items = ref([
                     label: 'Enterprise Monitor',
                     icon: 'i-lucide-building-2',
                     description: 'Displays the overall status of all running productions.',
-                    to: 'https://hciedev.laheyhealth.org/csp/healthshare/hscustom/Ens.Enterprise.Portal.MonitorStatus.zen',
+                    to: '../csp/healthshare/hscustom/Ens.Enterprise.Portal.MonitorStatus.zen',
                     target: '_blank'
                 },
                 {
