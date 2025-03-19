@@ -92,6 +92,11 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
     port: 6500,
   },
+  nitro: {
+    experimental: {
+      websocket: true
+    }
+  },
   vite: {
     preview: {
       allowedHosts: ['hciedev.laheyhealth.org']

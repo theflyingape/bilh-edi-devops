@@ -164,8 +164,8 @@ const items = ref([
                 {
                     label: 'Terminal',
                     icon: 'i-vscode-icons-file-type-shell',
-                    description: 'Secure shell access into these hosts',
-                    to: '/ssh'
+                    description: 'Secure CLI access into these hosts',
+                    to: '/terminal'
                 },
                 {
                     label: 'Visual Studio Code',
