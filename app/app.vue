@@ -4,7 +4,7 @@
 
     <UHeader>
     <template #title>
-        <Logo class="h-6 w-auto" />
+        <Logo class="h-10 w-auto" />
     </template>
     <UNavigationMenu :items="items" content-orientation="vertical" />
     <SideMenu v-model:open="sideMenu" />

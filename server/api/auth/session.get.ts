@@ -9,7 +9,7 @@ export default eventHandler((event) => {
     return null
     //throw createError({ statusCode: 403, statusMessage: 'Need to pass valid Bearer-authorization header to access this endpoint' })
   }
-  
+
   const extractedToken = extractToken(authorizationHeader)
   let decoded: JwtPayload
   try {
