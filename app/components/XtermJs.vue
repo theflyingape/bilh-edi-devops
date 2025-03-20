@@ -1,5 +1,7 @@
 <template>
-  <div ref="terminalContainer" class="h-full w-full"></div>
+    <!--UseFullscreen v-slot="{ toggle }"-->
+    <div ref="terminalContainer"></div>
+  <!--/UseFullscreen-->
 </template>
 
 <script setup lang="ts">
@@ -30,7 +32,7 @@ const emit = defineEmits<{ close: [boolean] }>()
   }
   let startup: client = {
     allowProposedApi: true, cursorBlink: true,
-    fontFamily: 'Consolas,Lucida Console,monospace', fontSize: 20, fontWeight: 'normal', fontWeightBold: 'bold',
+    fontFamily: 'Consolas,Lucida Console,monospace', fontSize: 22, fontWeight: 'normal', fontWeightBold: 'bold',
   }
 
   const { prepare, sessionList } = useTerminalSocket()
@@ -39,7 +41,7 @@ const emit = defineEmits<{ close: [boolean] }>()
   const terminalContainer = ref<HTMLElement | null>(null)
   //let terminal: Terminal | null = null
 
-  terminal.value = new Terminal({ ...startup, rows:25, cols:80 })
+  terminal.value = new Terminal({ ...startup, rows:27, cols:84 })
   const term = terminal.value
   prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
   console.log('XtermJs', sessionList.value)
@@ -56,8 +58,6 @@ const emit = defineEmits<{ close: [boolean] }>()
       term.open(terminalContainer.value)
       term.loadAddon(new WebglAddon())
       resize()
-
-      term.write(`Hello from xterm.js in Nuxt 3! ${Math.random()}  \r\n`)
       //window.addEventListener('resize', resize)
 /*
       term.onData((data) => {
@@ -76,7 +76,7 @@ const emit = defineEmits<{ close: [boolean] }>()
     fit.fit()
     let xy = fit.proposeDimensions()
     term.write(`\r\nresize: ${xy!.rows}x${xy!.cols} \r\n`)
-    term.resize(xy!.cols > 80 ? xy!.cols : 100, xy!.rows > 25 ? xy!.rows - 1 : 25)
+    term.resize(xy!.cols > 80 ? xy!.cols : 100, xy!.rows > 25 ? xy!.rows : 25)
   }
 /*
   props.socket!.onmessage = function (ev) {

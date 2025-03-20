@@ -9,12 +9,15 @@
     <UNavigationMenu :items="items" content-orientation="vertical" />
     <SideMenu v-model:open="sideMenu" />
     <template #right>
-        <div class="m-auto"><UColorModeSelect /></div>
-        <UBadge :color="online" variant="outline">{{scope}}</UBadge>
-        <div class="m-auto">
-            <UChip class="mt-2" :color="online" inset>
-                <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
-            </UChip>
+        <div class="flex flex-cols gap-2">
+            <div class="m-auto"><UColorModeSelect /></div>
+            <div class="m-auto"><USwitch color="neutral" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" v-model="isFullscreen" @click="toggle" /></div>
+            <div class="m-auto">
+                <UChip class="mt-2" :color="online" inset>
+                    <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
+                </UChip>
+            </div>
+            <div class="m-auto"><UBadge :color="online" variant="outline">{{scope}}</UBadge></div>
         </div>
     </template>
     <template #body>
@@ -41,17 +44,18 @@
 import { watchImmediate } from '@vueuse/core'
 
 const { status, data } = useAuth()
+const { isFullscreen, toggle } = useFullscreen()
 const online = computed(() => status.value == 'unauthenticated' ? 'action' : 'success')
 const scope = ref('Guest')
 const sideMenu = ref(false)
 
-function toggleSideMenu() {
-    sideMenu.value = !sideMenu.value
-}
-
 watchImmediate(data, (updated) => {
   scope.value = status.value == 'unauthenticated' ? 'Guest' : data.value?.scope[0] || 'Associate'
 })
+
+function toggleSideMenu() {
+    sideMenu.value = !sideMenu.value
+}
 
 const items = ref([
     [

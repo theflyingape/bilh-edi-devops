@@ -19,7 +19,7 @@
             <UCard class="w-full">
             <UForm :state="credentials" @submit.prevent="login">
                 <div class="flex flex-col items-center justify-center gap-4">
-                    <UFormField label="Username" name="username"><UInput v-model="credentials.username" type="string" placeholder="jsmith" /></UFormField>
+                    <UFormField label="Username" name="username"><UInput v-model="credentials.username" type="string" placeholder="jsmith" autofocus /></UFormField>
                     <UFormField label="Password" name="password"><UInput v-model="credentials.password" type="password" /></UFormField>
                 </div>
                 <div class="flex-col items-end justify-items-end gap-y-8">
@@ -60,7 +60,7 @@ const credentials = ref({
 })
 
 async function login() {
-    await signIn(credentials.value, {external: true}).then((reason) => {
+    await signIn(credentials.value, {callbackUrl: '/home', external: true}).then((reason) => {
         toast.add({ title: 'Hello!', description: `logged on at ${new Date().toTimeString()} on ${new Date().toDateString()} with ${reason}`})
     })
     .catch(async (err) => {
@@ -70,15 +70,12 @@ async function login() {
 
 function logout() {
     signOut({callbackUrl: '/logout', external: true})
-    toast.add({ title: 'Good-bye!', description: `logged off at ${new Date().toTimeString()} on ${new Date().toDateString()}`})
 }
 
 const modal = overlay.create(ModalInfo, { props: { title: "" } })
 
 function open(title: string) {
     modal.open()
-    modal.patch({
-        title: title,
-    })
+    modal.patch({ title: title })
 }
 </script>

@@ -113,7 +113,7 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true,
   },
-  modules: ['@nuxt/ui-pro', '@nuxt/eslint', '@sidebase/nuxt-auth', '@vueuse/nuxt'],
+  modules: ['@nuxt/ui-pro', '@nuxt/eslint', '@sidebase/nuxt-auth', '@vueuse/nuxt', '@nuxt/image'],
 
   build: {
     transpile: ['jsonwebtoken']
