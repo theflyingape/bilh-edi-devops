@@ -37,12 +37,13 @@ const emit = defineEmits<{ close: [boolean] }>()
 
   const { prepare, sessionList } = useTerminalSocket()
 
-  const terminal = defineModel<Terminal>('terminal')
+  //const terminal = defineModel<Terminal>('terminal')
   const terminalContainer = ref<HTMLElement | null>(null)
   //let terminal: Terminal | null = null
 
-  terminal.value = new Terminal({ ...startup, rows:27, cols:84 })
-  const term = terminal.value
+  //terminal.value = new Terminal({ ...startup, rows:27, cols:84 })
+  //const term = terminal.value
+  const term = new Terminal({ ...startup, rows:27, cols:84 })
   prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
   console.log('XtermJs', sessionList.value)
 

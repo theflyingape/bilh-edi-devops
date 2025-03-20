@@ -6,7 +6,7 @@
       </template>
       <template #default>
         <div class="flex justify-center">
-          <UButton class="text-lg" icon="i-lucide-x-circle" color="neutral" variant="soft" to="/" label="You have been logged out" />
+          <UButton class="text-lg" icon="i-lucide-x-circle" color="neutral" variant="soft" to="." label="You have been logged out" />
         </div>
       </template>
       <template #footer>

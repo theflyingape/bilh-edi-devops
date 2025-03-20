@@ -1,5 +1,5 @@
 <template>
-<UApp>
+<UApp :toaster="{ duration: 3000, position: 'bottom-left' }">
     <UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close close-icon="i-lucide-x-circle" id="wip" />
 
     <UHeader>

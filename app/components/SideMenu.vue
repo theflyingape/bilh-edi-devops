@@ -60,16 +60,16 @@ const credentials = ref({
 })
 
 async function login() {
-    await signIn(credentials.value, {callbackUrl: '/home', external: true}).then((reason) => {
-        toast.add({ title: 'Hello!', description: `logged on at ${new Date().toTimeString()} on ${new Date().toDateString()} with ${reason}`})
+    await signIn(credentials.value, {callbackUrl: 'home', external: false}).then(() => {
+        toast.add({ title: 'Hello!', description: `logged on at ${new Date().toTimeString()} on ${new Date().toDateString()}`})
     })
     .catch(async (err) => {
         open(`${err.statusCode}: ${err.statusMessage}`)
     })
 }
 
-function logout() {
-    signOut({callbackUrl: '/logout', external: true})
+async function logout() {
+    await signOut({callbackUrl: 'logout', external: false})
 }
 
 const modal = overlay.create(ModalInfo, { props: { title: "" } })
