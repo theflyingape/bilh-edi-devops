@@ -16,16 +16,18 @@
             <USwitch color="neutral" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" v-model="isFullscreen"
               @click="toggle" />
           </div>
-          <div class="m-auto">
+            <div class="m-auto">
             <UChip class="mt-2" :color="online" inset>
               <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
                 icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
             </UChip>
           </div>
           <div class="m-auto">
-            <UBadge :color="online" variant="outline">{{ scope }}</UBadge>
+            <UTooltip arrow :content="{ align:'center', side:'right', sideOffset:8 }" :text="`${ data?.id || 'not logged in' }`" >
+              <UBadge :color="online" variant="outline">{{ scope }}</UBadge>
+            </UTooltip>
           </div>
-        </div>
+      </div>
       </template>
       <template #body>
       </template>

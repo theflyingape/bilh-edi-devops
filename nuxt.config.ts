@@ -92,6 +92,7 @@ export default defineNuxtConfig({
 
   devtools: {
     enabled: true,
+    vscode: {},
   },
   devServer: {
     host: '0.0.0.0',
@@ -161,7 +162,7 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true,
   },
-  modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/ui-pro', '@nuxt/content', 'nuxt-llms', '@sidebase/nuxt-auth', '@vueuse/nuxt'],
+  modules: ['@nuxt/devtools', '@nuxt/eslint', '@nuxt/image', '@nuxt/ui-pro', '@nuxt/content', 'nuxt-llms', '@sidebase/nuxt-auth', '@vueuse/nuxt'],
   uiPro: {
     content: true
   },

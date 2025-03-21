@@ -4,15 +4,15 @@
         <div class="aspect-4/3 bg-zinc-800 p-3 rounded-md flex flex-row items-stretch min-w-7/12">
             <XtermJs class="row-end-1 w-full" v-show="value == 'Development'" @vue:mounted=""
                 session="Development"
-                wsUrl="ws://hciedev.laheyhealth.org/devops/api/node-pty"
+                :wsUrl="`wsUrl`"
             />
             <XtermJs class="w-full" v-show="value == 'Test'" @vue:mounted=""
                 session="Test"
-                wsUrl="ws://hcietst.laheyhealth.org/devops/api/node-pty"
+                :wsUrl="`wsUrl`"
             />
             <XtermJs class="w-full" v-show="value == 'LIVE'" @vue:mounted=""
                 session="LIVE"
-                wsUrl="ws://hcieprd.laheyhealth.org/devops/api/node-pty"
+                wsUrl="`wsUrl`"
             />
             <!-- side action controls -->
             <div class="flex flex-col justify-start gap-4 pl-3">
@@ -24,12 +24,13 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ auth:false, middleware: ["get-session"]})
+definePageMeta({ auth:true, middleware: ["get-session"]})
 import useTerminalSocket from '~/composables/useTerminalSocket'
 
 //const { status, data } = useAuth()
 const config = useRuntimeConfig()
-const { ws, status, data, send, open, close } = useWebSocket(`${config.public.websocket}://${location.host}${config.app.baseURL}/api/node-pty`, { autoConnect: false })
+const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/api/node-pty`
+const { ws, status, data, send, open, close } = useWebSocket(wsUrl, { autoConnect: false })
 const { sessionList } = useTerminalSocket()
 const items = ref(['Development', 'Test', 'LIVE'])
 const value = ref('Development')
