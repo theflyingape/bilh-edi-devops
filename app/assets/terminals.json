@@ -1,0 +1,41 @@
+{
+    "Development": {
+        "host": "hciedev.laheyhealth.org",
+        "cmd": "su",
+        "params": ["-l","--pty","$USER"],
+        "loglevel": "",
+        "pty": {
+            "term": "xterm256-color",
+            "cols": 80,
+            "rows": 25,
+            "cwd": "/files",
+            "env": {}
+        }
+    },
+    "Test": {
+        "host": "hcietst.laheyhealth.org",
+        "cmd": "su",
+        "params": ["-l","--pty","$USER"],
+        "loglevel": "",
+        "pty": {
+            "term": "xterm256-color",
+            "cols": 80,
+            "rows": 25,
+            "cwd": "/files",
+            "env": {}
+        }
+    },
+    "LIVE": {
+        "host": "hcieprd.laheyhealth.org",
+        "cmd": "su",
+        "params": ["-l","--pty","$USER"],
+        "loglevel": "",
+        "pty": {
+            "term": "xterm256-color",
+            "cols": 80,
+            "rows": 25,
+            "cwd": "/files",
+            "env": {}
+        }
+    }
+}

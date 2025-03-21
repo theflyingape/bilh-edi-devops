@@ -20,8 +20,5 @@ export default defineAppConfig({
     },
     icons: {
     },
-    notifications: {
-      position: 'top-0 bottom-auto'
-    }
   }
 })

@@ -1,0 +1,32 @@
+{
+    "Development": {
+        "bgColor": "#102040",
+        "cols": 100,
+        "scrollback": 1000,
+        "fontFamily": "notomono,notoemoji,Consolas,monospace",
+        "theme": {
+            "foreground": "#c1c2c8",
+            "background": "#010204"
+        }
+    },
+    "Test": {
+        "bgColor": "#102040",
+        "cols": 100,
+        "scrollback": 1000,
+        "fontFamily": "notomono,notoemoji,Consolas,monospace",
+        "theme": {
+            "foreground": "#c1c2c8",
+            "background": "#010204"
+        }
+    },
+    "LIVE": {
+        "bgColor": "#102040",
+        "cols": 100,
+        "scrollback": 1000,
+        "fontFamily": "notomono,notoemoji,Consolas,monospace",
+        "theme": {
+            "foreground": "#c1c2c8",
+            "background": "#010204"
+        }
+    }
+}

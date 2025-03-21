@@ -24,9 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import useTerminalSocket from '~/composables/useTerminalSocket'
-
 definePageMeta({ auth:true, middleware: ["get-session"]})
+import useTerminalSocket from '~/composables/useTerminalSocket'
 
 //const { status, data } = useAuth()
 const { ws, status, data, send, open, close } = useWebSocket(`ws://${location.host}/devops/api/node-pty`, { autoConnect: false })
@@ -36,9 +35,10 @@ const value = ref('Development')
 
 //const monitor = ref<HTMLElement | null>(null)
 //const monitorRef = useTemplateRef<HTMLElement>('monitor')
+console.log('terminal', process.env.NODE_ENV)
 
 watch(status, async (n, o) => {
-    //console.log('status', n, o)
+    console.log('status', n, o)
 })
 
 watch(ws, async (n, o) => {
@@ -51,6 +51,7 @@ function connect() {
     const xterm = session?.xterm
     xterm?.writeln(`Connecting to ${session?.url} ... `)
     const ws = sessionList.value[value.value]?.ws
+    ws?.close(1000, 'preparing for a new connect')
     //testSocket = <WebSocket>ws.value
 }
 

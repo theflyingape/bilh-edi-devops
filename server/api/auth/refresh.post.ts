@@ -65,8 +65,7 @@ export default eventHandler(async (event) => {
     return token
   }
   catch (err) {
-    console.error('refresh:', err)
-    setResponseStatus(event, 401, 'Unauthorized')
+    setResponseStatus(event, 401, `${ err }`)
     deleteCookie(event, 'auth.refresh-token'); // Delete the cookie
     deleteCookie(event, 'auth.token'); // Delete the cookie
     return { message: 'Logged out' };
