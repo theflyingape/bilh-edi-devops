@@ -24,25 +24,27 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ auth:true, middleware: ["get-session"]})
+definePageMeta({ auth:false, middleware: ["get-session"]})
 import useTerminalSocket from '~/composables/useTerminalSocket'
 
 //const { status, data } = useAuth()
-const { ws, status, data, send, open, close } = useWebSocket(`ws://${location.host}/devops/api/node-pty`, { autoConnect: false })
+const config = useRuntimeConfig()
+const { ws, status, data, send, open, close } = useWebSocket(`${config.public.websocket}://${location.host}${config.app.baseURL}/api/node-pty`, { autoConnect: false })
 const { sessionList } = useTerminalSocket()
 const items = ref(['Development', 'Test', 'LIVE'])
 const value = ref('Development')
 
 //const monitor = ref<HTMLElement | null>(null)
 //const monitorRef = useTemplateRef<HTMLElement>('monitor')
-console.log('terminal', process.env.NODE_ENV)
 
 watch(status, async (n, o) => {
+    console.log(ws.value)
     console.log('status', n, o)
 })
 
 watch(ws, async (n, o) => {
-    //console.log('watch', n, o)
+    console.log(ws.value)
+    console.log('ws', n, o)
 })
 
 function connect() {

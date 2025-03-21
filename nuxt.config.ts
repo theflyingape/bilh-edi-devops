@@ -63,6 +63,11 @@ export default defineNuxtConfig({
       // handler: './config/AuthRefreshHandler'
     },
   },
+  runtimeConfig: {
+    public: {
+      websocket: process.env.NODE_ENV == 'development' ?  'ws' : 'wss'
+    }
+  },
 
   routeRules: {
     '/': {
