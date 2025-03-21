@@ -19,7 +19,7 @@ export default defineNuxtConfig({
       //  getSession: { path: '/session', method: 'get' },
       },
       pages: {
-        login: '/home',
+        login: '/sorry',
       },
       session: {
         dataResponsePointer: "/",
@@ -92,9 +92,52 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
     port: 6500,
   },
+  eslint: {
+    config: {
+      stylistic: {
+        commaDangle: 'never',
+        braceStyle: '1tbs'
+      }
+    }
+  },
+  icon: {
+    provider: 'iconify'
+  },
+  llms: {
+    domain: 'https://docs-template.nuxt.dev/',
+    title: 'Nuxt UI Pro - Docs template',
+    description: 'A template for building documentation with Nuxt UI Pro and Nuxt Content',
+    full: {
+      title: 'Nuxt UI Pro - Docs template Full Documentation',
+      description: 'This is the full documentation for the Nuxt UI Pro - Docs template'
+    },
+    sections: [
+      {
+        title: 'Getting Started',
+        contentCollection: 'docs',
+        contentFilters: [
+          { field: 'path', operator: 'LIKE', value: '/getting-started%' }
+        ]
+      },
+      {
+        title: 'Essentials',
+        contentCollection: 'docs',
+        contentFilters: [
+          { field: 'path', operator: 'LIKE', value: '/essentials%' }
+        ]
+      }
+    ]
+  },
+
   nitro: {
     experimental: {
       websocket: true
+    },
+    prerender: {
+      routes: [
+        '/'
+      ],
+      crawlLinks: true
     }
   },
   vite: {
@@ -113,10 +156,22 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true,
   },
-  modules: ['@nuxt/ui-pro', '@nuxt/eslint', '@sidebase/nuxt-auth', '@vueuse/nuxt', '@nuxt/image'],
+  modules: ['@nuxt/eslint', '@nuxt/image', '@nuxt/ui-pro', '@nuxt/content', 'nuxt-llms', '@sidebase/nuxt-auth', '@vueuse/nuxt'],
+  uiPro: {
+    content: true
+  },
 
   build: {
     transpile: ['jsonwebtoken']
+  },
+  content: {
+    build: {
+      markdown: {
+        toc: {
+          searchDepth: 1
+        }
+      }
+    }
   },
   compatibilityDate: '2025-03-09',
   future: {

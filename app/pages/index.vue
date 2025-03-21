@@ -6,9 +6,7 @@
     orientation="horizontal"
     :links="links"
   >
-    <img
-      src="~/assets/images/HCIE.jpg"
-      alt="App screenshot"
+    <img src="~/assets/images/HCIE.jpg" alt="App screenshot"
       class="rounded-lg shadow-2xl ring ring-(--ui-border)"
     />
   </UPageHero>
