@@ -18,6 +18,13 @@ orientation: horizontal
   $ git pull
   $ sudo systemctl restart devops
   ```
+  :::tip
+  ---
+  target: _blank
+  to: https://openexchange.intersystems.com/?categories=Developer-Environment,Frameworks,Integration,Solutions,Technology-Example&work-with=Ensemble&industries=Healthcare&sort=d.desc
+  ---
+  Explore rapid innovation enabled by open-source development within scope and business motivators.
+  :::
   :::
 
 #title
@@ -25,12 +32,13 @@ Welcome
 
 #description
 The content here describes what you can do here on & off this main portal.
-There is also detailed help in support of overall EDI DevOps that follows.
+Much more follows in the EDI DevOps content pages.
 
 #links
   :::u-button
   ---
   size: xl
+  icon: i-vscode-icons-file-type-docz
   to: /getting-started
   trailing-icon: i-lucide-arrow-right
   ---
@@ -40,7 +48,7 @@ There is also detailed help in support of overall EDI DevOps that follows.
   :::u-button
   ---
   color: neutral
-  icon: i-lucide-circle-help
+  icon: i-heroicons-academic-cap
   size: xl
   to: https://learning.intersystems.com
   target: blank
@@ -52,24 +60,57 @@ There is also detailed help in support of overall EDI DevOps that follows.
 
 ::u-page-section
 #title
-About this Portal
+About
 
 #description
 Learn what each menu topic represents and how each item allows for quick access to the resource you need.
 
-## Usage
+#features
+  :::u-page-feature
+  ---
+  icon: i-lucide-book-open
+  to: help/guides
+  ---
+  #title
+  Guides
+  
+  #description
+  External access to the complete Documentation portal, but with a list of handy links to the most relevant sections that are often visited.
+  :::
 
-#description
-Learn what each menu topic represents and how each item allows for quick access to the resource you need.
+  :::u-page-feature
+  ---
+  icon: i-lucide-chart-bar-stacked
+  to: https://nuxt.com
+  ---
+  #title
+  Dashboards
+  
+  #description
+  Powered by Zen, these native dashboards provide critical insights and support for proactive, real-time Operations; but also, retrospective analysis for troubleshooting and planning.
+  :::
 
-::tip
----
-target: _blank
-to: https://ui.nuxt.com/getting-started/installation/pro/nuxt
----
-Learn more on how to take the most out of Nuxt UI Pro!
+  :::u-page-feature
+  ---
+  icon: i-lucide-database
+  to: https://nuxt.com
+  ---
+  #title
+  Productions
+  
+  #description
+  Powered by Health Connect using IRIS for HealthShare, these are your primary DevOps portals that run the integration engines for clinical and fiscal need.
+  :::
+
+  :::u-page-feature
+  ---
+  icon: i-lucide-box
+  to: https://nuxt.com
+  ---
+  #title
+  Tools
+  
+  #description
+  Essential applications to work within the IRIS database environments.
+  :::
 ::
-
-### sub-title
-
-To be continued ... 
