@@ -66,7 +66,7 @@ export default defineAppConfig({
       title: 'Community',
       links: [{
         icon: 'i-lucide-hand-helping',
-        label: 'InterSystems Developer Community',
+        label: 'Developer Community',
         to: 'https://community.intersystems.com',
         target: '_blank'
       }, {

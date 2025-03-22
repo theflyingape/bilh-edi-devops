@@ -1,7 +1,13 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+const sw = process.env.SW === 'true'
+
 export default defineNuxtConfig({
   app: {
     baseURL: '/devops',
+  },
+  appConfig: {
+    buildDate: new Date().toISOString(),
   },
   auth: {
     baseURL: '/api/auth',
@@ -135,11 +141,14 @@ export default defineNuxtConfig({
     ]
   },
   pwa: {
+    strategies: sw ? 'injectManifest' : 'generateSW',
+    srcDir: sw ? 'service-worker' : undefined,
+    filename: sw ? 'sw.ts' : undefined,
     registerType: 'autoUpdate',
     manifest: {
       name: 'EDI DevOps',
       short_name: 'EDI',
-      theme_color: '#ffffff',
+      theme_color: '#f0f8ff',
       icons: [
         {
           src: 'pwa-192x192.png',
@@ -158,6 +167,12 @@ export default defineNuxtConfig({
           purpose: 'any maskable',
         },
       ],
+    },
+    workbox: {
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
+    },
+    injectManifest: {
+      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
     },
     client: {
       installPrompt: true,

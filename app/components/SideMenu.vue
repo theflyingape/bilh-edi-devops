@@ -32,8 +32,13 @@
           </UForm>
         </UCard>
       </div>
-      <div class="flex m-3">
-        <UColorModeSelect />
+      <div class="flex">
+        <div class="p-4">
+          <UColorModeSelect class="m-auto" />
+        </div>
+        <div v-if="$pwa?.isPWAInstalled" class="p-4">
+          <NuxtImg width="48px" src="pwa.svg" />
+        </div>
       </div>
     </template>
     <template #footer>
