@@ -15,8 +15,8 @@
       <template #right>
         <div class="flex flex-cols gap-2">
           <div class="m-auto">
-            <UTooltip arrow :content="{ align:'center', side:'left', sideOffset:8 }" text="fullscreen" >
-              <USwitch color="neutral" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" v-model="isFullscreen"
+            <UTooltip arrow :content="{ align:'end', side:'left', sideOffset:1 }" text="click to toggle fullscreen" >
+              <USwitch color="secondary" unchecked-icon="i-heroicons-window" checked-icon="i-heroicons-tv" size="xl" v-model="isFullscreen"
               @click="toggle" />
             </UTooltip>
           </div>

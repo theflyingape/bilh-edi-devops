@@ -39,7 +39,7 @@ Much more follows in the EDI DevOps content pages.
   ---
   size: xl
   icon: i-vscode-icons-file-type-docz
-  to: /getting-started
+  to: /bilh-interface-engine
   trailing-icon: i-lucide-arrow-right
   ---
   EDI DevOps content
