@@ -134,6 +134,43 @@ export default defineNuxtConfig({
       }
     ]
   },
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'EDI DevOps',
+      short_name: 'EDI',
+      theme_color: '#ffffff',
+      icons: [
+        {
+          src: 'pwa-192x192.png',
+          sizes: '192x192',
+          type: 'image/png',
+        },
+        {
+          src: 'pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+        },
+        {
+          src: 'pwa-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'any maskable',
+        },
+      ],
+    },
+    client: {
+      installPrompt: true,
+      periodicSyncForUpdates: 10000,
+    },
+    devOptions: {
+      enabled: true,
+      suppressWarnings: true,
+      navigateFallback: '/',
+      navigateFallbackAllowlist: [/^\/$/],
+      type: 'module',
+    },
+  },
 
   nitro: {
     experimental: {
@@ -162,7 +199,7 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true,
   },
-  modules: ['@nuxt/devtools', '@nuxt/eslint', '@nuxt/image', '@nuxt/ui-pro', '@nuxt/content', 'nuxt-llms', '@sidebase/nuxt-auth', '@vueuse/nuxt'],
+  modules: ['@nuxt/devtools', '@nuxt/eslint', '@nuxt/image', '@nuxt/ui-pro', '@nuxt/content', 'nuxt-llms', '@sidebase/nuxt-auth', '@vueuse/nuxt', '@vite-pwa/nuxt'],
   uiPro: {
     content: true
   },

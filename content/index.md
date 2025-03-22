@@ -42,14 +42,34 @@ There is also detailed help in support of overall EDI DevOps that follows.
   color: neutral
   icon: i-lucide-circle-help
   size: xl
-  to: https://github.com/nuxt-ui-pro/docs
+  to: https://learning.intersystems.com
+  target: blank
   variant: subtle
   ---
-  Continue on this page
+  Visit InterSystems Learning services
   :::
 ::
 
 ::u-page-section
 #title
-Using this portal
+About this Portal
 
+#description
+Learn what each menu topic represents and how each item allows for quick access to the resource you need.
+
+## Usage
+
+#description
+Learn what each menu topic represents and how each item allows for quick access to the resource you need.
+
+::tip
+---
+target: _blank
+to: https://ui.nuxt.com/getting-started/installation/pro/nuxt
+---
+Learn more on how to take the most out of Nuxt UI Pro!
+::
+
+### sub-title
+
+To be continued ... 

@@ -36,7 +36,7 @@ export default defineAppConfig({
     // Update bottom left credits
     credits: `Copyright © ${new Date().getFullYear()}`,
     // Show or hide the color mode button
-    colorMode: false,
+    colorMode: true,
     // Customize links
     links: [{
       'icon': 'i-simple-icons-nuxtdotjs',

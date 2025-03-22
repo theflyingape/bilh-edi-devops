@@ -1,6 +1,8 @@
 <template>
   <UApp :toaster="{ duration: 3583, position: 'top-left' }">
     <NuxtLoadingIndicator />
+    <NuxtPwaManifest />
+
     <UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close
       close-icon="i-lucide-x-circle" id="wip" />
 
@@ -13,14 +15,16 @@
       <template #right>
         <div class="flex flex-cols gap-2">
           <div class="m-auto">
-            <USwitch color="neutral" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" v-model="isFullscreen"
+            <UTooltip arrow :content="{ align:'center', side:'left', sideOffset:8 }" text="fullscreen" >
+              <USwitch color="neutral" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" v-model="isFullscreen"
               @click="toggle" />
+            </UTooltip>
           </div>
-            <div class="m-auto">
-            <UChip class="mt-2" :color="online" inset>
-              <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
+          <div class="m-auto">
+              <UChip class="mt-2" :color="online" inset>
+                <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
                 icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
-            </UChip>
+              </UChip>
           </div>
           <div class="m-auto">
             <UTooltip arrow :content="{ align:'center', side:'right', sideOffset:8 }" :text="`${ data?.id || 'not logged in' }`" >
