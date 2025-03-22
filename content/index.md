@@ -28,7 +28,7 @@ orientation: horizontal
   :::
 
 #title
-Welcome
+Help
 
 #description
 The content here describes what you can do here on & off this main portal.

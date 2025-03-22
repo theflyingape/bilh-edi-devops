@@ -65,6 +65,11 @@ export default defineAppConfig({
     bottom: {
       title: 'Community',
       links: [{
+        icon: 'i-lucide-hand-helping',
+        label: 'InterSystems Developer Community',
+        to: 'https://community.intersystems.com',
+        target: '_blank'
+      }, {
         icon: 'i-lucide-star',
         label: 'Star on GitHub',
         to: 'https://github.com/theflyingape/bilh-edi-devops',
