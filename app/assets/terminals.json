@@ -1,8 +1,8 @@
 {
     "Development": {
-        "host": "hciedev.laheyhealth.org",
-        "cmd": "su",
-        "params": ["-l","--pty","$USER"],
+        "host": "localhost",
+        "cmd": "sudo",
+        "params": ["su", "-", "theflyingape"],
         "loglevel": "",
         "pty": {
             "term": "xterm256-color",
@@ -14,8 +14,8 @@
     },
     "Test": {
         "host": "hcietst.laheyhealth.org",
-        "cmd": "su",
-        "params": ["-l","--pty","$USER"],
+        "cmd": "sudo",
+        "params": ["su", "-l", "--pty", "$USER"],
         "loglevel": "",
         "pty": {
             "term": "xterm256-color",
@@ -27,8 +27,8 @@
     },
     "LIVE": {
         "host": "hcieprd.laheyhealth.org",
-        "cmd": "su",
-        "params": ["-l","--pty","$USER"],
+        "cmd": "sudo",
+        "params": ["su", "-l", "--pty", "$USER"],
         "loglevel": "",
         "pty": {
             "term": "xterm256-color",

@@ -34,28 +34,8 @@ export default function useTerminalSocket() {
 
     function connect(sessionId:string) {
         const { ws } = useWebSocket(sessionList.value[sessionId]?.url)
+        return ws.value
     }
-
-/*
-  props.socket!.onmessage = function (ev) {
-    term.write(ev.data)
-  }
-
-  props.socket!.onopen = (ev) => {
-    term.focus()
-    term.options.cursorBlink = true
-    term.writeln('\x1B[0;2mWebSocket \x1B[22mopen')
-  }
-
-  props.socket!.onclose = (ev) => {
-    term.options.cursorBlink = false
-    term.writeln('\x1B[0;2mWebSocket close\x1B[m')
-  }
-
-  props.socket!.onerror = (ev) => {
-    term.writeln('\x1B[0;2mWebSocket \x1B[22;1;31merror\x1B[m')
-  }
-*/
 
     return { sessionList, prepare, connect }
 }

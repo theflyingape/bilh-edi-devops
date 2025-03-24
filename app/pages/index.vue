@@ -3,7 +3,7 @@
     title="EDI DevOps"
     description="The Team's single point of access to the essential suite of apps, tools, and documentation for efficiency, effectiveness, and success!"
     orientation="horizontal"
-    headline="New release"
+    :headline="`Last built: ${useAppConfig().buildDate}`"
     :links="links"
   >
     <img src="~/assets/images/HCIE.jpg" alt="App screenshot"
