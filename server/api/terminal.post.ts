@@ -64,6 +64,7 @@ export default defineEventHandler(async (event) => {
 
     if (pid) {
       //syslog.note(`Started app PID: ${pid} CLIENT: ${process.env.SSH_CLIENT} (${rows}x${cols})`)
+      console.log(`Started app PID: ${pid} (${rows}x${cols})`)
       sessions[pid] = term
       //  buffer any initial output from forked process
       //  between this post and ensuing client wss connection
@@ -73,6 +74,7 @@ export default defineEventHandler(async (event) => {
     }
     else {
       //syslog.warn(`Failed to spawn app request for CLIENT: ${process.env.SSH_CLIENT} (${rows}x${cols})`)
+      console.error(`Failed to spawn app request (${rows}x${cols})`)
     }
 
     setResponseStatus(event, 200, `OK: ${term.pid} started`)

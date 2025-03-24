@@ -27,7 +27,8 @@ export default function useTerminalSocket() {
         if (cols) prep[sessionId].cols = cols
         if (url) {
             prep[sessionId].url = url
-            prep[sessionId].ws = useWebSocket(url, { autoConnect: false }).ws.value
+            // do not preemptively open a websocket from the component
+            //prep[sessionId].ws = useWebSocket(url, { autoConnect: false }).ws.value
         }
         sessionList.value = { ...sessionList.value, ...prep }
     }
