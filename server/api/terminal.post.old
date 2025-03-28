@@ -39,7 +39,7 @@ interface session extends IPty {
 }
 
 interface sessions {
-  [key: number]: session
+  [key: string]: session
 }
 
 import profiles from '~/assets/terminals.json'
@@ -49,9 +49,8 @@ let term
 
 export default defineEventHandler(async (event) => {
   try {
-    //const body = await readBody(event)
-    const body = { profile: 'Development' }
-
+    const body = await readBody(event)
+    //const body = { profile: 'Development' }
     let cols = terminal[body.profile].pty?.cols || 80
     let rows = terminal[body.profile].pty?.rows || 25
     term = pty.spawn(terminal[body.profile].cmd, terminal[body.profile].params, {
@@ -64,7 +63,7 @@ export default defineEventHandler(async (event) => {
 
     if (pid) {
       //syslog.note(`Started app PID: ${pid} CLIENT: ${process.env.SSH_CLIENT} (${rows}x${cols})`)
-      console.log(`Started app PID: ${pid} (${rows}x${cols})`)
+      console.log(`Started app PID: ${pid} (${rows}x${cols}) as ${terminal[body.profile].cmd} ${terminal[body.profile].params}`)
       sessions[pid] = term
       //  buffer any initial output from forked process
       //  between this post and ensuing client wss connection

@@ -214,6 +214,13 @@ const items = ref([
           description: 'The IDE standard for IRIS ObjectScript, scripting, and data file manipulation',
           to: '/code'
         },
+        {
+          label: 'Worldwide Response Center',
+          icon: 'i-heroicons-globe-americas-solid',
+          description: 'InterSystems WRC application for end user access to software and support, or call directly: 617-621-0700',
+          to: 'https://wrc.intersystems.com',
+          target: '_blank'
+        },
       ]
     }
   ],

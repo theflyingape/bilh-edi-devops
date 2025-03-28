@@ -38,23 +38,39 @@ export default function useTerminalSocket() {
 
   function connect(sessionId: string) {
     console.log('connect', sessionList[sessionId])
-    if (sessionList[sessionId]) {
-      sessionList[sessionId].xterm.writeln(` connect(${sessionList[sessionId]?.url}`)
-      const { ws } = useWebSocket(sessionList[sessionId]?.url)
+    const session = sessionList[sessionId]
+
+    if (session) {
+      session.xterm.writeln(`connect(${sessionList[sessionId]?.url}`)
+      const { ws, status, data, send, open, close } = useWebSocket(session.url, { autoConnect: true })
+
+      watch(ws, async (n, o) => {
+        console.log(ws.value)
+        console.log('ws now:', n, 'from:', o)
+      })
+
+      watch(status, async (n, o) => {
+        console.log(ws.value)
+        console.log('status now:', n, 'from:', o)
+      })
+
+      session.ws = ws.value
       if (ws.value?.onopen) {
         ws.value.onopen = (ev) => {
-          console.log('onopen', ev)
+          console.log('ws.onopen', ev)
         }
       }
-      sessionList[sessionId].ws = ws.value
-      return ws.value
     }
-    return undefined
   }
 
   function attach(sessionId: string) {
-    if (sessionList[sessionId]?.ws)
-      sessionList[sessionId].attach = new AttachAddon(<WebSocket>sessionList[sessionId].ws)
+    const session = sessionList[sessionId]
+
+    if (session && session.ws) {
+        console.log('attach', session)
+        session.attach = new AttachAddon(session.ws)
+        session.xterm.loadAddon(session.attach)
+    }
   }
 
   return { sessionList, prepare, connect, attach }

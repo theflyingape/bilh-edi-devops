@@ -52,7 +52,7 @@ const emit = defineEmits<{ close: [boolean] }>()
   term.unicode.activeVersion = '11'
 
   prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
-  console.log(`XtermJs with xterm: ${sessionList[props.session]?.xterm}`)
+  //console.log(`XtermJs with xterm: ${sessionList[props.session]?.xterm}`)
 
   onMounted(() => {
     console.log('onMounted')

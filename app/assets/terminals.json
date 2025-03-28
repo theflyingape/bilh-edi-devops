@@ -1,5 +1,5 @@
 {
-    "Development": {
+    "localhost": {
         "host": "localhost",
         "cmd": "sudo",
         "params": ["su", "-", "theflyingape"],
@@ -9,6 +9,19 @@
             "cols": 80,
             "rows": 25,
             "cwd": ".",
+            "env": {}
+        }
+    },
+    "Development": {
+        "host": "hciedev.laheyhealth.org",
+        "cmd": "su",
+        "params": ["-l", "--pty"],
+        "loglevel": "",
+        "pty": {
+            "term": "xterm256-color",
+            "cols": 80,
+            "rows": 25,
+            "cwd": "/files",
             "env": {}
         }
     },
