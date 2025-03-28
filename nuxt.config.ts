@@ -3,6 +3,7 @@
 const sw = process.env.SW === 'true'
 
 export default defineNuxtConfig({
+  debug: true,
   app: {
     baseURL: '/devops',
   },

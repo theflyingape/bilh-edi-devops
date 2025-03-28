@@ -41,17 +41,11 @@ export default function useTerminalSocket() {
     const session = sessionList[sessionId]
 
     if (session) {
-      session.xterm.writeln(`connect(${sessionList[sessionId]?.url}`)
-      const { ws, status, data, send, open, close } = useWebSocket(session.url, { autoConnect: true })
-
-      watch(ws, async (n, o) => {
-        console.log(ws.value)
-        console.log('ws now:', n, 'from:', o)
-      })
+      const { ws, status } = useWebSocket(session.url, { autoConnect: true })
 
       watch(status, async (n, o) => {
         console.log(ws.value)
-        console.log('status now:', n, 'from:', o)
+        console.log(session, 'websocket status now:', n, 'from:', o)
       })
 
       session.ws = ws.value
