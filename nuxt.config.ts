@@ -147,8 +147,8 @@ export default defineNuxtConfig({
     filename: sw ? 'sw.ts' : undefined,
     registerType: 'autoUpdate',
   */
-    scope: '/devops',
-    base: '/devops',
+    scope: '/devops/',
+    base: '/devops/',
     strategies: 'injectManifest',
     srcDir: 'service-worker',
     filename: 'sw.ts',
@@ -156,6 +156,8 @@ export default defineNuxtConfig({
     manifest: {
       name: 'EDI DevOps',
       short_name: 'EDI',
+      display_override: ['fullscreen', 'minimal-ui'],
+      display: 'standalone',
       theme_color: '#f0f8ff',
       icons: [
         {
