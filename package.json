@@ -29,7 +29,7 @@
     "@nuxt/image": "^1.10.0",
     "@nuxt/ui-pro": "^3.0.0",
     "@sidebase/nuxt-auth": "^0.10.0",
-    "@vite-pwa/nuxt": "^0.10.6",
+    "@vite-pwa/nuxt": "^0.10.8",
     "@vueuse/nuxt": "^13.0.0",
     "@xterm/addon-attach": "^0.11.0",
     "@xterm/addon-clipboard": "^0.1.0",

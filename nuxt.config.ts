@@ -141,10 +141,16 @@ export default defineNuxtConfig({
     ]
   },
   pwa: {
+  /*
     strategies: sw ? 'injectManifest' : 'generateSW',
     srcDir: sw ? 'service-worker' : undefined,
     filename: sw ? 'sw.ts' : undefined,
     registerType: 'autoUpdate',
+  */
+    strategies: 'injectManifest',
+    srcDir: 'service-worker',
+    filename: 'sw.ts',
+    registerType: 'prompt',
     manifest: {
       name: 'EDI DevOps',
       short_name: 'EDI',

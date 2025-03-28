@@ -13,9 +13,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ auth:false, middleware: ["get-session"]})
-//const MODE = process.env.NODE_ENV
-//const VERSION = process.env.VUE_APP_VERSION
+definePageMeta({ auth:false })
 
 const links = ref([
   {

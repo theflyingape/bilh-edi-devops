@@ -4,5 +4,5 @@ NUXT_APP_BASE_URL=/devops
 NUXT_BASE_URL=https://www.domain.com
 NUXT_JWT_ACCESS=30s
 NUXT_JWT_REFRESH=10h
-NUXT_JWT_PASSWORD=[your password]
-NUXT_UI_PRO_LICENSE=[your license]
+NUXT_JWT_PASSWORD=[app/site password]
+NUXT_UI_PRO_LICENSE=[your license key]

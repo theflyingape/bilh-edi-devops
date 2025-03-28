@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ auth:false, middleware: ["get-session"]})
+definePageMeta({ auth:false })
 
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '#ui-pro/utils/content'
@@ -39,7 +39,8 @@ defineOgImageComponent('Docs', {
 })
 */
 const links = computed(() => {
-  const links = []
+  const links: never[] = []
+/*
   if (toc?.bottom?.edit) {
     links.push({
       icon: 'i-lucide-external-link',
@@ -48,7 +49,7 @@ const links = computed(() => {
       target: '_blank'
     })
   }
-
+*/
   return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
 })
 </script>

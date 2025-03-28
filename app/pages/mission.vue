@@ -1,5 +1,6 @@
 <script setup lang="ts">
-definePageMeta({ auth:false, middleware: ["get-session"]})
+definePageMeta({ auth:false })
+
 const { data: page } = await useAsyncData('index', () => queryCollection('landing').path('/').first())
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
