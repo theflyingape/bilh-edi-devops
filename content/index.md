@@ -1,6 +1,6 @@
 ---
 seo:
-  title: EDI DevOps - HELP
+  title: EDI DevOps - Mission
   description: The landing page for a variety of topics detailed here.
 ---
 
@@ -23,16 +23,15 @@ orientation: horizontal
   target: _blank
   to: https://openexchange.intersystems.com/?categories=Developer-Environment,Frameworks,Integration,Solutions,Technology-Example&work-with=Ensemble&industries=Healthcare&sort=d.desc
   ---
-  Explore rapid innovation enabled by open-source development within scope and business motivators.
+  Explore rapid innovation enabled by open-source development: enhances the scope of our team development service catalog and aligns with the business motivators to solve data orchestrations critical for success.
   :::
   :::
 
 #title
-Help
+About
 
 #description
-The content here describes what you can do here on & off this main portal.
-Much more follows in the EDI DevOps content pages.
+The topics below describe what you can do on & off this main portal. Much more systems, development, and operational details follow in the EDI DevOps content.
 
 #links
   :::u-button
@@ -60,7 +59,7 @@ Much more follows in the EDI DevOps content pages.
 
 ::u-page-section
 #title
-About
+Topics
 
 #description
 Learn what each menu topic represents and how each item allows for quick access to the resource you need.

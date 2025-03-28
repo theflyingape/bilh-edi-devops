@@ -87,10 +87,10 @@ export default defineEventHandler(async (event) => {
   }
 })
 
-/*
-sudo `which node`
-const pty = require('node-pty')
-term = pty.spawn("su",["-","theflyingape"])
-term.onData((data) => { console.log(data) })
-term.write('ls\r')
-*/
+/** unit-test
+  sudo `which node`
+  const pty = require('node-pty')
+  term = pty.spawn("su",["-","theflyingape"])
+  term.onData((data) => { console.log(data) })
+  term.write('ls\r')
+**/

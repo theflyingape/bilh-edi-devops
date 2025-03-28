@@ -35,7 +35,7 @@ const emit = defineEmits<{ close: [boolean] }>()
     fontFamily: 'Consolas,Lucida Console,monospace', fontSize: 22, fontWeight: 'normal', fontWeightBold: 'bold',
   }
 
-  const { prepare, sessionList } = useTerminalSocket()
+  const { sessionList, prepare } = useTerminalSocket()
 
   //const terminal = defineModel<Terminal>('terminal')
   const terminalContainer = ref<HTMLElement | null>(null)
@@ -44,14 +44,15 @@ const emit = defineEmits<{ close: [boolean] }>()
   //terminal.value = new Terminal({ ...startup, rows:27, cols:84 })
   //const term = terminal.value
   const term = new Terminal({ ...startup, rows:27, cols:84 })
-  prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
-  console.log('XtermJs', sessionList.value)
 
   const fit = new FitAddon()
   term.loadAddon(new Unicode11Addon())
   term.loadAddon(new ClipboardAddon())
   term.loadAddon(fit)
   term.unicode.activeVersion = '11'
+
+  prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
+  console.log(`XtermJs with xterm: ${sessionList[props.session]?.xterm}`)
 
   onMounted(() => {
     console.log('onMounted')

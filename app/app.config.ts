@@ -22,6 +22,11 @@ export default defineAppConfig({
     },
   },
   uiPro: {
+    pageHero: {
+      slots: {
+        headline: 'mb-4'
+      }
+    },
     footer: {
       slots: {
         root: 'border-t border-(--ui-border)',

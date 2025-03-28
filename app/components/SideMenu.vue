@@ -42,7 +42,7 @@
       </div>
     </template>
     <template #footer>
-      <div class="grid-flow-col grid-rows-3 w-full">
+      <div class="grid-flow-col grid-rows-4 w-full">
         <div class="justify-items-center p-1">
           <div class="p-2"><svg viewBox="0 0 1352 200" fill="none" xmlns="http://www.w3.org/2000/svg"
               class="w-auto h-8 shrink-0">
@@ -87,6 +87,9 @@
         <div class="justify-items-center">
           <div><img src="~/assets/images/footer.png" class="drop-shadow-lg" /></div>
         </div>
+        <div class="p-2 text-start text-slate-500 text-sm">
+          <em>{{VERSION}} built {{BUILT}} for {{MODE}}</em>
+        </div>
         <div class="justify-items-end">
           <div class="pr-16"><em>value-add by Robert Hurst</em></div>
           <div class="pr-18">
@@ -109,6 +112,11 @@ const credentials = ref({
   username: '',
   password: '',
 })
+
+//const VERSION = useRuntimeConfig().public.appVersion
+const VERSION = useRuntimeConfig().app.appVersion
+const BUILT = useAppConfig().buildDate
+const MODE = process.env.NODE_ENV
 
 async function login() {
   await signIn(credentials.value, { callbackUrl: 'home', external: false }).then(() => {

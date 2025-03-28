@@ -219,9 +219,9 @@ const items = ref([
   ],
   [
     {
-      label: 'Help',
-      icon: 'i-lucide-circle-help',
-      to: '/help',
+      label: 'Mission',
+      icon: 'i-lucide-target',
+      to: '/mission',
       disabled: false
     },
   ]

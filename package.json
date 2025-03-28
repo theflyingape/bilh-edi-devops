@@ -1,6 +1,6 @@
 {
   "name": "edi-devops",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "license": "MIT",
   "type": "module",
   "description": "The team's single point of access to the essential suite of apps, tools, and documentation for efficiency, effectiveness, and success!",
@@ -10,15 +10,15 @@
     "url": "https://github.com/theflyingape/bilh-edi-devops"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "NUXT_PUBLIC_APP_VERSION=$npm_package_version nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": "nuxt start",
+    "start": "NUXT_PUBLIC_APP_VERSION=$npm_package_version nuxt start",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
@@ -31,6 +31,7 @@
     "@sidebase/nuxt-auth": "^0.10.0",
     "@vite-pwa/nuxt": "^0.10.6",
     "@vueuse/nuxt": "^13.0.0",
+    "@xterm/addon-attach": "^0.11.0",
     "@xterm/addon-clipboard": "^0.1.0",
     "@xterm/addon-fit": "^0.10.0",
     "@xterm/addon-unicode11": "^0.8.0",
