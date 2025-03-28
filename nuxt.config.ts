@@ -147,6 +147,8 @@ export default defineNuxtConfig({
     filename: sw ? 'sw.ts' : undefined,
     registerType: 'autoUpdate',
   */
+    scope: '/devops',
+    base: '/devops',
     strategies: 'injectManifest',
     srcDir: 'service-worker',
     filename: 'sw.ts',

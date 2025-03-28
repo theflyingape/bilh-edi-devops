@@ -17,6 +17,7 @@ orientation: horizontal
   $ cd /opt/devops
   $ git pull
   $ sudo systemctl restart devops
+  $ sudo journalctl -ft DevOps
   ```
   :::tip
   ---

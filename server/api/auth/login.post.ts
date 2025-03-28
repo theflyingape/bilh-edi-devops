@@ -130,7 +130,6 @@ export default defineEventHandler(async (event) => {
       mode: 'no-cors',
     }
   }).then(async (res) => {
-    console.log(res)
     try {
       await res.json().then(async (hcie) => {
         session = {
