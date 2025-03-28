@@ -21,7 +21,8 @@
 import useTerminalSocket from '~/composables/useTerminalSocket'
 
 const config = useRuntimeConfig()
-const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/api/node-pty`
+const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : useAuth().data?.value?.id
+const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/api/node-pty?id=${id}`
 //const { ws, status, data, send, open, close } = useWebSocket(wsUrl, { autoConnect: false })
 const { sessionList, connect, attach } = useTerminalSocket()
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
@@ -36,25 +37,10 @@ function terminal() {
   const xterm = session?.xterm
 
   if (session && xterm) {
-    xterm.write(`\n\x1B[2mConnecting to a new \x1B[0;1m${sessionId}\x1B[0;2m shell session as \x1B[m${useAuth().data.value?.id} ... `)
+    xterm.write(`\n\x1B[2mConnecting to a new \x1B[0;1m${sessionId}\x1B[0;2m shell session as \x1B[m${id} ... `)
     //  establish WebSocket pipe for client <-> shell
     connect(value.value)
     attach(sessionId)
-  /*
-    //  instantiate shell
-    $fetch('/api/terminal', {
-      method: 'POST', body: {
-        profile: value.value
-      }
-    }).then((result) => {
-      const host = result?.host
-      const pid = result?.pid
-      if (pid) {
-        xterm.writeln(`${host} process #${result.pid} spawned.\n`)
-        attach(sessionId)
-      }
-    })
-  */
   }
 }
 </script>

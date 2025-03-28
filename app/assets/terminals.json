@@ -2,7 +2,7 @@
     "localhost": {
         "host": "localhost",
         "cmd": "sudo",
-        "params": ["su", "-", "theflyingape"],
+        "params": ["su", "-"],
         "loglevel": "",
         "pty": {
             "term": "xterm256-color",
@@ -18,7 +18,7 @@
         "params": ["-l", "--pty"],
         "loglevel": "",
         "pty": {
-            "term": "xterm256-color",
+            "term": "xterm",
             "cols": 80,
             "rows": 25,
             "cwd": "/files",
@@ -31,7 +31,7 @@
         "params": ["su", "-l", "--pty", "$USER"],
         "loglevel": "",
         "pty": {
-            "term": "xterm256-color",
+            "term": "xterm256",
             "cols": 80,
             "rows": 25,
             "cwd": "/files",
@@ -44,7 +44,7 @@
         "params": ["su", "-l", "--pty", "$USER"],
         "loglevel": "",
         "pty": {
-            "term": "xterm256-color",
+            "term": "xterm256",
             "cols": 80,
             "rows": 25,
             "cwd": "/files",

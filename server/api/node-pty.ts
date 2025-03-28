@@ -2,6 +2,7 @@
 import { ITerminalOptions } from '@xterm/xterm'
 import pty from 'node-pty'
 import { IPty } from 'node-pty'
+import url from 'url'
 
 interface client {
   [key: string]: {
@@ -50,7 +51,8 @@ export default defineWebSocketHandler({
   open(peer) {
     const profile = 'localhost'
     console.log('WS open: ', peer.id, peer.request.url)
-    let term = pty.spawn(terminal[profile].cmd, terminal[profile].params, {
+    const wsOpts = url.parse(peer.request.url, true).query
+    let term = pty.spawn(terminal[profile].cmd, [...terminal[profile].params, <string>wsOpts?.id] , {
       name: terminal[profile].pty?.term || 'xterm256-color',
       cols: terminal[profile].pty?.cols || 80, rows: terminal[profile].pty?.rows || 25,
       cwd: terminal[profile].pty?.cwd || __dirname,
