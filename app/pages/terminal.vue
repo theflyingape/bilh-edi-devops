@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ auth: true, middleware: ["get-session"] })
+//definePageMeta({ auth: true, middleware: ["get-session"] })
 import useTerminalSocket from '~/composables/useTerminalSocket'
 
 const config = useRuntimeConfig()

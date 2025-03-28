@@ -6,7 +6,7 @@ import { z } from 'zod'
 const dev = process.dev
 export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || '30s'
 export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '1h'
-export const SECRET:PrivateKey = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
+export const SECRET: PrivateKey = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
 
 export interface User {
   id: string,
@@ -41,15 +41,15 @@ const credentialsSchema = z.object({
 export default defineEventHandler(async (event) => {
   const { username, password } = await readValidatedBody(event, credentialsSchema.parse)
   const auth = Buffer.from(`${username}:${password}`).toString('base64')
-  let session: JwtPayload = { id:username, enabled:false, scope:[] }
-  let token = { token:{} }
+  let session: JwtPayload = { id: username, enabled: false, scope: [] }
+  let token = { token: {} }
 
   //  this allows me to test out-of-band
   if (dev) {
     let name, comment, valid = ''
     let groups, roles = []
     let scope = session.scope
-    switch(username) {
+    switch (username) {
       case 'admin':
         name = 'Professor Falken'
         comment = 'Witness Protection'
@@ -85,7 +85,7 @@ export default defineEventHandler(async (event) => {
       default:
         setResponseStatus(event, 401, 'invalid user')
         return
-      }
+    }
     if (valid && password !== valid) {
       setResponseStatus(event, 401, 'invalid credentials')
       return
@@ -109,7 +109,7 @@ export default defineEventHandler(async (event) => {
     const refreshToken = sign(tokenData, SECRET, <SignOptions>{
       expiresIn: REFRESH_TOKEN_TTL
     })
-  
+
     const userTokens: TokensByUser = tokensByUser.get(username) ?? {
       access: new Map(),
       refresh: new Map()
@@ -148,9 +148,10 @@ export default defineEventHandler(async (event) => {
           if (session.groups?.includes('irisadm')) session.scope.push('admin')
           if (session.groups?.includes('irisdev')) session.scope.push('developer')
           if (session.groups?.includes('os-shell-access')) session.scope.push('analyst')
-          if (session.groups?.includes('lahey')) session.scope.push('user')
+          session.scope.push('user')
         }
-        session.scope.push('guest')
+        else
+          session.scope.push('guest')
 
         const tokenData: JwtPayload = session
         const accessToken = sign(tokenData, SECRET, <SignOptions>{
@@ -159,7 +160,7 @@ export default defineEventHandler(async (event) => {
         const refreshToken = sign(tokenData, SECRET, <SignOptions>{
           expiresIn: REFRESH_TOKEN_TTL
         })
-      
+
         // Naive implementation - please implement properly yourself!
         const userTokens: TokensByUser = tokensByUser.get(username) ?? {
           access: new Map(),
@@ -173,7 +174,7 @@ export default defineEventHandler(async (event) => {
         token = { token: { accessToken, refreshToken } }
       })
     }
-    catch(err) {
+    catch (err) {
       setResponseStatus(event, 401, `${err}`)
     }
   })
