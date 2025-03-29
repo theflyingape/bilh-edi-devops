@@ -3,9 +3,9 @@
         "host": "localhost",
         "cmd": "sudo",
         "params": ["su", "-"],
-        "loglevel": "",
+        "loglevel": "LOG_DEBUG",
         "pty": {
-            "term": "xterm256-color",
+            "term": "xterm-256color",
             "cols": 80,
             "rows": 25,
             "cwd": ".",
@@ -18,7 +18,7 @@
         "params": ["-l", "--pty"],
         "loglevel": "",
         "pty": {
-            "term": "xterm",
+            "term": "xterm-256color",
             "cols": 80,
             "rows": 25,
             "cwd": "/files",
@@ -31,7 +31,7 @@
         "params": ["su", "-l", "--pty", "$USER"],
         "loglevel": "",
         "pty": {
-            "term": "xterm256",
+            "term": "xterm-256color",
             "cols": 80,
             "rows": 25,
             "cwd": "/files",
@@ -44,7 +44,7 @@
         "params": ["su", "-l", "--pty", "$USER"],
         "loglevel": "",
         "pty": {
-            "term": "xterm256",
+            "term": "xterm-256color",
             "cols": 80,
             "rows": 25,
             "cwd": "/files",

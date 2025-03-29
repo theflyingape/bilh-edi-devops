@@ -2,6 +2,7 @@
 import { ITerminalOptions } from '@xterm/xterm'
 import pty from 'node-pty'
 import { IPty } from 'node-pty'
+import { log } from '../syslog'
 import url from 'url'
 
 interface client {
@@ -35,6 +36,7 @@ interface config {
 }
 
 interface session extends IPty {
+  profile: string
   spawn?: any
   startup?: string
 }
@@ -49,50 +51,56 @@ let sessions: sessions = {}
 
 export default defineWebSocketHandler({
   open(peer) {
-    const profile = 'localhost'
-    console.log('WS open: ', peer.id, peer.request.url)
     const wsOpts = url.parse(peer.request.url, true).query
-    let term = pty.spawn(terminal[profile].cmd, [...terminal[profile].params, <string>wsOpts?.id] , {
-      name: terminal[profile].pty?.term || 'xterm256-color',
-      cols: terminal[profile].pty?.cols || 80, rows: terminal[profile].pty?.rows || 25,
-      cwd: terminal[profile].pty?.cwd || __dirname,
-      env: terminal[profile].pty?.env || process.env
+    const id = <string>wsOpts?.id || 'unknown'
+    const profile = <string>wsOpts?.profile || 'localhost'
+    const cfg = terminal[profile]
+
+    log('LOG_DEBUG', `node-pty ${peer.id} open for ${id} on ${profile} - ${peer.request.url}`, cfg.loglevel)
+    let term = pty.spawn(cfg.cmd, [...cfg.params, id], {
+      name: cfg.pty?.term || 'xterm-256color',
+      cols: cfg.pty?.cols || 80, rows: cfg.pty?.rows || 25,
+      cwd: cfg.pty?.cwd || __dirname,
+      env: cfg.pty?.env || process.env
     })
     const pid = peer.id || term.pid
 
     if (pid) {
-      console.log(`Started terminal PID: ${pid} as ${terminal[profile].cmd} ${terminal[profile].params}`)
-      sessions[pid] = term
+      log('LOG_INFO', `node-pty ${pid} started PID #${term.pid}: ${[cfg.cmd, ...cfg.params, id].join(" ")}`, cfg.loglevel)
+      sessions[pid] = { profile: profile, ...term }
 
       term.onData((data) => {
         try {
           peer.send(data)
         } catch (ex) {
-          console.error(`?FATAL ACTIVE app session ${pid} pty → ws error:`, ex)
-          console.error(data)
+          log('LOG_ERROR', `node-pty ${pid} exception → browser: ${ex}`, cfg.loglevel)
         }
       })
 
       term.onExit(() => {
-        console.log(`Exit session ${pid}`)
+        log('LOG_NOTICE', `node-pty ${pid} exited PID #${term.pid}`, cfg.loglevel)
         delete sessions[pid]
       })
     }
     else {
-      console.error(`Failed to spawn the ${profile} terminal request`)
+      log('LOG_ERROR', `node-pty spawn failure to run: ${cfg.cmd} ${cfg.params.join(" ")}`, cfg.loglevel)
     }
   },
 
   message(peer, message) {
-    let term: IPty = sessions[peer.id]
+    const term: IPty = sessions[peer.id]
     term.write(message.text())
   },
 
   close(peer) {
-    console.log('node-pty close: ', peer.id)
+    const profile = sessions[peer.id].profile
+    const cfg = terminal[profile]
+    log('LOG_INFO', `node-pty ${peer.id} close`, cfg.loglevel)
   },
 
   error(peer, error) {
-    console.error('node-pty error: ', peer.id, error)
+    const profile = sessions[peer.id].profile
+    const cfg = terminal[profile]
+    log('LOG_ERROR', `node-pty ${peer.id} error: ${error}`, cfg.loglevel)
   },
 })
