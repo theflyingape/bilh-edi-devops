@@ -17,7 +17,6 @@ interface TS {
   }
 }
 
-//const wsList = ref(new Array<WebSocket|undefined>)
 let sessionList = <TS>{}
 
 export default function useTerminalSocket() {
@@ -29,11 +28,8 @@ export default function useTerminalSocket() {
     if (cols) prep[sessionId].cols = cols
     if (url) {
       prep[sessionId].url = url
-      // do not preemptively open a websocket from the component
-      //prep[sessionId].ws = useWebSocket(url, { autoConnect: false }).ws.value
     }
     sessionList = Object.assign(sessionList, prep)
-    //prep[sessionId].xterm.writeln(`prepared ${JSON.stringify(sessionList)}`)
   }
 
   function connect(sessionId: string) {
@@ -49,11 +45,13 @@ export default function useTerminalSocket() {
       })
 
       session.ws = ws.value
+      /*
       if (ws.value?.onopen) {
         ws.value.onopen = (ev) => {
           console.log('ws.onopen', ev)
         }
       }
+      */
     }
   }
 

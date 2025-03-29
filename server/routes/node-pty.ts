@@ -1,4 +1,4 @@
-//  start a new terminal session on host in preparation for a client websocket connection into node-pty
+// start a new terminal session on host in preparation for a client websocket connection into node-pty
 import { ITerminalOptions } from '@xterm/xterm'
 import pty from 'node-pty'
 import { IPty } from 'node-pty'
@@ -35,14 +35,11 @@ interface config {
   }
 }
 
-interface session extends IPty {
-  profile: string
-  spawn?: any
-  startup?: string
-}
-
 interface sessions {
-  [key: string]: session
+  [key: string]: { 
+    profile: string
+    term: IPty
+  }
 }
 
 import profiles from '~/assets/terminals.json'
@@ -57,17 +54,21 @@ export default defineWebSocketHandler({
     const cfg = terminal[profile]
 
     log('LOG_DEBUG', `node-pty ${peer.id} open for ${id} on ${profile} - ${peer.request.url}`, cfg.loglevel)
-    let term = pty.spawn(cfg.cmd, [...cfg.params, id], {
+    let spawn = pty.spawn(cfg.cmd, [...cfg.params, id], {
       name: cfg.pty?.term || 'xterm-256color',
       cols: cfg.pty?.cols || 80, rows: cfg.pty?.rows || 25,
       cwd: cfg.pty?.cwd || __dirname,
       env: cfg.pty?.env || process.env
     })
-    const pid = peer.id || term.pid
+
+    const pid = peer.id || spawn.pid
+    sessions[pid] = { profile: profile, term: spawn }
+    log('LOG_DEBUG', `node-pty sessions[${pid}] = ${JSON.stringify(sessions[pid])}`, cfg.loglevel)
+    const session = sessions[peer.id]
+    const term = session.term
 
     if (pid) {
       log('LOG_INFO', `node-pty ${pid} started PID #${term.pid}: ${[cfg.cmd, ...cfg.params, id].join(" ")}`, cfg.loglevel)
-      sessions[pid] = { profile: profile, ...term }
 
       term.onData((data) => {
         try {
@@ -88,18 +89,25 @@ export default defineWebSocketHandler({
   },
 
   message(peer, message) {
-    const term: IPty = sessions[peer.id]
+    const session = sessions[peer.id]
+    const term = session.term
+    const profile = session.profile
+    const cfg = terminal[profile]
     term.write(message.text())
   },
 
   close(peer) {
-    const profile = sessions[peer.id].profile
+    const session = sessions[peer.id]
+    const term = session.term
+    const profile = session.profile
     const cfg = terminal[profile]
     log('LOG_INFO', `node-pty ${peer.id} close`, cfg.loglevel)
   },
 
   error(peer, error) {
-    const profile = sessions[peer.id].profile
+    const session = sessions[peer.id]
+    const term = session.term
+    const profile = session.profile
     const cfg = terminal[profile]
     log('LOG_ERROR', `node-pty ${peer.id} error: ${error}`, cfg.loglevel)
   },
