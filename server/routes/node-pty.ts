@@ -1,6 +1,7 @@
-// start a new terminal session on host in preparation for a client websocket connection into node-pty
+//  spawn a new terminal session on host using
+//  this client websocket connection attached as stdin/stdout
 import { ITerminalOptions } from '@xterm/xterm'
-import pty from 'node-pty'
+import pty, { IDisposable } from 'node-pty'
 import { IPty } from 'node-pty'
 import { log } from '../syslog'
 import url from 'url'
@@ -36,7 +37,7 @@ interface config {
 }
 
 interface sessions {
-  [key: string]: { 
+  [key: string]: {
     profile: string
     term: IPty
   }
@@ -63,14 +64,13 @@ export default defineWebSocketHandler({
 
     const pid = peer.id || spawn.pid
     sessions[pid] = { profile: profile, term: spawn }
-    log('LOG_DEBUG', `node-pty sessions[${pid}] = ${JSON.stringify(sessions[pid])}`, cfg.loglevel)
-    const session = sessions[peer.id]
-    const term = session.term
+    const session = sessions[pid]
+    log('LOG_DEBUG', `node-pty sessions[${pid}] = ${JSON.stringify(session)}`, cfg.loglevel)
 
     if (pid) {
-      log('LOG_INFO', `node-pty ${pid} started PID #${term.pid}: ${[cfg.cmd, ...cfg.params, id].join(" ")}`, cfg.loglevel)
+      log('LOG_NOTICE', `node-pty ${pid} started PID #${sessions[pid].term.pid}: ${[cfg.cmd, ...cfg.params, id].join(" ")}`)
 
-      term.onData((data) => {
+      session.term.onData((data) => {
         try {
           peer.send(data)
         } catch (ex) {
@@ -78,8 +78,8 @@ export default defineWebSocketHandler({
         }
       })
 
-      term.onExit(() => {
-        log('LOG_NOTICE', `node-pty ${pid} exited PID #${term.pid}`, cfg.loglevel)
+      session.term.onExit((ev) => {
+        log('LOG_NOTICE', `node-pty ${pid} exit ${ev.exitCode} from PID #${sessions[pid].term.pid}`)
         delete sessions[pid]
       })
     }
@@ -102,6 +102,7 @@ export default defineWebSocketHandler({
     const profile = session.profile
     const cfg = terminal[profile]
     log('LOG_INFO', `node-pty ${peer.id} close`, cfg.loglevel)
+    term.kill('SIGKILL')
   },
 
   error(peer, error) {
@@ -110,5 +111,6 @@ export default defineWebSocketHandler({
     const profile = session.profile
     const cfg = terminal[profile]
     log('LOG_ERROR', `node-pty ${peer.id} error: ${error}`, cfg.loglevel)
+    term.kill('SIGKILL')
   },
 })

@@ -12,7 +12,8 @@ interface TS {
     rows?: number
     cols?: number
     url?: string
-    ws?: WebSocket | undefined
+    ws?: Ref<WebSocket|undefined>
+    status?: string
     attach?: AttachAddon
   }
 }
@@ -29,6 +30,7 @@ export default function useTerminalSocket() {
     if (url) {
       prep[sessionId].url = url
     }
+    prep[sessionId].status = 'CLOSED'
     sessionList = Object.assign(sessionList, prep)
   }
 
@@ -37,33 +39,45 @@ export default function useTerminalSocket() {
     const session = sessionList[sessionId]
 
     if (session) {
-      const { ws, status } = useWebSocket(session.url, { autoConnect: true })
+      const { ws, status } = useWebSocket(session.url)
+      session.ws = ws
+      session.status = status.value
 
       watch(status, async (n, o) => {
-        console.log(ws.value)
+        session.status = status.value
         console.log(session, 'websocket status now:', n, 'from:', o)
+        isConnected.value = connected(sessionId)
+        if (!session.ws?.value?.OPEN) session.attach?.dispose()
       })
-
-      session.ws = ws.value
-      /*
-      if (ws.value?.onopen) {
-        ws.value.onopen = (ev) => {
-          console.log('ws.onopen', ev)
-        }
-      }
-      */
     }
   }
 
   function attach(sessionId: string) {
     const session = sessionList[sessionId]
 
-    if (session && session.ws) {
+    if (session && session.ws?.value) {
         console.log('attach', session)
-        session.attach = new AttachAddon(session.ws)
+        session.attach = new AttachAddon(session.ws.value)
         session.xterm.loadAddon(session.attach)
     }
   }
 
-  return { sessionList, prepare, connect, attach }
+  function detach(sessionId: string) {
+    const session = sessionList[sessionId]
+    console.log('detach', session)
+
+    if (session && session.ws) {
+      session.ws.value?.close()
+      //session.ws.value = undefined
+    }
+  }
+
+  const isConnected = ref(false)
+
+  function connected(sessionId:string) {
+    console.log(sessionId, 'connected:', sessionList[sessionId]?.status)
+    return (sessionList[sessionId] && sessionList[sessionId].status !== 'CLOSED') || false
+  }
+
+  return { sessionList, prepare, connect, attach, detach, isConnected }
 }

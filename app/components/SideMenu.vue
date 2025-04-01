@@ -93,7 +93,7 @@
         <div class="justify-items-end">
           <div class="pr-16"><em>value-add by Robert Hurst</em></div>
           <div class="pr-18">
-            <UButton color="neutral" variant="link" icon="i-simple-icons-github" to="https://github.com/theflyingape"
+            <UButton color="neutral" variant="link" icon="i-simple-icons-github" to="https://github.com/theflyingape/bilh-edi-devops"
               target="_blank">GitHub</UButton>
           </div>
         </div>

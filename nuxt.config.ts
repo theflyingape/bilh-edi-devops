@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-
-const sw = process.env.SW === 'true'
+// const sw = process.env.SW === 'true'
 
 export default defineNuxtConfig({
   app: {
@@ -198,6 +197,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    baseURL: '/devops',
     experimental: {
       websocket: true
     },
@@ -206,7 +206,8 @@ export default defineNuxtConfig({
         '/'
       ],
       crawlLinks: true
-    }
+    },
+    preset: 'node_server',
   },
   vite: {
     preview: {
@@ -216,7 +217,7 @@ export default defineNuxtConfig({
       allowedHosts: ['hciedev.laheyhealth.org'],
       hmr: {
         protocol: 'ws',
-        host: 'localhost'
+        host: '127.0.0.1'
       }
     }
   },

@@ -1,6 +1,7 @@
 // @ts-expect-error missing types
 import syslog from 'modern-syslog'
 syslog.open('DevOps')
+log('LOG_NOTICE', `syslog events are available from ssr`)
 
 //  syslog wrapper
 export function log(priority:string|number, message:string, loglevel:string|number = 'LOG_NOTICE') {

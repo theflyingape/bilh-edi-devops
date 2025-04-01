@@ -1,5 +1,6 @@
 //import { createError, eventHandler, readBody } from 'h3'
 import { PrivateKey, sign, SignOptions } from 'jsonwebtoken'
+import { log } from '../../syslog'
 import { z } from 'zod'
 
 //  supply trivial values for testing -- make .env to better secure your site implementation
@@ -121,6 +122,7 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 200, 'logged in')
 
     token = { token: { accessToken, refreshToken } }
+    log('LOG_NOTICE', `${username} ${event} return token size: ${JSON.stringify(token).length}`)
     return token
   }
 
@@ -175,8 +177,11 @@ export default defineEventHandler(async (event) => {
     }
     catch (err) {
       setResponseStatus(event, 401, `${err}`)
+      log('LOG_NOTICE', `${username} ${event} ${JSON.stringify(err)}`)
     }
   })
+
+  log('LOG_NOTICE', `${username} ${event} return token size: ${JSON.stringify(token).length}`)
   return token
 })
 
