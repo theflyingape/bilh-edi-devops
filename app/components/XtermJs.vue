@@ -10,7 +10,7 @@ const props = defineProps<{
   theme: keyof theme  //  pick a color
   rows?: number       //  25
   cols?: number       //  80
-  wsUrl?: string      //  ws://${location.host}/devops/api/node-pty
+  wsUrl?: string      //  wss://${location.host}/node-pty
 }>()
 
 import { Terminal, type ITerminalOptions, type ITheme } from '@xterm/xterm'

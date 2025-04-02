@@ -3,7 +3,7 @@
 
 export default defineNuxtConfig({
   app: {
-    baseURL: '/devops',
+    //baseURL: '/devops',
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' })
@@ -146,8 +146,8 @@ export default defineNuxtConfig({
     filename: sw ? 'sw.ts' : undefined,
     registerType: 'autoUpdate',
   */
-    scope: '/devops/',
-    base: '/devops/',
+    scope: '/',
+    base: '/',
     strategies: 'injectManifest',
     srcDir: 'service-worker',
     filename: 'sw.ts',
@@ -197,7 +197,7 @@ export default defineNuxtConfig({
   },
 
   nitro: {
-    baseURL: '/devops',
+    //baseURL: '/devops',
     experimental: {
       websocket: true
     },

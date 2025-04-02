@@ -31,8 +31,8 @@ import useTerminalSocket from '~/composables/useTerminalSocket'
 
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : useAuth().data?.value?.id
-const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
-//const wsUrl = `${config.public.websocket}://${location.host}/node-pty?id=${id}`
+//const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
+const wsUrl = `${config.public.websocket}://${location.host}/node-pty?id=${id}`
 
 const { sessionList, connect, attach, detach, connected, isConnected } = useTerminalSocket()
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
