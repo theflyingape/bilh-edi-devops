@@ -1,7 +1,7 @@
 //  spawn a new terminal session on host using
 //  this client websocket connection attached as stdin/stdout
 import { ITerminalOptions } from '@xterm/xterm'
-import pty, { IDisposable } from 'node-pty'
+import pty from 'node-pty'
 import { IPty } from 'node-pty'
 import { log } from '../syslog'
 import url from 'url'
@@ -80,7 +80,10 @@ export default defineWebSocketHandler({
 
       session.term.onExit((ev) => {
         log('LOG_NOTICE', `node-pty ${pid} exit ${ev.exitCode} from PID #${sessions[pid].term.pid}`)
-        delete sessions[pid]
+        if (peer.websocket && peer.websocket.readyState != 3)
+          peer.websocket.close!()
+        else if (sessions[pid])
+          delete sessions[pid]
       })
     }
     else {
@@ -98,11 +101,14 @@ export default defineWebSocketHandler({
 
   close(peer) {
     const session = sessions[peer.id]
-    const term = session.term
-    const profile = session.profile
+    const term = session?.term
+    const profile = session?.profile
     const cfg = terminal[profile]
     log('LOG_INFO', `node-pty ${peer.id} close`, cfg.loglevel)
-    term.kill('SIGKILL')
+    if (term)
+      term.kill('SIGTERM')
+    else
+      delete sessions[peer.id]
   },
 
   error(peer, error) {
@@ -111,6 +117,9 @@ export default defineWebSocketHandler({
     const profile = session.profile
     const cfg = terminal[profile]
     log('LOG_ERROR', `node-pty ${peer.id} error: ${error}`, cfg.loglevel)
-    term.kill('SIGKILL')
-  },
+    if (term)
+      term.kill('SIGTERM')
+    else
+      delete sessions[peer.id]
+   },
 })

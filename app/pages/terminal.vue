@@ -9,10 +9,14 @@
       <!-- side action controls -->
       <div class="flex flex-col justify-start gap-4 pl-3">
         <div v-if="isConnected">
-          <UButton color="action" @click="terminate">Disconnect</UButton>
+          <UChip class="mt-2" color="success">
+            <UButton color="action" variant="soft" @click="terminate">Disconnect</UButton>
+          </UChip>
         </div>
         <div v-else>
-          <UButton color="action" @click="terminal">Connect</UButton>
+          <UChip class="mt-2" color="neutral">
+            <UButton color="action" @click="terminal">Connect</UButton>
+          </UChip>
         </div>
         <USelect v-model="value" :items="items" class="w-36" />
       </div>
@@ -30,9 +34,13 @@ const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : useAuth().da
 const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 //const wsUrl = `${config.public.websocket}://${location.host}/node-pty?id=${id}`
 
-const { sessionList, connect, attach, detach, isConnected } = useTerminalSocket()
+const { sessionList, connect, attach, detach, connected, isConnected } = useTerminalSocket()
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
 const value = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Development')
+
+watch(value, async (n, o) => {
+  isConnected.value = connected(value.value)
+})
 
 function terminal() {
   const sessionId = value.value

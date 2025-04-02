@@ -72,12 +72,12 @@ export default function useTerminalSocket() {
     }
   }
 
-  const isConnected = ref(false)
-
   function connected(sessionId:string) {
-    console.log(sessionId, 'connected:', sessionList[sessionId]?.status)
+    //console.log(sessionId, 'connected:', sessionList[sessionId]?.status)
     return (sessionList[sessionId] && sessionList[sessionId].status !== 'CLOSED') || false
   }
 
-  return { sessionList, prepare, connect, attach, detach, isConnected }
+  const isConnected = ref(false)
+
+  return { sessionList, prepare, connect, attach, detach, connected, isConnected }
 }
