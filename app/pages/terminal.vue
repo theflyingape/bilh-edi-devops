@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import { useResizeObserver } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
-import useTerminalSocket from '~/composables/useTerminalSocket'
+//import useTerminalSocket from '~/composables/useTerminalSocket'
 
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : useAuth().data?.value?.id
