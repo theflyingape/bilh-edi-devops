@@ -27,9 +27,9 @@
     },
     "Test": {
         "host": "hcietst.laheyhealth.org",
-        "cmd": "sudo",
-        "params": ["su", "-l", "--pty", "$USER"],
-        "loglevel": "",
+        "cmd": "su",
+        "params": ["-l", "--pty"],
+        "loglevel": "LOG_INFO",
         "pty": {
             "term": "xterm-256color",
             "cols": 80,
@@ -40,9 +40,9 @@
     },
     "LIVE": {
         "host": "hcieprd.laheyhealth.org",
-        "cmd": "sudo",
-        "params": ["su", "-l", "--pty", "$USER"],
-        "loglevel": "",
+        "cmd": "su",
+        "params": ["-l", "--pty"],
+        "loglevel": "LOG_INFO",
         "pty": {
             "term": "xterm-256color",
             "cols": 80,

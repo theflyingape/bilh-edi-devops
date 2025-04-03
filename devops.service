@@ -5,10 +5,12 @@ After=local-fs.target network-online.target
 [Service]
 Type=simple
 User=root
-Group=irisdev
-Environment=NODE_VERSION=lts/iron NODE_ENV=production
-ExecStartPre=/opt/devops/.nvm/nvm-exec npm run build
-ExecStart=/opt/devops/.nvm/nvm-exec node .output/server/index.mjs
+Group=irisadm
+SupplementaryGroups=irisdev
+#Environment=NODE_VERSION=lts/iron NODE_ENV=production
+#ExecStartPre=/opt/devops/.nvm/nvm-exec npm run build
+#ExecStart=/opt/devops/.nvm/nvm-exec node .output/server/index.mjs
+ExecStart=/bin/sh /opt/devops/devops-portal.sh
 KillMode=mixed
 Restart=on-failure
 RestartSec=15
