@@ -16,7 +16,7 @@
         "host": "hciedev.laheyhealth.org",
         "cmd": "su",
         "params": ["-l", "--pty"],
-        "loglevel": "",
+        "loglevel": "LOG_DEBUG",
         "pty": {
             "term": "xterm-256color",
             "cols": 80,

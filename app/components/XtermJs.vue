@@ -13,7 +13,8 @@ const props = defineProps<{
   wsUrl?: string      //  wss://${location.host}/node-pty
 }>()
 
-import { Terminal, type ITerminalOptions, type ITheme } from '@xterm/xterm'
+import { type ITerminalOptions, type ITheme } from '@xterm/xterm'
+import { Terminal } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import { Unicode11Addon } from '@xterm/addon-unicode11'
 import { WebglAddon } from '@xterm/addon-webgl'
