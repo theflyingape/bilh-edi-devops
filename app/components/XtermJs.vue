@@ -13,7 +13,7 @@ const props = defineProps<{
   wsUrl?: string      //  wss://${location.host}/node-pty
 }>()
 
-import { type ITerminalOptions, type ITheme } from '@xterm/xterm'
+import { Terminal, type ITerminalOptions, type ITheme } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import { Unicode11Addon } from '@xterm/addon-unicode11'
 import { WebglAddon } from '@xterm/addon-webgl'
@@ -61,7 +61,7 @@ let startup: client = {
   wordSeparator: ` .:;?!"'<>(/)[=]`
 }
 
-const { sessionList, prepare } = useTerminalSocket()
+const { prepare } = useTerminalSocket()
 
 const terminalContainer = ref<HTMLElement | null>(null)
 const term = new Terminal({ ...startup, rows:27, cols:84 })
@@ -79,13 +79,6 @@ onMounted(() => {
   if (terminalContainer.value) {
     term.open(terminalContainer.value)
     term.loadAddon(new WebglAddon())
-
-    //window.addEventListener('resize', resize)
-/*
-    term.onData((data) => {
-        props?.socket!.send(data)
-    })
-*/
   }
 })
 

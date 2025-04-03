@@ -73,12 +73,12 @@ export default defineNuxtConfig({
       websocket: process.env.NODE_ENV == 'development' ?  'ws' : 'wss'
     }
   },
-
+/*
   routeRules: {
     '/': {
-      // prerender: true,
-      // swr: 5,
-      // ssr: false,
+      //prerender: true,
+      //swr: 5,
+      //ssr: false,
     },
     '/with-caching': {
       swr: 86400000,
@@ -87,7 +87,7 @@ export default defineNuxtConfig({
       }
     }
   },
-
+*/
   css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
   ui: {
     theme: {
@@ -205,7 +205,8 @@ export default defineNuxtConfig({
       routes: [
         '/'
       ],
-      crawlLinks: true
+      crawlLinks: true,
+      failOnError: false,
     },
     preset: 'node_server',
   },
