@@ -55,7 +55,7 @@ export default defineWebSocketHandler({
     const cfg = terminal[profile]
 
     log('LOG_DEBUG', `node-pty ${peer.id} open for ${id} on ${profile} - ${peer.request.url}`, cfg.loglevel)
-    let spawn = pty.spawn(cfg.cmd, [...cfg.params, id], {
+    let spawn = pty.spawn(cfg.cmd, [...cfg.params, id, cfg.host], {
       name: cfg.pty?.term || 'xterm-256color',
       cols: cfg.pty?.cols || 80, rows: cfg.pty?.rows || 25,
       cwd: cfg.pty?.cwd || __dirname,

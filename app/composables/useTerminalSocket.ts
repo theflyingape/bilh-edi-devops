@@ -21,7 +21,7 @@ interface TS {
 }
 
 let sessionList = <TS>{}
-let lastRows = 80, lastCols = 25
+let lastRows = 50, lastCols = 80
 
 export default function useTerminalSocket() {
   function prepare(sessionId: string, terminal: Terminal, url?: string, rows?: number, cols?: number) {
@@ -91,13 +91,14 @@ export default function useTerminalSocket() {
     const session = sessionList[sessionId]
     if (session) {
       if (session.fit) {
-        session.fit.fit()
+        //session.fit.fit()
         let xy = session.fit?.proposeDimensions()
         if (xy?.rows && Number.isNaN(xy.rows) == false && xy.rows >= 20) lastRows = xy.rows
         if (xy?.cols && Number.isNaN(xy.cols) == false && xy.cols >= 40) lastCols = xy.cols
         console.log(`resize(${sessionId}):`, lastRows, lastCols)
-        session.xterm.resize(lastCols, lastRows)
+        //session.xterm.resize(lastCols, lastRows)
       }
+      session.xterm.focus()
     }
   }
 

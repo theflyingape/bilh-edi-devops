@@ -1,8 +1,8 @@
 {
     "localhost": {
         "host": "localhost",
-        "cmd": "sudo",
-        "params": ["su", "-"],
+        "cmd": "/bin/sh",
+        "params": [ "node-pty.sh" ],
         "loglevel": "LOG_DEBUG",
         "pty": {
             "term": "xterm-256color",
@@ -14,8 +14,8 @@
     },
     "Development": {
         "host": "hciedev.laheyhealth.org",
-        "cmd": "su",
-        "params": ["-l", "--pty"],
+        "cmd": "/bin/sh",
+        "params": [ "node-pty.sh" ],
         "loglevel": "LOG_DEBUG",
         "pty": {
             "term": "xterm-256color",
@@ -27,8 +27,8 @@
     },
     "Test": {
         "host": "hcietst.laheyhealth.org",
-        "cmd": "su",
-        "params": ["-l", "--pty"],
+        "cmd": "/bin/sh",
+        "params": [ "node-pty.sh" ],
         "loglevel": "LOG_INFO",
         "pty": {
             "term": "xterm-256color",
@@ -40,8 +40,8 @@
     },
     "LIVE": {
         "host": "hcieprd.laheyhealth.org",
-        "cmd": "su",
-        "params": ["-l", "--pty"],
+        "cmd": "/bin/sh",
+        "params": [ "node-pty.sh" ],
         "loglevel": "LOG_INFO",
         "pty": {
             "term": "xterm-256color",

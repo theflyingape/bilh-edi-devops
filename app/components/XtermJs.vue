@@ -40,8 +40,8 @@ const theme: theme = {
   },
   DJT: {
     foreground: "#d0d0d0", background: "#004547", cursor: 'Silver',
-    black: "#000000", red: "#c00000", green: "#00c000", yellow: "#c8c000",
-    blue: "#0000c0", magenta: "#c000c0", cyan: "#00c0c0", white: "#c8c8c8",
+    black: "#000000", red: "#c80000", green: "#00c800", yellow: "#c8c000",
+    blue: "#0808c8", magenta: "#c800c8", cyan: "#00c8c8", white: "#c8c8c8",
     brightBlack: "#606060", brightRed: "#fa0000", brightGreen: "#00fa00", brightYellow: "#fafa00",
     brightBlue: "#0000fa", brightMagenta: "#fa00fa", brightCyan: "#00fafa", brightWhite: "#fafafa"
   },
@@ -64,7 +64,7 @@ let startup: client = {
 const { sessionList, prepare, resize } = useTerminalSocket()
 
 const terminalContainer = ref<HTMLElement | null>(null)
-const term = new Terminal({ ...startup, rows:30, cols:90 })
+const term = new Terminal({ ...startup, rows:36, cols:100 })
 
 term.loadAddon(new Unicode11Addon())
 term.loadAddon(new ClipboardAddon())
