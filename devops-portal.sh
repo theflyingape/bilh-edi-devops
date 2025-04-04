@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /opt/devops
+[ -d /opt/devops ] && cd /opt/devops
 
 NODE_VERSION=lts/iron NODE_ENV=production .nvm/nvm-exec npm run build
 

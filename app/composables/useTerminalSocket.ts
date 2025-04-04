@@ -4,11 +4,13 @@
  **/
 import { Terminal, type ITerminalOptions } from '@xterm/xterm'
 import { AttachAddon } from '@xterm/addon-attach'
+import { FitAddon } from '@xterm/addon-fit'
 
 interface TS {
   [key: string]: {
     xterm: Terminal
     options?: ITerminalOptions
+    fit?: FitAddon
     rows?: number
     cols?: number
     url?: string
@@ -19,6 +21,7 @@ interface TS {
 }
 
 let sessionList = <TS>{}
+let lastRows = 80, lastCols = 25
 
 export default function useTerminalSocket() {
   function prepare(sessionId: string, terminal: Terminal, url?: string, rows?: number, cols?: number) {
@@ -32,6 +35,11 @@ export default function useTerminalSocket() {
     }
     prep[sessionId].status = 'CLOSED'
     sessionList = Object.assign(sessionList, prep)
+    const session = sessionList[sessionId]
+    if (session) {
+      session.fit = new FitAddon()
+      session.xterm.loadAddon(session.fit)
+    }
   }
 
   function connect(sessionId: string) {
@@ -72,12 +80,26 @@ export default function useTerminalSocket() {
     }
   }
 
-  function connected(sessionId:string) {
+  function connected(sessionId: string) {
     //console.log(sessionId, 'connected:', sessionList[sessionId]?.status)
     return (sessionList[sessionId] && sessionList[sessionId].status !== 'CLOSED') || false
   }
 
   const isConnected = ref(false)
 
-  return { sessionList, prepare, connect, attach, detach, connected, isConnected }
+  function resize(sessionId: string) {
+    const session = sessionList[sessionId]
+    if (session) {
+      if (session.fit) {
+        session.fit.fit()
+        let xy = session.fit?.proposeDimensions()
+        if (xy?.rows && Number.isNaN(xy.rows) == false && xy.rows >= 20) lastRows = xy.rows
+        if (xy?.cols && Number.isNaN(xy.cols) == false && xy.cols >= 40) lastCols = xy.cols
+        console.log(`resize(${sessionId}):`, lastRows, lastCols)
+        session.xterm.resize(lastCols, lastRows)
+      }
+    }
+  }
+
+  return { sessionList, prepare, connect, attach, detach, connected, isConnected, resize }
 }

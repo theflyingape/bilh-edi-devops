@@ -10,14 +10,14 @@ orientation: horizontal
 ---
   :::prose-pre
   ---
-  code: ssh hciedev
-  filename: Terminal
+  code: ssh hciedev.laheyhealth.org
+  filename: HCIEDEV terminal session
   ---
   ```bash
   $ cd /opt/devops
   $ git pull
-  $ sudo systemctl restart devops
-  $ sudo journalctl -ft DevOps
+  $ systemctl restart devops
+  $ journalctl -xeu devops
   ```
   :::tip
   ---
