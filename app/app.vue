@@ -44,11 +44,11 @@
       </NuxtLayout>
     </UMain>
 
-    <AppFooter />
+    <!--AppFooter /-->
 
-    <ClientOnly>
+    <!--ClientOnly>
       <LazyUContentSearch :files="files" :navigation="navigation" />
-    </ClientOnly>
+    </ClientOnly-->
 
 </UApp>
 </template>

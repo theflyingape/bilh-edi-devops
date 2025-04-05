@@ -16,8 +16,8 @@ orientation: horizontal
   ```bash
   $ cd /opt/devops
   $ git pull
-  $ systemctl restart devops
-  $ journalctl -xeu devops
+  $ sudo systemctl restart devops
+  $ journalctl -fxeu devops
   ```
   :::tip
   ---

@@ -15,20 +15,9 @@ const props = defineProps<{
 
 import { type ITerminalOptions, type ITheme } from '@xterm/xterm'
 import { Terminal } from '@xterm/xterm'
-import { Unicode11Addon } from '@xterm/addon-unicode11'
 import { WebglAddon } from '@xterm/addon-webgl'
-import { ClipboardAddon } from '@xterm/addon-clipboard'
 import useTerminalSocket from '~/composables/useTerminalSocket'
-
-interface client extends ITerminalOptions {
-  title?: string
-  bgColor?: string
-  keymap?: [{
-    key: string
-    shiftKey: boolean
-    mapCode: number
-  }]
-}
+import { preProcessFile } from 'typescript';
 
 interface theme {
   [key: string]: ITheme
@@ -41,7 +30,7 @@ const theme: theme = {
   DJT: {
     foreground: "#d0d0d0", background: "#004547", cursor: 'Silver',
     black: "#000000", red: "#c80000", green: "#00c800", yellow: "#c8c000",
-    blue: "#0808c8", magenta: "#c800c8", cyan: "#00c8c8", white: "#c8c8c8",
+    blue: "#4547c8", magenta: "#c800c8", cyan: "#00c8c8", white: "#c8c8c8",
     brightBlack: "#606060", brightRed: "#fa0000", brightGreen: "#00fa00", brightYellow: "#fafa00",
     brightBlue: "#0000fa", brightMagenta: "#fa00fa", brightCyan: "#00fafa", brightWhite: "#fafafa"
   },
@@ -54,7 +43,7 @@ const theme: theme = {
   }
 }
 
-let startup: client = {
+let startup: ITerminalOptions = {
   allowProposedApi: true, cursorBlink: true, drawBoldTextInBrightColors: true,
   scrollback: 4000, theme: theme[props.theme],
   fontFamily: 'Consolas,Lucida Console,monospace', fontSize: 20, fontWeight: 'normal', fontWeightBold: 'bold',
@@ -62,22 +51,15 @@ let startup: client = {
 }
 
 const { sessionList, prepare, resize } = useTerminalSocket()
-
 const terminalContainer = ref<HTMLElement | null>(null)
-const term = new Terminal({ ...startup, rows:36, cols:100 })
-
-term.loadAddon(new Unicode11Addon())
-term.loadAddon(new ClipboardAddon())
-term.unicode.activeVersion = '11'
-
-prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
+const term = new Terminal({ ...startup, rows: 40, cols: 100 })
 
 onMounted(() => {
-  console.log('onMounted')
+  prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
+
   if (terminalContainer.value) {
     term.open(terminalContainer.value)
     term.loadAddon(new WebglAddon())
-    resize(props.session)
   }
 })
 
@@ -85,8 +67,4 @@ onBeforeUnmount(() => {
   sessionList[props.session]?.fit?.dispose()
   term.dispose()
 })
-
 </script>
-
-<style scoped>
-</style>

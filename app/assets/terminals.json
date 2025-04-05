@@ -1,54 +1,30 @@
 {
-    "localhost": {
-        "host": "localhost",
-        "cmd": "/bin/sh",
-        "params": [ "/opt/devops/node-pty.sh" ],
-        "loglevel": "LOG_DEBUG",
-        "pty": {
-            "term": "xterm-256color",
-            "cols": 80,
-            "rows": 25,
-            "cwd": ".",
-            "env": {}
-        }
-    },
-    "Development": {
-        "host": "hciedev.laheyhealth.org",
-        "cmd": "/bin/sh",
-        "params": [ "/opt/devops/node-pty.sh" ],
-        "loglevel": "LOG_DEBUG",
-        "pty": {
-            "term": "xterm-256color",
-            "cols": 80,
-            "rows": 25,
-            "cwd": "/files",
-            "env": {}
-        }
-    },
-    "Test": {
-        "host": "hcietst.laheyhealth.org",
-        "cmd": "/bin/sh",
-        "params": [ "/opt/devops/node-pty.sh" ],
-        "loglevel": "LOG_INFO",
-        "pty": {
-            "term": "xterm-256color",
-            "cols": 80,
-            "rows": 25,
-            "cwd": "/files",
-            "env": {}
-        }
-    },
-    "LIVE": {
-        "host": "hcieprd.laheyhealth.org",
-        "cmd": "/bin/sh",
-        "params": [ "/opt/devops/node-pty.sh" ],
-        "loglevel": "LOG_INFO",
-        "pty": {
-            "term": "xterm-256color",
-            "cols": 80,
-            "rows": 25,
-            "cwd": "/files",
-            "env": {}
-        }
+  "localhost": {
+    "host": "localhost",
+    "cmd": "sudo",
+    "params": [ "su", "-" ],
+    "loglevel": "LOG_DEBUG",
+    "pty": {
+      "term": "xterm-256color", "cols": 80, "rows": 25,
+      "cwd": ".", "env": {}
     }
+  },
+  "Development": {
+    "host": "hciedev.laheyhealth.org",
+    "cmd": "/bin/sh",
+    "params": [ "/opt/devops/node-pty.sh" ],
+    "loglevel": "LOG_DEBUG"
+  },
+  "Test": {
+    "host": "hcietst.laheyhealth.org",
+    "cmd": "/bin/sh",
+    "params": [ "/opt/devops/node-pty.sh" ],
+    "loglevel": "LOG_INFO"
+  },
+  "LIVE": {
+    "host": "hcieprd.laheyhealth.org",
+    "cmd": "/bin/sh",
+    "params": [ "/opt/devops/node-pty.sh" ],
+    "loglevel": "LOG_INFO"
+  }
 }

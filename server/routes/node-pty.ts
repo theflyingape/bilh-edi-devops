@@ -1,51 +1,9 @@
 //  spawn a new terminal session on host using
 //  this client websocket connection attached as stdin/stdout
-import { ITerminalOptions } from '@xterm/xterm'
-import pty from 'node-pty'
-import { IPty } from 'node-pty'
 import { log } from '../syslog'
+import pty from 'node-pty'
+import { terminal, sessions } from '../terminal-sessions'
 import url from 'url'
-
-interface client {
-  [key: string]: {
-    options: ITerminalOptions
-    bgColor: string
-    cols?: number
-    scrollback: 1000
-    fontFamily: string
-    theme: {
-      foreground: string
-      background: string
-    }
-  }
-}
-
-interface config {
-  [key: string]: {
-    host: string
-    cmd: string
-    params: string[]
-    loglevel?: string | number
-    pty?: {
-      term: string
-      cols: number
-      rows: number
-      cwd: string
-      env: {}
-    }
-  }
-}
-
-interface sessions {
-  [key: string]: {
-    profile: string
-    term: IPty
-  }
-}
-
-import profiles from '~/assets/terminals.json'
-let terminal: config = Object.assign(profiles)
-let sessions: sessions = {}
 
 export default defineWebSocketHandler({
   open(peer) {
@@ -55,7 +13,12 @@ export default defineWebSocketHandler({
     const cfg = terminal[profile]
 
     log('LOG_DEBUG', `node-pty ${peer.id} open for ${id} on ${profile} - ${peer.request.url}`, cfg.loglevel)
-    let spawn = pty.spawn(cfg.cmd, [...cfg.params, id, cfg.host], {
+    //  prepare server-side command arguments
+    let params = [ ...cfg.params ]
+    params.push(id)
+    if (profile !== 'localhost') params.push(cfg.host)
+    //  execute
+    let spawn = pty.spawn(cfg.cmd, params, {
       name: cfg.pty?.term || 'xterm-256color',
       cols: cfg.pty?.cols || 80, rows: cfg.pty?.rows || 25,
       cwd: cfg.pty?.cwd || __dirname,
@@ -96,7 +59,31 @@ export default defineWebSocketHandler({
     const term = session.term
     const profile = session.profile
     const cfg = terminal[profile]
-    term.write(message.text())
+    //  allow for JSON "events" to passthru this pipe, in place of negotiating
+    //  the WebSocket peer.id back to the client and using REST endpoint(s)
+    let text = message.text()
+    if (text.length > 30) {
+      const start = text.indexOf('♥{')
+      if (start >= 0) {
+        const end = text.indexOf('}}', start + 2) + 1
+        if (end > start) {
+          try {
+            term.write(text.substring(0, start - 1))
+            const req = text.substring(start + 1, end + 1)
+            text = text.substring(end + 1)
+            const event = JSON.parse(req)
+            if (event.resize) {
+              log('LOG_DEBUG', `node-pty ${peer.id} ${req}`, cfg.loglevel)
+              session.term.resize(event.resize.cols, event.resize.rows)
+            }
+          }
+          catch(err) {
+            log('LOG_ERROR', `node-pty ${peer.id} ${err}`, cfg.loglevel)
+          }
+        }
+      }
+    }
+    term.write(text)
   },
 
   close(peer) {
