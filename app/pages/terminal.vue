@@ -1,16 +1,18 @@
 <template>
   <div ref="monitor" class="bg-zinc-200 min-h-dvh h-dvh min-w-full w-full">
-    <div class="flex flex-nowrap h-dvh w-full justify-center">
-      <!-- action controls -->
-      <div class="justify-items-start m-1 space-y-1">
-        <USelect v-model="value" :items="items" class="w-36" />
-      </div>
+    <div class="flex flex-nowrap h-dvh w-full justify-center pt-2">
       <!-- monitor with a thin bezel -->
-      <div ref="crt" class="bg-zinc-800 m-2 p-2 pb-14 rounded-md min-w-1/2 w-3/4 max-w-5/6 min-h-1/2 h-11/12 max-h-11/12 overflow-auto resize resizer">
-        <XtermJs v-show="value == 'localhost'" @vue:mounted="" session="localhost" theme="White" resize='monitor' :wsUrl="`${wsUrl}&profile=${value}`" />
-        <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}&profile=${value}`" />
-        <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}&profile=${value}`" />
-        <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}&profile=${value}`" />
+      <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-1/2 w-3/4 max-w-5/6 min-h-1/2 h-11/12 max-h-11/12 overflow-auto resize resizer">
+        <XtermJs v-show="value == 'localhost'" @vue:mounted="" session="localhost" theme="White" resize='monitor' :wsUrl="`${wsUrl}`" />
+        <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}`" />
+        <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" />
+        <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" />
+        <div class="flex justify-end mr-5 space-x-2 text-white">
+          {{ selection }} &nbsp;
+          <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
+          <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
+          <USeparator orientation="vertical" class="h-6" />&nbsp; {{rows}}x{{cols}}
+        </div>
       </div>
       <!-- action controls -->
       <div class="justify-items-start m-1 space-y-1">
@@ -39,14 +41,12 @@ const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : useAuth().da
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/node-pty?id=${id}`
 
-const { sessionList, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
+const { sessionList, cols, rows, selection, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
 const value = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
 
-//  monitor-crt-terminal
-//const monitorRef = useTemplateRef('monitor')
-const crtRef = useTemplateRef('crt')
 /*
+const monitorRef = useTemplateRef('monitor')
 useResizeObserver(monitorRef, (entries) => {
   //const [entry] = entries
   //const { width, height } = <DOMRectReadOnly>entry?.contentRect
@@ -55,12 +55,13 @@ useResizeObserver(monitorRef, (entries) => {
   resize(value.value)
 })
 */
+const crtRef = useTemplateRef('crt')
 useResizeObserver(crtRef, (entries) => {
   resize(value.value)
 })
 
 watch(value, async (n, o) => {
-  connected(value.value)
+  connected(n)
 })
 
 function terminal() {
@@ -80,6 +81,19 @@ function terminate() {
 function xterm(sessionId = value.value) {
   const session = sessionList[sessionId]
   return session?.xterm
+}
+
+function clear() {
+  selection.value = ''
+  navigator.clipboard.writeText(selection.value)
+  xterm()?.clearSelection()
+  xterm()?.focus()
+}
+
+function reset() {
+  xterm()?.reset()
+  xterm()?.focus()
+  sessionList[value.value]?.ws?.value?.send('\r')
 }
 </script>
 

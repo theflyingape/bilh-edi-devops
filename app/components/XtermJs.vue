@@ -1,7 +1,5 @@
 <template>
-  <!--UseFullscreen v-slot="{ toggle }"-->
-    <div class="h-full w-full" ref="terminalContainer"></div>
-  <!--/UseFullscreen-->
+  <div class="h-full w-full" ref="terminalContainer" onfocus="resize(props.session)"></div>
 </template>
 
 <script setup lang="ts">
@@ -15,8 +13,6 @@ const props = defineProps<{
 
 import { type ITerminalOptions, type ITheme } from '@xterm/xterm'
 import { Terminal } from '@xterm/xterm'
-import { WebglAddon } from '@xterm/addon-webgl'
-import useTerminalSocket from '~/composables/useTerminalSocket'
 
 interface theme {
   [key: string]: ITheme
@@ -55,15 +51,15 @@ const terminalContainer = ref<HTMLElement | null>(null)
 const term = new Terminal({ ...startup, rows: 32, cols: 96 })
 
 onMounted(() => {
-  prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
-
   if (terminalContainer.value) {
     term.open(terminalContainer.value)
-    term.loadAddon(new WebglAddon())
+    prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
   }
 })
 
 onBeforeUnmount(() => {
+  const { detach } = useTerminalSocket()
+  detach(props.session)
   sessionList[props.session]?.fit?.dispose()
   term.dispose()
 })
