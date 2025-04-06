@@ -1,12 +1,12 @@
 <template>
-  <div ref="monitor" class="bg-zinc-200 min-w-1/2 min-h-full">
-    <div class="flex flex-nowrap justify-center">
+  <div ref="monitor" class="bg-zinc-200 min-h-dvh h-dvh min-w-full w-full">
+    <div class="flex flex-nowrap h-dvh w-full justify-center">
       <!-- action controls -->
       <div class="justify-items-start m-1 space-y-1">
         <USelect v-model="value" :items="items" class="w-36" />
       </div>
       <!-- monitor with a thin bezel -->
-      <div ref="crt" class="bg-zinc-800 m-2 p-2 pb-12 rounded-md w-11/12 h-full overflow-auto resize resizer">
+      <div ref="crt" class="bg-zinc-800 m-2 p-2 pb-12 rounded-md min-w-2/3 w-3/4 max-w-5/6 min-h-1/2 h-11/12 max-h-11/12 overflow-auto resize resizer">
         <XtermJs v-show="value == 'localhost'" @vue:mounted="" session="localhost" theme="Snow" resize='monitor' :wsUrl="`${wsUrl}&profile=${value}`" />
         <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="Snow" :wsUrl="`${wsUrl}&profile=${value}`" />
         <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="DJT" :wsUrl="`${wsUrl}&profile=${value}`" />
@@ -56,7 +56,7 @@ useResizeObserver(monitorRef, (entries) => {
 })
 */
 useResizeObserver(crtRef, (entries) => {
-  resize(value.value, 2)
+  resize(value.value)
 })
 
 watch(value, async (n, o) => {

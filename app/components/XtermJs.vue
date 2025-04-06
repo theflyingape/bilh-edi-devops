@@ -1,6 +1,6 @@
 <template>
   <!--UseFullscreen v-slot="{ toggle }"-->
-    <div ref="terminalContainer"></div>
+    <div class="h-full w-full" ref="terminalContainer"></div>
   <!--/UseFullscreen-->
 </template>
 
