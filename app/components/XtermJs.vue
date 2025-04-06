@@ -17,7 +17,6 @@ import { type ITerminalOptions, type ITheme } from '@xterm/xterm'
 import { Terminal } from '@xterm/xterm'
 import { WebglAddon } from '@xterm/addon-webgl'
 import useTerminalSocket from '~/composables/useTerminalSocket'
-import { preProcessFile } from 'typescript';
 
 interface theme {
   [key: string]: ITheme
@@ -44,15 +43,16 @@ const theme: theme = {
 }
 
 let startup: ITerminalOptions = {
-  allowProposedApi: true, cursorBlink: true, drawBoldTextInBrightColors: true,
-  scrollback: 4000, theme: theme[props.theme],
+  allowProposedApi: true, scrollback: 5000, scrollSensitivity: 5, smoothScrollDuration: 250,
+  cursorBlink: false, drawBoldTextInBrightColors: true,
   fontFamily: 'Consolas,Lucida Console,monospace', fontSize: 20, fontWeight: 'normal', fontWeightBold: 'bold',
-  wordSeparator: ` .:;?!"'<>(/)[=]`
+  theme: theme[props.theme],
+  wordSeparator: ` .:;?!"'<>[=]`
 }
 
-const { sessionList, prepare, resize } = useTerminalSocket()
+const { sessionList, prepare } = useTerminalSocket()
 const terminalContainer = ref<HTMLElement | null>(null)
-const term = new Terminal({ ...startup, rows: 40, cols: 100 })
+const term = new Terminal({ ...startup, rows: 32, cols: 96 })
 
 onMounted(() => {
   prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
