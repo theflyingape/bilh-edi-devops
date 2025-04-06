@@ -24,16 +24,16 @@ interface theme {
 
 const theme: theme = {
   Amber: {
-    foreground: "#c1c2c8", background: "#332211", cursor: 'Gold', cursorAccent: 'ForestGreen',
+    foreground: "#c1c2c8", background: "#403010", cursor: 'Gold', cursorAccent: 'ForestGreen',
   },
-  DJT: {
-    foreground: "#d0d0d0", background: "#456868", cursor: 'Silver',
+  Green: {
+    foreground: "#d0d0d0", background: "#103020", cursor: 'Silver',
     black: "#000000", red: "#c80000", green: "#00c800", yellow: "#c8c000",
-    blue: "#4547d0", magenta: "#c800c8", cyan: "#00c8c8", white: "#c8c8c8",
+    blue: "#4547d8", magenta: "#c800c8", cyan: "#00c8c8", white: "#c8c8c8",
     brightBlack: "#606060", brightRed: "#fa0000", brightGreen: "#00fa00", brightYellow: "#fafa00",
-    brightBlue: "#4547ff", brightMagenta: "#fa00fa", brightCyan: "#00fafa", brightWhite: "#fafafa"
+    brightBlue: "#4547ff", brightMagenta: "#fa00fa", brightCyan: "#00fafa", brightWhite: "#ffffff"
   },
-  Snow: {
+  White: {
     foreground: 'LightGray', background: '#102040', cursor: 'PowderBlue',
     black: 'Black', red: 'DarkRed', green: 'ForestGreen', yellow: 'SandyBrown',
     blue: 'MediumBlue', magenta: 'MediumOrchid', cyan: 'DarkCyan', white: 'Silver',

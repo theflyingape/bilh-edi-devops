@@ -7,9 +7,9 @@
       </div>
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 m-2 p-2 pb-14 rounded-md min-w-1/2 w-3/4 max-w-5/6 min-h-1/2 h-11/12 max-h-11/12 overflow-auto resize resizer">
-        <XtermJs v-show="value == 'localhost'" @vue:mounted="" session="localhost" theme="Snow" resize='monitor' :wsUrl="`${wsUrl}&profile=${value}`" />
-        <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="Snow" :wsUrl="`${wsUrl}&profile=${value}`" />
-        <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="DJT" :wsUrl="`${wsUrl}&profile=${value}`" />
+        <XtermJs v-show="value == 'localhost'" @vue:mounted="" session="localhost" theme="White" resize='monitor' :wsUrl="`${wsUrl}&profile=${value}`" />
+        <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}&profile=${value}`" />
+        <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}&profile=${value}`" />
         <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}&profile=${value}`" />
       </div>
       <!-- action controls -->
