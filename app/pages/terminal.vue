@@ -8,10 +8,17 @@
         <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" />
         <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" />
         <div class="flex justify-between ml-5 mr-5">
-          <div>
-            <UKbd size="sm" value="ctrl" variant="subtle" /><UKbd size="sm" value="o" variant="subtle" />
-            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="Midnight Commander toggle"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
+          <div v-if="isConnected">
+            <div v-if="mcRef">
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="press Ctrl-O anywhere">
+                <UButton color="neutral" @click="mc"><UKbd size="sm" value="ctrl" variant="subtle" /><UKbd size="sm" value="o" variant="subtle" /></UButton>
+              </UTooltip>
+            </div>
+            <div v-else>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="launch Midnight Commander"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
+            </div>
           </div>
+          <div>&nbsp;</div>
           <div class="flex nowrap space-x-2 text-white">
           <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> {{ selection.includes('\n') ? selection.split('\n').length+'-line(s) copied' : selection.length < 30 ? selection : selection.substring(0,26)+'…'+selection.slice(-3) }} &nbsp;
           <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
@@ -102,8 +109,17 @@ function reset() {
   sessionList[value.value]?.ws?.value?.send('\r')
 }
 
+//  Midnight Commander
+const mcRef = ref(false)
+
 function mc() {
-  sessionList[value.value]?.ws?.value?.send('\x0f')
+  if (mcRef.value) {
+    sessionList[value.value]?.ws?.value?.send('\x0f')
+  }
+  else {
+    sessionList[value.value]?.ws?.value?.send('mc /files /files\r')
+    mcRef.value = true
+  }
 }
 
 defineShortcuts({
