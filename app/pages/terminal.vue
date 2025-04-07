@@ -7,11 +7,17 @@
         <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}`" />
         <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" />
         <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" />
-        <div class="flex justify-end mr-5 nowrap space-x-2 text-white">
+        <div class="flex justify-between ml-5 mr-5">
+          <div>
+            <UKbd size="sm" value="ctrl" variant="subtle" /><UKbd size="sm" value="o" variant="subtle" />
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="Midnight Commander toggle"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
+          </div>
+          <div class="flex nowrap space-x-2 text-white">
           <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> {{ selection.includes('\n') ? selection.split('\n').length+'-line(s) copied' : selection.length < 30 ? selection : selection.substring(0,26)+'…'+selection.slice(-3) }} &nbsp;
           <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
           <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
           <USeparator orientation="vertical" class="h-6" />&nbsp; {{rows}}x{{cols}}
+          </div>
         </div>
       </div>
       <!-- action controls -->
@@ -95,6 +101,14 @@ function reset() {
   xterm()?.focus()
   sessionList[value.value]?.ws?.value?.send('\r')
 }
+
+function mc() {
+  sessionList[value.value]?.ws?.value?.send('\x0f')
+}
+
+defineShortcuts({
+  ctrl_o: mc
+})
 </script>
 
 <style lang="css" scoped>
