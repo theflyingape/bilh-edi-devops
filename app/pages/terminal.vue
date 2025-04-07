@@ -7,8 +7,11 @@
         <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}`" />
         <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" />
         <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" />
-        <div class="flex justify-between ml-5 mr-5">
-          <div v-if="isConnected">
+        <!-- bottom control panel -->
+        <div class="flex flex-nowrap justify-between ml-5 mr-5">
+          <!-- session controls -->
+          <div v-if="isConnected" class="flex flex-nowrap space-x-2">
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="btop: resource monitors"><UButton size="sm" icon="i-heroicons-rectangle-group" color="neutral" variant="subtle" @click="btop" /></UTooltip>
             <div v-if="mcRef">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="press Ctrl-O anywhere">
                 <UButton color="neutral" @click="mc"><UKbd size="sm" value="ctrl" variant="subtle" /><UKbd size="sm" value="o" variant="subtle" /></UButton>
@@ -18,16 +21,20 @@
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="launch Midnight Commander"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
             </div>
           </div>
-          <div>&nbsp;</div>
-          <div class="flex nowrap space-x-2 text-white">
-          <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> {{ selection.includes('\n') ? selection.split('\n').length+'-line(s) copied' : selection.length < 30 ? selection : selection.substring(0,26)+'…'+selection.slice(-3) }} &nbsp;
-          <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
-          <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
-          <USeparator orientation="vertical" class="h-6" />&nbsp; {{rows}}x{{cols}}
+          <!-- center controls -->
+          <div class="flex flex-nowrap space-x-2">
+            &nbsp;
+          </div>
+          <!-- right terminal controls -->
+          <div class="flex flex-nowrap space-x-2 text-white">
+            <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> {{ selection.includes('\n') ? selection.split('\n').length+'-line(s) copied' : selection.length < 30 ? selection : selection.substring(0,26)+'…'+selection.slice(-3) }} &nbsp;
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
+            <USeparator orientation="vertical" class="h-6" />&nbsp; {{rows}}x{{cols}}
           </div>
         </div>
       </div>
-      <!-- action controls -->
+      <!-- top-right action controls -->
       <div class="justify-items-start m-1 space-y-1">
         <div v-if="isConnected">
           <UChip class="mt-2" color="success">
@@ -83,6 +90,7 @@ function terminal() {
   //  establish WebSocket pipe for client <-> shell
   connect(sessionId)
   attach(sessionId)
+  mcRef.value = false
 }
 
 function terminate() {
@@ -109,6 +117,12 @@ function reset() {
   sessionList[value.value]?.ws?.value?.send('\r')
 }
 
+//  btop: resource monitors
+function btop() {
+  sessionList[value.value]?.ws?.value?.send('btop\r')
+  xterm()?.focus()
+}
+
 //  Midnight Commander
 const mcRef = ref(false)
 
@@ -120,6 +134,7 @@ function mc() {
     sessionList[value.value]?.ws?.value?.send('mc /files /files\r')
     mcRef.value = true
   }
+  xterm()?.focus()
 }
 
 defineShortcuts({
