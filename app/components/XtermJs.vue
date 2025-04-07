@@ -43,7 +43,7 @@ let startup: ITerminalOptions = {
   cursorBlink: false, drawBoldTextInBrightColors: true,
   fontFamily: 'Consolas,Lucida Console,monospace', fontSize: 20, fontWeight: 'normal', fontWeightBold: 'bold',
   theme: theme[props.theme],
-  wordSeparator: ` .:;?!"'<>[=]`
+  wordSeparator: ` :;?!"'<>[=]`
 }
 
 const { sessionList, prepare } = useTerminalSocket()

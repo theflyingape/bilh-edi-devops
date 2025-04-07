@@ -68,6 +68,7 @@ export default function useTerminalSocket() {
       else {
         session.attach?.dispose()
         session.xterm.options.cursorBlink = false
+        useToast().add({ title: `${sessionId} terminal disconnected`, description: `${new Date().toTimeString()}` })
         audio.src = DISCONNECT_SOUND
         audio.play()
       }
@@ -96,10 +97,8 @@ export default function useTerminalSocket() {
 
   function detach(sessionId: string) {
     const session = sessionList[sessionId]!
-    if (session.ws?.value) {
+    if (session.ws?.value)
       session.ws?.value.close()
-      useToast().add({ title: `${sessionId} terminal disconnected`, description: `${new Date().toTimeString()}` })
-    }
   }
 
   function connected(sessionId: string) {
