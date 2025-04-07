@@ -216,10 +216,10 @@ const items = ref([
           to: '/code'
         },
         {
-          label: 'Worldwide Response Center',
+          label: 'WRC: Application Catalog',
           icon: 'i-heroicons-globe-americas-solid',
-          description: 'InterSystems WRC application for end user access to software and support, or call directly: 617-621-0700',
-          to: 'https://wrc.intersystems.com',
+          description: 'InterSystems Application Catalog for end user portal access to their software and support. Or call directly: 617-621-0700',
+          to: 'https://login.intersystems.com/login/SSO.UI.User.Catalog.cls',
           target: '_blank'
         },
       ]
