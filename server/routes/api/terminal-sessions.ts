@@ -25,5 +25,9 @@ interface sessions {
 }
 
 import profiles from '~/assets/terminals.json'
-export let terminal: config = Object.assign(profiles)
-export let sessions: sessions = {}
+let terminal: config = Object.assign(profiles)
+let sessions: sessions = {}
+
+export default function useTerminalSessions() {
+  return { terminal, sessions }
+}

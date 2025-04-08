@@ -28,7 +28,7 @@
               </UChip>
           </div>
           <div class="m-auto">
-            <UTooltip arrow :content="{ align:'center', side:'right', sideOffset:8 }" :text="`${ data?.id || 'not logged in' }`" >
+            <UTooltip arrow :content="{ align:'center', side:'right', sideOffset:8 }" :text="`${ get(data)?.id || 'not logged in' }`" >
               <UBadge :color="online" variant="outline">{{ scope }}</UBadge>
             </UTooltip>
           </div>

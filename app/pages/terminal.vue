@@ -68,7 +68,7 @@ import { useTemplateRef } from 'vue'
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth().data)?.id
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
-const wsUrl = `${config.public.websocket}://${location.host}/node-pty?id=${id}`
+const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
 
 const { sessionList, cols, rows, selection, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])

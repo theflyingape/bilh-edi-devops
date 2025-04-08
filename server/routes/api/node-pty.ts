@@ -1,9 +1,11 @@
 //  spawn a new terminal session on host using
 //  this client websocket connection attached as stdin/stdout
-import { log } from '../syslog'
+import { log } from '~/lib/syslog'
 import pty from 'node-pty'
-import { terminal, sessions } from '../terminal-sessions'
 import url from 'url'
+import useTerminalSessions from './terminal-sessions'
+
+const { terminal, sessions } = useTerminalSessions()
 
 export default defineWebSocketHandler({
   open(peer) {

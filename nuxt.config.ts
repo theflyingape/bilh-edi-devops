@@ -13,7 +13,6 @@ export default defineNuxtConfig({
     isEnabled: true,
     globalAppMiddleware: true,
     //disableServerSideAuth: false,
-    //disableServerSideAuth: true,
     originEnvKey: 'AUTH_ORIGIN',
     provider: {
       type: 'local',
@@ -88,7 +87,8 @@ export default defineNuxtConfig({
     }
   },
 */
-  css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
+
+css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
   ui: {
     theme: {
       colors: [ 'primary', 'secondary', 'tertiary', 'info', 'success', 'warning', 'error', 'action' ]
@@ -196,7 +196,10 @@ export default defineNuxtConfig({
     },
   },
 
-  nitro: {
+  routeRules: {
+    "/api/**": { cache: false, swr: false }
+  },
+    nitro: {
     //baseURL: '/devops',
     experimental: {
       websocket: true

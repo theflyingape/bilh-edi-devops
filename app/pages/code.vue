@@ -21,13 +21,16 @@
 </template>
 
 <script setup lang="ts">
-import { set, useIntervalFn, useNow } from '@vueuse/core'
+import { get, set, useIntervalFn, useNow } from '@vueuse/core'
+const { status, data } = useAuth()
 const now = useNow()
 const pin = ref([d10(), d10(), d10()])
 
 useIntervalFn(() => {
   set(pin, [d10(), d10(), d10()])
 }, 12500)
+
+console.log(useFetch(`/api/code-server?username=${get(data)?.id}`))
 
 function d10(): string {
   const n = 10 * Math.random()

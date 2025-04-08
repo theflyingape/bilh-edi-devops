@@ -1,6 +1,6 @@
 //import { createError, eventHandler, readBody } from 'h3'
 import { PrivateKey, sign, SignOptions } from 'jsonwebtoken'
-import { log } from '../../syslog'
+import { log } from '~/lib/syslog'
 import { z } from 'zod'
 
 //  supply trivial values for testing -- make .env to better secure your site implementation

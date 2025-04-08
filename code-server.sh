@@ -16,7 +16,7 @@ for pool in `seq 4 -1 1`; do
 	let count=`ss -Hl src :$port | wc -l`
 	(( count == 0 )) && PORT=$port
 done
-[ -n "$PORT" ] || exit
+[ -n "$PORT" ] || exit 1
 echo "PORT=$PORT"
 
 HB=${HOME}/.local/share/code-server/heartbeat
