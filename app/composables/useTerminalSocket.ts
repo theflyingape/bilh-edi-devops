@@ -10,10 +10,11 @@ import { FitAddon } from '@xterm/addon-fit'
 import { SearchAddon } from '@xterm/addon-search'
 import { AttachAddon } from '../lib/addon-attach'
 import { BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } from '../lib/sounds'
-
+/*
 const { audioOutputs: speakers } = useDevicesList({
   constraints: { audio: true, video: false },
   requestPermissions: true })
+*/
 const audio = new Audio()
 
 interface TS {
