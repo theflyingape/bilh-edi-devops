@@ -14,7 +14,7 @@ export default defineEventHandler(async (event)  => {
   }
   else {
     const pin = generatePIN()
-    const vscode = child.spawn('code-server.sh', [], { cwd: '.', env: { ...process.env, IDLE: '3600', HOME: `/home/${username}`, USER: username, PASSWORD: pin.join('') }, stdio: 'ignore' })
+    const vscode = child.spawn('code-server.sh', [], { cwd: '/opt/devops', env: { ...process.env, IDLE: '3600', HOME: `/home/${username}`, USER: username, PASSWORD: pin.join('') }, stdio: 'ignore' })
     if (vscode.pid) {
       await new Promise<number>((resolve, reject) => {
         //  wait for a PORT=#### assignment to echo
