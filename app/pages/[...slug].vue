@@ -1,6 +1,7 @@
 <script setup lang="ts">
 definePageMeta({ auth:false })
 
+import { get } from '@vueuse/core'
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '#ui-pro/utils/content'
 
@@ -13,7 +14,7 @@ const { toc, seo } = useAppConfig()
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
 const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
-if (!page.value) {
+if (!get(page)) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
@@ -24,13 +25,13 @@ const { data: surround } = await useAsyncData(`${route.path}-surround`, () => {
 })
 
 useSeoMeta({
-  title: page.value.seo.title,
-  ogTitle: `${page.value.seo.title} - ${seo?.siteName}`,
-  description: page.value.seo.description,
-  ogDescription: page.value.seo.description
+  title: get(page)?.seo.title,
+  ogTitle: `${get(page)?.seo.title} - ${seo?.siteName}`,
+  description: get(page)?.seo.description,
+  ogDescription: get(page)?.seo.description
 })
 
-const headline = computed(() => findPageHeadline(navigation?.value, page.value))
+const headline = computed(() => findPageHeadline(get(navigation), get(page)))
 /*
 defineOgImageComponent('Docs', {
   title: page.value.title,

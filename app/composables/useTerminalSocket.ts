@@ -2,6 +2,7 @@
  * used for any instance of an <XtermJs> component that may
  * require a WebSocket connection
  **/
+import { get, set, useDevicesList } from '@vueuse/core'
 import { Terminal, type ITerminalOptions } from '@xterm/xterm'
 import { WebglAddon } from '@xterm/addon-webgl'
 import { Unicode11Addon } from '@xterm/addon-unicode11'
@@ -10,6 +11,7 @@ import { SearchAddon } from '@xterm/addon-search'
 import { AttachAddon } from '../lib/addon-attach'
 import { BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } from '../lib/sounds'
 
+const { audioOutputs: speakers } = useDevicesList({ requestPermissions: true })
 const audio = new Audio()
 
 interface TS {
@@ -58,11 +60,11 @@ export default function useTerminalSocket() {
 
     const { ws, status } = useWebSocket(session.url)
     session.ws = ws
-    session.status = status.value
+    session.status = get(status)
 
     watch(status, async (n, o) => {
-      session.status = status.value
-      console.log(session, 'websocket status now:', n, 'from:', o)
+      session.status = get(status)
+      console.info(session, 'websocket status now:', n, 'from:', o)
       connected(sessionId)
       if (n == 'OPEN') {
         resize(sessionId)
@@ -92,8 +94,8 @@ export default function useTerminalSocket() {
       session.xterm.onSelectionChange(() => {
         const text = session.xterm.getSelection()
         if (text.length) {
-          selection.value = text
-          navigator.clipboard.writeText(selection.value)
+          set(selection,text)
+          navigator.clipboard.writeText(get(selection))
         }
       })
     }
@@ -101,13 +103,12 @@ export default function useTerminalSocket() {
 
   function detach(sessionId: string) {
     const session = sessionList[sessionId]!
-    if (session.ws?.value)
-      session.ws?.value.close()
+    if (session.ws?.value) session.ws?.value.close()
   }
 
   function connected(sessionId: string) {
     const session = sessionList[sessionId]!
-    isConnected.value = session.attach?.checkOpenSocket() || false
+    set(isConnected, session.attach?.checkOpenSocket() || false)
     resize(sessionId)
   }
 
@@ -120,15 +121,15 @@ export default function useTerminalSocket() {
       let xy = session.fit.proposeDimensions()
       if (xy?.rows && xy?.cols) {
         if (Number.isNaN(xy.rows) == false && xy.rows >= 12)
-          rows.value = xy.rows
+          set(rows, xy.rows)
         if (Number.isNaN(xy.cols) == false && xy.cols >= 40)
-          cols.value = xy.cols
-        session.xterm.resize(cols.value, rows.value)
+          set(cols, xy.cols)
+        session.xterm.resize(get(cols), get(rows))
       }
       session.xterm.focus()
     }
     //  notify backend as necessary
-    const event = { resize: { rows: rows.value, cols: cols.value } }
+    const event = { resize: { rows: get(rows), cols: get(cols) } }
     session.attach?.sendData('♥' + JSON.stringify(event))
   }
 

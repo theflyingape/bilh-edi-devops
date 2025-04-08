@@ -10,7 +10,7 @@
     "url": "https://github.com/theflyingape/bilh-edi-devops"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=20 <21"
   },
   "scripts": {
     "build": "nuxt build",

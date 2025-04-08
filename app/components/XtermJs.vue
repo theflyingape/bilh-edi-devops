@@ -11,6 +11,7 @@ const props = defineProps<{
   wsUrl?: string      //  wss://${location.host}/node-pty
 }>()
 
+import { get } from '@vueuse/core'
 import { type ITerminalOptions, type ITheme } from '@xterm/xterm'
 import { Terminal } from '@xterm/xterm'
 
@@ -20,17 +21,20 @@ interface theme {
 
 const theme: theme = {
   Amber: {
-    foreground: "#c1c2c8", background: "#403010", cursor: 'Gold', cursorAccent: 'ForestGreen',
+    cursor: 'Gold', cursorAccent: 'DarkRed', foreground: "#c1c2c8", background: "#403010",
+    selectionBackground: 'LightYellow', selectionForeground: 'Red',
   },
   Green: {
-    foreground: "#d0d0d0", background: "#103020", cursor: 'Silver',
+    cursor: 'Silver', cursorAccent: 'DarkCyan', foreground: "#d0d0d0", background: "#103020",
+    selectionBackground: 'LightYellow', selectionForeground: 'ForestGreen',
     black: "#000000", red: "#c80000", green: "#00c800", yellow: "#c8c000",
     blue: "#4547d8", magenta: "#c800c8", cyan: "#00c8c8", white: "#c8c8c8",
     brightBlack: "#606060", brightRed: "#fa0000", brightGreen: "#00fa00", brightYellow: "#fafa00",
     brightBlue: "#4547ff", brightMagenta: "#fa00fa", brightCyan: "#00fafa", brightWhite: "#ffffff"
   },
   White: {
-    foreground: 'LightGray', background: '#102040', cursor: 'PowderBlue',
+    cursor: 'PowderBlue', cursorAccent: 'Midnight', foreground: 'LightGray', background: '#102040', 
+    selectionBackground: 'LightYellow', selectionForeground: 'DarkOrchid',
     black: 'Black', red: 'DarkRed', green: 'ForestGreen', yellow: 'SandyBrown',
     blue: 'MediumBlue', magenta: 'MediumOrchid', cyan: 'DarkCyan', white: 'Silver',
     brightBlack: 'DimGray', brightRed: 'Red', brightGreen: 'LightGreen', brightYellow: 'Gold',
@@ -47,14 +51,12 @@ let startup: ITerminalOptions = {
 }
 
 const { sessionList, prepare } = useTerminalSocket()
-const terminalContainer = ref<HTMLElement | null>(null)
+const terminalContainer = templateRef('terminalContainer')
 const term = new Terminal({ ...startup, rows: 32, cols: 96 })
 
 onMounted(() => {
-  if (terminalContainer.value) {
-    term.open(terminalContainer.value)
-    prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
-  }
+  term.open(get(terminalContainer))
+  prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
 })
 
 onBeforeUnmount(() => {

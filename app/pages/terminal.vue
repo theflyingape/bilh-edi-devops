@@ -26,10 +26,10 @@
           </div>
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
-            <UForm state="searchRef" @submit.prevent="search">
+            <UForm state="searchInput" @submit.prevent="search(true)">
               <UInput v-model="searchInput.entry" ref="input" color="info" icon="i-vscode-icons-file-type-search-result" size="sm" variant="subtle" placeholder="Search..." :ui="{ trailing: 'pe-1' }">
               <template v-if="searchInput.entry?.length" #trailing>
-                <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" @click="{ searchInput.entry = ''; search(); }" />
+                <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" @click="{ searchInput.entry = ''; search(false); }" />
               </template>
               </UInput>
             </UForm>
@@ -62,11 +62,11 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver } from '@vueuse/core'
+import { get, set, useResizeObserver } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 
 const config = useRuntimeConfig()
-const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : useAuth().data?.value?.id
+const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth().data)?.id
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/node-pty?id=${id}`
 
@@ -86,36 +86,40 @@ useResizeObserver(monitorRef, (entries) => {
 */
 const crtRef = useTemplateRef('crt')
 useResizeObserver(crtRef, (entries) => {
-  resize(value.value)
+  resize(get(value))
 })
 
 watch(value, async (n, o) => {
   connected(n)
 })
 
+function send(text: string) {
+  sessionList[get(value)]?.ws?.value?.send(text)
+}
+
 function terminal() {
-  const sessionId = value.value
+  const sessionId = get(value)
   xterm()?.writeln(`\r\n\x1B[2mConnecting to a \x1B[0;1m${sessionId}\x1B[0;2m shell session as \x1B[m${id} ... \n`)
   //  establish WebSocket pipe for client <-> shell
   connect(sessionId)
   attach(sessionId)
-  mcRef.value = false
+  set(mcRef, false)
 }
 
 function terminate() {
-  const sessionId = value.value
+  const sessionId = get(value)
   xterm()?.writeln(`\r\n\x1B[2mDisconnecting \x1B[0;1m${sessionId}\x1B[0;2m shell session`)
   detach(sessionId)
 }
 
-function xterm(sessionId = value.value) {
+function xterm(sessionId = get(value)) {
   const session = sessionList[sessionId]
   return session?.xterm
 }
 
 function clear() {
-  selection.value = ''
-  navigator.clipboard.writeText(selection.value)
+  set(selection, '')
+  navigator.clipboard.writeText(get(selection))
   xterm()?.clearSelection()
   xterm()?.focus()
 }
@@ -123,12 +127,12 @@ function clear() {
 function reset() {
   xterm()?.reset()
   xterm()?.focus()
-  sessionList[value.value]?.ws?.value?.send('\r')
+  send('\r')
 }
 
 //  btop: resource monitors
 function btop() {
-  sessionList[value.value]?.ws?.value?.send('btop\r')
+  send('btop\r')
   xterm()?.focus()
 }
 
@@ -136,12 +140,12 @@ function btop() {
 const mcRef = ref(false)
 
 function mc() {
-  if (mcRef.value) {
-    sessionList[value.value]?.ws?.value?.send('\x0f')
+  if (get(mcRef)) {
+    send('\x0f')
   }
   else {
-    sessionList[value.value]?.ws?.value?.send('mc /files /files\r')
-    mcRef.value = true
+    send('mc /files /files\r')
+    set(mcRef, true)
   }
   xterm()?.focus()
 }
@@ -154,18 +158,25 @@ defineShortcuts({
 const input = useTemplateRef('input')
 const searchInput = ref({ entry: '' })
 
-function search() {
-  if (searchInput.value.entry) {
-    sessionList[value.value]?.search?.findNext(searchInput.value.entry)
+function search(query:boolean) {
+  let keepFocus = true
+  if (get(searchInput).entry) {
+    sessionList[get(value)]?.search?.findPrevious(get(searchInput).entry)
   }
   else {
-    selection.value = ''
+    set(selection, '')
     xterm()?.clearSelection()
+    xterm()?.scrollToBottom()
+    if (query) keepFocus = false
   }
-  setTimeout(() => {
-    input.value?.inputRef?.focus()
-    input.value?.inputRef?.select()
-  }, 200)
+  if (keepFocus) {
+    setTimeout(() => {
+      get(input)?.inputRef?.focus()
+      get(input)?.inputRef?.select()
+    }, 100)
+  }
+  else
+    xterm()?.focus()
 }
 </script>
 

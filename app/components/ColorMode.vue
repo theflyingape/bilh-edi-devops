@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useColorMode } from '@vueuse/core'
+import { get, set, useColorMode } from '@vueuse/core'
 
 const { system, store } = useColorMode()
-const myColorMode = computed(() => store.value === 'auto' ? system.value : store.value)
+const myColorMode = computed(() => get(store) === 'auto' ? get(system) : get(store))
 const { state, next } = useCycleList(['auto', 'light', 'dark'] as const, { initialValue: myColorMode })
 
 function cycle() {
   next()
-  store.value = state.value
+  set(store, get(state))
 }
 </script>
 

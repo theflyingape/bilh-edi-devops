@@ -103,6 +103,7 @@
 </template>
 
 <script setup lang="ts">
+import { get } from '@vueuse/core'
 import { ModalInfo } from '#components'
 const { status, data, signIn, signOut } = useAuth()
 const overlay = useOverlay()
@@ -119,7 +120,7 @@ const BUILT = useAppConfig().buildDate
 const MODE = process.env.NODE_ENV
 
 async function login() {
-  await signIn(credentials.value, { callbackUrl: 'home', external: false }).then(() => {
+  await signIn(get(credentials), { callbackUrl: 'home', external: false }).then(() => {
     toast.add({ title: 'Hello!', description: `logged on ${new Date().toTimeString()}` })
   })
     .catch(async (err) => {

@@ -1,7 +1,9 @@
+import { get } from '@vueuse/core'
+
 export default defineNuxtRouteMiddleware((to, from) => {
   const { refresh, signOut, status } = useAuth()
 
-  if (status.value !== 'unauthenticated') {
+  if (get(status) !== 'unauthenticated') {
     refresh().then((result) => {
     /*
       console.log('get-session result:', result)

@@ -79,20 +79,20 @@ useSeoMeta({
 })
 
 //const { $api } = useNuxtApp()
-import { watchImmediate } from '@vueuse/core'
+import { get, set, watchImmediate } from '@vueuse/core'
 
 const { status, data } = useAuth()
 const { isFullscreen, toggle } = useFullscreen()
-const online = computed(() => status.value == 'unauthenticated' ? 'action' : 'success')
+const online = computed(() => get(status) == 'unauthenticated' ? 'action' : 'success')
 const scope = ref('Guest')
 const sideMenu = ref(false)
 
 watchImmediate(data, (updated) => {
-  scope.value = status.value == 'unauthenticated' ? 'Guest' : data.value?.scope[0] || 'Associate'
+  set(scope, get(status) == 'unauthenticated' ? 'Guest' : get(data)?.scope[0] || 'Associate')
 })
 
 function toggleSideMenu() {
-  sideMenu.value = !sideMenu.value
+  set(sideMenu, !get(sideMenu))
 }
 
 const items = ref([
