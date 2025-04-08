@@ -29,12 +29,17 @@ const url = ref('')
 const username = get(data)?.id
 
 onMounted(() => {
-  const { data } = useFetch(`/api/code-server?username=${username}`).get().json()
-  console.log('code-server data:', JSON.stringify(get(data)))
-  if (get(data)?.status == 'OK') {
-    set(pin, get(data)?.pin)
-    set(url, get(data)?.url)
-    //navigateTo(get(url), { open: { target: '_blank' } })
-  }
+  const { onFetchResponse } = useFetch(`/api/code-server?username=${username}`)
+
+  onFetchResponse((response) => {
+    response.json().then((value) => {
+      console.log('code-server response:', JSON.stringify(value))
+      if (value?.status == 'OK') {
+        set(pin, value?.pin)
+        set(url, value?.url)
+        //navigateTo(value?.url, { open: { target: '_blank' } })
+      }
+    })
+  })
 })
 </script>
