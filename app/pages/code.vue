@@ -29,7 +29,7 @@ const url = ref('')
 const username = get(data)?.id
 
 onMounted(() => {
-  const { data } = useFetch(`/api/code-server?username=${username}`)
+  const { data } = useFetch(`/api/code-server?username=${username}`).get().json()
   console.log('code-server data:', JSON.stringify(get(data)))
   if (get(data)?.status == 'OK') {
     set(pin, get(data)?.pin)
