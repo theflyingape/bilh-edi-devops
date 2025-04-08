@@ -21,7 +21,7 @@ export default defineEventHandler(async (event)  => {
         //  wait for a PORT=#### assignment to echo
         vscode.stdout?.on('data', (data) => {
           log('LOG_NOTICE', `code-server output: ${data}`)
-          const ini = data.split("=")
+          const ini = data.toString().split("=")
           if (ini[0] == "PORT") {
             const port = parseInt(ini[1])
             ports[port] = { id: username }
