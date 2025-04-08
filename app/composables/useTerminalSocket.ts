@@ -6,6 +6,7 @@ import { Terminal, type ITerminalOptions } from '@xterm/xterm'
 import { WebglAddon } from '@xterm/addon-webgl'
 import { Unicode11Addon } from '@xterm/addon-unicode11'
 import { FitAddon } from '@xterm/addon-fit'
+import { SearchAddon } from '@xterm/addon-search'
 import { AttachAddon } from '../lib/addon-attach'
 import { BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } from '../lib/sounds'
 
@@ -22,6 +23,7 @@ interface TS {
     ws?: Ref<WebSocket|undefined>
     status?: string
     attach?: AttachAddon
+    search?: SearchAddon
   }
 }
 
@@ -47,6 +49,8 @@ export default function useTerminalSocket() {
     const session = sessionList[sessionId]!
     session.fit = new FitAddon()
     session.xterm.loadAddon(session.fit)
+    session.search = new SearchAddon()
+    term.loadAddon(session.search)
   }
 
   function connect(sessionId: string) {

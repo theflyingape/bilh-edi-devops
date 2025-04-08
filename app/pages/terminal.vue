@@ -21,9 +21,18 @@
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="launch Midnight Commander"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
             </div>
           </div>
+          <div v-else>
+            &nbsp;
+          </div>
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
-            &nbsp;
+            <UForm state="searchRef" @submit.prevent="search">
+              <UInput v-model="searchInput.entry" ref="input" color="info" icon="i-vscode-icons-file-type-search-result" size="sm" variant="subtle" placeholder="Search..." :ui="{ trailing: 'pe-1' }">
+              <template v-if="searchInput.entry?.length" #trailing>
+                <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" @click="{ searchInput.entry = ''; search(); }" />
+              </template>
+              </UInput>
+            </UForm>
           </div>
           <!-- right terminal controls -->
           <div class="flex flex-nowrap space-x-2 text-white">
@@ -140,6 +149,24 @@ function mc() {
 defineShortcuts({
   ctrl_o: mc
 })
+
+//  Search
+const input = useTemplateRef('input')
+const searchInput = ref({ entry: '' })
+
+function search() {
+  if (searchInput.value.entry) {
+    sessionList[value.value]?.search?.findNext(searchInput.value.entry)
+  }
+  else {
+    selection.value = ''
+    xterm()?.clearSelection()
+  }
+  setTimeout(() => {
+    input.value?.inputRef?.focus()
+    input.value?.inputRef?.select()
+  }, 200)
+}
 </script>
 
 <style lang="css" scoped>
