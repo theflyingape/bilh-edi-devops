@@ -23,7 +23,7 @@ const links = ref([
   },
   {
     label: 'Learn more',
-    to: '/BILH Interface Engine.pdf',
+    to: 'https://hciedev.laheyhealth.org/BILH%20Interface%20Engine.pdf',
     target: '_blank',
     color: 'neutral',
     variant: 'subtle',

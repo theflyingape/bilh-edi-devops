@@ -17,7 +17,7 @@ export default eventHandler((event) => {
   }
   catch (error) {
     console.error({
-      msg: 'Login failed. Here\'s the raw error:',
+      msg: `Login failed. Here's the raw error:`,
       error
     })
     setResponseStatus(event, 401, 'Unauthorized')

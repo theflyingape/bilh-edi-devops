@@ -105,7 +105,7 @@ const items = ref([
     {
       label: 'Guides',
       icon: 'i-lucide-book-open',
-      to: '../csp/docbook/DocBook.UI.Page.cls',
+      to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls',
       target: '_blank',
       children: [
         {

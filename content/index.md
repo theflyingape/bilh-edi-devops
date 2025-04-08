@@ -69,7 +69,7 @@ Learn what each menu topic represents and how each item allows for quick access 
   :::u-page-feature
   ---
   icon: i-lucide-book-open
-  to: help/guides
+  to: https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls
   ---
   #title
   Guides
@@ -81,7 +81,7 @@ Learn what each menu topic represents and how each item allows for quick access 
   :::u-page-feature
   ---
   icon: i-lucide-chart-bar-stacked
-  to: https://nuxt.com
+  to: /home
   ---
   #title
   Dashboards
@@ -93,7 +93,7 @@ Learn what each menu topic represents and how each item allows for quick access 
   :::u-page-feature
   ---
   icon: i-lucide-database
-  to: https://nuxt.com
+  to: /home
   ---
   #title
   Productions
@@ -105,7 +105,7 @@ Learn what each menu topic represents and how each item allows for quick access 
   :::u-page-feature
   ---
   icon: i-lucide-box
-  to: https://nuxt.com
+  to: /home
   ---
   #title
   Tools
