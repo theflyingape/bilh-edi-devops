@@ -10,7 +10,7 @@
       <template #default>
         <div class="flex flex-col gap-4 items-center">
           <UPinInput v-model="pin" type="number" length="3" disabled />
-          <UButton class="text-2xl" icon="i-vscode-icons-file-type-vscode" color="info" variant="soft" to="." :label="`Start hacking`" />
+          <UButton class="text-2xl" icon="i-vscode-icons-file-type-vscode" color="info" variant="soft" :to="url" :label="`Start hacking`" />
         </div>
       </template>
       <template #footer>
@@ -32,8 +32,9 @@ onMounted(() => {
   const { data } = useFetch(`/api/code-server?username=${username}`)
   console.log('code-server data:', JSON.stringify(get(data)))
   if (get(data)?.status == 'OK') {
-    const url = get(data)?.url
-    navigateTo(url, { open: { target: '_blank' } })
+    set(pin, get(data)?.pin)
+    set(url, get(data)?.url)
+    //navigateTo(get(url), { open: { target: '_blank' } })
   }
 })
 </script>

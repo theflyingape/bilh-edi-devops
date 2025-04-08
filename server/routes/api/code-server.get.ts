@@ -26,7 +26,7 @@ export default defineEventHandler(async (event)  => {
           if (ini[0] == 'PORT') {
             const port = parseInt(ini[1])
             ports[port] = { id: username }
-            sessions[username] = { pin: generatePIN(), port: port,
+            sessions[username] = { pin: pin, port: port,
               url: `https://hciedev.laheyhealth.org/code-server/6501/?workspace=/home/${username}/.local/share/code-server/User/Workspaces/${username}-devops.code-workspace`}
           }
           if (ini[0] == '.')
