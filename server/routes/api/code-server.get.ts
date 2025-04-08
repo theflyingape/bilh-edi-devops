@@ -14,11 +14,13 @@ export default defineEventHandler(async (event)  => {
   }
   else {
     const pin = generatePIN()
-    const vscode = child.spawn('code-server.sh', [], { cwd: '/opt/devops', env: { ...process.env, IDLE: '3600', HOME: `/home/${username}`, USER: username, PASSWORD: pin.join('') }, stdio: 'ignore' })
+    const vscode = child.spawn('./code-server.sh', [], { cwd: '.', env: { ...process.env, IDLE: '3600', HOME: `/home/${username}`, USER: username, PASSWORD: pin.join('') } })
     if (vscode.pid) {
+      log('LOG_NOTICE', `code-server spawned PID #${vscode.pid} for ${username}`)
       await new Promise<number>((resolve, reject) => {
         //  wait for a PORT=#### assignment to echo
-        vscode.stdout?.on('data', (data: string) => {
+        vscode.stdout?.on('data', (data) => {
+          log('LOG_NOTICE', `code-server output: ${data}`)
           const ini = data.split("=")
           if (ini[0] == "PORT") {
             const port = parseInt(ini[1])

@@ -25,7 +25,14 @@ import { get, set, useNow } from '@vueuse/core'
 const { data } = useAuth()
 const now = useNow()
 const pin = ref([])
+const username = get(data)?.id
 
-const response = await useFetch(`/api/code-server?username=${get(data)?.id}`)
-console.log('code-server:', response)
+onMounted(() => {
+  const result = useFetch(`/api/code-server?username=${username}`).then((response) => {
+    console.log('code-server:', response)
+    navigateTo(`https://hciedev.laheyhealth.org/code-server/6501/?workspace=/home/${username}/.local/share/code-server/User/Workspace/${username}-devops.code-workspace`, {
+  open: { target: '_blank' } })
+  })
+  console.log('code-server result:', result)
+})
 </script>
