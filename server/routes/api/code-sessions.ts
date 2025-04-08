@@ -9,6 +9,7 @@ interface sessions {
   [key: string]: {
     pin: string[]
     port: number
+    url: string
   }
 }
 

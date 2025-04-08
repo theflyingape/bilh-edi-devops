@@ -8,6 +8,7 @@ export default defineEventHandler(async (event)  => {
   log('LOG_NOTICE', `code-server ${event}`)
   const params = url.parse(event.path, true).query
   const username = <string>params?.username || 'guest'
+  let response = { status: 'spawn error' }
 
   if (sessions[username]) {
     return { status: 'OK', ...sessions[username] }
@@ -18,29 +19,31 @@ export default defineEventHandler(async (event)  => {
     if (vscode.pid) {
       log('LOG_NOTICE', `code-server spawned PID #${vscode.pid} for ${username}`)
       await new Promise<number>((resolve, reject) => {
-        //  wait for a PORT=#### assignment to echo
+        //  wait for a PORT=#### assignment to echo and the first idle dot
         vscode.stdout?.on('data', (data) => {
-          log('LOG_NOTICE', `code-server output: ${data}`)
+          log('LOG_NOTICE', `code-server: ${data}`)
           const ini = data.toString().split("=")
-          if (ini[0] == "PORT") {
+          if (ini[0] == 'PORT') {
             const port = parseInt(ini[1])
             ports[port] = { id: username }
-            sessions[username] = { pin: generatePIN(), port: port }
-            resolve(port)
+            sessions[username] = { pin: generatePIN(), port: port,
+              url: `https://hciedev.laheyhealth.org/code-server/6501/?workspace=/home/${username}/.local/share/code-server/User/Workspaces/${username}-devops.code-workspace`}
           }
+          if (ini[0] == '.')
+            resolve(sessions[username].port)
         })
-        //  script exited
+        //  script aborted
         vscode.on('close', (code) => {
           reject(code)
         })
       }).then((reason) => {
         log('LOG_NOTICE', `code-server ${username} assigned #${reason}`)
-        return { status: 'OK', ...sessions[username] }
+        response = { status: 'OK', ...sessions[username] }
       }).catch((reason) => {
         log('LOG_ERROR', `code-server exit ${reason}: rejected ${username} request`)
-        return { status: 'ERR' }
+        response = { status: 'rejected' }
       })
     }
-    return { status: 'spawn error' }
+    return response
   }
 })

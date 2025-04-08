@@ -21,18 +21,19 @@
 </template>
 
 <script setup lang="ts">
-import { get, set, useNow } from '@vueuse/core'
+import { get, set, useNow, useFetch } from '@vueuse/core'
 const { data } = useAuth()
 const now = useNow()
 const pin = ref([])
+const url = ref('')
 const username = get(data)?.id
 
 onMounted(() => {
-  const result = useFetch(`/api/code-server?username=${username}`).then((response) => {
-    console.log('code-server:', response)
-    navigateTo(`https://hciedev.laheyhealth.org/code-server/6501/?workspace=/home/${username}/.local/share/code-server/User/Workspace/${username}-devops.code-workspace`, {
-  open: { target: '_blank' } })
-  })
-  console.log('code-server result:', result)
+  const { data } = useFetch(`/api/code-server?username=${username}`)
+  console.log('code-server data:', JSON.stringify(get(data)))
+  if (get(data)?.status == 'OK') {
+    const url = get(data)?.url
+    navigateTo(url, { open: { target: '_blank' } })
+  }
 })
 </script>
