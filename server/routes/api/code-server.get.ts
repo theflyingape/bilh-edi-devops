@@ -15,7 +15,7 @@ export default defineEventHandler(async (event)  => {
     const pid = ports[port].pid
     try {
       process.kill(pid, 0)
-      return { status: `PID #${pid} still running`, ...sessions[username] }
+      return { status: 'OK', ...sessions[username], ...ports[port] }
     } catch (e) {
       //  process had shutdown -- free from lists and re-instantiate a new one
       delete sessions[username], ports[port]
