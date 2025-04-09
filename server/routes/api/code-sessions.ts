@@ -2,6 +2,7 @@
 interface ports {
   [key: number]: {
     id: string
+    pid: number
   }
 }
 

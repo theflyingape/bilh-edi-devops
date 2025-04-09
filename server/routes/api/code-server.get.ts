@@ -11,39 +11,47 @@ export default defineEventHandler(async (event)  => {
   let response = { status: 'spawn error' }
 
   if (sessions[username]) {
-    return { status: 'OK', ...sessions[username] }
-  }
-  else {
-    const pin = generatePIN()
-    const vscode = child.spawn('./code-server.sh', [], { cwd: '.', env: { ...process.env, IDLE: '3600', HOME: `/home/${username}`, USER: username, PASSWORD: pin.join('') } })
-    if (vscode.pid) {
-      log('LOG_NOTICE', `code-server spawned PID #${vscode.pid} for ${username}`)
-      await new Promise<number>((resolve, reject) => {
-        //  wait for a PORT=#### assignment to echo and the first idle dot
-        vscode.stdout?.on('data', (data) => {
-          log('LOG_NOTICE', `code-server: ${data}`)
-          const ini = data.toString().split("=")
-          if (ini[0] == 'PORT') {
-            const port = parseInt(ini[1])
-            ports[port] = { id: username }
-            sessions[username] = { pin: pin, port: port,
-              url: `https://hciedev.laheyhealth.org/code-server/6501/?workspace=/home/${username}/.local/share/code-server/User/Workspaces/${username}-devops.code-workspace`}
-          }
-          if (ini[0] == '.')
-            resolve(sessions[username].port)
-        })
-        //  script aborted
-        vscode.on('close', (code) => {
-          reject(code)
-        })
-      }).then((reason) => {
-        log('LOG_NOTICE', `code-server ${username} assigned #${reason}`)
-        response = { status: 'OK', ...sessions[username] }
-      }).catch((reason) => {
-        log('LOG_ERROR', `code-server exit ${reason}: rejected ${username} request`)
-        response = { status: 'rejected' }
-      })
+    const port = sessions[username].port
+    const pid = ports[port].pid
+    try {
+      process.kill(pid, 0)
+      return { status: `PID #${pid} still running`, ...sessions[username] }
+    } catch (e) {
+      //  process had shutdown -- free from lists and re-instantiate a new one
+      delete sessions[username], ports[port]
     }
-    return response
   }
+
+  const pin = generatePIN()
+  const vscode = child.spawn('./code-server.sh', [], { cwd: '.', env: { ...process.env, IDLE: '3600', HOME: `/home/${username}`, USER: username, PASSWORD: pin.join('') } })
+
+  if (vscode.pid) {
+    log('LOG_NOTICE', `code-server spawned PID #${vscode.pid} for ${username}`)
+    await new Promise<number>((resolve, reject) => {
+      //  wait for a PORT=#### assignment to echo and the first idle dot
+      vscode.stdout?.on('data', (data) => {
+        log('LOG_NOTICE', `code-server: ${data}`)
+        const ini = data.toString().split("=")
+        if (ini[0] == 'PORT') {
+          const port = parseInt(ini[1])
+          ports[port] = { id: username, pid: vscode.pid! }
+          sessions[username] = { pin: pin, port: port,
+            url: `https://hciedev.laheyhealth.org/code-server/6501/?workspace=/home/${username}/.local/share/code-server/User/Workspaces/${username}-devops.code-workspace`}
+        }
+        if (ini[0] == '.')
+          resolve(sessions[username].port)
+      })
+      //  script aborted
+      vscode.on('close', (code) => {
+        reject(code)
+      })
+    }).then((reason) => {
+      log('LOG_NOTICE', `code-server ${username} assigned #${reason}`)
+      response = { status: 'OK', ...sessions[username] }
+    }).catch((reason) => {
+      log('LOG_ERROR', `code-server exit ${reason}: rejected ${username} request`)
+      response = { status: 'rejected' }
+    })
+  }
+  return response
 })

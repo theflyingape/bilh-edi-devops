@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center h-lvh">
-    <UCard class="drop-shadow-2xl" variant="subtle">
+    <UCard class="drop-shadow-2xl" variant="outline">
       <template #header>
         <div class="flex justify-end text-xl">
           <div v-if="pin.length">
@@ -15,12 +15,12 @@
       </template>
       <template #default>
         <div class="flex flex-col gap-4 items-center">
-          <div v-if="pin.length">
+          <div v-if="pin.length" class="space-y-8">
             <UPinInput v-model="pin" type="number" length="3" disabled />
-            <UButton class="text-2xl" icon="i-vscode-icons-file-type-vscode" color="info" variant="soft" target="_blank" :to="url" :label="`Start hacking`" />
+            <div><UButton class="text-2xl" icon="i-vscode-icons-file-type-vscode" color="info" variant="soft" target="_blank" :to="url" :label="`Start hacking`" /></div>
           </div>
           <div v-else class="space-y-8">
-            <div class=" font-semibold text-2xl  text-sky-600 text-center"><UIcon class="align-middle" name="i-vscode-icons-file-type-vscode" size="48" />&nbsp;Code Server</div>
+            <div class="font-semibold text-center text-2xl  text-sky-600"><UIcon class="align-middle" name="i-vscode-icons-file-type-vscode" size="48" />&nbsp; Code Server</div>
             <SubmitButton class="text-2xl" color="action" target="_blank" :to="url" :label="`Prepare my session`" @click="execute" />
           </div>
       </div>
@@ -50,5 +50,19 @@ onFetchResponse((response) => {
       //navigateTo(value?.url, { open: { target: '_blank' } })
     }
   })
+})
+
+onMounted(() => {
+  const style = document.body.style
+  style.backgroundImage = "url('/vscode-background.png')"
+  style.backgroundPosition = 'center'
+  style.backgroundRepeat = 'no-repeat'
+  style.backgroundSize = 'contain'
+  style.height = '100%'
+  style.width = '100%'
+})
+
+onBeforeUnmount(() => {
+  document.body.style.backgroundImage = 'none'
 })
 </script>
