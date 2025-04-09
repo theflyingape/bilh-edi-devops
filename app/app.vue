@@ -2,11 +2,12 @@
   <UApp :toaster="{ duration: 3583, position: 'top-left' }">
     <NuxtLoadingIndicator />
     <NuxtPwaManifest />
-
-    <UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close
-      close-icon="i-lucide-x-circle" id="wip" />
-    <UBanner color="success" icon="i-lucide-wand" title="Feat! Terminal allows you to connect into all remote sessions" close
-      close-icon="i-lucide-x-circle" id="feat1" />
+    <!--UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close
+      close-icon="i-lucide-x-circle" id="wip" /-->
+    <!--UBanner color="success" icon="i-lucide-wand" title="Feat! Terminal allows you to connect into all remote sessions" close
+      close-icon="i-lucide-x-circle" id="feat1" /-->
+    <UBanner color="success" icon="i-lucide-wand" title="Feat! built-in managed session into your Code workspace" close
+      close-icon="i-lucide-x-circle" id="feat2" />
     <UHeader>
       <template #title>
         <Logo class="h-10 w-auto" />
