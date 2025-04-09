@@ -13,7 +13,7 @@
           </div>
         </template>
         <template #footer>
-          <div class="text-start text-lg">{{new Date().toDateString()}}<br>{{new Date().toTimeString()}}</div>
+          <div class="text-start text-nowrap font-mono">{{new Date().toDateString()}}<br>{{new Date().toTimeString()}}</div>
         </template>
       </UCard>
     </div>

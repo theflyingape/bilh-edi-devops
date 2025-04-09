@@ -8,7 +8,7 @@ export default defineEventHandler(async (event)  => {
   log('LOG_NOTICE', `code-server ${event}`)
   const params = url.parse(event.path, true).query
   const username = <string>params?.username || 'guest'
-  let response = { status: 'spawn error' }
+  let response = { status: 'unknown' }
 
   if (sessions[username]) {
     const port = sessions[username].port
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event)  => {
   }
 
   const pin = generatePIN()
-  const vscode = child.spawn('./code-server.sh', [], { cwd: '.', env: { ...process.env, IDLE: '3600', HOME: `/home/${username}`, USER: username, PASSWORD: pin.join('') } })
+  const vscode = child.spawn('./code-server.sh', [], { cwd: '.', env: { ...process.env, IDLE: '36000', HOME: `/home/${username}`, USER: username, PASSWORD: pin.join('') } })
 
   if (vscode.pid) {
     log('LOG_NOTICE', `code-server spawned PID #${vscode.pid} for ${username}`)
@@ -47,11 +47,14 @@ export default defineEventHandler(async (event)  => {
       })
     }).then((reason) => {
       log('LOG_NOTICE', `code-server ${username} assigned #${reason}`)
-      response = { status: 'OK', ...sessions[username] }
+      response = { status: 'OK', ...sessions[username], ...ports[sessions[username].port] }
     }).catch((reason) => {
       log('LOG_ERROR', `code-server exit ${reason}: rejected ${username} request`)
-      response = { status: 'rejected' }
+      response = { status: `rejected: ${reason}` }
     })
+  }
+  else {
+    response = { status: `spawn error #${vscode.exitCode}` }
   }
   return response
 })
