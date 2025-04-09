@@ -10,7 +10,7 @@
       <template #default>
         <div class="flex flex-col gap-4 items-center">
           <UPinInput v-model="pin" type="number" length="3" disabled />
-          <UButton class="text-2xl" icon="i-vscode-icons-file-type-vscode" color="info" variant="soft" :to="url" :label="`Start hacking`" />
+          <UButton class="text-2xl" icon="i-vscode-icons-file-type-vscode" color="info" variant="soft" target="_blank" :to="url" :label="`Start hacking`" />
         </div>
       </template>
       <template #footer>
