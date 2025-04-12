@@ -27,7 +27,7 @@
               </UFormField>
             </div>
             <div class="flex justify-end pt-8">
-                <SubmitButton>Login</SubmitButton>
+              <SubmitButton>Login</SubmitButton>
             </div>
           </UForm>
         </UCard>
@@ -88,13 +88,13 @@
           <div><img src="~/assets/images/footer.png" class="drop-shadow-lg" /></div>
         </div>
         <div class="p-2 text-start text-slate-500 text-sm">
-          <em>{{VERSION}} built {{BUILT}} for {{MODE}}</em>
+          <em>{{ VERSION }} built {{ BUILT }} for {{ MODE }}</em>
         </div>
         <div class="justify-items-end">
           <div class="pr-16"><em>value-add by Robert Hurst</em></div>
           <div class="pr-18">
-            <UButton color="neutral" variant="link" icon="i-simple-icons-github" to="https://github.com/theflyingape/bilh-edi-devops"
-              target="_blank">GitHub</UButton>
+            <UButton color="neutral" variant="link" icon="i-simple-icons-github"
+              to="https://github.com/theflyingape/bilh-edi-devops" target="_blank">GitHub</UButton>
           </div>
         </div>
       </div>

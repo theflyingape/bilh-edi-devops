@@ -13,54 +13,55 @@
         <Logo class="h-10 w-auto" />
       </template>
       <UNavigationMenu :items="items" content-orientation="vertical" />
-      <SideMenu v-model:open="sideMenu" />
       <template #right>
         <div class="flex flex-cols gap-2">
           <div class="m-auto">
-            <UTooltip arrow :content="{ align:'end', side:'left', sideOffset:1 }" text="click to toggle fullscreen" >
-              <USwitch color="secondary" unchecked-icon="i-heroicons-window" checked-icon="i-heroicons-tv" size="xl" v-model="isFullscreen"
-              @click="toggle" />
+            <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="click to toggle fullscreen">
+              <USwitch color="secondary" unchecked-icon="i-heroicons-window" checked-icon="i-heroicons-tv" size="xl"
+                v-model="isFullscreen" @click="toggle" />
             </UTooltip>
           </div>
           <div class="m-auto">
-              <UChip class="mt-2" :color="online" inset>
+            <UChip class="mt-2" :color="online" inset>
+              <UTooltip arrow :content="{ align: 'center', side: 'left', sideOffset: 8 }"
+                :text="`${get(data)?.id || 'click to login'}`">
                 <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
-                icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
-              </UChip>
+                  icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
+              </UTooltip>
+            </UChip>
           </div>
           <div class="m-auto">
-            <UTooltip arrow :content="{ align:'center', side:'right', sideOffset:8 }" :text="`${ get(data)?.id || 'not logged in' }`" >
+            <UTooltip arrow :content="{ align: 'center', side: 'right', sideOffset: 8 }"
+              :text="`${get(data)?.id || 'not logged in'}`">
               <UBadge :color="online" variant="outline">{{ scope }}</UBadge>
             </UTooltip>
           </div>
-      </div>
+          <SideMenu v-model:open="sideMenu" />
+        </div>
       </template>
       <template #body>
       </template>
     </UHeader>
-
     <UMain>
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
     </UMain>
-
     <!--AppFooter /-->
-
     <!--ClientOnly>
       <LazyUContentSearch :files="files" :navigation="navigation" />
     </ClientOnly-->
-
-</UApp>
+  </UApp>
 </template>
 
 <script setup lang="ts">
 const { seo } = useAppConfig()
+/*
 const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('landing'))
 const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('landing'), {
   server: false
 })
-
+*/
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' }
@@ -215,6 +216,12 @@ const items = ref([
           icon: 'i-vscode-icons-file-type-vscode',
           description: 'The IDE standard for IRIS ObjectScript, scripting, and data file manipulation',
           to: '/code'
+        },
+        {
+          label: 'Utility',
+          icon: 'vscode-icons:file-type-config',
+          description: 'A variety of useful tools to assist you with mundane tasks',
+          to: '/utility'
         },
         {
           label: 'Worldwide Response Center',

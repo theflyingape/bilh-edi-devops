@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-lvh">
-    <UCard class="drop-shadow-2xl" variant="outline">
+  <div class="flex h-dvh">
+    <UCard class="m-auto" variant="outline">
       <template #header>
         <div class="flex justify-end text-lg">
           <div v-if="pin.length">

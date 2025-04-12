@@ -23,7 +23,7 @@ const links = ref([
   },
   {
     label: 'Learn more',
-    to: 'https://hciedev.laheyhealth.org/BILH%20Interface%20Engine.pdf',
+    to: 'https://bilh.sharepoint.com/:b:/s/BIDMC-TechnologyOffice/EY3XzMlMufhJlEyV8IvU0sABgRaS0E3KguczgJFZmZ0fiQ?e=EpwRAj',
     target: '_blank',
     color: 'neutral',
     variant: 'subtle',

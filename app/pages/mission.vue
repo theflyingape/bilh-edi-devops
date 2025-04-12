@@ -1,3 +1,10 @@
+<template>
+  <ContentRenderer
+    v-if="page"
+    :value="page"
+    :prose="false"
+  />
+</template>
 <script setup lang="ts">
 definePageMeta({ auth:false })
 import { get } from '@vueuse/core'
@@ -17,11 +24,3 @@ useSeoMeta({
   twitterImage: 'https://docs-template.nuxt.dev/social-card.png'
 })
 </script>
-
-<template>
-  <ContentRenderer
-    v-if="page"
-    :value="page"
-    :prose="false"
-  />
-</template>
