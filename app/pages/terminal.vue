@@ -11,7 +11,7 @@
         <div class="flex flex-nowrap justify-between ml-5 mr-5">
           <!-- session controls -->
           <div v-if="isConnected" class="flex flex-nowrap space-x-2">
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="btop: resource monitors"><UButton size="sm" icon="i-heroicons-rectangle-group" color="neutral" variant="subtle" @click="btop" /></UTooltip>
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="btop: resource monitors"><UButton size="sm" icon="i-heroicons-rectangle-group" color="neutral" variant="subtle" @click="btop" /></UTooltip>
             <div v-if="mcRef">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="press Ctrl-O anywhere">
                 <UButton color="neutral" @click="mc"><UKbd size="sm" value="ctrl" variant="subtle" /><UKbd size="sm" value="o" variant="subtle" /></UButton>
@@ -20,6 +20,7 @@
             <div v-else>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="launch Midnight Commander"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
             </div>
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="curl builder"><UButton size="sm" icon="i-lucide-biceps-flexed" color="neutral" variant="subtle" @click="curl" /></UTooltip>
           </div>
           <div v-else>
             &nbsp;
@@ -59,6 +60,30 @@
       </div>
     </div>
   </div>
+
+  <UDrawer
+    v-model:open="isCurl"
+    title="Drawer with footer"
+    description="This is useful when you want a form in a Drawer."
+    :ui="{ container: 'max-w-xl mx-auto' }"
+  >
+    <UButton label="Open" color="neutral" variant="subtle" trailing-icon="i-lucide-chevron-up" />
+
+    <template #body>
+      <Placeholder class="h-48" />
+    </template>
+
+    <template #footer>
+      <UButton label="Submit" color="neutral" class="justify-center" />
+      <UButton
+        label="Cancel"
+        color="neutral"
+        variant="outline"
+        class="justify-center"
+        @click="isCurl = false"
+      />
+    </template>
+  </UDrawer>
 </template>
 
 <script setup lang="ts">
@@ -153,6 +178,13 @@ function mc() {
 defineShortcuts({
   ctrl_o: mc
 })
+
+//  curl
+const isCurl = ref(false)
+
+function curl() {
+  set(isCurl, true)
+}
 
 //  Search
 const input = useTemplateRef('input')

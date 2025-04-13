@@ -132,6 +132,13 @@ const items = ref([
           target: '_blank',
         },
         {
+          label: 'Using ObjectScript',
+          icon: 'i-vscode-icons-file-type-script',
+          description: 'When there is need to write code to extend a built-in component or to create a component from scratch',
+          to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS',
+          target: '_blank',
+        },
+        {
           label: 'Introducing Productions',
           description: 'Production basics, settings, and message flow',
           icon: 'i-lucide-house',
