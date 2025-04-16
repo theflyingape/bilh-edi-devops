@@ -146,6 +146,7 @@ export default defineEventHandler(async (event) => {
         }
 
         if (session.enabled) {
+          if (session.groups?.includes('sysadm') || session.groups?.includes('wheel')) session.scope.push('systems')
           if (session.groups?.includes('irisadm')) session.scope.push('admin')
           if (session.groups?.includes('irisdev')) session.scope.push('developer')
           if (session.groups?.includes('os-shell-access')) session.scope.push('analyst')
