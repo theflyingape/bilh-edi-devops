@@ -20,7 +20,7 @@ export interface User {
 }
 
 export interface JwtPayload extends User {
-  scope: Array<'guest' | 'user' | 'analyst' | 'developer' | 'admin'>
+  scope: Array<'guest' | 'user' | 'analyst' | 'developer' | 'admin' | 'systems'>
   exp?: number
 }
 

@@ -20,10 +20,10 @@
           <UForm :state="credentials" @submit.prevent="login">
             <div class="flex flex-col items-center justify-center gap-4">
               <UFormField label="Username" name="username">
-                <UInput v-model="credentials.username" type="string" placeholder="jsmith" autofocus />
+                <UInput v-model="credentials.username" type="string" placeholder="itsystems" autofocus />
               </UFormField>
               <UFormField label="Password" name="password">
-                <UInput v-model="credentials.password" type="password" />
+                <UInput v-model="credentials.password" type="password" placeholder="BILH password" />
               </UFormField>
             </div>
             <div class="flex justify-end pt-8">
