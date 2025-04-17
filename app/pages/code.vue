@@ -43,7 +43,8 @@ const message = ref('')
 const pin = ref([])
 const url = ref('')
 const username = get(data)?.id
-const { aborted, execute, onFetchResponse } = useFetch(`/api/code-server?username=${username}`, { immediate: false, timeout: 12345 } )
+const headers = useRequestHeaders(['cookie']) as HeadersInit
+const { aborted, execute, onFetchResponse } = useFetch(`/api/code-server?username=${username}`, { headers: headers }, { immediate: false, timeout: 12345 } )
 
 onFetchResponse((response) => {
   response.json().then((value) => {

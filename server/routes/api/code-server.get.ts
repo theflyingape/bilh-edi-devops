@@ -1,9 +1,18 @@
+import { getServerSession } from '#auth'
 import child from 'child_process'
 import { log } from '~/lib/syslog'
 import useCodeServer from './code-sessions'
 import url from 'url'
+import { H3Event, EventHandlerRequest } from 'h3'
 
 export default defineEventHandler(async (event)  => {
+  //  inspired by the getServerSession of NextAuth.js
+  //  it also avoids an external HTTP GET request to the /api/auth/sessions endpoint,
+  // instead directly calling a pure JS-method
+  const session = await getServerSession(event)
+  if (!session)
+    return { status: 'unauthenticated' }
+  
   const { ports, sessions, generatePIN } = useCodeServer()
   log('LOG_NOTICE', `code-server ${event}`)
   const params = url.parse(event.path, true).query

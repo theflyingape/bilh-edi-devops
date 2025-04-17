@@ -185,7 +185,7 @@ css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
     },
     client: {
       installPrompt: true,
-      periodicSyncForUpdates: 10000,
+      periodicSyncForUpdates: 3600,
     },
     devOptions: {
       enabled: true,
