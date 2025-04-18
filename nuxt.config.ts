@@ -69,7 +69,6 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      auth_provider_type: 'local',
       websocket: process.env.NODE_ENV == 'development' ?  'ws' : 'wss'
     }
   },

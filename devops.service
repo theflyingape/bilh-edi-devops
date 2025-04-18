@@ -7,7 +7,7 @@ Type=simple
 User=root
 Group=irisadm
 SupplementaryGroups=irisdev
-#Environment=NODE_VERSION=lts/iron NODE_ENV=production
+#Environment=NODE_VERSION=lts/iron NODE_ENV=production NUXT_JWT_ACCESS=300s NUXT_JWT_REFRESH=12h NUXT_PUBLIC_APP_VERSION=0.5.2
 #ExecStartPre=/opt/devops/.nvm/nvm-exec npm run build
 #ExecStart=/opt/devops/.nvm/nvm-exec node .output/server/index.mjs
 ExecStart=/bin/sh /opt/devops/devops-portal.sh
