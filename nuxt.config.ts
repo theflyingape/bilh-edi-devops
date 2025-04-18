@@ -62,13 +62,14 @@ export default defineNuxtConfig({
       // Whether to refresh the session every time the browser window is refocused.
       enableOnWindowFocus: true,
       // Whether to refresh the session every `X` milliseconds. Set this to `false` to turn it off. The session will only be refreshed if a session already exists.
-      enablePeriodically: false,
+      enablePeriodically: 98765,
       // Custom refresh handler - uncomment to use
       // handler: './config/AuthRefreshHandler'
     },
   },
   runtimeConfig: {
     public: {
+      auth_provider_type: 'local',
       websocket: process.env.NODE_ENV == 'development' ?  'ws' : 'wss'
     }
   },
