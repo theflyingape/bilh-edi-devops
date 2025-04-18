@@ -44,6 +44,7 @@ export default defineEventHandler(async (event) => {
   const auth = Buffer.from(`${username}:${password}`).toString('base64')
   let session: JwtPayload = { id: username, enabled: false, scope: [] }
   let token = { token: {} }
+  log('LOG_NOTICE', `${username} ${event} ${ACCESS_TOKEN_TTL} ${REFRESH_TOKEN_TTL} ${SECRET}`)
 
   //  this allows me to test out-of-band
   if (dev) {
