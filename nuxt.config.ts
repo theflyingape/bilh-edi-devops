@@ -196,9 +196,6 @@ css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
     },
   },
 
-  routeRules: {
-    "/api/**": { cache: false, swr: false }
-  },
   nitro: {
     //baseURL: '/devops',
     experimental: {
@@ -213,15 +210,13 @@ css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
     },
     preset: 'node_server',
     routeRules: {
-      '/**': {
-        cache: {
-        //  1-hour
-          maxAge: 60 * 60,
-        //  enable stale-while-validate
-          swr: true
-        }
+      '/': {
+        cache: { maxAge: 60 * 60, swr: true },
+      },
+      '/api/': {
+        cache: false
       }
-    }
+    },
   },
   vite: {
     preview: {
