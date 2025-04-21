@@ -199,7 +199,7 @@ css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
   routeRules: {
     "/api/**": { cache: false, swr: false }
   },
-    nitro: {
+  nitro: {
     //baseURL: '/devops',
     experimental: {
       websocket: true
@@ -212,6 +212,16 @@ css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
       failOnError: false,
     },
     preset: 'node_server',
+    routeRules: {
+      '/**': {
+        cache: {
+        //  1-hour
+          maxAge: 60 * 60,
+        //  enable stale-while-validate
+          swr: true
+        }
+      }
+    }
   },
   vite: {
     preview: {
