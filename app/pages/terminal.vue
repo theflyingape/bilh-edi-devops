@@ -3,10 +3,10 @@
     <div class="flex flex-nowrap h-full w-full justify-center pt-2">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-1/2 h-11/12 max-h-11/12 overflow-hidden resize resizer">
-        <XtermJs v-show="value == 'localhost'" @vue:mounted="" session="localhost" theme="White" resize='monitor' :wsUrl="`${wsUrl}`" />
-        <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}`" />
-        <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" />
-        <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" />
+        <XtermJs v-show="value == 'localhost'" @vue:mounted="" session="localhost" theme="White" resize='monitor' :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <!-- bottom control panel -->
         <div class="flex flex-nowrap justify-between ml-5 mr-5">
           <!-- session controls -->
@@ -20,7 +20,7 @@
             <div v-else>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="launch Midnight Commander"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
             </div>
-            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="curl builder"><UButton size="sm" icon="i-lucide-biceps-flexed" color="neutral" variant="subtle" @click="curl" /></UTooltip>
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="curl builder"><UButton size="sm" icon="i-lucide-biceps-flexed" color="neutral" variant="subtle" @click="isCurl = true" /></UTooltip>
           </div>
           <div v-else>
             &nbsp;
@@ -57,37 +57,35 @@
           </UChip>
         </div>
         <USelect v-model="value" :items="items" class="w-36" />
+        <div>
+          <UTooltip arrow :content="{ align:'end', side:'left', sideOffset:1 }" text="decrease font size"><UButton size="lg" icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
+          <UTooltip arrow :content="{ align:'end', side:'left', sideOffset:1 }" text="increase font size"><UButton size="lg" icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
+        </div>
       </div>
     </div>
   </div>
 
-  <UDrawer
-    v-model:open="isCurl"
-    title="Drawer with footer"
-    description="This is useful when you want a form in a Drawer."
-    :ui="{ container: 'max-w-xl mx-auto' }"
-  >
-    <UButton label="Open" color="neutral" variant="subtle" trailing-icon="i-lucide-chevron-up" />
-
+  <UDrawer v-model:open="isCurl" title="Curl Builder" description="fill out form below" :ui="{ container: 'max-w-xl mx-auto' }">
+    <Placeholder class="h-48" />
     <template #body>
-      <Placeholder class="h-48" />
+      <UForm :state="curl" @submit.prevent="sendCurl">
+        <UFormField label="URL" name="url">
+          <UInput v-model="curl.url" type="string" placeholder="https://server.com/path/to/endpoint" autofocus />
+        </UFormField>
+      </UForm>
     </template>
 
     <template #footer>
-      <UButton label="Submit" color="neutral" class="justify-center" />
-      <UButton
-        label="Cancel"
-        color="neutral"
-        variant="outline"
-        class="justify-center"
-        @click="isCurl = false"
-      />
+      <div class="justify-end space-x-2">
+        <SubmitButton label="Submit" />
+        <UButton label="Cancel" color="neutral" variant="outline" @click="isCurl = false" />
+      </div>
     </template>
   </UDrawer>
 </template>
 
 <script setup lang="ts">
-import { get, set, useResizeObserver } from '@vueuse/core'
+import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 
 const config = useRuntimeConfig()
@@ -99,24 +97,35 @@ const { sessionList, cols, rows, selection, connect, attach, detach, connected, 
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
 const value = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
 
-/*
-const monitorRef = useTemplateRef('monitor')
-useResizeObserver(monitorRef, (entries) => {
-  //const [entry] = entries
-  //const { width, height } = <DOMRectReadOnly>entry?.contentRect
-  //console.log('crt resize:',width,'x',height)
-  //items.value.forEach((item) => { resize(item) })
-  resize(value.value)
-})
-*/
 const crtRef = useTemplateRef('crt')
 useResizeObserver(crtRef, (entries) => {
   resize(get(value))
 })
 
+const curl = ref({
+  url: '',
+  insecure: false,
+})
+
+const prefs = {
+  fontSize: 20
+}
+const save = useStorage('prefs-local-storage', prefs, localStorage, { mergeDefaults: true })
+console.log('save', save.value)
+
 watch(value, async (n, o) => {
   connected(n)
 })
+
+function fontSize(delta:number) {
+  if (xterm()?.options.fontSize) {
+    xterm()!.options.fontSize = xterm()!.options.fontSize! + delta
+    prefs.fontSize = xterm()!.options.fontSize!
+    localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
+    save.value.fontSize = prefs.fontSize
+    resize(get(value))
+  }
+}
 
 function send(text: string) {
   sessionList[get(value)]?.ws?.value?.send(text)
@@ -182,10 +191,6 @@ defineShortcuts({
 //  curl
 const isCurl = ref(false)
 
-function curl() {
-  set(isCurl, true)
-}
-
 //  Search
 const input = useTemplateRef('input')
 const searchInput = ref({ entry: '' })
@@ -209,6 +214,11 @@ function search(query:boolean) {
   }
   else
     xterm()?.focus()
+}
+
+function sendCurl() {
+  set(isCurl, false)
+  send(`curl `)
 }
 </script>
 

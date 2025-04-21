@@ -113,6 +113,7 @@ export default function useTerminalSocket() {
 
   function resize(sessionId: string) {
     const session = sessionList[sessionId]!
+
     if (session.fit) {
       session.fit.fit()
       let xy = session.fit.proposeDimensions()
@@ -125,7 +126,6 @@ export default function useTerminalSocket() {
       }
       session.xterm.focus()
     }
-    //  notify backend as necessary
     const event = { resize: { rows: get(rows), cols: get(cols) } }
     session.attach?.sendData('♥' + JSON.stringify(event))
   }

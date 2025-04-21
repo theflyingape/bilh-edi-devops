@@ -6,6 +6,7 @@
 const props = defineProps<{
   session: string     //  key identifier
   theme: keyof theme  //  pick a color
+  fontSize?: number   //  20
   rows?: number       //  25
   cols?: number       //  80
   wsUrl?: string      //  wss://${location.host}/node-pty
@@ -43,9 +44,9 @@ const theme: theme = {
 }
 
 let startup: ITerminalOptions = {
-  allowProposedApi: true, scrollback: 5000, scrollSensitivity: 5, smoothScrollDuration: 250,
+  allowProposedApi: true, scrollback: 8000, scrollSensitivity: 5, smoothScrollDuration: 250,
   cursorBlink: false, drawBoldTextInBrightColors: true,
-  fontFamily: 'Consolas,Lucida Console,monospace', fontSize: 20, fontWeight: 'normal', fontWeightBold: 'bold',
+  fontFamily: 'Consolas,Lucida Console,monospace', fontSize: props?.fontSize || 20, fontWeight: 'normal', fontWeightBold: 'bold',
   theme: theme[props.theme],
   wordSeparator: ` :;?!"'<>[=]`
 }

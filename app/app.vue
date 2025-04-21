@@ -12,12 +12,12 @@
       <template #title>
         <Logo class="h-10 w-auto" />
       </template>
-      <UNavigationMenu :items="items" content-orientation="vertical" />
+      <UNavigationMenu :items="items" content-orientation="horizontal" />
       <template #right>
         <div class="flex flex-cols gap-2">
           <div class="m-auto">
             <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="click to toggle fullscreen">
-              <USwitch color="secondary" unchecked-icon="i-heroicons-window" checked-icon="i-heroicons-tv" size="xl"
+              <USwitch color="secondary" unchecked-icon="i-lucide-scaling" checked-icon="i-heroicons-tv" size="xl"
                 v-model="isFullscreen" @click="toggle" />
             </UTooltip>
           </div>
@@ -186,10 +186,10 @@ const items = ref([
       icon: 'i-lucide-database',
       children: [
         {
-          label: 'Development',
-          icon: 'i-vscode-icons-file-type-apib',
-          description: 'Prototyping & Training environment',
-          to: 'https://hciedev.laheyhealth.org/csp/sys/UtilHome.csp',
+          label: 'LIVE',
+          icon: 'i-vscode-icons-file-type-plsql-package',
+          description: 'Production environment',
+          to: 'https://hcieprd.laheyhealth.org/csp/sys/UtilHome.csp',
           target: '_blank'
         },
         {
@@ -200,10 +200,10 @@ const items = ref([
           target: '_blank'
         },
         {
-          label: 'LIVE',
-          icon: 'i-vscode-icons-file-type-plsql-package',
-          description: 'Production environment',
-          to: 'https://hcieprd.laheyhealth.org/csp/sys/UtilHome.csp',
+          label: 'Development',
+          icon: 'i-vscode-icons-file-type-apib',
+          description: 'Prototyping & Training environment',
+          to: 'https://hciedev.laheyhealth.org/csp/sys/UtilHome.csp',
           target: '_blank'
         }
       ]
