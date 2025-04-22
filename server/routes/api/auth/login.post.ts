@@ -2,12 +2,14 @@
 import { PrivateKey, sign, SignOptions } from 'jsonwebtoken'
 import { log } from '~/lib/syslog'
 import { z } from 'zod'
+import useIrisTokens from '../iris-sessions'
 
 //  supply trivial values for testing -- make .env to better secure your site implementation
 const dev = process.dev || false
 export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || '30s'
 export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '1h'
 export const SECRET: PrivateKey = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
+const { HCIE, tokens, login } = useIrisTokens()
 
 export interface User {
   id: string,
@@ -126,61 +128,71 @@ export default defineEventHandler(async (event) => {
     return token
   }
 
-  await fetch(`https://hciedev.laheyhealth.org/api/hcie/user/${username}`, {
-    headers: {
-      Authorization: `Basic ${auth}`,
-      mode: 'no-cors',
-    }
-  }).then(async (res) => {
-    try {
-      await res.json().then(async (hcie) => {
-        session = {
-          id: username,
-          enabled: hcie.Enabled,
-          groups: hcie.Groups,
-          roles: hcie.Roles,
-          name: hcie.FullName,
-          comment: hcie.Comment,
-          loggedInAt: Date.now(),
-          scope: []
+  //  first, retrieve IRIS REST JWT as user authentication
+  await login(HCIE.Dev, username, password).then(async (jwt) => {
+    if (jwt) {
+      //  authenticated, now get user scope for authorization
+      await fetch(`https://hciedev.laheyhealth.org/api/hcie/user/${username}`, {
+        headers: {
+          Authorization: `Bearer ${jwt.access_token}`
         }
+      }).then(async (res) => {
+        try {
+          await res.json().then(async (hcie) => {
+            session = {
+              id: username,
+              enabled: hcie.Enabled,
+              groups: hcie.Groups,
+              roles: hcie.Roles,
+              name: hcie.FullName,
+              comment: hcie.Comment,
+              loggedInAt: Date.now(),
+              scope: []
+            }
+    
+            if (session.enabled) {
+              if (session.groups?.includes('sysadm') || session.groups?.includes('wheel')) session.scope.push('systems')
+              if (session.groups?.includes('irisadm')) session.scope.push('admin')
+              if (session.groups?.includes('irisdev')) session.scope.push('developer')
+              if (session.groups?.includes('os-shell-access')) session.scope.push('analyst')
+              session.scope.push('user')
+            }
+            else
+              session.scope.push('guest')
 
-        if (session.enabled) {
-          if (session.groups?.includes('sysadm') || session.groups?.includes('wheel')) session.scope.push('systems')
-          if (session.groups?.includes('irisadm')) session.scope.push('admin')
-          if (session.groups?.includes('irisdev')) session.scope.push('developer')
-          if (session.groups?.includes('os-shell-access')) session.scope.push('analyst')
-          session.scope.push('user')
+            //  create separate JWT for Nuxt auth session handling
+            const tokenData: JwtPayload = session
+            const accessToken = sign(tokenData, SECRET, <SignOptions>{
+              expiresIn: ACCESS_TOKEN_TTL
+            })
+            const refreshToken = sign(tokenData, SECRET, <SignOptions>{
+              expiresIn: REFRESH_TOKEN_TTL
+            })
+    
+            // Naive implementation - please implement properly yourself!
+            const userTokens: TokensByUser = tokensByUser.get(username) ?? {
+              access: new Map(),
+              refresh: new Map()
+            }
+            userTokens.access.set(accessToken, refreshToken)
+            userTokens.refresh.set(refreshToken, accessToken)
+            tokensByUser.set(username, userTokens)
+    
+            setResponseStatus(event, 200, 'logged in')
+            token = { token: { accessToken, refreshToken } }
+          })
         }
-        else
-          session.scope.push('guest')
-
-        const tokenData: JwtPayload = session
-        const accessToken = sign(tokenData, SECRET, <SignOptions>{
-          expiresIn: ACCESS_TOKEN_TTL
-        })
-        const refreshToken = sign(tokenData, SECRET, <SignOptions>{
-          expiresIn: REFRESH_TOKEN_TTL
-        })
-
-        // Naive implementation - please implement properly yourself!
-        const userTokens: TokensByUser = tokensByUser.get(username) ?? {
-          access: new Map(),
-          refresh: new Map()
+        catch (err) {
+          setResponseStatus(event, 401, `${err}`)
+          log('LOG_NOTICE', `${username} ${event} ${JSON.stringify(err)}`)
         }
-        userTokens.access.set(accessToken, refreshToken)
-        userTokens.refresh.set(refreshToken, accessToken)
-        tokensByUser.set(username, userTokens)
-
-        setResponseStatus(event, 200, 'logged in')
-        token = { token: { accessToken, refreshToken } }
       })
     }
-    catch (err) {
-      setResponseStatus(event, 401, `${err}`)
-      log('LOG_NOTICE', `${username} ${event} ${JSON.stringify(err)}`)
-    }
+  }).catch(() => {
+    setResponseStatus(event, 401, 'unauthorized')
+    log('LOG_NOTICE', `${username} ${event} login authentication failed`)
   })
+
 
   log('LOG_NOTICE', `${username} ${event} ${REFRESH_TOKEN_TTL} return token size: ${JSON.stringify(token).length}`)
   return token

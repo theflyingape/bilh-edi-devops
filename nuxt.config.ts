@@ -72,23 +72,8 @@ export default defineNuxtConfig({
       websocket: process.env.NODE_ENV == 'development' ?  'ws' : 'wss'
     }
   },
-/*
-  routeRules: {
-    '/': {
-      //prerender: true,
-      //swr: 5,
-      //ssr: false,
-    },
-    '/with-caching': {
-      swr: 86400000,
-      auth: {
-        disableServerSideAuth: true
-      }
-    }
-  },
-*/
 
-css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
+  css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
   ui: {
     theme: {
       colors: [ 'primary', 'secondary', 'tertiary', 'info', 'success', 'warning', 'error', 'action' ]
@@ -116,25 +101,25 @@ css: ['~/assets/css/main.css', '~/assets/css/xterm.css'],
   },
   llms: {
     domain: 'https://docs-template.nuxt.dev/',
-    title: 'Nuxt UI Pro - Docs template',
-    description: 'A template for building documentation with Nuxt UI Pro and Nuxt Content',
+    title: 'EDI DevOps - Documentation',
+    description: 'Documentation built on Nuxt UI Pro and Nuxt Content',
     full: {
-      title: 'Nuxt UI Pro - Docs template Full Documentation',
-      description: 'This is the full documentation for the Nuxt UI Pro - Docs template'
+      title: 'BILH EDI DevOps - Documentation',
+      description: 'This is online documentation for EDI DevOps'
     },
     sections: [
       {
-        title: 'Getting Started',
+        title: 'BILH Interface Engine',
         contentCollection: 'docs',
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/getting-started%' }
+          { field: 'path', operator: 'LIKE', value: '/1-bilh-interface-engine%' }
         ]
       },
       {
-        title: 'Essentials',
+        title: 'Technology & Innovation',
         contentCollection: 'docs',
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/essentials%' }
+          { field: 'path', operator: 'LIKE', value: '/2-technology-and-innovation%' }
         ]
       }
     ]

@@ -111,7 +111,6 @@ const prefs = {
   fontSize: 20
 }
 const save = useStorage('prefs-local-storage', prefs, localStorage, { mergeDefaults: true })
-console.log('save', save.value)
 
 watch(value, async (n, o) => {
   connected(n)

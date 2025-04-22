@@ -2,7 +2,7 @@ import { get } from '@vueuse/core'
 
 export default defineNuxtRouteMiddleware((to) => {
   const { status, data } = useAuth()
-  const notAllowed = ['code', 'code-server', 'terminal']
+  const notAllowed = ['code', 'terminal']
 
   //  a little negative, but ... 
   if (get(status) !== 'unauthenticated') {
