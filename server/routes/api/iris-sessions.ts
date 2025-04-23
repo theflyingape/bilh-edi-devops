@@ -26,7 +26,6 @@ tokens[HCIE.Test] = {}
 tokens[HCIE.Live] = {}
 
 export default function useIrisTokens() {
-
   //  retrieve IRIS REST JWT as user authentication
   async function login(hcie:HCIE, username:string, password:string): Promise<token|null> {
     let jwt = null
@@ -68,6 +67,7 @@ export default function useIrisTokens() {
       headers: {
         Authorization: `Bearer ${jwt.access_token}`,
         mode: 'no-cors',
+        'Content-Type': 'application/json',
       }, body: JSON.stringify(jwt)
     }).then(async (res) => {
       try {
@@ -91,11 +91,12 @@ export default function useIrisTokens() {
         headers: {
           Authorization: `Bearer ${jwt.access_token}`,
           mode: 'no-cors',
-        }, body: JSON.stringify(jwt)
+          'Content-Type': 'application/json',
+        }
       }).then(async (res) => {
         try {
-          await res.json().then(async (res) => {
-            payload = res
+          await res.json().then(async (js) => {
+            payload = js
           })
         }
         catch (err) {

@@ -129,54 +129,51 @@ export default defineEventHandler(async (event) => {
 
   //  first, retrieve IRIS REST JWT as user authentication
   await login(HCIE.Dev, username, password).then(async (jwt) => {
-    log('LOG_NOTICE', `${username} login jwt: ${JSON.stringify(jwt)}`)
     if (jwt) {
-      //  authenticated, now get user scope for authorization
-      await endpoint(HCIE.Dev, username, `user/${username}`).then(async (res) => {
+    //  authenticated, now get user scope for authorization
+      await endpoint(HCIE.Dev, username, `user/${username}`).then(async (hcie) => {
         try {
-          await res!.json().then(async (hcie) => {
-            session = {
-              id: username,
-              enabled: hcie.Enabled,
-              groups: hcie.Groups,
-              roles: hcie.Roles,
-              name: hcie.FullName,
-              comment: hcie.Comment,
-              loggedInAt: Date.now(),
-              scope: []
-            }
-    
-            if (session.enabled) {
-              if (session.groups?.includes('sysadm') || session.groups?.includes('wheel')) session.scope.push('systems')
-              if (session.groups?.includes('irisadm')) session.scope.push('admin')
-              if (session.groups?.includes('irisdev')) session.scope.push('developer')
-              if (session.groups?.includes('os-shell-access')) session.scope.push('analyst')
-              session.scope.push('user')
-            }
-            else
-              session.scope.push('guest')
+          session = {
+            id: username,
+            enabled: hcie?.Enabled,
+            groups: hcie?.Groups,
+            roles: hcie?.Roles,
+            name: hcie?.FullName,
+            comment: hcie?.Comment,
+            loggedInAt: Date.now(),
+            scope: []
+          }
 
-            //  create separate JWT for Nuxt auth session handling
-            const tokenData: JwtPayload = session
-            const accessToken = sign(tokenData, SECRET, <SignOptions>{
-              expiresIn: ACCESS_TOKEN_TTL
-            })
-            const refreshToken = sign(tokenData, SECRET, <SignOptions>{
-              expiresIn: REFRESH_TOKEN_TTL
-            })
-    
-            // Naive implementation - please implement properly yourself!
-            const userTokens: TokensByUser = tokensByUser.get(username) ?? {
-              access: new Map(),
-              refresh: new Map()
-            }
-            userTokens.access.set(accessToken, refreshToken)
-            userTokens.refresh.set(refreshToken, accessToken)
-            tokensByUser.set(username, userTokens)
-    
-            setResponseStatus(event, 200, 'logged in')
-            token = { token: { accessToken, refreshToken } }
+          if (session.enabled) {
+            if (session.groups?.includes('sysadm') || session.groups?.includes('wheel')) session.scope.push('systems')
+            if (session.groups?.includes('irisadm')) session.scope.push('admin')
+            if (session.groups?.includes('irisdev')) session.scope.push('developer')
+            if (session.groups?.includes('os-shell-access')) session.scope.push('analyst')
+            session.scope.push('user')
+          }
+          else
+            session.scope.push('guest')
+
+          //  create separate JWT for Nuxt auth session handling
+          const tokenData: JwtPayload = session
+          const accessToken = sign(tokenData, SECRET, <SignOptions>{
+            expiresIn: ACCESS_TOKEN_TTL
           })
+          const refreshToken = sign(tokenData, SECRET, <SignOptions>{
+            expiresIn: REFRESH_TOKEN_TTL
+          })
+
+          // Naive implementation - please implement properly yourself!
+          const userTokens: TokensByUser = tokensByUser.get(username) ?? {
+            access: new Map(),
+            refresh: new Map()
+          }
+          userTokens.access.set(accessToken, refreshToken)
+          userTokens.refresh.set(refreshToken, accessToken)
+          tokensByUser.set(username, userTokens)
+
+          setResponseStatus(event, 200, 'logged in')
+          token = { token: { accessToken, refreshToken } }
         }
         catch (err) {
           setResponseStatus(event, 401, `${err}`)
@@ -188,7 +185,6 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 401, 'unauthorized')
     log('LOG_NOTICE', `${username} ${event} login authentication failed`)
   })
-
 
   log('LOG_NOTICE', `${username} ${event} ${REFRESH_TOKEN_TTL} return token size: ${JSON.stringify(token).length}`)
   return token
