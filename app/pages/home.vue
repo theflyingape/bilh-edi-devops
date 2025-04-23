@@ -42,8 +42,8 @@ const isAdmin = (get(data)?.scope[0] == 'admin' || get(data)?.scope[0] == 'syste
 const { HCIE, endpoint } = useIrisTokens()
 const mirrorSet = ref({ Dev:<mirrorset>{}, Test:<mirrorset>{}, Live:<mirrorset>{} })
 mirror(HCIE.Dev, mirrorSet.value.Dev)
-mirror(HCIE.Test, mirrorSet.value.Test)
-mirror(HCIE.Live, mirrorSet.value.Live)
+//mirror(HCIE.Test, mirrorSet.value.Test)
+//mirror(HCIE.Live, mirrorSet.value.Live)
 
 function mirror(hcie:string, mirror:mirrorset) {
   const user = get(data)?.id
