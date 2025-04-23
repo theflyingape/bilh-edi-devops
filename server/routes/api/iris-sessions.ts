@@ -27,7 +27,7 @@ tokens[HCIE.Live] = {}
 
 export default function useIrisTokens() {
   //  retrieve IRIS REST JWT as user authentication
-  async function login(hcie:HCIE, username:string, password:string): Promise<token|null> {
+  async function login(hcie:string, username:string, password:string): Promise<token|null> {
     let jwt = null
     const auth = Buffer.from(`${username}:${password}`).toString('base64')
     await fetch(`https://${hcie}/login`, { method: 'POST',
@@ -50,7 +50,7 @@ export default function useIrisTokens() {
   }
 
   //  bye-bye
-  async function logout(hcie:HCIE, user:string) {
+  async function logout(hcie:string, user:string) {
     let jwt = tokens[hcie][user]
     await fetch(`https://${hcie}/logout`, { method: 'POST',
       headers: {
@@ -62,7 +62,7 @@ export default function useIrisTokens() {
     })
   }
 
-  async function refresh(hcie:HCIE, jwt: token) {
+  async function refresh(hcie:string, jwt: token) {
     await fetch(`https://${hcie}/refresh`, { method: 'POST',
       headers: {
         Authorization: `Bearer ${jwt.access_token}`,
@@ -81,7 +81,7 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie:HCIE, user:string, route:string, method = 'GET'): Promise<object|null> {
+  async function endpoint(hcie:string, user:string, route:string, method = 'GET'): Promise<object|null> {
     let jwt = tokens[hcie][user]
     let payload = null
     //  let's refresh access prior to invocation
