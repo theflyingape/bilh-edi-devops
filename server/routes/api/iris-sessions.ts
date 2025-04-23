@@ -31,7 +31,7 @@ export default function useIrisTokens() {
   async function login(hcie:HCIE, username:string, password:string): Promise<token|null> {
     let jwt = null
     const auth = Buffer.from(`${username}:${password}`).toString('base64')
-    await fetch(`https://${hcie}/login`, {
+    await fetch(`https://${hcie}/login`, { method: 'POST',
       headers: {
         Authorization: `Basic ${auth}`,
         mode: 'no-cors',
@@ -53,7 +53,7 @@ export default function useIrisTokens() {
   //  bye-bye
   async function logout(hcie:HCIE, user:string) {
     let jwt = tokens[hcie][user]
-    await fetch(`https://${hcie}/logout`, {
+    await fetch(`https://${hcie}/logout`, { method: 'POST',
       headers: {
         Authorization: `Bearer ${jwt.access_token}`,
         mode: 'no-cors',
@@ -64,7 +64,7 @@ export default function useIrisTokens() {
   }
 
   async function refresh(hcie:HCIE, jwt: token) {
-    await fetch(`https://${hcie}/refresh`, {
+    await fetch(`https://${hcie}/refresh`, { method: 'POST',
       headers: {
         Authorization: `Bearer ${jwt.access_token}`,
         mode: 'no-cors',
@@ -81,13 +81,13 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie:HCIE, user:string, route:string): Promise<object|null> {
+  async function endpoint(hcie:HCIE, user:string, route:string, method = 'GET'): Promise<object|null> {
     let jwt = tokens[hcie][user]
     let payload = null
     //  let's refresh access prior to invocation
     await refresh(hcie, jwt).then(async () => {
       jwt = tokens[hcie][user]
-      await fetch(`https://${hcie}/${route}`, {
+      await fetch(`https://${hcie}/${route}`, { method: method,
         headers: {
           Authorization: `Bearer ${jwt.access_token}`,
           mode: 'no-cors',
