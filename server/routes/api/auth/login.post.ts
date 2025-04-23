@@ -9,7 +9,7 @@ const dev = process.dev || false
 export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || '30s'
 export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '1h'
 export const SECRET: PrivateKey = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
-const { HCIE, tokens, login } = useIrisTokens()
+const { HCIE, login, endpoint } = useIrisTokens()
 
 export interface User {
   id: string,
@@ -43,7 +43,6 @@ const credentialsSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const { username, password } = await readValidatedBody(event, credentialsSchema.parse)
-  const auth = Buffer.from(`${username}:${password}`).toString('base64')
   let session: JwtPayload = { id: username, enabled: false, scope: [] }
   let token = { token: {} }
 
@@ -130,15 +129,12 @@ export default defineEventHandler(async (event) => {
 
   //  first, retrieve IRIS REST JWT as user authentication
   await login(HCIE.Dev, username, password).then(async (jwt) => {
+    log('LOG_NOTICE', `${username} login jwt: ${JSON.stringify(jwt)}`)
     if (jwt) {
       //  authenticated, now get user scope for authorization
-      await fetch(`https://hciedev.laheyhealth.org/api/hcie/user/${username}`, {
-        headers: {
-          Authorization: `Bearer ${jwt.access_token}`
-        }
-      }).then(async (res) => {
+      await endpoint(HCIE.Dev, username, `user/${username}`).then(async (res) => {
         try {
-          await res.json().then(async (hcie) => {
+          await res!.json().then(async (hcie) => {
             session = {
               id: username,
               enabled: hcie.Enabled,

@@ -29,6 +29,7 @@ export default function useIrisTokens() {
 
   //  retrieve IRIS REST JWT as user authentication
   async function login(hcie:HCIE, username:string, password:string): Promise<token|null> {
+    let jwt = null
     const auth = Buffer.from(`${username}:${password}`).toString('base64')
     await fetch(`https://${hcie}/login`, {
       headers: {
@@ -37,26 +38,28 @@ export default function useIrisTokens() {
       }
     }).then(async (res) => {
       try {
-        await res.json().then(async (jwt) => {
-          tokens[hcie][jwt.sub] = jwt
-          return jwt
+        await res.json().then(async (t) => {
+          tokens[hcie][t.sub] = t
+          jwt = t
         })
       }
       catch (err) {
         console.error(err)
       }
     })
-    return null
+    return jwt
   }
 
   //  bye-bye
-  async function logout(hcie:HCIE, jwt: token) {
+  async function logout(hcie:HCIE, user:string) {
+    let jwt = tokens[hcie][user]
     await fetch(`https://${hcie}/logout`, {
       headers: {
         Authorization: `Bearer ${jwt.access_token}`,
         mode: 'no-cors',
       }
     }).then(async (res) => {
+      delete tokens[hcie][user]
     })
   }
 
@@ -78,9 +81,12 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie:HCIE, route:string, jwt: token) {
+  async function endpoint(hcie:HCIE, user:string, route:string): Promise<object|null> {
+    let jwt = tokens[hcie][user]
+    let payload = null
     //  let's refresh access prior to invocation
     await refresh(hcie, jwt).then(async () => {
+      jwt = tokens[hcie][user]
       await fetch(`https://${hcie}/${route}`, {
         headers: {
           Authorization: `Bearer ${jwt.access_token}`,
@@ -89,7 +95,7 @@ export default function useIrisTokens() {
       }).then(async (res) => {
         try {
           await res.json().then(async (res) => {
-            
+            payload = res
           })
         }
         catch (err) {
@@ -97,6 +103,7 @@ export default function useIrisTokens() {
         }
       })
     })
+    return payload
   }
 
   return { HCIE, tokens, login, logout, refresh, endpoint }
