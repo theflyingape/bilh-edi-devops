@@ -1,14 +1,13 @@
 <template>
 <div class="flex flex-col items-center justify-center">
-  <UCard v-if="isAdmin" class="m-2" variant="subtle">
-    <template #default>
-      <div class="flex flex-row justify-center">
-        <UTextarea v-if="mirrorSet.Dev">
-          {{ mirrorSet.Dev.instance }}
-          {{ mirrorSet.Dev.mirrorStatus[0]?.memberName }} {{ mirrorSet.Dev.mirrorStatus[0]?.currentRole }}
-          {{ mirrorSet.Dev.mirrorStatus[1]?.memberName }} {{ mirrorSet.Dev.mirrorStatus[1]?.currentRole }}
-        </UTextarea>
-      </div>
+  <UCard v-if="isAdmin && mirrorSet.Dev" class="m-2" variant="subtle">
+    <template #header>
+      {{ mirrorSet.Dev.instance }}
+    </template>
+    {{ mirrorSet.Dev.mirrorStatus[0]?.memberName }} {{ mirrorSet.Dev.mirrorStatus[0]?.currentRole }}
+    {{ mirrorSet.Dev.mirrorStatus[1]?.memberName }} {{ mirrorSet.Dev.mirrorStatus[1]?.currentRole }}
+    <template #footer>
+      <Placeholder class="h-8" />
     </template>
   </UCard>
 </div>
