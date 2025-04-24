@@ -69,6 +69,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
+      version: '0.5.3',
       websocket: process.env.NODE_ENV == 'development' ?  'ws' : 'wss'
     }
   },
@@ -182,26 +183,22 @@ export default defineNuxtConfig({
   },
 
   nitro: {
+    preset: 'node_server',
     //baseURL: '/devops',
     experimental: {
       websocket: true
     },
     prerender: {
-      routes: [
-        '/'
-      ],
+      routes: [ '/' ],
       crawlLinks: true,
       failOnError: false,
     },
-    preset: 'node_server',
     routeRules: {
-      '/': {
-        cache: { maxAge: 60 * 60, swr: true },
-      },
-      '/api/': {
-        cache: false
-      }
-    },
+    //'/**': { cache: { maxAge: 6, swr: false } },
+      '/api/**': { cache: false },
+      '/assets/**': { headers: { 'cache-control': 's-maxage=0' } },
+      '/mission/**': { cache: { maxAge: 3600 } }
+    }
   },
   vite: {
     preview: {

@@ -88,13 +88,14 @@
           <div><img src="~/assets/images/footer.png" class="drop-shadow-lg" /></div>
         </div>
         <div class="p-2 text-start text-slate-500 text-sm">
-          <em>{{ VERSION }} built {{ BUILT }} for {{ MODE }}</em>
+          <em>built {{ BUILT }} for {{ MODE }}</em>
         </div>
         <div class="justify-items-end">
-          <div class="pr-16"><em>value-add by Robert Hurst</em></div>
-          <div class="pr-18">
-            <UButton color="neutral" variant="link" icon="i-simple-icons-github"
+          <div class="pr-16"><em>a value-add by Robert Hurst</em></div>
+          <div class="pr-18 text-slate-500 text-xs">
+            <UButton class="align-middle" color="neutral" variant="link" icon="i-simple-icons-github"
               to="https://github.com/theflyingape/bilh-edi-devops" target="_blank">GitHub</UButton>
+            {{ VERSION }}
           </div>
         </div>
       </div>
@@ -114,8 +115,7 @@ const credentials = ref({
   password: '',
 })
 
-//const VERSION = useRuntimeConfig().public.appVersion
-const VERSION = useRuntimeConfig().app.appVersion
+const VERSION = useRuntimeConfig().public.version
 const BUILT = useAppConfig().buildDate
 const MODE = process.env.NODE_ENV
 
