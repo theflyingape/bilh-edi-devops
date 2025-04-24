@@ -33,15 +33,14 @@ interface mirrorset {
   mirrorStatus: mirrorstatus[]
 }
 
-import type { RefSymbol } from '@vue/reactivity'
 import { get } from '@vueuse/core'
 import useIrisTokens from '~~/server/routes/api/iris-sessions'
 
-const { status, data } = useAuth()
+const { data } = useAuth()
 const isAdmin = (get(data)?.scope[0] == 'admin' || get(data)?.scope[0] == 'systems') ? true : false
 const { HCIE } = useIrisTokens()
 const mirrorSet = ref({ Dev:<mirrorset>{}, Test:<mirrorset>{}, Live:<mirrorset>{} })
-mirror(HCIE.Dev, mirrorSet.value.Dev)
+//mirror(HCIE.Dev, mirrorSet.value.Dev)
 //mirror(HCIE.Test, mirrorSet.value.Test)
 //mirror(HCIE.Live, mirrorSet.value.Live)
 

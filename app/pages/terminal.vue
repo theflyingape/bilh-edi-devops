@@ -36,30 +36,30 @@
             </UForm>
           </div>
           <!-- right terminal controls -->
-          <div class="flex flex-nowrap space-x-2 text-white">
+          <div class="flex flex-nowrap font-mono space-x-2 text-gray-400 text-lg">
             <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> {{ selection.includes('\n') ? selection.split('\n').length+'-line(s) copied' : selection.length < 30 ? selection : selection.substring(0,26)+'…'+selection.slice(-3) }} &nbsp;
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
-            <USeparator orientation="vertical" class="h-6" />&nbsp; {{rows}}x{{cols}}
+            <USeparator orientation="vertical" class="h-6" />&nbsp;{{rows}}x{{cols}}
           </div>
         </div>
       </div>
       <!-- top-right action controls -->
       <div class="justify-items-start m-1 space-y-1">
-        <div v-if="isConnected">
-          <UChip class="mt-2" color="success">
+        <USelect v-model="value" :items="items" class="m-2 w-32" />
+        <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" size="sm" variant="subtle" @click="fontSize(-2)" /></UTooltip>
+        <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" size="sm" variant="subtle" @click="fontSize(2)" /></UTooltip>
+        <div v-if="isConnected" class="pl-4 m-2">
+          <UChip color="success">
             <UButton color="action" variant="soft" @click="terminate">Disconnect</UButton>
           </UChip>
         </div>
-        <div v-else>
-          <UChip class="mt-2" color="neutral">
-            <UButton color="action" @click="terminal">Connect</UButton>
+        <div v-else class="pl-2 m-2">
+          <UChip color="neutral">
+            <UButton color="secondary" size="xl" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
           </UChip>
         </div>
-        <USelect v-model="value" :items="items" class="w-36" />
         <div>
-          <UTooltip arrow :content="{ align:'end', side:'left', sideOffset:1 }" text="decrease font size"><UButton size="lg" icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
-          <UTooltip arrow :content="{ align:'end', side:'left', sideOffset:1 }" text="increase font size"><UButton size="lg" icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
         </div>
       </div>
     </div>
@@ -117,12 +117,12 @@ watch(value, async (n, o) => {
 })
 
 function fontSize(delta:number) {
-  if (xterm()?.options.fontSize) {
-    xterm()!.options.fontSize = xterm()!.options.fontSize! + delta
-    prefs.fontSize = xterm()!.options.fontSize!
-    localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
-    save.value.fontSize = prefs.fontSize
-    resize(get(value))
+  prefs.fontSize = xterm()!.options.fontSize! + delta
+  localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
+  save.value.fontSize = prefs.fontSize
+  for(const session in sessionList) {
+    xterm(session)!.options.fontSize = prefs.fontSize
+    resize(session)
   }
 }
 
