@@ -1,5 +1,5 @@
 //  IRIS sessions: client-side handling from %SYS.TokenAuth provisioning
-import { get, set } from '@vueuse/core'
+import { get, set, useBase64 } from '@vueuse/core'
 
 export interface IRIStoken {
   access_token: string
@@ -60,7 +60,7 @@ export default function useIrisTokens() {
       })
     }
     else {
-      const auth = Buffer.from(`${username}:${password}`).toString('base64')
+      const auth = useBase64(`${username}:${password}`).base64
       await fetch(`https://${hcie}/login`, {
         method: 'POST',
         headers: {
