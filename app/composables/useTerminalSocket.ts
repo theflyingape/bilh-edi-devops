@@ -28,8 +28,8 @@ interface TS {
 
 //  XtermJs instance(s)
 let sessionList = <TS>{}
-const cols = ref(96)
-const rows = ref(32)
+const cols = ref(80)
+const rows = ref(25)
 const selection = ref('')
 
 export default function useTerminalSocket() {
@@ -40,8 +40,8 @@ export default function useTerminalSocket() {
 
     let prep = <TS>{}
     prep[sessionId] = { xterm: term }
-    if (rows) prep[sessionId].rows = rows
-    if (cols) prep[sessionId].cols = cols
+    prep[sessionId].rows = rows || get(rows)
+    prep[sessionId].cols = cols || get(cols)
     if (url) prep[sessionId].url = url + `&profile=${sessionId}`
     prep[sessionId].status = 'CLOSED'
     sessionList = Object.assign(sessionList, prep)
@@ -117,15 +117,18 @@ export default function useTerminalSocket() {
     if (session.fit) {
       session.fit.fit()
       let xy = session.fit.proposeDimensions()
+      //  sanity checks
       if (xy?.rows && xy?.cols) {
         if (Number.isNaN(xy.rows) == false && xy.rows >= 12)
           set(rows, xy.rows)
         if (Number.isNaN(xy.cols) == false && xy.cols >= 40)
           set(cols, xy.cols)
+        console.log(get(cols), 'x', get(rows), '<-', session.xterm.cols,':',session.xterm.rows)
         session.xterm.resize(get(cols), get(rows))
       }
       session.xterm.focus()
     }
+
     const event = { resize: { rows: get(rows), cols: get(cols) } }
     session.attach?.sendData('♥' + JSON.stringify(event))
   }

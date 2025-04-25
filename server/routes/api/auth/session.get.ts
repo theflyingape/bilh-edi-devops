@@ -38,6 +38,6 @@ export default eventHandler((event) => {
   }
 
   // All checks successful
-  const { id, enabled, groups, roles, name, comment, loggedInAt, scope } = decoded
-  return { id, enabled, groups, roles, name, comment, loggedInAt, scope }
+  const { id, enabled } = decoded
+  return { id, enabled }
 })

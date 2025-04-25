@@ -1,5 +1,6 @@
 <template>
-  <div class="h-full w-full" ref="terminalContainer" onfocus="resize(props.session)"></div>
+  <!--div class="h-full w-full" ref="terminalContainer" onfocus="resize(props.session)"></div-->
+  <div class="h-full w-full" ref="terminalContainer"></div>
 </template>
 
 <script setup lang="ts">
@@ -53,11 +54,11 @@ let startup: ITerminalOptions = {
 
 const { sessionList, prepare } = useTerminalSocket()
 const terminalContainer = templateRef('terminalContainer')
-const term = new Terminal({ ...startup, rows: 32, cols: 96 })
+const term = new Terminal({ ...startup, rows: props.rows || 25, cols: props.cols || 80 })
 
 onMounted(() => {
   term.open(get(terminalContainer))
-  prepare(props.session, term, props?.wsUrl, props?.rows, props?.cols)
+  prepare(props.session, term, props.wsUrl, props.rows, props.cols)
 })
 
 onBeforeUnmount(() => {

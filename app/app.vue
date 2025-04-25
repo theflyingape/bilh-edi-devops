@@ -24,17 +24,14 @@
           <div class="m-auto">
             <UChip class="mt-2" :color="online" inset>
               <UTooltip arrow :content="{ align: 'center', side: 'left', sideOffset: 8 }"
-                :text="`${get(data)?.id || 'click to login'}`">
+                :text="`${get(user)?.id || 'click to login'}`">
                 <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
                   icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
               </UTooltip>
             </UChip>
           </div>
           <div class="m-auto">
-            <UTooltip arrow :content="{ align: 'center', side: 'right', sideOffset: 8 }"
-              :text="`${get(data)?.id || 'not logged in'}`">
-              <UBadge :color="online" variant="outline">{{ scope }}</UBadge>
-            </UTooltip>
+            <UBadge :color="online" variant="outline">{{ who }}</UBadge>
           </div>
           <SideMenu v-model:open="sideMenu" />
         </div>
@@ -76,15 +73,12 @@ useSeoMeta({
 
 import { get, set, watchImmediate } from '@vueuse/core'
 
-const { status, data } = useAuth()
+const { user } = useIrisSessions()
+const { status } = useAuth()
 const { isFullscreen, toggle } = useFullscreen()
-const online = computed(() => get(status) == 'unauthenticated' ? 'action' : 'success')
-const scope = ref('Guest')
+const online = ref(computed(() => get(status) == 'unauthenticated' ? 'action' : 'success'))
+const who = ref(computed(() => get(status) == 'unauthenticated' ? 'Guest' : get(user).scope?.length ? get(user).scope[0] : 'Associate'))
 const sideMenu = ref(false)
-
-watchImmediate(data, (updated) => {
-  set(scope, get(status) == 'unauthenticated' ? 'Guest' : get(data)?.scope[0] || 'Associate')
-})
 
 function toggleSideMenu() {
   set(sideMenu, !get(sideMenu))

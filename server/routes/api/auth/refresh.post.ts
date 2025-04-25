@@ -44,13 +44,7 @@ export default eventHandler(async (event) => {
 
     const user: JwtPayload = {
       id: decoded.id,
-      enabled: decoded.enabled,
-      groups: decoded.groups,
-      roles: decoded.roles,
-      name: decoded.name,
-      comment: decoded.comment,
-      loggedInAt: decoded.loggedInAt,
-      scope: decoded.scope
+      enabled: decoded.enabled
     }
 
     const accessToken = sign({ ...user }, SECRET, <SignOptions>{
@@ -66,8 +60,8 @@ export default eventHandler(async (event) => {
   }
   catch (err) {
     setResponseStatus(event, 401, `${ err }`)
-    deleteCookie(event, 'auth.refresh-token'); // Delete the cookie
-    deleteCookie(event, 'auth.token'); // Delete the cookie
-    return { message: 'Logged out' };
+    deleteCookie(event, 'auth.refresh-token')
+    deleteCookie(event, 'auth.token')
+    return { message: 'Logged out' }
   }
 })

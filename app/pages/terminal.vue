@@ -3,7 +3,7 @@
     <div class="flex flex-nowrap h-full w-full justify-center pt-2">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-1/2 h-11/12 max-h-11/12 overflow-hidden resize resizer">
-        <XtermJs v-show="value == 'localhost'" @vue:mounted="" session="localhost" theme="White" resize='monitor' :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <DevOnly><XtermJs v-show="value == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
         <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
@@ -45,8 +45,8 @@
         </div>
       </div>
       <!-- top-right action controls -->
-      <div class="justify-items-start m-1 space-y-1">
-        <USelect v-model="value" :items="items" class="m-2 w-32" />
+      <div class="flex-nowrap justify-items-start m-1 space-y-1">
+        <USelect v-model="value" :items="items" class="m-2 w-30" />
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" size="sm" variant="subtle" @click="fontSize(-2)" /></UTooltip>
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" size="sm" variant="subtle" @click="fontSize(2)" /></UTooltip>
         <div v-if="isConnected" class="pl-4 m-2">
@@ -54,7 +54,7 @@
             <UButton color="action" variant="soft" @click="terminate">Disconnect</UButton>
           </UChip>
         </div>
-        <div v-else class="pl-2 m-2">
+        <div v-else class="m-2">
           <UChip color="neutral">
             <UButton color="secondary" size="xl" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
           </UChip>
@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
-import { useTemplateRef } from 'vue'
+import { useTemplateRef, type VNodeRef } from 'vue'
 
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth().data)?.id
@@ -217,7 +217,7 @@ function search(query:boolean) {
 
 function sendCurl() {
   set(isCurl, false)
-  send(`curl `)
+  send(`curl ${curl.value.insecure ? '-k' : ''} ${curl.value.url}`)
 }
 </script>
 

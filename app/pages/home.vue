@@ -7,7 +7,6 @@
     {{ mirrorSet.Dev.mirrorStatus[0]?.memberName }} {{ mirrorSet.Dev.mirrorStatus[0]?.currentRole }}
     {{ mirrorSet.Dev.mirrorStatus[1]?.memberName }} {{ mirrorSet.Dev.mirrorStatus[1]?.currentRole }}
     <template #footer>
-      <Placeholder class="h-8" />
     </template>
   </UCard>
 </div>
@@ -33,23 +32,21 @@ interface mirrorset {
   mirrorStatus: mirrorstatus[]
 }
 
-import { get } from '@vueuse/core'
-import useIrisTokens from '~~/server/routes/api/iris-sessions'
+//  does this help?
+//reloadNuxtApp({ ttl: 100000 })
 
-const { data } = useAuth()
-const isAdmin = (get(data)?.scope[0] == 'admin' || get(data)?.scope[0] == 'systems') ? true : false
-const { HCIE } = useIrisTokens()
+import { get } from '@vueuse/core'
+
+const { HCIE, user, endpoint } = useIrisSessions()
+const isAdmin = get(user)?.scope?.includes('admin') || get(user)?.scope?.includes('systems')
 const mirrorSet = ref({ Dev:<mirrorset>{}, Test:<mirrorset>{}, Live:<mirrorset>{} })
 //mirror(HCIE.Dev, mirrorSet.value.Dev)
 //mirror(HCIE.Test, mirrorSet.value.Test)
 //mirror(HCIE.Live, mirrorSet.value.Live)
 
 function mirror(hcie:string, mirror:mirrorset) {
-  const user = get(data)?.id
-  if (user) {
-    endpoint(hcie, user, 'status').then((status) => {
-      Object.assign(mirror, status)
-    })
-  }
+  endpoint(hcie, 'status').then((status) => {
+    Object.assign(mirror, status)
+  })
 }
 </script>

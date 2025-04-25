@@ -1,12 +1,13 @@
 import { get } from '@vueuse/core'
 
 export default defineNuxtRouteMiddleware((to) => {
-  const { status, data } = useAuth()
+  const { status } = useAuth()
+  const { user } = useIrisSessions()
   const notAllowed = ['code', 'terminal']
 
-  //  a little negative, but ... 
-  if (get(status) !== 'unauthenticated') {
-      if (get(data)?.scope[0] == 'user' && notAllowed.indexOf(to.name!.toString()) != -1)
+  //  a little negative, but steer any visitors away ... 
+  if (get(status) !== 'unauthenticated' && notAllowed.includes(to.name!.toString())) {
+      if (get(user).scope[0] == 'guest' || get(user).scope[0] == 'user')
         return navigateTo('/sorry')
   }
 })

@@ -5,15 +5,16 @@
     class: 'rounded-full'
   }">
     <template #body>
-      <div v-if="status !== 'unauthenticated'" class="flex flex-row justify-items-center gap-8">
-        <div v-if="data">
-          <b>{{ data.name }}</b>
-          <UBadge color="neutral" variant="soft">{{ data.scope[0] }}</UBadge><br>
-          {{ data.comment }}
-        </div>
-        <div>
-          <SubmitButton variant="soft" @click="logout">Logout</SubmitButton>
-        </div>
+      <div v-if="status !== 'unauthenticated'" class="flex flex-nowrap justify-evenly gap-8">
+        <UCard v-if="user.enabled" class="w-full">
+          <template #header>
+            <div>{{ user.name }} (<b>{{ user.id }}</b>)</div>
+            <div><em>{{ user.comment }}</em></div>
+          </template>
+          <div class="text-sm font-mono">DevOps:<UBadge v-for="scope in user.scope" class="m-1" size="sm" color="info" variant="soft">{{ scope }}</UBadge></div>
+          <div class="text-sm font-mono">&nbsp;HCIE:<UBadge v-for="roles in user.roles" class="m-1" size="sm" color="neutral" variant="outline">{{ roles }}</UBadge></div>
+          <div class="flex justify-end mt-4"><SubmitButton variant="soft" @click="logout">Logout</SubmitButton></div>
+        </UCard>
       </div>
       <div v-else>
         <UCard class="w-full">
@@ -104,32 +105,58 @@
 </template>
 
 <script setup lang="ts">
-import { get } from '@vueuse/core'
+import { get, set } from '@vueuse/core'
 import { ModalInfo } from '#components'
+
 const { status, data, signIn, signOut } = useAuth()
+const { HCIE, credentials, user, getSession, endSession, endpoint } = useIrisSessions()
 const overlay = useOverlay()
 const toast = useToast()
-
-const credentials = ref({
-  username: '',
-  password: '',
-})
 
 const VERSION = useRuntimeConfig().public.version
 const BUILT = useAppConfig().buildDate
 const MODE = process.env.NODE_ENV
 
 async function login() {
-  await signIn(get(credentials), { callbackUrl: 'home', external: false }).then(() => {
-    toast.add({ title: 'Hello!', description: `logged on ${new Date().toTimeString()}` })
-  })
-    .catch(async (err) => {
-      open(`${err.statusCode}: ${err.statusMessage}`)
+  await getSession(HCIE.Dev, get(credentials).username, get(credentials).password).then(async (jwt) => {
+    console.log('user', get(user))
+    Object.assign(credentials.value.IRIStoken, jwt)
+    await signIn(get(credentials), {callbackUrl:'home', external:false}).then(async () => {
+      if (!get(user).enabled) {
+        await endpoint(HCIE.Dev, `user/${user.value.id}`).then(async (hcie) => {
+          set(user, {
+            id: get(credentials).username,
+            enabled: hcie.Enabled ?? false,
+            groups: hcie.Groups,
+            roles: hcie.Roles,
+            name: hcie.FullName,
+            comment: hcie.Comment,
+            loggedInAt: Date.now(),
+            scope: []
+          })
+        }).catch(async (err) => {
+          open(`${err.statusCode}: ${err.statusMessage}`)
+        })
+      }
+      if (get(user).enabled) {
+        if (get(user).groups?.includes('sysadm') || get(user).groups?.includes('wheel')) get(user).scope.push('systems')
+        if (get(user).groups?.includes('irisadm')) get(user).scope.push('admin')
+        if (get(user).groups?.includes('irisdev')) get(user).scope.push('developer')
+        if (get(user).groups?.includes('os-shell-access')) get(user).scope.push('analyst')
+        get(user).scope.push('user')
+        toast.add({ title: `Hello, ${get(user).scope[0]}!`, description: `logged on ${new Date().toTimeString()}` })
+      }
+      else
+        get(user).scope.push('guest')
+      await navigateTo('home', {external:false})
     })
+  })
 }
 
 async function logout() {
-  await signOut({ callbackUrl: 'logout', external: false })
+  await endSession(HCIE.Dev).then(async () => {
+    await signOut({ callbackUrl: 'logout', external: false })
+  })
 }
 
 const modal = overlay.create(ModalInfo, { props: { title: "" } })
