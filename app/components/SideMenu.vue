@@ -118,14 +118,14 @@ const BUILT = useAppConfig().buildDate
 const MODE = process.env.NODE_ENV
 
 async function login() {
-  await getSession(HCIE.Dev, get(credentials).username, get(credentials).password).then(async (jwt) => {
-    console.log('user', get(user))
+  const username = get(credentials).username
+  await getSession(HCIE.Dev, username, get(credentials).password).then(async (jwt) => {
     Object.assign(credentials.value.IRIStoken, jwt)
     await signIn(get(credentials), {callbackUrl:'home', external:false}).then(async () => {
       if (!get(user).enabled) {
-        await endpoint(HCIE.Dev, `user/${user.value.id}`).then(async (hcie) => {
+        await endpoint(HCIE.Dev, `user/${username}`).then(async (hcie) => {
           set(user, {
-            id: get(credentials).username,
+            id: username,
             enabled: hcie.Enabled ?? false,
             groups: hcie.Groups,
             roles: hcie.Roles,
@@ -143,7 +143,6 @@ async function login() {
         if (get(user).groups?.includes('irisadm')) get(user).scope.push('admin')
         if (get(user).groups?.includes('irisdev')) get(user).scope.push('developer')
         if (get(user).groups?.includes('os-shell-access')) get(user).scope.push('analyst')
-        get(user).scope.push('user')
         toast.add({ title: `Hello, ${get(user).scope[0]}!`, description: `logged on ${new Date().toTimeString()}` })
       }
       else

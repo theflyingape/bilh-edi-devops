@@ -73,16 +73,12 @@ useSeoMeta({
 
 import { get, set, watchImmediate } from '@vueuse/core'
 
+const { sideMenu, toggleSideMenu } = useDevOps()
 const { user } = useIrisSessions()
 const { status } = useAuth()
 const { isFullscreen, toggle } = useFullscreen()
 const online = ref(computed(() => get(status) == 'unauthenticated' ? 'action' : 'success'))
 const who = ref(computed(() => get(status) == 'unauthenticated' ? 'Guest' : get(user).scope?.length ? get(user).scope[0] : 'Associate'))
-const sideMenu = ref(false)
-
-function toggleSideMenu() {
-  set(sideMenu, !get(sideMenu))
-}
 
 const items = ref([
   [
