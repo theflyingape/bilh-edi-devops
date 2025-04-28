@@ -20,12 +20,7 @@ const props = defineProps<{
 
 const { mirrorSet, endpoint } = useIrisSessions()
 
-onActivated(() => {
-  console.log('activated')
-})
-
 onMounted(() => {
-  console.log('mounted')
   status()
 })
 
