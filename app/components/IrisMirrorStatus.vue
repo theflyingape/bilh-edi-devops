@@ -17,6 +17,15 @@ const props = defineProps<{
 
 const { mirrorSet, endpoint } = useIrisSessions()
 
+onActivated(() => {
+  console.log('activated')
+})
+
+onMounted(() => {
+  console.log('mounted')
+  status()
+})
+
 function status() {
   endpoint(props.hcie, 'status').then((status:mirrorset) => {
     mirrorSet.value[props.hcie] = status
