@@ -42,7 +42,6 @@ const credentials = ref({
 const user = ref(<User>{})
 
 export default function useIrisTokens() {
-
   //  provision an IRIS REST JWT session off user authentication
   async function getSession(hcie: string, username: string, password: string): Promise<IRIStoken | null> {
     const dev = import.meta.dev || false
@@ -60,13 +59,12 @@ export default function useIrisTokens() {
       })
     }
     else {
-      //          mode: 'no-cors', 'x-ISC_CORS': 'true'
-
       const auth = btoa(`${username}:${password}`)
       await fetch(`https://${hcie}/login`, {
         method: 'POST',
         headers: {
           Authorization: `Basic ${auth}`,
+          mode: 'no-cors'
         }
       }).then(async (res) => {
         try {
@@ -91,7 +89,7 @@ export default function useIrisTokens() {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${jwt.access_token}`,
-          mode: 'no-cors', 'x-ISC_CORS': 'true',
+          mode: 'no-cors'
         }
       }).then(async (res) => {
         delete tokens[hcie]
@@ -104,8 +102,8 @@ export default function useIrisTokens() {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${jwt.access_token}`,
-        mode: 'no-cors', 'x-ISC_CORS': 'true',
-        'Content-Type': 'application/json',
+        mode: 'no-cors',
+        'Content-Type': 'application/json'
       }, body: JSON.stringify(jwt)
     }).then(async (res) => {
       try {
@@ -130,7 +128,7 @@ export default function useIrisTokens() {
           method: method,
           headers: {
             Authorization: `Bearer ${jwt.access_token}`,
-            mode: 'no-cors', 'x-ISC_CORS': 'true',
+            mode: 'no-cors',
             'Content-Type': 'application/json'
           }
         }).then(async (res) => {

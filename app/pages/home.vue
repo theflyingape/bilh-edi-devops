@@ -73,4 +73,11 @@ function mirror(hcie:string, mirror:mirrorset) {
     Object.assign(mirror, status)
   })
 }
+
+await useFetch('', {
+  onResponse( { request, response, options } ) {
+    response.headers.get('')
+  }
+})
+
 </script>

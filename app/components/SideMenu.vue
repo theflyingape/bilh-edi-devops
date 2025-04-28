@@ -154,6 +154,8 @@ async function login() {
 
 async function logout() {
   await endSession(HCIE.Dev).then(async () => {
+    user.value.enabled = false
+    user.value.scope = []
     await signOut({ callbackUrl: 'logout', external: false })
   })
 }
