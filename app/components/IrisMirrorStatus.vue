@@ -5,11 +5,11 @@
         {{ status.memberName }} {{ status.currentRole }}
       </div>
       <div v-else>
-        {{ status.journalTimeLatency }} {{ status.databaseLatency }}
+        {{ status.memberName }} {{ status.currentRole }} {{ status.journalTimeLatency }} {{ status.databaseLatency }}
       </div>
     </div>
     <template #footer>
-      <div>{{ mirrorSet[props.hcie]?.instance ?? props.hcie }}</div>
+      <div class="text-start text-nowrap font-mono">{{ mirrorSet[props.hcie]!.instance }} {{ new Date().toLocaleTimeString() }}</div>
     </template>
   </UCard>
 </template>
