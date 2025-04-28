@@ -45,6 +45,7 @@ export interface mirrorset {
   memberStatus: string[]
   otherStatus: string[]
   mirrorStatus: mirrorstatus[]
+  lastBackup: string
 }
 
 const mirrorSet:Ref<{[key: string]: mirrorset}> = ref({ Dev:<mirrorset>{}, Test:<mirrorset>{}, Live:<mirrorset>{} })

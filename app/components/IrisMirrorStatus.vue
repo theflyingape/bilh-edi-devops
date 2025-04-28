@@ -7,6 +7,7 @@
       <div v-else>
         {{ status.memberName }} {{ status.currentRole }} {{ status.journalTimeLatency }} {{ status.databaseLatency }}
       </div>
+      <div>Last backup: {{ mirrorSet[props.hcie]?.lastBackup }}</div>
     </div>
   </UCard>
 </template>
