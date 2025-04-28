@@ -33,6 +33,8 @@ export interface mirrorstatus {
   currentStatus: string
   journalLatency: string
   databaseLatency: string
+  journalTimeLatency: string
+  databaseTimeLatency: string
   displayType: string
   displayStatus: string
 }

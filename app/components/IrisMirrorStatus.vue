@@ -1,12 +1,15 @@
 <template>
-  <UCard v-if="mirrorSet[props.hcie]" class="m-2" variant="subtle">
-    <template #header>
-      {{ mirrorSet[props.hcie]?.instance ?? props.hcie }}
-    </template>
+  <UCard v-if="mirrorSet[props.hcie]" class="m-1" variant="subtle">
     <div class="text-sm font-mono" v-for="status in mirrorSet[props.hcie]?.mirrorStatus">
-      {{ status.memberName }} {{ status.currentRole }}
+      <div v-if="status.currentRole == 'Primary'" class="font-semibold text-success">
+        {{ status.memberName }} {{ status.currentRole }}
+      </div>
+      <div v-else>
+        {{ status.journalTimeLatency }} {{ status.databaseLatency }}
+      </div>
     </div>
     <template #footer>
+      <div>{{ mirrorSet[props.hcie]?.instance ?? props.hcie }}</div>
     </template>
   </UCard>
 </template>
