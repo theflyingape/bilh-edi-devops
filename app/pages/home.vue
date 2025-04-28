@@ -1,8 +1,8 @@
 <template>
   <div v-if="online && isAdmin" class="flex flex-nowrap flex-row items-center justify-center">
     <IrisMirrorStatus hcie="Dev" />
-    <IrisMirrorStatus hcie="Test" />
-    <IrisMirrorStatus hcie="Live" />
+    <!--IrisMirrorStatus hcie="Test" /-->
+    <!--IrisMirrorStatus hcie="Live" /-->
   </div>
   <div v-else class="flex flex-col items-center justify-center h-lvh">
     <UCard class="drop-shadow-2xl" variant="subtle">
