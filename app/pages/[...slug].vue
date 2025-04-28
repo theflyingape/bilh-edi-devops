@@ -50,13 +50,12 @@
   </UPage>
 </template>
 <script setup lang="ts">
-definePageMeta({ auth:false })
-
 import { get } from '@vueuse/core'
 import type { ContentNavigationItem } from '@nuxt/content'
 import { findPageHeadline } from '#ui-pro/utils/content'
 
 definePageMeta({
+  auth:false,
   layout: 'docs'
 })
 
