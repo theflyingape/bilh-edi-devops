@@ -1,14 +1,8 @@
 <template>
-  <div v-if="online" class="flex flex-col items-center justify-center">
-    <UCard v-if="isAdmin && mirrorSet.Dev" class="m-2" variant="subtle">
-      <template #header>
-        {{ mirrorSet.Dev.instance }}
-      </template>
-      {{ mirrorSet.Dev.mirrorStatus[0]?.memberName }} {{ mirrorSet.Dev.mirrorStatus[0]?.currentRole }}
-      {{ mirrorSet.Dev.mirrorStatus[1]?.memberName }} {{ mirrorSet.Dev.mirrorStatus[1]?.currentRole }}
-      <template #footer>
-      </template>
-    </UCard>
+  <div v-if="online && isAdmin" class="flex flex-col items-center justify-center">
+    <IrisMirrorStatus hcie="Dev" />
+    <IrisMirrorStatus hcie="Test" />
+    <IrisMirrorStatus hcie="Live" />
   </div>
   <div v-else class="flex flex-col items-center justify-center h-lvh">
     <UCard class="drop-shadow-2xl" variant="subtle">
@@ -36,24 +30,6 @@ definePageMeta({ auth:false })
 const { status } = useAuth()
 const online = ref(computed(() => get(status) !== 'unauthenticated'))
 
-interface mirrorstatus {
-  memberName: string
-  currentRole: string
-  currentStatus: string
-  journalLatency: string
-  databaseLatency: string
-  displayType: string
-  displayStatus: string
-}
-
-interface mirrorset {
-  status: string
-  instance: string
-  memberStatus: string[]
-  otherStatus: string[]
-  mirrorStatus: mirrorstatus[]
-}
-
 //  does this help?
 //reloadNuxtApp({ ttl: 100000 })
 
@@ -61,23 +37,7 @@ import { get, useNow } from '@vueuse/core'
 
 const now = useNow()
 const { toggleSideMenu } = useDevOps()
-const { HCIE, user, endpoint } = useIrisSessions()
+const { user } = useIrisSessions()
 const isAdmin = get(user)?.scope?.includes('admin') || get(user)?.scope?.includes('systems')
-const mirrorSet = ref({ Dev:<mirrorset>{}, Test:<mirrorset>{}, Live:<mirrorset>{} })
-//mirror(HCIE.Dev, mirrorSet.value.Dev)
-//mirror(HCIE.Test, mirrorSet.value.Test)
-//mirror(HCIE.Live, mirrorSet.value.Live)
-
-function mirror(hcie:string, mirror:mirrorset) {
-  endpoint(hcie, 'status').then((status) => {
-    Object.assign(mirror, status)
-  })
-}
-
-await useFetch('', {
-  onResponse( { request, response, options } ) {
-    response.headers.get('')
-  }
-})
 
 </script>

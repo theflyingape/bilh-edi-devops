@@ -119,11 +119,11 @@ const MODE = process.env.NODE_ENV
 
 async function login() {
   const username = get(credentials).username
-  await getSession(HCIE.Dev, username, get(credentials).password).then(async (jwt) => {
+  await getSession("Dev", username, get(credentials).password).then(async (jwt) => {
     Object.assign(credentials.value.IRIStoken, jwt)
     await signIn(get(credentials), {callbackUrl:'home', external:false}).then(async () => {
       if (!get(user).enabled) {
-        await endpoint(HCIE.Dev, `user/${username}`).then(async (hcie) => {
+        await endpoint("Dev", `user/${username}`).then(async (hcie) => {
           set(user, {
             id: username,
             enabled: hcie.Enabled ?? false,
@@ -153,7 +153,7 @@ async function login() {
 }
 
 async function logout() {
-  await endSession(HCIE.Dev).then(async () => {
+  await endSession("Dev").then(async () => {
     user.value.enabled = false
     user.value.scope = []
     await signOut({ callbackUrl: 'logout', external: false })

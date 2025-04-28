@@ -16,6 +16,7 @@ orientation: horizontal
   ```bash
   $ cd /opt/devops
   $ git pull
+  $ source nvm && npm install
   $ sudo systemctl restart devops
   $ journalctl -fxeu devops
   ```

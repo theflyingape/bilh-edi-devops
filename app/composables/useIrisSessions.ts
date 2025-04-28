@@ -27,10 +27,36 @@ interface tokens {
 
 let tokens: tokens = {}
 
-enum HCIE {
-  Dev = "hciedev.laheyhealth.org/api/hcie",
-  Test = "hcietst.laheyhealth.org/api/hcie",
-  Live = "hcieprd.laheyhealth.org/api/hcie"
+export interface mirrorstatus {
+  memberName: string
+  currentRole: string
+  currentStatus: string
+  journalLatency: string
+  databaseLatency: string
+  displayType: string
+  displayStatus: string
+}
+
+export interface mirrorset {
+  status: string
+  instance: string
+  memberStatus: string[]
+  otherStatus: string[]
+  mirrorStatus: mirrorstatus[]
+}
+
+const mirrorSet:Ref<{[key: string]: mirrorset}> = ref({ Dev:<mirrorset>{}, Test:<mirrorset>{}, Live:<mirrorset>{} })
+
+const HCIE: {[key: string]: string} = {
+  Dev: "hciedev.laheyhealth.org",
+  Test: "hcietst.laheyhealth.org",
+  Live: "hcieprd.laheyhealth.org"
+}
+
+const API: {[key: string]: string} = {
+  Dev: "/api/hcie",
+  Test: "/api/hcie",
+  Live: "/api/hcie"
 }
 
 const credentials = ref({
@@ -60,7 +86,7 @@ export default function useIrisTokens() {
     }
     else {
       const auth = btoa(`${username}:${password}`)
-      await fetch(`https://${hcie}/login`, {
+      await fetch(`https://${HCIE[hcie]}${API[hcie]}/login`, {
         method: 'POST',
         headers: {
           Authorization: `Basic ${auth}`,
@@ -85,7 +111,7 @@ export default function useIrisTokens() {
   async function endSession(hcie: string) {
     const jwt = tokens[hcie]
     if (jwt) {
-      await fetch(`https://${hcie}/logout`, {
+      await fetch(`https://${HCIE[hcie]}${API[hcie]}/logout`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${jwt.access_token}`,
@@ -98,7 +124,7 @@ export default function useIrisTokens() {
   }
 
   async function refresh(hcie: string, jwt: IRIStoken) {
-    await fetch(`https://${hcie}/refresh`, {
+    await fetch(`https://${HCIE[hcie]}${API[hcie]}/refresh`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${jwt.access_token}`,
@@ -124,7 +150,7 @@ export default function useIrisTokens() {
     if (jwt) {
       await refresh(hcie, jwt).then(async () => {
         jwt = tokens[hcie]!
-        await fetch(`https://${hcie}/${route}`, {
+        await fetch(`https://${HCIE[hcie]}${API[hcie]}/${route}`, {
           method: method,
           headers: {
             Authorization: `Bearer ${jwt.access_token}`,
@@ -146,5 +172,5 @@ export default function useIrisTokens() {
     return payload
   }
 
-  return { HCIE, credentials, user, getSession, endSession, refresh, endpoint }
+  return { HCIE, mirrorSet, credentials, user, getSession, endSession, refresh, endpoint }
 }
