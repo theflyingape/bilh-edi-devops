@@ -42,6 +42,7 @@ export interface mirrorstatus {
 export interface mirrorset {
   status: string
   instance: string
+  systemMode: string
   memberStatus: string[]
   otherStatus: string[]
   mirrorStatus: mirrorstatus[]
