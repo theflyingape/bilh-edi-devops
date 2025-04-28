@@ -142,7 +142,8 @@ async function login() {
         if (get(user).groups?.includes('sysadm') || get(user).groups?.includes('wheel')) get(user).scope.push('systems')
         if (get(user).groups?.includes('irisadm')) get(user).scope.push('admin')
         if (get(user).groups?.includes('irisdev')) get(user).scope.push('developer')
-        if (get(user).groups?.includes('os-shell-access')) get(user).scope.push('analyst')
+        if (get(user).groups?.includes('grp-os-shell-access')) get(user).scope.push('analyst')
+        if (!get(user).scope.length) get(user).scope.push('user')
         toast.add({ title: `Hello, ${get(user).scope[0]}!`, description: `logged on ${new Date().toTimeString()}` })
       }
       else
