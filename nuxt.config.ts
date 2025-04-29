@@ -69,7 +69,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      version: '0.5.4',
+      version: '0.6.0',
       websocket: process.env.NODE_ENV == 'development' ?  'ws' : 'wss'
     }
   },

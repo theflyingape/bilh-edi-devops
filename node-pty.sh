@@ -4,5 +4,5 @@
 #
 cd "`dirname $0`"
 ssh-copy-id -i .ssh/id_rsa.pub $1@$2 2>/dev/null
-ssh -i .ssh/id_rsa $1@$2
+ssh -i .ssh/id_rsa $1@$2 -t -C "/bin/sh -l -c 'tmux attach || tmux new'"
 exit

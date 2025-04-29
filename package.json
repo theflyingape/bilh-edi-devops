@@ -1,6 +1,6 @@
 {
   "name": "edi-devops",
-  "version": "0.5.4",
+  "version": "0.6.0",
   "license": "MIT",
   "type": "module",
   "description": "The team's single point of access to the essential suite of apps, tools, and documentation for efficiency, effectiveness, and success!",
@@ -39,7 +39,7 @@
     "jsonwebtoken": "^9.0.2",
     "modern-syslog": "^1.2.0",
     "node-pty": "^1.1.0-beta9",
-    "nuxt": "^3.17.0",
+    "nuxt": "^3.17.1",
     "nuxt-llms": "^0.1.2",
     "zod": "^3.24.3"
   },
