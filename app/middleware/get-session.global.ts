@@ -2,7 +2,8 @@ import { get } from '@vueuse/core'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const { refresh, signOut, status } = useAuth()
-
+  const { user, endSession } = useIrisSessions()
+  
   if (get(status) !== 'unauthenticated') {
     await refresh().then((result) => {
     /*
@@ -11,9 +12,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       console.log('get-session result:', result)
       })
     */
-    }).catch((err) => {
+    }).catch(async (err) => {
       console.error('get-session error:', err)
-      signOut({callbackUrl: 'logout', external: false})
+      await endSession("Dev").then(async () => {
+        user.value.enabled = false
+        user.value.scope = []
+        await signOut({ callbackUrl: 'logout', external: false })
+      })
     })
   }
 })

@@ -58,13 +58,13 @@
           <UChip color="neutral">
             <UButton color="secondary" size="xl" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
           </UChip>
-          <USwitch v-model="tmux" @click="tmuxToggle" color="secondary" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" label="tmux" />
+          <USwitch v-model="tmux" @click="tmuxToggle" color="secondary" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" :label="termType" />
           </div>
       </div>
     </div>
   </div>
 
-  <UDrawer v-model:open="isCurl" title="Curl Builder" description="fill out form below" :ui="{ container: 'max-w-xl mx-auto' }">
+  <UDrawer v-model:open="isCurl" title="Curl Builder (wip)" description="fill out form below" :ui="{ container: 'max-w-xl mx-auto' }">
     <Placeholder class="h-48" />
     <template #body>
       <UForm :state="curl" @submit.prevent="sendCurl">
@@ -113,6 +113,7 @@ const curl = ref({
 let prefs = JSON.parse(localStorage.getItem('prefs-local-storage') ?? '{ fontSize:20, tmux:true }')
 const save = useStorage('prefs-local-storage', prefs, localStorage, { mergeDefaults: true })
 const tmux = ref(prefs.tmux)
+const termType = ref(prefs.tmux ? 'tmux' : 'ssh')
 
 function fontSize(delta:number) {
   prefs.fontSize = xterm()!.options.fontSize! + delta
@@ -127,6 +128,7 @@ function fontSize(delta:number) {
 function tmuxToggle() {
   prefs.tmux = !prefs.tmux
   set(tmux, prefs.tmux)
+  set(termType, prefs.tmux ? 'tmux' : 'ssh')
   localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
   save.value.tmux = prefs.tmux
 }
