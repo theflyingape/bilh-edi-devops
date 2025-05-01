@@ -27,7 +27,7 @@
           </div>
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
-            <UButton v-if="tmux" color="neutral" variant="link" size="sm" icon="i-vscode-icons-file-type-search-result" @click="send('\x02[\x12')" />
+            <UButton v-if="tmux" color="neutral" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" />
             <UForm v-else :state=searchInput @submit.prevent="search(true)">
               <UInput v-model="searchInput.entry" ref="input" color="info" icon="i-vscode-icons-file-type-search-result" size="sm" variant="subtle" placeholder="Search..." :ui="{ trailing: 'pe-1' }">
               <template v-if="searchInput.entry?.length" #trailing>
@@ -124,6 +124,12 @@ function fontSize(delta:number) {
     xterm(session)!.options.fontSize = prefs.fontSize
     resize(session)
   }
+}
+
+function tmuxSearch() {
+  send('\x02[')
+  xterm()?.focus()
+  send('\x12')
 }
 
 function tmuxToggle() {

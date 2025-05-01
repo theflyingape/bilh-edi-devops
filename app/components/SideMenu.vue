@@ -8,7 +8,7 @@
       <div v-if="status !== 'unauthenticated'" class="flex flex-nowrap justify-evenly gap-8">
         <UCard v-if="user.enabled" class="w-full">
           <template #header>
-            <UUser :name=user.name :description="`(${user.id}) ${user.comment}`" />
+            <UUser :name=user.name :description="`${user.comment} (${user.id})`" />
           </template>
           <div class="text-sm font-mono">DevOps:<UBadge v-for="scope in user.scope" class="m-1" size="sm" color="info" variant="soft">{{ scope }}</UBadge></div>
           <div class="text-sm font-mono">&nbsp;HCIE:<UBadge v-for="roles in user.roles" class="m-1" size="sm" color="neutral" variant="outline">{{ roles }}</UBadge></div>
