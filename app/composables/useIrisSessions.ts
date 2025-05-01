@@ -153,7 +153,7 @@ export default function useIrisTokens() {
 
     //  upon first invocation to another instance ...
     if (!jwt) {
-      await getSession(hcie, get(credentials).username, get(credentials).password).then(async (jwt) => {
+      await getSession(hcie, get(credentials).username, get(credentials).password).then((jwt) => {
         if(jwt) tokens[hcie] = jwt
       })
     }
