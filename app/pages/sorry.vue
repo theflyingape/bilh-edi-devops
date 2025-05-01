@@ -10,7 +10,7 @@
       <template #default>
         <div class="flex justify-center">
           <UButton class="text-2xl" icon="i-vscode-icons-file-type-devcontainer" color="neutral" variant="soft" to="."
-            :label="`${status} as ${data?.scope[0] || 'a guest'} is insufficient`" />
+            :label="`${status} as ${scope} is insufficient`" />
         </div>
       </template>
       <template #footer>
@@ -23,5 +23,8 @@
 
 <script setup lang="ts">
 definePageMeta({ auth: false })
-const { data, status } = useAuth()
+import { get } from '@vueuse/core'
+const { status } = useAuth()
+const { user } = useIrisSessions()
+const scope = get(user)?.scope?.length ? get(user)?.scope[0] : 'a guest'
 </script>

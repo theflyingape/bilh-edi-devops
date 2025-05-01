@@ -70,18 +70,18 @@ const credentials = ref({
 })
 
 const user = ref(<User>{})
+const dev = import.meta.dev || false
 
 export default function useIrisTokens() {
   //  provision an IRIS REST JWT session off user authentication
   async function getSession(hcie: string, username: string, password: string): Promise<IRIStoken | null> {
-    const dev = import.meta.dev || false
     let IRIStoken = dev ? { access_token: 'access', refresh_token: 'refresh', sub: username, iat: 0, exp: -1 } : null
     if (IRIStoken) {
       set(user, {
         id: get(credentials).username,
         enabled: true,
-        groups: ['irisadm', 'irisdev', 'sysadm'],
-        roles: ['%Developer', '%Operator'],
+        groups: ['sysadm', 'irisadm', 'irisdev'],
+        roles: ['%Manager', '%Developer', '%Operator'],
         name: 'Devlin Tester',
         comment: 'TPM',
         loggedInAt: Date.now(),
@@ -113,6 +113,7 @@ export default function useIrisTokens() {
 
   //  bye-bye
   async function endSession(hcie: string) {
+    if (dev) return
     const jwt = tokens[hcie]
     if (jwt) {
       await fetch(`https://${HCIE[hcie]}${API[hcie]}/logout`, {
@@ -128,6 +129,7 @@ export default function useIrisTokens() {
   }
 
   async function refresh(hcie: string, jwt: IRIStoken) {
+    if (dev) return
     await fetch(`https://${HCIE[hcie]}${API[hcie]}/refresh`, {
       method: 'POST',
       headers: {
@@ -150,6 +152,7 @@ export default function useIrisTokens() {
   async function endpoint(hcie: string, route: string, method = 'GET'): Promise<any | null> {
     let payload = null
     let jwt = tokens[hcie]
+    if (dev) return payload
 
     //  upon first invocation to another instance ...
     if (!jwt) {

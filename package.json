@@ -50,6 +50,7 @@
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.15.3",
     "eslint": "^9.25.1",
+    "nuxt-file-storage": "^0.3.0",
     "typescript": "^5.8.3"
   },
   "overrides": {

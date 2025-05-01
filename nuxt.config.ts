@@ -216,7 +216,11 @@ export default defineNuxtConfig({
   imports: {
     autoImport: true,
   },
-  modules: ['@nuxt/devtools', '@nuxt/eslint', '@nuxt/image', '@nuxt/ui-pro', '@nuxt/content', 'nuxt-llms', '@sidebase/nuxt-auth', '@vueuse/nuxt', '@vite-pwa/nuxt'],
+  modules: [
+    '@nuxt/devtools', '@nuxt/eslint', '@nuxt/image', '@nuxt/ui-pro', '@nuxt/content', 
+    '@sidebase/nuxt-auth', '@vueuse/nuxt', '@vite-pwa/nuxt',
+    'nuxt-file-storage', 'nuxt-llms'
+  ],
   uiPro: {
     content: true
   },
