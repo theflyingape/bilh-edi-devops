@@ -1,5 +1,5 @@
 <template>
-  <UCard v-if="mirrorSet[props.hcie]" class="m-1" variant="subtle">
+  <UCard v-model="mirrorSet[props.hcie]" class="m-1" variant="subtle">
     <div class="font-bold font-sans underline">{{ mirrorSet[props.hcie]?.systemMode }}</div>
     <div class="text-sm font-mono" v-for="status in mirrorSet[props.hcie]?.mirrorStatus">
       <div v-if="status.currentRole == 'Primary'" class="font-semibold text-success">
@@ -23,8 +23,8 @@ onMounted(() => {
   status()
 })
 
-async function status() {
-  await endpoint(props.hcie, 'status').then((status:mirrorset) => {
+function status() {
+  endpoint(props.hcie, 'status').then((status:mirrorset) => {
     mirrorSet.value[props.hcie] = status
   })
 }
