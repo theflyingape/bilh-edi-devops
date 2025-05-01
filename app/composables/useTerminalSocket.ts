@@ -52,10 +52,10 @@ export default function useTerminalSocket() {
     term.loadAddon(session.search)
   }
 
-  function connect(sessionId: string) {
+  function connect(sessionId: string, tmux = false) {
     const session = sessionList[sessionId]!
 
-    const { ws, status } = useWebSocket(session.url)
+    const { ws, status } = useWebSocket(session.url! + (tmux ? '&tmux=true' : ''))
     session.ws = ws
     session.status = get(status)
 

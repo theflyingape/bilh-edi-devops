@@ -12,6 +12,7 @@ export default defineWebSocketHandler({
     const wsOpts = url.parse(peer.request.url, true).query
     const id = <string>wsOpts?.id || 'unknown'
     const profile = <string>wsOpts?.profile || 'localhost'
+    const tmux = <string>wsOpts?.tmux == 'true'
     const cfg = terminal[profile]
 
     log('LOG_DEBUG', `node-pty ${peer.id} open for ${id} on ${profile} - ${peer.request.url}`, cfg.loglevel)
@@ -19,6 +20,10 @@ export default defineWebSocketHandler({
     let params = [ ...cfg.params ]
     params.push(id)
     if (profile !== 'localhost') params.push(cfg.host)
+    if (tmux) {
+      if (profile == 'localhost') params.push('-c')
+      params.push('tmux')
+    }
     //  execute
     let spawn = pty.spawn(cfg.cmd, params, {
       name: cfg.pty?.term || 'xterm-256color',

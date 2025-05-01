@@ -27,7 +27,7 @@
           </div>
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
-            <UForm :state=searchInput @submit.prevent="search(true)">
+            <UForm v-if="!tmux" :state=searchInput @submit.prevent="search(true)">
               <UInput v-model="searchInput.entry" ref="input" color="info" icon="i-vscode-icons-file-type-search-result" size="sm" variant="subtle" placeholder="Search..." :ui="{ trailing: 'pe-1' }">
               <template v-if="searchInput.entry?.length" #trailing>
                 <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" @click="{ searchInput.entry = ''; search(false); }" />
@@ -46,21 +46,20 @@
       </div>
       <!-- top-right action controls -->
       <div class="flex-nowrap justify-items-start m-1 space-y-1">
-        <USelect v-model="value" :items="items" class="m-2 w-30" />
+        <USelect v-model="value" :items="items" class="m-1 w-32" />
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" size="sm" variant="subtle" @click="fontSize(-2)" /></UTooltip>
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" size="sm" variant="subtle" @click="fontSize(2)" /></UTooltip>
-        <div v-if="isConnected" class="pl-4 m-2">
+        <div v-if="isConnected" class="m-1 pl-4">
           <UChip color="success">
             <UButton color="action" variant="soft" @click="terminate">Disconnect</UButton>
           </UChip>
         </div>
-        <div v-else class="m-2">
+        <div v-else class="flex m-1 p-1 space-x-2">
           <UChip color="neutral">
             <UButton color="secondary" size="xl" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
           </UChip>
-        </div>
-        <div>
-        </div>
+          <USwitch v-model="tmux" @click="tmuxToggle" color="secondary" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" label="tmux" />
+          </div>
       </div>
     </div>
   </div>
@@ -102,19 +101,18 @@ useResizeObserver(crtRef, (entries) => {
   resize(get(value))
 })
 
+watch(value, async (n, o) => {
+  connected(n)
+})
+
 const curl = ref({
   url: '',
   insecure: false,
 })
 
-const prefs = {
-  fontSize: 20
-}
+let prefs = JSON.parse(localStorage.getItem('prefs-local-storage') ?? '{ fontSize:20, tmux:true }')
 const save = useStorage('prefs-local-storage', prefs, localStorage, { mergeDefaults: true })
-
-watch(value, async (n, o) => {
-  connected(n)
-})
+const tmux = ref(prefs.tmux)
 
 function fontSize(delta:number) {
   prefs.fontSize = xterm()!.options.fontSize! + delta
@@ -126,17 +124,24 @@ function fontSize(delta:number) {
   }
 }
 
+function tmuxToggle() {
+  prefs.tmux = !prefs.tmux
+  set(tmux, prefs.tmux)
+  localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
+  save.value.tmux = prefs.tmux
+}
+
 function send(text: string) {
   sessionList[get(value)]?.ws?.value?.send(text)
 }
 
 function terminal() {
   const sessionId = get(value)
-  xterm()?.writeln(`\r\n\x1B[2mConnecting to a \x1B[0;1m${sessionId}\x1B[0;2m shell session as \x1B[m${id} ... \n`)
   //  establish WebSocket pipe for client <-> shell
-  connect(sessionId)
+  connect(sessionId, get(tmux))
   attach(sessionId)
   set(mcRef, false)
+  xterm()?.writeln(`\r\n\x1B[2mConnecting to a \x1B[0;1m${sessionId}\x1B[0;2m shell session ${prefs.tmux ? 'with tmux' : 'just ssh'} as \x1B[m${id} ... \n`)
 }
 
 function terminate() {
