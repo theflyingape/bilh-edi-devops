@@ -23,8 +23,8 @@ onMounted(() => {
   status()
 })
 
-function status() {
-  endpoint(props.hcie, 'status').then((status:mirrorset) => {
+async function status() {
+  await endpoint(props.hcie, 'status').then((status:mirrorset) => {
     mirrorSet.value[props.hcie] = status
   })
 }

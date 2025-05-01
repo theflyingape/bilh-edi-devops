@@ -2,6 +2,7 @@
   <div v-if="online && isAdmin" class="flex justify-center">
     <div class="grid grid-flow-col grid-rows-2">
       <UPlaceholder class="row-span-2">
+        <UCard>&nbsp;</UCard>
         <!--IrisMirrorStatus hcie="Live" /-->
       </UPlaceholder>
       <IrisMirrorStatus hcie="Test" />
