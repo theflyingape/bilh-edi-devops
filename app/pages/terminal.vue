@@ -27,7 +27,10 @@
           </div>
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
-            <UButton v-if="tmux" color="neutral" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" />
+            <div v-if="tmux" class="space-x-2">
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="help"><UButton class="rounded-full bg-amber-100 hover:bg-amber-300" color="neutral" variant="link" icon="i-lucide-badge-help" @click="tmuxHelp" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="enter Copy Mode & search"><UButton class="rounded-full bg-violet-100 hover:bg-violet-300" color="neutral" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" /></UTooltip>
+            </div>
             <UForm v-else :state=searchInput @submit.prevent="search(true)">
               <UInput v-model="searchInput.entry" ref="input" color="info" icon="i-vscode-icons-file-type-search-result" size="sm" variant="subtle" placeholder="Search..." :ui="{ trailing: 'pe-1' }">
               <template v-if="searchInput.entry?.length" #trailing>
@@ -126,10 +129,20 @@ function fontSize(delta:number) {
   }
 }
 
+function tmuxHelp() {
+  send('\x02')
+  xterm()?.focus()
+  setTimeout(() => {
+    send('?')
+  }, 100)
+}
+
 function tmuxSearch() {
   send('\x02[')
   xterm()?.focus()
-  send('\x12')
+  setTimeout(() => {
+    send('\x12')
+  }, 100)
 }
 
 function tmuxToggle() {
