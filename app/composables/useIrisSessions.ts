@@ -148,8 +148,16 @@ export default function useIrisTokens() {
   }
 
   async function endpoint(hcie: string, route: string, method = 'GET'): Promise<any | null> {
-    let jwt = tokens[hcie]
     let payload = null
+    let jwt = tokens[hcie]
+
+    //  upon first invocation to another instance ...
+    if (!jwt) {
+      await getSession(hcie, get(credentials).username, get(credentials).password).then(async (jwt) => {
+        if(jwt) tokens[hcie] = jwt
+      })
+    }
+
     //  let's refresh access prior to invocation
     if (jwt) {
       await refresh(hcie, jwt).then(async () => {
