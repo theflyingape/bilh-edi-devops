@@ -27,7 +27,8 @@
           </div>
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
-            <UForm v-if="!tmux" :state=searchInput @submit.prevent="search(true)">
+            <UButton v-if="tmux" color="neutral" variant="link" size="sm" icon="i-vscode-icons-file-type-search-result" @click="send('\x02[\x12')" />
+            <UForm v-else :state=searchInput @submit.prevent="search(true)">
               <UInput v-model="searchInput.entry" ref="input" color="info" icon="i-vscode-icons-file-type-search-result" size="sm" variant="subtle" placeholder="Search..." :ui="{ trailing: 'pe-1' }">
               <template v-if="searchInput.entry?.length" #trailing>
                 <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" @click="{ searchInput.entry = ''; search(false); }" />
