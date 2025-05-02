@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 definePageMeta({ auth:false })
+reloadNuxtApp()
 
 const links = ref([
   {

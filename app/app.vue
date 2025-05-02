@@ -22,7 +22,7 @@
             </UTooltip>
           </div>
           <div class="m-auto">
-            <UChip class="mt-2" :color="online" inset>
+            <UChip class="mt-2" :color="chip" inset>
               <UTooltip arrow :content="{ align: 'center', side: 'left', sideOffset: 8 }"
                 :text="`${get(user)?.id || 'click to login'}`">
                 <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
@@ -31,7 +31,7 @@
             </UChip>
           </div>
           <div class="m-auto">
-            <UBadge :color="online" variant="outline">{{ who }}</UBadge>
+            <UBadge :color="chip" variant="outline">{{ who }}</UBadge>
           </div>
           <SideMenu v-model:open="sideMenu" />
         </div>
@@ -73,11 +73,11 @@ useSeoMeta({
 
 import { get, set, watchImmediate } from '@vueuse/core'
 
-const { sideMenu, toggleSideMenu } = useDevOps()
+const { online, sideMenu, toggleSideMenu } = useDevOps()
 const { user } = useIrisSessions()
 const { status } = useAuth()
 const { isFullscreen, toggle } = useFullscreen()
-const online = ref(computed(() => get(status) == 'unauthenticated' ? 'action' : 'success'))
+const chip = ref(computed(() => get(online) ? 'success' : 'action'))
 const who = ref(computed(() => get(status) == 'unauthenticated' ? 'Guest' : get(user).scope?.length ? get(user).scope[0] : 'Associate'))
 
 const items = ref([

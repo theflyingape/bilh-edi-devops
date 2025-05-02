@@ -12,7 +12,7 @@
           </template>
           <div class="text-sm font-mono">DevOps:<UBadge v-for="scope in user.scope" class="m-1" size="sm" color="info" variant="soft">{{ scope }}</UBadge></div>
           <div class="text-sm font-mono">&nbsp;HCIE:<UBadge v-for="roles in user.roles" class="m-1" size="sm" color="neutral" variant="outline">{{ roles }}</UBadge></div>
-          <div class="flex justify-end mt-4"><SubmitButton variant="soft" @click="logout">Logout</SubmitButton></div>
+          <div class="flex justify-end mt-4"><SubmitButton loading-auto variant="soft" @click="logout">Logout</SubmitButton></div>
         </UCard>
       </div>
       <div v-else>
@@ -27,7 +27,7 @@
               </UFormField>
             </div>
             <div class="flex justify-end pt-8">
-              <SubmitButton>Login</SubmitButton>
+              <SubmitButton loading-auto>Login</SubmitButton>
             </div>
           </UForm>
         </UCard>
@@ -146,19 +146,16 @@ async function login() {
       }
       else
         get(user).scope.push('guest')
-      //  onward
-      useDevOps().toggleSideMenu()
-      await navigateTo('home', {external:false})
-    })
+        setTimeout(() => { set(useDevOps().sideMenu, false) }, 1000)
+      })
   })
 }
 
 async function logout() {
-  useDevOps().toggleSideMenu()
   await endSession("Dev").then(async () => {
     user.value.enabled = false
     user.value.scope = []
-    await signOut({ callbackUrl: 'logout', external: false })
+    await signOut({ callbackUrl: 'logout', external: true })
   })
 }
 

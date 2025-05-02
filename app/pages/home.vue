@@ -31,16 +31,12 @@
 </template>
 <script setup lang="ts">
 definePageMeta({ auth:false })
-//  does this help?
-//reloadNuxtApp({ ttl: 100000 })
 
-import { get, useNow } from '@vueuse/core'
+import { get, set, useNow } from '@vueuse/core'
 const { status } = useAuth()
-const online = ref(computed(() => get(status) !== 'unauthenticated'))
 const isAdmin = ref(computed(() => get(user)?.scope?.includes('admin') || get(user)?.scope?.includes('systems')))
 
 const now = useNow()
-const { toggleSideMenu } = useDevOps()
+const { online, toggleSideMenu } = useDevOps()
 const { user } = useIrisSessions()
-
 </script>
