@@ -119,7 +119,7 @@ async function login() {
   const username = get(credentials).username
   await getSession("Dev", username, get(credentials).password).then(async (jwt) => {
     Object.assign(credentials.value.IRIStoken, jwt)
-    await signIn(get(credentials), {callbackUrl:'home', external:false}).then(async () => {
+    await signIn(get(credentials), {callbackUrl:'/home', external:false}).then(async () => {
       if (!get(user).enabled) {
         await endpoint("Dev", `user/${username}`).then(async (hcie) => {
           set(user, {
@@ -146,8 +146,9 @@ async function login() {
       }
       else
         get(user).scope.push('guest')
-        setTimeout(() => { set(useDevOps().sideMenu, false) }, 1000)
-      })
+      //  fini
+      setTimeout(() => { set(useDevOps().sideMenu, false) }, 1000)
+    })
   })
 }
 
