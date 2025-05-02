@@ -10,10 +10,8 @@ export default eventHandler(async (event) => {
   let token = { token: { accessToken:accessToken, refreshToken:refreshToken } }
 
   if (!refreshToken || !authorizationHeader) {
-    throw createError({
-      statusCode: 401,
-      statusMessage: 'Unauthorized, no refreshToken or no Authorization header'
-    })
+    setResponseStatus(event, 401, `Unauthorized, no refreshToken or no Authorization header`)
+    return null
   }
 
   // Verify

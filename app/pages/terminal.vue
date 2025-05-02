@@ -49,21 +49,26 @@
         </div>
       </div>
       <!-- top-right action controls -->
-      <div class="flex-nowrap justify-items-start m-1 space-y-1">
-        <USelect v-model="value" :items="items" class="m-1 w-32" />
-        <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" size="sm" variant="subtle" @click="fontSize(-2)" /></UTooltip>
-        <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" size="sm" variant="subtle" @click="fontSize(2)" /></UTooltip>
+      <div class="flex-nowrap justify-items-start m-1 space-x-1 space-y-1">
+        <USelect v-model="value" :items="items" class="p-2 w-36" />
+        <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
+        <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
         <div v-if="isConnected" class="m-1 pl-4">
           <UChip color="success">
             <UButton color="action" variant="soft" @click="terminate">Disconnect</UButton>
           </UChip>
         </div>
-        <div v-else class="flex m-1 p-1 space-x-2">
+        <div v-else class="flex m-2 p-2 space-x-2">
           <UChip color="neutral">
             <UButton color="secondary" size="xl" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
           </UChip>
-          <USwitch v-model="tmux" @click="tmuxToggle" color="secondary" unchecked-icon="i-lucide-x" checked-icon="i-lucide-check" :label="termType" />
-          </div>
+          <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" color="secondary" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-lock-keyhole" :label="termType" />
+        </div>
+        <div v-if="isConnected">
+          <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
+          <UInput ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
+          <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
+        </div>
       </div>
     </div>
   </div>
@@ -89,7 +94,7 @@
 
 <script setup lang="ts">
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
-import { useTemplateRef, type VNodeRef } from 'vue'
+import { useTemplateRef } from 'vue'
 
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth().data)?.id
@@ -99,6 +104,9 @@ const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${i
 const { sessionList, cols, rows, selection, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
 const value = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
+
+const { handleFileInput, files } = useFileStorage({ clearOldFiles: true })
+const filesRef = useTemplateRef('filesInput')
 
 const crtRef = useTemplateRef('crt')
 useResizeObserver(crtRef, (entries) => {
@@ -245,6 +253,18 @@ function search(query:boolean) {
 function sendCurl() {
   set(isCurl, false)
   send(`curl ${curl.value.insecure ? '-k' : ''} ${curl.value.url}`)
+}
+
+const uploadFiles = async () => {
+  const response = await $fetch('/api/files', {
+    method: 'POST',
+    body: {
+      files: get(files)
+    }
+  })
+  filesRef.value!.inputRef!.value = ''
+  set(files, [])
+  useToast().add({ title: `File upload complete`, description: `${response}` })
 }
 </script>
 

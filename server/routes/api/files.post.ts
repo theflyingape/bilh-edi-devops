@@ -1,20 +1,14 @@
+import { log } from '~/lib/syslog'
 import { ServerFile } from "nuxt-file-storage"
 
 export default defineEventHandler(async (event) => {
   const { files } = await readBody<{ files: ServerFile[] }>(event)
 
-  for (const file of files) {
-    // Parses a data URL and returns an object with the binary data and the file extension.
-    const { binaryString, ext } = parseDataUrl(file.content)
-  }
-
-  // Deleting Files
-  await deleteFile('requiredFile.txt', '/userFiles')
-
-  // Get file path
-  await getFileLocally('requiredFile.txt', '/userFiles')
-  // returns: {AbsolutePath}/userFiles/requiredFile.txt
-
-  // Get all files in a folder
-  await getFilesLocally('/userFiles')
+  const fileNames: string[] = []
+	for (const file of files) {
+    log('LOG_NOTICE', `file uploaded -> ${file.name} size: ${file.size} type: ${file.type} modified: ${new Date(file.lastModified)} `)
+    const basename = file.name.split('.').slice(0, -1).join('.')
+		fileNames.push(await storeFileLocally(file, basename))
+	}
+	return fileNames
 })

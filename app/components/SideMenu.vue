@@ -12,7 +12,7 @@
           </template>
           <div class="text-sm font-mono">DevOps:<UBadge v-for="scope in user.scope" class="m-1" size="sm" color="info" variant="soft">{{ scope }}</UBadge></div>
           <div class="text-sm font-mono">&nbsp;HCIE:<UBadge v-for="roles in user.roles" class="m-1" size="sm" color="neutral" variant="outline">{{ roles }}</UBadge></div>
-          <div class="flex justify-end mt-4"><SubmitButton loading-auto variant="soft" @click="logout">Logout</SubmitButton></div>
+          <div class="flex justify-end mt-4"><SubmitButton variant="soft" @click="logout">Logout</SubmitButton></div>
         </UCard>
       </div>
       <div v-else>
@@ -27,7 +27,7 @@
               </UFormField>
             </div>
             <div class="flex justify-end pt-8">
-              <SubmitButton loading-auto>Login</SubmitButton>
+              <SubmitButton>Login</SubmitButton>
             </div>
           </UForm>
         </UCard>

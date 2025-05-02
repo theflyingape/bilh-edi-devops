@@ -22,7 +22,7 @@
           <div v-else class="space-y-8">
             <div class="font-semibold text-center text-2xl text-sky-600"><UIcon class="align-middle" name="i-vscode-icons-file-type-vscode" size="48" />&nbsp; Code Server</div>
             <div class="text-center"><UIcon name="i-lucide-construction" />&nbsp;<ULink to="https://docs.intersystems.com/healthconnectlatest/csp/docbook/DocBook.UI.Page.cls?KEY=AB_idesetup#AB_idesetup_isc" target="_blank">ObjectScript IDEs</ULink></div>
-            <div><SubmitButton class="text-2xl" color="action" target="_blank" :to="url" :label="`Prepare my session`" loading-auto @click="execute" /></div>
+            <div><SubmitButton class="text-2xl" color="action" target="_blank" :to="url" :label="`Prepare my session`" @click="execute" /></div>
           </div>
           <div v-if="message" class="text-center text-sm text-info-600">{{ message }}</div>
           <div v-if="aborted" class="text-center text-error-600">Aborted by timeout!</div>
