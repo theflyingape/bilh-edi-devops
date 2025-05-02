@@ -65,11 +65,7 @@ After your SSL directives within _your_ site httpd configuration, append:
 Make sure to install the dependencies:
 
 ```bash
-# choose your method
 $ npm install
-$ pnpm install
-$ yarn install
-$ bun install
 ```
 
 ## Development Server
@@ -77,11 +73,8 @@ $ bun install
 Start the development server on `http://localhost:6500`:
 
 ```bash
-# choose your method, prefix HOST= and/or PORT= as overrides
+# prefix HOST= and/or PORT= as overrides
 $ npm run dev
-$ pnpm run dev
-$ yarn dev
-$ bun run dev
 ```
 
 ## Production Mode
@@ -89,21 +82,13 @@ $ bun run dev
 Build the application for production:
 
 ```bash
-# choose your method
 $ npm run build
-$ pnpm run build
-$ yarn build
-$ bun run build
 ```
 
 Locally preview production build:
 
 ```bash
-# choose your method
 $ npm run preview
-$ pnpm run preview
-$ yarn preview
-$ bun run preview
 ```
 
 Check out the Nuxt [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
