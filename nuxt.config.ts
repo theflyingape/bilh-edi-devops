@@ -6,7 +6,8 @@ export default defineNuxtConfig({
     //baseURL: '/devops',
   },
   appConfig: {
-    buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' })
+    buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' }),
+    version: '0.6.3'
   },
   auth: {
     baseURL: '/api/auth',
@@ -69,7 +70,6 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      version: '0.6.2',
       websocket: process.env.NODE_ENV == 'development' ?  'ws' : 'wss'
     }
   },

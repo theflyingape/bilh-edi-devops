@@ -21,4 +21,6 @@
 
 <script setup lang="ts">
 definePageMeta({ auth:false })
+import { reloadNuxtApp } from "nuxt/app"
+setTimeout(() => { reloadNuxtApp({ path: "/home" }) }, 2000)
 </script>

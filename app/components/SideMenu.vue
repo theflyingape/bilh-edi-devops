@@ -88,14 +88,14 @@
           <div><img src="~/assets/images/footer.png" class="drop-shadow-lg" /></div>
         </div>
         <div class="p-2 text-start text-slate-500 text-sm">
-          <em>built {{ BUILT }} for {{ MODE }}</em>
+          <em>built {{ buildDate }} for {{ MODE }}</em>
         </div>
         <div class="justify-items-end">
           <div class="pr-16"><em>a value-add by Robert Hurst</em></div>
           <div class="pr-18 text-slate-500 text-xs">
             <UButton class="align-middle" color="neutral" variant="link" icon="i-simple-icons-github"
               to="https://github.com/theflyingape/bilh-edi-devops" target="_blank">GitHub</UButton>
-            {{ VERSION }}
+            {{ version }}
           </div>
         </div>
       </div>
@@ -112,8 +112,7 @@ const { HCIE, credentials, user, getSession, endSession, endpoint } = useIrisSes
 const overlay = useOverlay()
 const toast = useToast()
 
-const VERSION = useRuntimeConfig().public.version
-const BUILT = useAppConfig().buildDate
+const { buildDate, version } = useAppConfig()
 const MODE = process.env.NODE_ENV
 
 async function login() {
@@ -147,12 +146,15 @@ async function login() {
       }
       else
         get(user).scope.push('guest')
+      //  onward
+      useDevOps().toggleSideMenu()
       await navigateTo('home', {external:false})
     })
   })
 }
 
 async function logout() {
+  useDevOps().toggleSideMenu()
   await endSession("Dev").then(async () => {
     user.value.enabled = false
     user.value.scope = []
