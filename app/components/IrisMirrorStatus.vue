@@ -13,7 +13,7 @@
     </template>
     <template #footer>
       <div class="flex font-mono justify-end italic text-sm">
-        <UIcon :name="ICON[props.hcie]!" class="align-middle" />&nbsp;Last backup: {{ mirrorSet[props.hcie]?.lastBackup }}
+        <UIcon :name="ICON[props.hcie]!" class="align-middle size-5" />&nbsp;Last backup: {{ timeAgo }}
       </div>
     </template>
   </UCard>
@@ -23,12 +23,15 @@ const props = defineProps<{
   hcie: string     //  instance identifier
 }>()
 
+import { formatTimeAgo } from '@vueuse/core'
 const { ICON, mirrorSet, endpoint } = useIrisSessions()
+let timeAgo: string = "unknown"
 status()
 
 function status() {
   endpoint(props.hcie, 'status').then((status:mirrorset) => {
     mirrorSet.value[props.hcie] = status
+    timeAgo = formatTimeAgo(new Date(status.lastBackup)) || "unclear"
   })
 }
 </script>
