@@ -197,11 +197,14 @@ export default defineNuxtConfig({
       failOnError: false,
     },
     routeRules: {
-      '/*': { cache: { maxAge: 3600, swr: false }, ssr: false },
       '/api/**': { cache: false },
       '/assets/**': { headers: { 'cache-control': 's-maxage=0' } },
+      '/components/**': { ssr: false },
       '/composables/**': { ssr: false },
-      '/mission/**': { cache: { maxAge: 3600 } }
+      '/home': { cache: { maxAge: 600, swr: false } },
+      '/index': { cache: { maxAge: 600, swr: false } },
+      '/mission/**': { cache: { maxAge: 3600 } },
+      '/terminal': { cache: { maxAge: 600, swr: false }, ssr: false },
     }
   },
   vite: {
