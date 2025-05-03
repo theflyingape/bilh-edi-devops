@@ -1,7 +1,7 @@
 <template>
   <div v-if="online && isAdmin" class="flex justify-center">
-    <div class="grid grid-flow-col grid-rows-2 shrink">
-      <UPlaceholder class="row-span-2">
+    <div class="grid grid-flow-col grid-rows-2">
+      <UPlaceholder class="row-span-2 shrink">
         <UCard><em>pending 2024 upgrade</em></UCard>
         <!--IrisMirrorStatus hcie="Live" /-->
       </UPlaceholder>

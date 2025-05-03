@@ -1,5 +1,5 @@
 <template>
-  <UCard v-model="mirrorSet[props.hcie]" class="m-1" variant="subtle">
+  <UCard v-model="mirrorSet[props.hcie]" class="m-1 shrink" variant="subtle">
     <template #default>
       <div class="font-bold font-sans underline">{{ mirrorSet[props.hcie]?.systemMode }}</div>
       <div class="text-sm font-mono" v-for="status in mirrorSet[props.hcie]?.mirrorStatus">
