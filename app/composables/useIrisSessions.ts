@@ -57,6 +57,12 @@ const HCIE: {[key: string]: string} = {
   Live: "hcieprd.laheyhealth.org"
 }
 
+const ICON: {[key: string]: string} = {
+  Dev: "i-vscode-icons-file-type-apib",
+  Test: "i-vscode-icons-file-type-light-todo",
+  Live: "i-vscode-icons-file-type-plsql-package"
+}
+
 const API: {[key: string]: string} = {
   Dev: "/api/hcie",
   Test: "/api/hcie",
@@ -190,5 +196,5 @@ export default function useIrisTokens() {
     return payload
   }
 
-  return { HCIE, mirrorSet, credentials, user, getSession, endSession, refresh, endpoint }
+  return { HCIE, ICON, mirrorSet, credentials, user, getSession, endSession, refresh, endpoint }
 }

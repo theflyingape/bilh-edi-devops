@@ -74,7 +74,7 @@ useSeoMeta({
 import { get, set, watchImmediate } from '@vueuse/core'
 
 const { online, sideMenu, toggleSideMenu } = useDevOps()
-const { user } = useIrisSessions()
+const { ICON, user } = useIrisSessions()
 const { status } = useAuth()
 const { isFullscreen, toggle } = useFullscreen()
 const chip = ref(computed(() => get(online) ? 'success' : 'action'))
@@ -170,21 +170,21 @@ const items = ref([
       children: [
         {
           label: 'LIVE',
-          icon: 'i-vscode-icons-file-type-plsql-package',
+          icon: ICON.LIVE,
           description: 'Production environment',
           to: 'https://hcieprd.laheyhealth.org/csp/sys/UtilHome.csp',
           target: '_blank'
         },
         {
           label: 'Test',
-          icon: 'i-vscode-icons-file-type-light-todo',
+          icon: ICON.Test,
           description: 'Testing & Staging environment',
           to: 'https://hcietst.laheyhealth.org/csp/sys/UtilHome.csp',
           target: '_blank'
         },
         {
           label: 'Development',
-          icon: 'i-vscode-icons-file-type-apib',
+          icon: ICON.Dev,
           description: 'Prototyping & Training environment',
           to: 'https://hciedev.laheyhealth.org/csp/sys/UtilHome.csp',
           target: '_blank'
