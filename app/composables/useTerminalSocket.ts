@@ -9,7 +9,6 @@ import { Unicode11Addon } from '@xterm/addon-unicode11'
 import { FitAddon } from '@xterm/addon-fit'
 import { SearchAddon } from '@xterm/addon-search'
 import { AttachAddon } from '~/lib/addon-attach.client'
-import useMultiMedia from './useMultiMedia'
 const { audio, BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } = useMultiMedia()
 
 interface TS {
@@ -66,15 +65,15 @@ export default function useTerminalSocket() {
       connected(sessionId)
       if (n == 'OPEN') {
         resize(sessionId)
-        audio.src = CONNECT_SOUND
-        audio.play()
+        get(audio).src = CONNECT_SOUND
+        get(audio).play()
       }
       else {
         session.attach?.dispose()
         session.xterm.options.cursorBlink = false
         useToast().add({ title: `${sessionId} terminal disconnected`, description: `${new Date().toTimeString()}` })
-        audio.src = DISCONNECT_SOUND
-        audio.play()
+        get(audio).src = DISCONNECT_SOUND
+        get(audio).play()
       }
     })
   }
@@ -86,8 +85,8 @@ export default function useTerminalSocket() {
       session.xterm.loadAddon(session.attach)
       session.xterm.options.cursorBlink = true
       session.xterm.onBell(() => {
-        audio.src = BELL_SOUND
-        audio.play()
+        get(audio).src = BELL_SOUND
+        get(audio).play()
       })
       session.xterm.onSelectionChange(() => {
         const text = session.xterm.getSelection()

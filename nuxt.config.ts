@@ -197,7 +197,7 @@ export default defineNuxtConfig({
       failOnError: false,
     },
     routeRules: {
-      '/**': { cache: { maxAge: 3600, swr: false } },
+      '/*': { cache: { maxAge: 3600, swr: false }, ssr: false },
       '/api/**': { cache: false },
       '/assets/**': { headers: { 'cache-control': 's-maxage=0' } },
       '/composables/**': { ssr: false },
