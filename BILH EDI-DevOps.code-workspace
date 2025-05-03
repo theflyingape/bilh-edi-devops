@@ -19,7 +19,7 @@
     },
     "editor.cursorBlinking": "blink",
     "editor.cursorStyle": "block",
-    "editor.fontFamily": "'Victor Mono','Noto Sans Mono','Noto Color Emoji',Consolas,monospace",
+    "editor.fontFamily": "'JetbrainsMono Nerd Font', 'Victor Mono','Noto Sans Mono','Noto Color Emoji',Consolas,monospace",
     "editor.fontLigatures": true,
     "editor.fontSize": 16,
     "editor.formatOnSave": false,
@@ -74,7 +74,7 @@
     "terminal.integrated.cursorBlinking": true,
     "terminal.integrated.copyOnSelection": true,
     "terminal.integrated.enableVisualBell": true,
-    "terminal.integrated.fontFamily": "'Noto Sans Mono','Noto Color Emoji','Lucida Console',Consolas,monospace",
+    "terminal.integrated.fontFamily": "'JetbrainsMono Nerd Font', 'Noto Sans Mono','Noto Color Emoji','Lucida Console',Consolas,monospace",
     "terminal.integrated.fontLigatures.enabled": true,
     "terminal.integrated.fontSize": 16,
     "terminal.integrated.fontWeight": "400",
@@ -106,10 +106,12 @@
       "terminal.ansiBrightWhite": "#FFFFFF",
       "terminalCursor.foreground": "#6AE0FA"
     },
+    "workbench.activityBar.location": "top",
     "workbench.colorTheme": "Solarized Dark",
     "workbench.iconTheme": "vscode-icons",
     "workbench.productIconTheme": "Default",
     "workbench.sideBar.location": "right",
+    "window.zoomLevel": 1.5,
   },
   "extensions": {
     "recommendations": [

@@ -15,7 +15,7 @@ const props = defineProps<{
 
 import { get } from '@vueuse/core'
 import { type ITerminalOptions, type ITheme } from '@xterm/xterm'
-import { Terminal } from '@xterm/xterm/lib/xterm.mjs'
+import { Terminal } from '@xterm/xterm'
 
 interface theme {
   [key: string]: ITheme

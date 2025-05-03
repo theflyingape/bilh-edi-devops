@@ -95,31 +95,6 @@ Check out the Nuxt [deployment documentation](https://nuxt.com/docs/getting-star
 
 ## FAQ: responses provided by [Nuxt AI Chatbot](https://github.com/nuxt-ui-pro/chat)
 
-### What is ObjectScript?
-
-ObjectScript is a programming language used to develop and implement applications on the MUMPS (Massachusetts General Hospital Utility Multi-Programming System) platform, which is a popular healthcare information system used in hospitals and healthcare organizations.
-
-ObjectScript is a general-purpose, object-oriented language that allows developers to create custom applications, interfaces, and tools for MUMPS. It's designed to be a flexible and efficient language for building complex applications, including clinical decision support systems, patient management systems, and other healthcare-related software.
-
-ObjectScript is used to create a wide range of applications, including:
-
-1. Clinical decision support systems
-2. Patient management systems
-3. Laboratory information systems
-4. Radiology information systems
-5. Pharmacy management systems
-6. Telemedicine systems
-7. Electronic health records (EHRs)
-
-ObjectScript is known for its:
-
-1. **Object-oriented programming**: It supports object-oriented programming concepts, such as encapsulation, inheritance, and polymorphism, which make it easier to write reusable and maintainable code.
-2. **Dynamic typing**: ObjectScript is dynamically typed, which means that the data type of a variable is determined at runtime, rather than at compile time.
-3. **Extensive libraries and frameworks**: MUMPS provides a vast library of built-in functions and frameworks that make it easy to perform common tasks, such as data manipulation, networking, and security.
-4. **Integration with MUMPS**: ObjectScript is tightly integrated with the MUMPS platform, allowing developers to leverage the strengths of both languages.
-
-Overall, ObjectScript is a powerful and flexible language that enables developers to create complex, customized applications for the healthcare industry.
-
 ### What does EDI in healthcare IT mean?
 
 In healthcare IT, EDI stands for Electronic Data Interchange (EDI). It refers to the electronic exchange of business documents and data between different healthcare organizations, such as hospitals, clinics, insurance companies, and pharmacies, in a standardized and secure manner.
@@ -205,3 +180,28 @@ HL7 has also been adopted by various industries beyond healthcare, including:
 3. **Insurance**: HL7 is used to exchange data between insurance companies, healthcare providers, and regulatory agencies.
 
 In summary, HL7 has been a crucial standard for healthcare data exchange for over three decades, enabling improved interoperability, data quality, and care coordination. Its continued adoption and evolution have made it an essential tool for the healthcare industry.
+
+### What is ObjectScript?
+
+ObjectScript is a programming language used to develop and implement applications on the MUMPS (Massachusetts General Hospital Utility Multi-Programming System) platform, which is a popular healthcare information system used in hospitals and healthcare organizations.
+
+ObjectScript is a general-purpose, object-oriented language that allows developers to create custom applications, interfaces, and tools for MUMPS. It's designed to be a flexible and efficient language for building complex applications, including clinical decision support systems, patient management systems, and other healthcare-related software.
+
+ObjectScript is used to create a wide range of applications, including:
+
+1. Clinical decision support systems
+2. Patient management systems
+3. Laboratory information systems
+4. Radiology information systems
+5. Pharmacy management systems
+6. Telemedicine systems
+7. Electronic health records (EHRs)
+
+ObjectScript is known for its:
+
+1. **Object-oriented programming**: It supports object-oriented programming concepts, such as encapsulation, inheritance, and polymorphism, which make it easier to write reusable and maintainable code.
+2. **Dynamic typing**: ObjectScript is dynamically typed, which means that the data type of a variable is determined at runtime, rather than at compile time.
+3. **Extensive libraries and frameworks**: MUMPS provides a vast library of built-in functions and frameworks that make it easy to perform common tasks, such as data manipulation, networking, and security.
+4. **Integration with MUMPS**: ObjectScript is tightly integrated with the MUMPS platform, allowing developers to leverage the strengths of both languages.
+
+Overall, ObjectScript is a powerful and flexible language that enables developers to create complex, customized applications for the healthcare industry.

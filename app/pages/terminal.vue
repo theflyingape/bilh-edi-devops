@@ -84,7 +84,6 @@
         </UFormField>
       </UForm>
     </template>
-
     <template #footer>
       <div class="justify-end space-x-2">
         <SubmitButton label="Submit" />
@@ -107,6 +106,10 @@ const { sessionList, cols, rows, selection, connect, attach, detach, connected, 
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
 const value = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
 
+watch(value, async (n, o) => {
+  connected(n)
+})
+
 const { handleFileInput, files } = useFileStorage({ clearOldFiles: true })
 const filesRef = useTemplateRef('filesInput')
 
@@ -115,26 +118,26 @@ useResizeObserver(crtRef, (entries) => {
   resize(get(value))
 })
 
-watch(value, async (n, o) => {
-  connected(n)
-})
-
 const curl = ref({
   url: '',
   insecure: false,
 })
 
-let prefs = {}
+//  some sticky preferences for the terminal session
+interface prefs {
+  fontSize?: number
+  tmux?: boolean
+}
+let prefs: prefs = {}
 try {
   prefs = JSON.parse(localStorage.getItem('prefs-local-storage') ?? '{ "fontSize":20, "tmux":true }')
 }
 catch(err) {
   prefs = { fontSize:20, tmux:true }
 }
-
 const save = useStorage('prefs-local-storage', prefs, localStorage, { mergeDefaults: true })
-const tmux = ref(prefs.tmux)
 const termType = ref(prefs.tmux ? 'tmux' : 'ssh')
+const tmux = ref(prefs.tmux)
 
 function fontSize(delta:number) {
   prefs.fontSize = xterm()!.options.fontSize! + delta
