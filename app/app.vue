@@ -170,7 +170,7 @@ const items = ref([
       children: [
         {
           label: 'LIVE',
-          icon: ICON.LIVE,
+          icon: ICON.Live,
           description: 'Production environment',
           to: 'https://hcieprd.laheyhealth.org/csp/sys/UtilHome.csp',
           target: '_blank'
