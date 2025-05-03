@@ -8,8 +8,9 @@ import { WebglAddon } from '@xterm/addon-webgl'
 import { Unicode11Addon } from '@xterm/addon-unicode11'
 import { FitAddon } from '@xterm/addon-fit'
 import { SearchAddon } from '@xterm/addon-search'
-import { AttachAddon } from '../lib/addon-attach'
-import { audio, BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } from '../lib/sounds'
+import { AttachAddon } from '~/lib/addon-attach.client'
+import useMultiMedia from './useMultiMedia'
+const { audio, BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } = useMultiMedia()
 
 interface TS {
   [key: string]: {

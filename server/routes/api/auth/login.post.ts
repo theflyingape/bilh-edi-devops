@@ -1,6 +1,6 @@
 import { PrivateKey, sign, SignOptions } from 'jsonwebtoken'
 import { IRIStoken } from '~/composables/useIrisSessions'
-import { log } from '~/lib/syslog'
+import { log } from '~/lib/syslog.server'
 import { z } from 'zod'
 
 //  supply trivial values for testing -- make .env to better secure your site implementation

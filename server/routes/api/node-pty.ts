@@ -1,6 +1,6 @@
 //  spawn a new terminal session on host using
 //  this client websocket connection attached as stdin/stdout
-import { log } from '~/lib/syslog'
+import { log } from '~/lib/syslog.server'
 import pty from 'node-pty'
 import url from 'url'
 import useTerminalSessions from './terminal-sessions'

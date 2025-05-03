@@ -1,6 +1,6 @@
 import { getServerSession } from '#auth'
 import child from 'child_process'
-import { log } from '~/lib/syslog'
+import { log } from '~/lib/syslog.server'
 import useCodeServer from './code-sessions'
 import url from 'url'
 import { H3Event, EventHandlerRequest } from 'h3'

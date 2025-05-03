@@ -1,4 +1,4 @@
-import { log } from '~/lib/syslog'
+import { log } from '~/lib/syslog.server'
 import { ServerFile } from "nuxt-file-storage"
 
 export default defineEventHandler(async (event) => {

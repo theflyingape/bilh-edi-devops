@@ -3,10 +3,12 @@
     <div class="flex flex-nowrap h-full w-full justify-center pt-2">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-1/2 h-11/12 max-h-11/12 overflow-hidden resize resizer">
-        <DevOnly><XtermJs v-show="value == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
-        <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <ClientOnly>
+          <DevOnly><XtermJs v-show="value == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
+          <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+          <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+          <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        </ClientOnly>
         <!-- bottom control panel -->
         <div class="flex flex-nowrap justify-between ml-5 mr-5">
           <!-- session controls -->
@@ -122,7 +124,14 @@ const curl = ref({
   insecure: false,
 })
 
-let prefs = JSON.parse(localStorage.getItem('prefs-local-storage') ?? '{ fontSize:20, tmux:true }')
+let prefs = {}
+try {
+  prefs = JSON.parse(localStorage.getItem('prefs-local-storage') ?? '{ "fontSize":20, "tmux":true }')
+}
+catch(err) {
+  prefs = { fontSize:20, tmux:true }
+}
+
 const save = useStorage('prefs-local-storage', prefs, localStorage, { mergeDefaults: true })
 const tmux = ref(prefs.tmux)
 const termType = ref(prefs.tmux ? 'tmux' : 'ssh')

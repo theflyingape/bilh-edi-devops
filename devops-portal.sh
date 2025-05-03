@@ -3,7 +3,7 @@
 [ -d /opt/devops ] && cd /opt/devops
 
 # let's try renaming CommonJs module to steer bundle to use ESM (.mjs) only
-find node_modules -name xterm.js -exec mv -v {} {}-old  \;
+find node_modules -name 'xterm.js*' -exec mv -v {} {}-old  \;
 
 NODE_VERSION=lts/iron NODE_ENV=production .nvm/nvm-exec npm run build
 

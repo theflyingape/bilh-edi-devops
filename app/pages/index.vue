@@ -14,7 +14,8 @@
 
 <script setup lang="ts">
 definePageMeta({ auth:false })
-reloadNuxtApp()
+//routeRules swr:false
+//reloadNuxtApp()
 
 const links = ref([
   {

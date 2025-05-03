@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' }),
-    version: '0.6.5'
+    version: '0.6.6'
   },
   auth: {
     baseURL: '/api/auth',
@@ -197,13 +197,17 @@ export default defineNuxtConfig({
       failOnError: false,
     },
     routeRules: {
-    //'/**': { cache: { maxAge: 6, swr: false } },
+      '/**': { cache: { maxAge: 3600, swr: false } },
       '/api/**': { cache: false },
       '/assets/**': { headers: { 'cache-control': 's-maxage=0' } },
+      '/composables/**': { ssr: false },
       '/mission/**': { cache: { maxAge: 3600 } }
     }
   },
   vite: {
+    optimizeDeps:{
+      exclude: ['@xterm/xterm']
+    },
     preview: {
       allowedHosts: ['hciedev.laheyhealth.org']
     },
