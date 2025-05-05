@@ -43,7 +43,8 @@
           </div>
           <!-- right terminal controls -->
           <div class="flex flex-nowrap font-mono space-x-2 text-gray-400 text-lg">
-            <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> {{ selection.includes('\n') ? selection.split('\n').length+'-line(s) copied' : selection.length < 30 ? selection : selection.substring(0,26)+'…'+selection.slice(-3) }} &nbsp;
+            <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" :text="title"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
+            <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UButton size="sm" color="warning" variant="link" :label="selectionLabel" />
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
             <USeparator orientation="vertical" class="h-6" />&nbsp;{{rows}}x{{cols}}
@@ -102,7 +103,17 @@ const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth(
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
 
-const { sessionList, cols, rows, selection, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
+const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
+
+const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
+
+const titleLabel = ref(computed(() => get(title).length < 20 ? get(title) : get(title)[0]+'…/'+get(title).split('/').at(-1)))
+
+function titleClick() {
+  set(selection, get(title))
+  navigator.clipboard.writeText(get(title))
+}
+
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
 const value = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
 

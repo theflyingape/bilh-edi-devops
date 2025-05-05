@@ -31,6 +31,7 @@ let sessionList = <TS>{}
 const cols = ref(80)
 const rows = ref(25)
 const selection = ref('')
+const title = ref('')
 
 export default function useTerminalSocket() {
   function prepare(sessionId: string, term: Terminal, url?: string, rows?: number, cols?: number) {
@@ -91,9 +92,17 @@ export default function useTerminalSocket() {
       session.xterm.onSelectionChange(() => {
         const text = session.xterm.getSelection()
         if (text.length) {
-          set(selection,text)
+          set(selection, text)
           navigator.clipboard.writeText(get(selection))
         }
+      })
+      session.xterm.onTitleChange((value) => {
+        if (value.includes('@'))
+          value = value.split('@').at(1)!
+        if (value.includes(':'))
+          value = value.split(':').at(1)!
+        value = value.trim()
+        set(title, value)
       })
     }
   }
@@ -133,5 +142,5 @@ export default function useTerminalSocket() {
     session.attach?.sendData('♥' + JSON.stringify(event))
   }
 
-  return { sessionList, cols, rows, selection, prepare, connect, attach, detach, connected, isConnected, resize }
+  return { sessionList, cols, rows, selection, title, prepare, connect, attach, detach, connected, isConnected, resize }
 }
