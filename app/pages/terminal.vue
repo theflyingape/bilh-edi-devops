@@ -287,13 +287,12 @@ async function downloadFile() {
     const sessionId = get(value)
     const folder = get(title)
     const file = get(selection)
-    const { data } = await useFetch('/api/download', {
+    await useFetch('/api/download', {
       method: 'POST', body: {
         user: id!, host: sessionId, file: `${folder}/${file}`
       },
       onResponse({ request, response, options }) {
         const downloaded = <Blob>response._data
-        console.log('downloaded', downloaded)
         //  invoke browser download chooser action
         const link = document.createElement('a')
         link.href = window.URL.createObjectURL(downloaded)
@@ -302,23 +301,6 @@ async function downloadFile() {
         useToast().add({ title: file, description: `size: ${downloaded.stream.length}` })
       }
     })
-    console.log('data', data)
-/*
-    .then((res) => {
-      //  defer download file into cache
-      setTimeout(() => {
-        fetch(`/files/${file}`).then((response) => {
-          response.blob().then((blob) => {
-            //  invoke browser download chooser action
-            const link = document.createElement('a')
-            link.href = window.URL.createObjectURL(blob)
-            link.download = file
-            link.click()
-          })
-        })
-      }, 1234)
-    })
-*/
   }
   else
     useToast().add({ title: 'Not allowed!', description: 'change directory into /files' })
