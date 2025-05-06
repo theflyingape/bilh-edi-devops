@@ -1,6 +1,7 @@
 import { get } from '@vueuse/core'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  
   try {
     const { refresh, signOut } = useAuth()
     const { online } = useDevOps()
