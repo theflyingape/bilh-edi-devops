@@ -21,10 +21,10 @@ export default defineEventHandler(async (event) => {
       "content-type": "application/octet-stream",
       "content-disposition": `attachment; filename="${fileName}"`
     })
-    //const buffer = readFileSync(downloaded)
-    //send(event, Buffer.from(buffer), 'application/octet-stream')
-    const blob = await openAsBlob(downloaded)
-    await send(event, blob.stream(), 'application/octet-stream')
+    //const blob = await openAsBlob(downloaded)
+    //await send(event, blob.stream(), 'application/octet-stream')
+    const buffer = readFileSync(downloaded)
+    await send(event, Buffer.from(buffer), 'application/octet-stream')
     setResponseStatus(event, 200, 'OK')
 
     //return { status: 'OK', file: fileName, size: got.size }
