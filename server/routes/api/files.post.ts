@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     //  execute
     try {
       execFileSync('./files.sh',
-        [ 'upload', user, host, `"${folder}/${basename}"` ], { timeout:3600 }
+        [ 'upload', user, host, `"${folder}/${file.name}"` ], { timeout:3600 }
       )
     }
     catch(err) {
