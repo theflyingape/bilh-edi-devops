@@ -287,24 +287,22 @@ async function downloadFile() {
     const sessionId = get(value)
     const folder = get(title)
     const file = get(selection)
-    await useFetch('/api/download', {
+    const { data } = await useFetch('/api/download', {
       method: 'POST', body: {
         user: id!, host: sessionId, file: `${folder}/${file}`
       },
       onResponse({ request, response, options }) {
-        console.log(response)
-        response.blob().then((downloaded) => {
-          console.log('downloaded', downloaded.type, downloaded.stream.length)
-          console.log(downloaded)
-          //  invoke browser download chooser action
-          const link = document.createElement('a')
-          link.href = window.URL.createObjectURL(downloaded)
-          link.download = file
-          link.click()
-          useToast().add({ title: file, description: `size: ${downloaded.stream.length}` })
-        })
+        const downloaded = <Blob>response._data
+        console.log('downloaded', downloaded)
+        //  invoke browser download chooser action
+        const link = document.createElement('a')
+        link.href = window.URL.createObjectURL(downloaded)
+        link.download = file
+        link.click()
+        useToast().add({ title: file, description: `size: ${downloaded.stream.length}` })
       }
     })
+    console.log('data', data)
 /*
     .then((res) => {
       //  defer download file into cache
