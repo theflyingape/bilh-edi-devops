@@ -125,6 +125,9 @@ onMounted(() => {
       console.log('version response:', JSON.stringify(value))
       if (value?.version !== version) {
         reloadNuxtApp()
+        user.value.enabled = false
+        user.value.scope = []
+        signOut({ callbackUrl: 'logout', external: true })
       }
     }).catch((ex) => {
       console.error('version', ex)
