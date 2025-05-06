@@ -292,18 +292,20 @@ async function downloadFile() {
         user: id!, host: sessionId, file: `${folder}/${file}`
       },
       onResponse({ request, response, options }) {
-        response.clone().blob().then((blob) => {
+        console.log(response)
+        response.blob().then((blob) => {
           console.log('blob', blob.type, blob.size)
           //  invoke browser download chooser action
           const link = document.createElement('a')
           link.href = window.URL.createObjectURL(blob)
           link.download = file
           link.click()
+          useToast().add({ title: file, description: `size: ${blob.size}` })
         })
       }
-    }).then((res) => {
-      useToast().add({ title: get(res.data)?.file, description: `size: ${get(res.data)?.size}` })
-      /*
+    })
+/*
+    .then((res) => {
       //  defer download file into cache
       setTimeout(() => {
         fetch(`/files/${file}`).then((response) => {
@@ -316,8 +318,8 @@ async function downloadFile() {
           })
         })
       }, 1234)
-      */
     })
+*/
   }
   else
     useToast().add({ title: 'Not allowed!', description: 'change directory into /files' })

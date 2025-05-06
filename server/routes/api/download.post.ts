@@ -25,11 +25,11 @@ export default defineEventHandler(async (event) => {
     send(event, Buffer.from(buffer))
     setResponseStatus(event, 200, 'OK')
 
-    return { status: 'OK', file: fileName, size: got.size }
+    //return { status: 'OK', file: fileName, size: got.size }
   }
   catch(err) {
     log('LOG_ERROR', `${err}`)
     setResponseStatus(event, 404, 'not found')
-    return { status: err, file: '', size: 0 }
+    //return { status: err, file: '', size: 0 }
   }
 })
