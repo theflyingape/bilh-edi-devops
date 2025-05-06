@@ -293,14 +293,16 @@ async function downloadFile() {
       },
       onResponse({ request, response, options }) {
         console.log(response)
-        response.blob().then((blob) => {
-          console.log('blob', blob.type, blob.size)
+        response.body?.getReader()
+        response.blob().then((downloaded) => {
+          console.log('downloaded', downloaded.type, downloaded.stream.length)
+          console.log(downloaded)
           //  invoke browser download chooser action
           const link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
+          link.href = window.URL.createObjectURL(downloaded)
           link.download = file
           link.click()
-          useToast().add({ title: file, description: `size: ${blob.size}` })
+          useToast().add({ title: file, description: `size: ${downloaded.stream.length}` })
         })
       }
     })
