@@ -16,7 +16,7 @@ file="`basename ${artifact}`"
 
 [ "$cmd" = "download" -o "$cmd" = "upload" ] || exit 5
 
-ssh-copy-id -i "${SSKEY}.pub" "${user}@${host}" 2>/dev/null || exit 6
+ssh-copy-id -i "${SSLKEY}.pub" "${user}@${host}" 2>/dev/null || exit 6
 
 if [ "$cmd" == "download" ]; then
     scp -i "${SSLKEY}" "${user}@${host}:${artifact}" . || exit 7
