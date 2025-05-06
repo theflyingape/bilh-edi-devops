@@ -48,6 +48,17 @@ The topics below describe what you can do on & off this main portal. Much more s
 
   :::u-button
   ---
+  color: info
+  icon: i-lucide-message-circle-question
+  size: xl
+  to: /faq
+  trailing-icon: i-lucide-arrow-right
+  ---
+  FAQ
+  :::
+
+  :::u-button
+  ---
   color: neutral
   icon: i-heroicons-academic-cap
   size: xl
