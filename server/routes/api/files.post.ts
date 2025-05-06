@@ -1,6 +1,9 @@
 import { execFileSync } from 'node:child_process'
 import { log } from '~/lib/syslog.server'
 import { ServerFile } from "nuxt-file-storage"
+import useTerminalSessions from './terminal-sessions'
+
+const { terminal } = useTerminalSessions()
 
 export default defineEventHandler(async (event) => {
   const { files, user, host, folder } = await readBody<{ files: ServerFile[], user:string, host:string, folder:string }>(event)
@@ -13,7 +16,7 @@ export default defineEventHandler(async (event) => {
     //  execute
     try {
       execFileSync('./files.sh',
-        [ 'upload', user, host, `"${folder}/${file.name}"` ], { timeout:3600 }
+        [ 'upload', user, terminal[host].host, `"${folder}/${file.name}"` ], { timeout:3600 }
       )
     }
     catch(err) {
