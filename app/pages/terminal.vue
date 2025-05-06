@@ -279,10 +279,12 @@ function sendCurl() {
 }
 
 const uploadFiles = async () => {
+  const sessionId = get(value)
   const response = await $fetch('/api/files', {
     method: 'POST',
     body: {
-      files: get(files)
+      files: get(files),
+      user: id!, host: sessionId, folder: get(title)
     }
   })
   filesRef.value!.inputRef!.value = ''
