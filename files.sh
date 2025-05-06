@@ -3,6 +3,7 @@
 # invoked by server/routes/files
 #
 cd "`dirname $0`"
+PUBKEY="${PWD}/.ssh/id_rsa.pub"
 [ -d "files" ] || mkdir files
 cd files
 
@@ -15,14 +16,14 @@ file="`basename ${artifact}`"
 
 [ "$cmd" = "download" -o "$cmd" = "upload" ] || exit 5
 
-ssh-copy-id -i .ssh/id_rsa.pub "${user}@${host}" 2>/dev/null || exit 6
+ssh-copy-id -i "${PUBKEY}" "${user}@${host}" 2>/dev/null || exit 6
 
 if [ "$cmd" == "download" ]; then
-    scp -i .ssh/id_rsa.pub "${user}@${host}:${artifact}" . || exit 7
+    scp -i "${PUBKEY}" "${user}@${host}:${artifact}" . || exit 7
 fi
 
 if [ "$cmd" == "upload" ]; then
-    scp -i .ssh/id_rsa.pub "${file}" "${user}@${host}:${artifact}" || exit 8
+    scp -i "${PUBKEY}" "${file}" "${user}@${host}:${artifact}" || exit 8
     rm -fv "${file}"
 fi
 
