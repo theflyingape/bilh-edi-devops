@@ -132,7 +132,7 @@ export default function useTerminalSocket() {
           set(rows, xy.rows)
         if (Number.isNaN(xy.cols) == false && xy.cols >= 40)
           set(cols, xy.cols)
-        console.log(get(cols), 'x', get(rows), '<-', session.xterm.cols,':',session.xterm.rows)
+        //console.log(get(cols), 'x', get(rows), '<-', session.xterm.cols,':',session.xterm.rows)
         session.xterm.resize(get(cols), get(rows))
       }
       session.xterm.focus()

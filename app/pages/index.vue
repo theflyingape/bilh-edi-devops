@@ -14,8 +14,27 @@
 
 <script setup lang="ts">
 definePageMeta({ auth:false })
+import { useFetch } from '@vueuse/core'
+const { buildDate, version } = useAppConfig()
 //routeRules swr:false
 //reloadNuxtApp()
+
+onMounted(() => {
+  const headers = useRequestHeaders(['cookie']) as HeadersInit
+  const { onFetchResponse } = useFetch(`/api/version`, { headers: headers }, { immediate: true, timeout: 5678 } )
+
+  console.log(buildDate, 'check version', version)
+  onFetchResponse((response) => {
+    response.json().then((value) => {
+      console.log('version response:', JSON.stringify(value))
+      if (value?.version !== version)
+        useAuth().signOut({ callbackUrl: 'logout', external: true })
+    }).catch((ex) => {
+      console.error('version', ex)
+    })
+  })
+})
+
 
 const links = ref([
   {

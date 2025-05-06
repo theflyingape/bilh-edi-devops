@@ -104,7 +104,7 @@
 </template>
 
 <script setup lang="ts">
-import { get, set, useFetch } from '@vueuse/core'
+import { get, set } from '@vueuse/core'
 import { ModalInfo } from '#components'
 
 const { status, data, signIn, signOut } = useAuth()
@@ -114,29 +114,6 @@ const toast = useToast()
 
 const { buildDate, version } = useAppConfig()
 const MODE = process.env.NODE_ENV
-
-onMounted(() => {
-  const headers = useRequestHeaders(['cookie']) as HeadersInit
-  const { onFetchResponse } = useFetch(`/api/version`, { headers: headers }, { immediate: true, timeout: 5678 } )
-
-  console.log(buildDate, 'check version', version)
-  onFetchResponse((response) => {
-    response.json().then((value) => {
-      console.log('version response:', JSON.stringify(value))
-      if (value?.version !== version) {
-        reloadNuxtApp()
-        user.value.enabled = false
-        user.value.scope = []
-        signOut({ callbackUrl: 'logout', external: true })
-      }
-    }).catch((ex) => {
-      console.error('version', ex)
-    })
-  })
-})
-
-function chechVersion() {
-}
 
 async function login() {
   const username = get(credentials).username
