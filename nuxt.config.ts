@@ -98,7 +98,7 @@ export default defineNuxtConfig({
     }
   },
   fileStorage: {
-    mount: 'files'
+    mount: 'public/files'
   },
   icon: {
     provider: 'iconify'

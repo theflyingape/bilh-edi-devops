@@ -10,8 +10,8 @@ cd public/files
 [ -n "$2" ] && user="$2" || exit 2
 [ -n "$3" ] && host="$3" || exit 3
 [ -n "$4" ] && artifact="$4" || exit 4
-folder=$( dirname ${artifact} )
-file=$( basename ${artifact} )
+folder=$( dirname "${artifact}" )
+file=$( basename "${artifact}" )
 
 [ "$cmd" = "download" -o "$cmd" = "upload" ] || exit 5
 
