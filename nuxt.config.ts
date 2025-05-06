@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' }),
-    version: '0.6.10'
+    version: '0.6.11'
   },
   auth: {
     baseURL: '/api/auth',
@@ -98,7 +98,7 @@ export default defineNuxtConfig({
     }
   },
   fileStorage: {
-    mount: 'files'
+    mount: 'public/files'
   },
   icon: {
     provider: 'iconify'

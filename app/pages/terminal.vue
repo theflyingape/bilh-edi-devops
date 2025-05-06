@@ -44,7 +44,7 @@
           <!-- right terminal controls -->
           <div class="flex flex-nowrap font-mono space-x-2 text-gray-400 text-lg">
             <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" :text="title"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
-            <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UButton size="sm" color="warning" variant="link" :label="selectionLabel" />
+            <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UButton size="sm" color="warning" variant="link" :label="selectionLabel" @click="downloadFile" />
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
             <USeparator orientation="vertical" class="h-6" />&nbsp;{{rows}}x{{cols}}
@@ -70,7 +70,7 @@
         <div v-if="isConnected">
           <div v-if="isFiles">
             <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-            <UInput class="w-64" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
+            <UInput class="w-60" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
             <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
           </div>
         </div>
@@ -282,11 +282,32 @@ function sendCurl() {
   send(`curl ${curl.value.insecure ? '-k' : ''} ${curl.value.url}`)
 }
 
+async function downloadFile() {
+  if (get(isFiles)) {
+    const sessionId = get(value)
+    const folder = get(title)
+    const file = get(selection)
+    await $fetch('/api/download', {
+      method: 'POST', body: {
+        user: id!, host: sessionId, file: `${folder}/${file}`
+      }
+    }).then(async () => {
+      const response = await fetch(`/files/${file}`)
+      const blob = await response.blob()
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = file
+      link.click()
+    })
+  }
+  else
+    useToast().add({ title: 'Not allowed!', description: 'change directory into /files' })
+}
+
 const uploadFiles = async () => {
   const sessionId = get(value)
-  const response = await $fetch('/api/files', {
-    method: 'POST',
-    body: {
+  const response = await $fetch('/api/upload', {
+    method: 'POST', body: {
       files: get(files),
       user: id!, host: sessionId, folder: get(title)
     }
