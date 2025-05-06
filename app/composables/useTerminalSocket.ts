@@ -62,7 +62,7 @@ export default function useTerminalSocket() {
 
     watch(status, async (n, o) => {
       session.status = get(status)
-      console.info(session, 'websocket status now:', n, 'from:', o)
+      console.info(sessionId, 'websocket status now:', n, 'from:', o)
       connected(sessionId)
       if (n == 'OPEN') {
         resize(sessionId)

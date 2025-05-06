@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
     //  execute
     try {
       execFileSync('./files.sh',
-        [ 'upload', user, terminal[host].host, `"${folder}/${file.name}"` ], { timeout:3600 }
+        [ 'upload', user, terminal[host].host, `${folder}/${file.name}` ], { timeout:3600 }
       )
     }
     catch(err) {
