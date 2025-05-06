@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   //  execute
   try {
       execFileSync('./files.sh',
-        [ 'download', user, terminal[host].host, `"${file}"` ], { timeout:3600 }
+        [ 'download', user, terminal[host].host, file ], { timeout:3600 }
       )
       const got = statSync(file)
       log('LOG_NOTICE', `file downloaded -> ${file} size: ${got.size} modified: ${new Date(got.mtime)}`)
