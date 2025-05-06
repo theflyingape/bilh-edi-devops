@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process'
-import { readFileSync, statSync } from 'node:fs'
+import { openAsBlob, readFileSync, statSync } from 'node:fs'
 import { log } from '~/lib/syslog.server'
 import useTerminalSessions from './terminal-sessions'
 
@@ -21,8 +21,10 @@ export default defineEventHandler(async (event) => {
       "content-type": "application/octet-stream",
       "content-disposition": `attachment; filename="${fileName}"`
     })
-    const buffer = readFileSync(downloaded)
-    send(event, Buffer.from(buffer))
+    //const buffer = readFileSync(downloaded)
+    //send(event, Buffer.from(buffer), 'application/octet-stream')
+    const blob = await openAsBlob(downloaded)
+    await send(event, blob.stream(), 'application/octet-stream')
     setResponseStatus(event, 200, 'OK')
 
     //return { status: 'OK', file: fileName, size: got.size }

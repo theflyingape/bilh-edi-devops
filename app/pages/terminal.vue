@@ -293,7 +293,6 @@ async function downloadFile() {
       },
       onResponse({ request, response, options }) {
         console.log(response)
-        response.body?.getReader()
         response.blob().then((downloaded) => {
           console.log('downloaded', downloaded.type, downloaded.stream.length)
           console.log(downloaded)
