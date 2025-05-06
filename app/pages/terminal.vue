@@ -68,9 +68,11 @@
           <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" color="secondary" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-lock-keyhole" :label="termType" />
         </div>
         <div v-if="isConnected">
-          <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-          <UInput ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
-          <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
+          <div v-if="isFiles">
+            <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
+            <UInput class="w-64" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
+            <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
+          </div>
         </div>
       </div>
     </div>
@@ -113,6 +115,8 @@ function titleClick() {
   set(selection, get(title))
   navigator.clipboard.writeText(get(title))
 }
+
+const isFiles = ref(computed(() => get(title) == '/files' || get(title).startsWith('/files/')))
 
 const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
 const value = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
