@@ -19,6 +19,6 @@ export default defineEventHandler(async (event) => {
   }
   catch(err) {
     log('LOG_ERROR', `${err}`)
-    return { status: err }
+    return { status: err, file: '', size: 0, mtime: 0 }
   }
 })

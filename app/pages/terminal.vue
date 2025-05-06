@@ -291,13 +291,18 @@ async function downloadFile() {
       method: 'POST', body: {
         user: id!, host: sessionId, file: `${folder}/${file}`
       }
-    }).then(async () => {
-      const response = await fetch(`/files/${file}`)
-      const blob = await response.blob()
-      const link = document.createElement('a')
-      link.href = window.URL.createObjectURL(blob)
-      link.download = file
-      link.click()
+    }).then(async (res) => {
+      useToast().add({ title: res.file, description: `size: ${res.size}` })
+      setTimeout(() => {
+        //  download file into cache
+        const response = await fetch(`/files/${file}`)
+        const blob = await response.blob()
+        //  invoke browser download chooser action
+        const link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = file
+        link.click()
+      }, 1234)
     })
   }
   else
