@@ -4,7 +4,7 @@
 #
 cd "`dirname $0`"
 SSLKEY="${PWD}/.ssh/id_rsa"
-cd public/files
+cd files
 
 [ -n "$1" ] && cmd="$1" || exit 1
 [ -n "$2" ] && user="$2" || exit 2

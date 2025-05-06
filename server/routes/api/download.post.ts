@@ -13,12 +13,12 @@ export default defineEventHandler(async (event) => {
       [ 'download', user, terminal[host].host, file ], { timeout:3600 }
     )
     const downloaded = file.split('/').at(-1)
-    const got = statSync('public/files/' + downloaded)
-    log('LOG_NOTICE', `file downloaded -> ${file} size: ${got.size} modified: ${new Date(got.mtime)}`)
-    return { status: 'OK', file: downloaded, size: got.size, mtime: got.mtime }
+    const got = statSync('files/' + downloaded)
+    log('LOG_NOTICE', `file downloaded -> ${file} size: ${got.size}`)
+    return { status: 'OK', file: downloaded, size: got.size }
   }
   catch(err) {
     log('LOG_ERROR', `${err}`)
-    return { status: err, file: '', size: 0, mtime: 0 }
+    return { status: err, file: '', size: 0 }
   }
 })
