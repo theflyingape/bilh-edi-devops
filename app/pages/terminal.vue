@@ -292,7 +292,7 @@ async function downloadFile() {
         user: id!, host: sessionId, file: `${folder}/${file}`
       },
       onResponse({ request, response, options }) {
-        response.blob().then((blob) => {
+        response.clone().blob().then((blob) => {
           console.log('blob', blob.type, blob.size)
           //  invoke browser download chooser action
           const link = document.createElement('a')
