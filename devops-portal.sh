@@ -5,6 +5,9 @@
 # let's try renaming CommonJs module to steer bundle to use ESM (.mjs) only
 find node_modules -name xterm.js -exec mv -v {} {}-old  \;
 
+# flush any transition public/files for download
+rm -fv public/files/*
+
 NODE_VERSION=lts/iron NODE_ENV=production .nvm/nvm-exec npm run build
 
 umask 002
