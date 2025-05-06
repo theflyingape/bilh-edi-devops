@@ -27,4 +27,8 @@ import { get } from '@vueuse/core'
 const { status } = useAuth()
 const { user } = useIrisSessions()
 const scope = get(user)?.scope?.length ? get(user)?.scope[0] : 'a guest'
+if (!get(user)?.scope?.length) {
+  user.value.enabled = false
+  reloadNuxtApp()
+}
 </script>
