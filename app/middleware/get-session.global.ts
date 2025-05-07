@@ -11,7 +11,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       //  a sanity check if user moved off of stale landing page
       const { stale } = useDevOps()
       if (get(stale))
-        signOut({ callbackUrl: '/', external: true })
+        await navigateTo('/', { external: true })
+        return
     }
 
     if (get(online)) {
