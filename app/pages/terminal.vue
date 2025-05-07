@@ -43,7 +43,7 @@
           </div>
           <!-- right terminal controls -->
           <div class="flex flex-nowrap font-mono space-x-2 text-gray-400 text-lg">
-            <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" :text="title"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
+            <USeparator v-if="title.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" :text="title"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
             <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UButton size="sm" color="warning" variant="link" :label="selectionLabel" @click.prevent="downloadFile" loading-auto />
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
@@ -284,6 +284,10 @@ function sendCurl() {
 }
 
 async function downloadFile() {
+  if (!get(isConnected)) {
+    useToast().add({ title: 'Not connected', description: 'Connect to host and switch directory into /files' })
+    return
+  }
   if (get(isFiles)) {
     const sessionId = get(value)
     const folder = get(title)
@@ -299,7 +303,7 @@ async function downloadFile() {
         link.href = window.URL.createObjectURL(downloaded)
         link.download = file
         link.click()
-        useToast().add({ title: file, description: `size: ${downloaded.stream.length}` })
+        useToast().add({ title: file, description: `size: ${downloaded.size}` })
       }
     })
   }
