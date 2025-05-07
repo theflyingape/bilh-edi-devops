@@ -9,7 +9,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' }),
-    version: '0.6.12'
+    version: '0.6.13'
   },
   auth: {
     baseURL: '/api/auth',

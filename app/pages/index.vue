@@ -6,11 +6,11 @@
     headline="Beth Israel Lahey Health"
     :links="links"
   >
+  <div class="flex-nowrap justify-items-center p-2 text-slate-500 text-sm">
     <img src="~/assets/images/HCIE.jpg" alt="App screenshot" class="rounded-lg shadow-2xl ring ring-(--ui-border)" />
-    <div class="p-2 text-end text-slate-500 text-sm">
-      <em>v{{ version }} built {{ buildDate }}</em>
-    </div>
-
+    <UButton v-if="stale" color="error" leading-icon="i-lucide-refresh-cw" variant="subtle" @click.prevent="reload">reload</UButton>
+    &nbsp;<em>v<b>{{ v }}</b> built {{ ts }}</em>
+  </div>
   </UPageHero>
 </template>
 
@@ -19,7 +19,15 @@ definePageMeta({
   auth:false,
   pageTransition: { name: 'page', mode: 'out-in' }
 })
+
+import { set } from '@vueuse/core'
 const { buildDate, version } = useAppConfig()
+const { isStale, reload, stale } = useDevOps()
+const ts = ref(buildDate)
+const v = ref(version)
+
+isStale(version)
+
 
 const links = ref([
   {

@@ -1,11 +1,31 @@
-import { get, set } from '@vueuse/core'
+import { get, set, useFetch } from '@vueuse/core'
 
 const online = ref(computed(() => get(useAuth().status) !== 'unauthenticated'))
 const sideMenu = ref(false)
+const stale = ref(false)
 
 export default function usePortal() {
+
+  function isStale(version:string) {
+    console.log('check version', version)
+    useFetch('/api/version', { immediate: true, timeout: 5678 })
+    .onFetchResponse(async (response) => {
+      await response.json().then((value) => {
+        console.log('version response:', JSON.stringify(value))
+        set(stale, (version !== value.version))
+      })
+    })
+  }
+
+  function reload() {
+    console.log('app reload')
+    reloadNuxtApp({force:true})
+    console.log('page reload')
+    location.reload()
+  }
+
   function toggleSideMenu() {
     set(sideMenu, !get(sideMenu))
   }
-  return { online, sideMenu, toggleSideMenu }
+  return { isStale, online, reload, sideMenu, stale, toggleSideMenu }
 }
