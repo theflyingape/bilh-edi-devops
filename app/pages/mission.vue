@@ -6,7 +6,10 @@
   />
 </template>
 <script setup lang="ts">
-definePageMeta({ auth:false })
+definePageMeta({
+  auth:false,
+  pageTransition: { name: 'page', mode: 'out-in' }
+})
 import { get } from '@vueuse/core'
 
 const { data: page } = await useAsyncData('index', () => queryCollection('landing').path('/').first())

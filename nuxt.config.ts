@@ -4,6 +4,8 @@
 export default defineNuxtConfig({
   app: {
     //baseURL: '/devops',
+    pageTransition: false,
+    layoutTransition: false
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' }),

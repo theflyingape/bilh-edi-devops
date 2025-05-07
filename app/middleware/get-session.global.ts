@@ -1,4 +1,4 @@
-import { get } from '@vueuse/core'
+import { get, useFetch } from '@vueuse/core'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   
@@ -6,7 +6,22 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const { refresh, signOut } = useAuth()
     const { online } = useDevOps()
     const { user, endSession } = useIrisSessions()
-    
+
+    if (from.path == '/') {
+      const { buildDate, version } = useAppConfig()
+      console.log(buildDate, 'check version', version)
+      const { onFetchResponse } = useFetch(`/api/version`, { immediate: true, timeout: 5678 } )
+      onFetchResponse((response) => {
+        response.json().then((value) => {
+          console.log('version response:', JSON.stringify(value))
+          if (version !== value.version)
+            navigateTo('/logout', { external: true })
+        }).catch((ex) => {
+          console.error('version', ex)
+        })
+      })
+    }
+
     if (get(online)) {
       await refresh().then((result) => {
       /*
@@ -17,10 +32,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       */
       }).catch(async (err) => {
         console.error('get-session error:', err)
-        await endSession("Dev").then(async () => {
+        await endSession("Dev").finally(async () => {
           user.value.enabled = false
           user.value.scope = []
-          await signOut({ callbackUrl: '/logout', external: false })
+          await signOut({ callbackUrl: '/logout', external: true })
         })
       })
     }

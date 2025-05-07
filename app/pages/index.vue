@@ -6,35 +6,20 @@
     headline="Beth Israel Lahey Health"
     :links="links"
   >
-    <img src="~/assets/images/HCIE.jpg" alt="App screenshot"
-      class="rounded-lg shadow-2xl ring ring-(--ui-border)"
-    />
+    <img src="~/assets/images/HCIE.jpg" alt="App screenshot" class="rounded-lg shadow-2xl ring ring-(--ui-border)" />
+    <div class="p-2 text-end text-slate-500 text-sm">
+      <em>v{{ version }} built {{ buildDate }}</em>
+    </div>
+
   </UPageHero>
 </template>
 
 <script setup lang="ts">
-definePageMeta({ auth:false })
-import { useFetch } from '@vueuse/core'
-const { buildDate, version } = useAppConfig()
-//routeRules swr:false
-//reloadNuxtApp()
-
-onMounted(() => {
-  const headers = useRequestHeaders(['cookie']) as HeadersInit
-  const { onFetchResponse } = useFetch(`/api/version`, { headers: headers }, { immediate: true, timeout: 5678 } )
-
-  console.log(buildDate, 'check version', version)
-  onFetchResponse((response) => {
-    response.json().then((value) => {
-      console.log('version response:', JSON.stringify(value))
-      if (value?.version !== version)
-        useAuth().signOut({ callbackUrl: 'logout', external: true })
-    }).catch((ex) => {
-      console.error('version', ex)
-    })
-  })
+definePageMeta({
+  auth:false,
+  pageTransition: { name: 'page', mode: 'out-in' }
 })
-
+const { buildDate, version } = useAppConfig()
 
 const links = ref([
   {

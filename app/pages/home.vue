@@ -72,7 +72,10 @@
   </div>
 </template>
 <script setup lang="ts">
-definePageMeta({ auth:false })
+definePageMeta({
+  auth:false,
+  pageTransition: { name: 'rotate', mode: 'out-in' }
+})
 
 import { get, set, useNow } from '@vueuse/core'
 const { status } = useAuth()

@@ -26,7 +26,11 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ auth:false })
+definePageMeta({
+  auth:false,
+  pageTransition: { name: 'page', mode: 'out-in' }
+})
+
 import { get, set, useFileSystemAccess } from '@vueuse/core'
 import { shallowRef, type ShallowRef } from 'vue'
 const { open } = useFileSystemAccess()
