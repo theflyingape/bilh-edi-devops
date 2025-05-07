@@ -70,6 +70,7 @@ export default function useTerminalSocket() {
         get(audio).play()
       }
       else {
+        set(title, '')
         session.attach?.dispose()
         session.xterm.options.cursorBlink = false
         useToast().add({ title: `${sessionId} terminal disconnected`, description: `${new Date().toTimeString()}` })

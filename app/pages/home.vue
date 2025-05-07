@@ -5,8 +5,6 @@
         <div class="text-center underline">LIVE</div>
         <div class="flex justify-center gap-2">
           <UCard variant="outline"><em>future card</em></UCard>
-          <UCard variant="outline"><em>future card</em></UCard>
-          <UCard variant="outline"><em>future card</em></UCard>
         </div>
         <div class="flex justify-center gap-2">
           <UCard variant="soft"><em>future card</em></UCard>
@@ -33,11 +31,7 @@
       <div class="grid grid-cols-2">
         <div class="space-y-4">
           <div class="flex justify-center">
-            <UCard>
-              <div class="font-bold font-sans underline">LIVE</div>
-              <em>pending 2024 upgrade</em>
-            </UCard>
-            <!--IrisMirrorStatus hcie="Live" /-->
+            <IrisMirrorStatus hcie="Live" />
           </div>
         </div>
         <div class="space-y-4">

@@ -204,6 +204,7 @@ function terminal() {
 function terminate() {
   const sessionId = get(value)
   xterm()?.writeln(`\r\n\x1B[2mDisconnecting \x1B[0;1m${sessionId}\x1B[0;2m shell session`)
+  set(titleLabel, '')
   detach(sessionId)
 }
 
