@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const { online } = useDevOps()
     const { user, endSession } = useIrisSessions()
 
-    if (from.path == '/') {
+    if (from.path == '/' && to.path !== '/') {
       //  a sanity check if user moved off of stale landing page
       const { stale } = useDevOps()
       if (get(stale))
