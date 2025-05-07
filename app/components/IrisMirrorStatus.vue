@@ -12,7 +12,7 @@
       </div>
     </template>
     <template #footer>
-      <div class="flex font-mono justify-end italic space-x-3 text-sm">
+      <div class="flex font-mono justify-end italic text-sm">
         <UIcon :name="ICON[props.hcie]!" class="align-middle size-5" />Last archive: {{ archiveAgo }}&nbsp;
         <UIcon name="i-lucide-database" class="align-middle size-5" />Last backup: {{ backupAgo }}
       </div>
