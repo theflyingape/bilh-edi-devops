@@ -12,8 +12,9 @@
       </div>
     </template>
     <template #footer>
-      <div class="flex font-mono justify-end italic text-sm">
-        <UIcon :name="ICON[props.hcie]!" class="align-middle size-5" />&nbsp;Last backup: {{ timeAgo }}
+      <div class="flex font-mono justify-end italic space-x-2 text-sm">
+        <UIcon :name="ICON[props.hcie]!" class="align-middle size-5" />&nbsp;Last archive: {{ archiveAgo }}
+        <UIcon name="i-lucide-database" class="align-middle size-5" />&nbsp;Last backup: {{ backupAgo }}
       </div>
     </template>
   </UCard>
@@ -25,13 +26,15 @@ const props = defineProps<{
 
 import { formatTimeAgo } from '@vueuse/core'
 const { ICON, mirrorSet, endpoint } = useIrisSessions()
-let timeAgo: string = "unknown"
+let archiveAgo: string = "unknown"
+let backupAgo: string = "unknown"
 status()
 
 function status() {
   endpoint(props.hcie, 'status').then((status:mirrorset) => {
     mirrorSet.value[props.hcie] = status
-    timeAgo = formatTimeAgo(new Date(status.lastBackup)) || "unclear"
+    archiveAgo = formatTimeAgo(new Date(status.lastArchive)) || "unclear"
+    backupAgo = formatTimeAgo(new Date(status.lastBackup)) || "unclear"
   })
 }
 </script>

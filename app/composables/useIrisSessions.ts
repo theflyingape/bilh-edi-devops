@@ -46,6 +46,7 @@ export interface mirrorset {
   memberStatus: string[]
   otherStatus: string[]
   mirrorStatus: mirrorstatus[]
+  lastArchive: string
   lastBackup: string
 }
 
