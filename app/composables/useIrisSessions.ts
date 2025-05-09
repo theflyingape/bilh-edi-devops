@@ -99,10 +99,7 @@ export default function useIrisTokens() {
       const auth = btoa(`${username}:${password}`)
       await fetch(`https://${HCIE[hcie]}${API[hcie]}/login`, {
         method: 'POST',
-        headers: {
-          Authorization: `Basic ${auth}`,
-          mode: 'no-cors'
-        }
+        headers: { Authorization: `Basic ${auth}` }
       }).then(async (res) => {
         try {
           await res.json().then(async (t) => {
@@ -125,10 +122,7 @@ export default function useIrisTokens() {
     if (jwt) {
       await fetch(`https://${HCIE[hcie]}${API[hcie]}/logout`, {
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${jwt.access_token}`,
-          mode: 'no-cors'
-        }
+        headers: { Authorization: `Bearer ${jwt.access_token}` }
       }).then(async (res) => {
         delete tokens[hcie]
       })
@@ -141,7 +135,6 @@ export default function useIrisTokens() {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${jwt.access_token}`,
-        mode: 'no-cors',
         'Content-Type': 'application/json'
       }, body: JSON.stringify(jwt)
     }).then(async (res) => {
@@ -176,7 +169,7 @@ export default function useIrisTokens() {
       await refresh(hcie, jwt).then(async () => {
         jwt = tokens[hcie]!
         await fetch(`https://${HCIE[hcie]}${API[hcie]}/${route}`, {
-          method: method, mode: 'no-cors',
+          method: method,
           headers: {
             Authorization: `Bearer ${jwt.access_token}`,
             'Content-Type': 'application/json'
