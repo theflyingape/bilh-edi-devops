@@ -1,6 +1,5 @@
 //  IRIS sessions: client-side handling from %SYS.TokenAuth provisioning
 import { get, set } from '@vueuse/core'
-import type { MethodOptions } from 'vue'
 
 export interface IRIStoken {
   access_token: string
@@ -176,14 +175,22 @@ export default function useIrisTokens() {
     if (jwt) {
       await refresh(hcie, jwt).then(async () => {
         jwt = tokens[hcie]!
-        const { status, data: data } = await useLazyFetch(`https://${HCIE[hcie]}${API[hcie]}/${route}`, {
+        await fetch(`https://${HCIE[hcie]}${API[hcie]}/${route}`, {
           method: method, mode: 'no-cors',
           headers: {
             Authorization: `Bearer ${jwt.access_token}`,
             'Content-Type': 'application/json'
           }
+        }).then(async (res) => {
+          try {
+            await res.json().then(async (js) => {
+              payload = js
+            })
+          }
+          catch (err) {
+            console.error(err)
+          }
         })
-        payload = data
       })
     }
     return payload
