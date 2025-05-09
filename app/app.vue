@@ -1,7 +1,6 @@
 <template>
   <UApp :toaster="{ duration: 3583, position: 'top-left' }">
     <NuxtLoadingIndicator />
-    <NuxtPwaManifest />
     <!--UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close
       close-icon="i-lucide-x-circle" id="wip" /-->
     <!--UBanner color="success" icon="i-lucide-wand" title="Feat! Terminal allows you to connect into all remote sessions" close
