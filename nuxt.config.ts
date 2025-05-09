@@ -1,6 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-// const sw = process.env.SW === 'true'
-
 export default defineNuxtConfig({
   app: {
     //baseURL: '/devops',
@@ -9,7 +7,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' }),
-    version: '0.7.1'
+    version: '0.7.2'
   },
   auth: {
     baseURL: '/api/auth',
@@ -130,62 +128,6 @@ export default defineNuxtConfig({
       }
     ]
   },
-  pwa: {
-  /*
-    strategies: sw ? 'injectManifest' : 'generateSW',
-    srcDir: sw ? 'service-worker' : undefined,
-    filename: sw ? 'sw.ts' : undefined,
-    registerType: 'autoUpdate',
-  */
-    scope: '/',
-    base: '/',
-    strategies: 'injectManifest',
-    srcDir: 'service-worker',
-    filename: 'sw.ts',
-    registerType: 'prompt',
-    manifest: {
-      name: 'EDI DevOps',
-      short_name: 'EDI',
-      display_override: ['fullscreen', 'minimal-ui'],
-      display: 'standalone',
-      theme_color: '#f0f8ff',
-      icons: [
-        {
-          src: 'pwa-192x192.png',
-          sizes: '192x192',
-          type: 'image/png',
-        },
-        {
-          src: 'pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-        },
-        {
-          src: 'pwa-512x512.png',
-          sizes: '512x512',
-          type: 'image/png',
-          purpose: 'any maskable',
-        },
-      ],
-    },
-    workbox: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-    },
-    injectManifest: {
-      globPatterns: ['**/*.{js,css,html,png,svg,ico}'],
-    },
-    client: {
-      installPrompt: true,
-      periodicSyncForUpdates: 3600,
-    },
-    devOptions: {
-      enabled: true,
-      suppressWarnings: true,
-      navigateFallback: '/',
-      navigateFallbackAllowlist: [/^\/$/],
-      type: 'module',
-    },
-  },
 
   nitro: {
     preset: 'node_server',
@@ -230,8 +172,7 @@ export default defineNuxtConfig({
   },
   modules: [
     '@nuxt/devtools', '@nuxt/eslint', '@nuxt/image', '@nuxt/ui-pro', '@nuxt/content', 
-    '@sidebase/nuxt-auth', '@vueuse/nuxt', '@vite-pwa/nuxt',
-    'nuxt-file-storage', 'nuxt-llms'
+    '@sidebase/nuxt-auth', '@vueuse/nuxt', 'nuxt-file-storage', 'nuxt-llms'
   ],
   uiPro: {
     content: true

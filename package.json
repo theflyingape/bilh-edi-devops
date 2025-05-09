@@ -29,7 +29,6 @@
     "@nuxt/image": "^1.10.0",
     "@nuxt/ui-pro": "^3.1.1",
     "@sidebase/nuxt-auth": "^0.10.1",
-    "@vite-pwa/nuxt": "^1.0.0",
     "@vueuse/nuxt": "^13.1.0",
     "@xterm/addon-fit": "^0.11.0-beta.105",
     "@xterm/addon-search": "^0.16.0-beta.105",
