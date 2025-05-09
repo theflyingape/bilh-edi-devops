@@ -1,4 +1,4 @@
-import { get, useFetch } from '@vueuse/core'
+import { get } from '@vueuse/core'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   
@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const { user, endSession } = useIrisSessions()
 
     if (from.path == '/' && to.path !== '/') {
-      //  a sanity check if user moved off of stale landing page
+      //  sanity check if user moved off of a stale landing page
       const { stale } = useDevOps()
       if (get(stale))
         await navigateTo('/', { external: true })

@@ -20,7 +20,6 @@ definePageMeta({
   pageTransition: { name: 'page', mode: 'out-in' }
 })
 
-import { set } from '@vueuse/core'
 const { buildDate, version } = useAppConfig()
 const { isStale, reload, stale } = useDevOps()
 const ts = ref(buildDate)

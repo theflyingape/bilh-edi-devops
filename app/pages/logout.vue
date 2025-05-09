@@ -21,5 +21,5 @@
 
 <script setup lang="ts">
 definePageMeta({ auth:false })
-reloadNuxtApp()
+//reloadNuxtApp()
 </script>
