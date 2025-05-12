@@ -19,9 +19,7 @@ export default function usePortal() {
 
   function reload() {
     console.log('app reload')
-    reloadNuxtApp({force:true})
-    console.log('page reload')
-    location.reload()
+    reloadNuxtApp({force:true, path:'/'})
   }
 
   function toggleSideMenu() {
