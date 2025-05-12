@@ -10,31 +10,27 @@ export default eventHandler(async (event) => {
   let token = { token: { accessToken:accessToken, refreshToken:refreshToken } }
 
   if (!refreshToken || !authorizationHeader) {
-    setResponseStatus(event, 401, `Unauthorized, no refreshToken or no Authorization header`)
-    return null
+    return dumpSession('Unauthorized, no refreshToken or no Authorization header', 'invalid session')
   }
 
   // Verify
   try {
     const decoded = verify(refreshToken, <Secret>SECRET) as JwtPayload | undefined
     if (!decoded) {
-      setResponseStatus(event, 401, `Unauthorized, refreshToken can't be verified`)
-      return token
+      return dumpSession(`Unauthorized, refreshToken can't be verified`, 'invalid refresh token')
     }
 
     // Get tokens
     const userTokens = tokensByUser.get(decoded.id)
     if (!userTokens) {
-      setResponseStatus(event, 401, 'Unauthorized, user is not logged in')
-      return token
+      return dumpSession('Unauthorized, user is not logged in', 'invalid login')
     }
 
     // Check against known token
     const requestAccessToken = extractToken(authorizationHeader)
     const knownAccessToken = userTokens.refresh.get(body.refreshToken)
     if (!knownAccessToken || knownAccessToken !== requestAccessToken) {
-      setResponseStatus(event, 401, 'token mismatch')
-      return token
+      return dumpSession('toekn mismatch', 'token mismatch')
     }
 
     // Invalidate old access token
@@ -57,9 +53,14 @@ export default eventHandler(async (event) => {
     return token
   }
   catch (err) {
-    setResponseStatus(event, 401, `${ err }`)
+    console.error(err)
+    return dumpSession(`${ err }`, 'refresh error')
+  }
+
+  function dumpSession(respond:string, message:string) {
+    setResponseStatus(event, 401, respond)
     deleteCookie(event, 'auth.refresh-token')
     deleteCookie(event, 'auth.token')
-    return { message: 'Logged out' }
+    return { status:respond, message:message }
   }
 })
