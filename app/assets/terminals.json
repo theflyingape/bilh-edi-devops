@@ -9,7 +9,7 @@
       "cwd": ".", "env": {}
     }
   },
-  "Development": {
+  "Dev": {
     "host": "hciedev.laheyhealth.org",
     "cmd": "/bin/sh",
     "params": [ "/opt/devops/node-pty.sh" ],
@@ -21,7 +21,7 @@
     "params": [ "/opt/devops/node-pty.sh" ],
     "loglevel": "LOG_INFO"
   },
-  "LIVE": {
+  "Live": {
     "host": "hcieprd.laheyhealth.org",
     "cmd": "/bin/sh",
     "params": [ "/opt/devops/node-pty.sh" ],
