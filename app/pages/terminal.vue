@@ -72,9 +72,9 @@
             <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
             <UInput class="w-60" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
             <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
-            <div v-if="selection.length && fileStat?.fileName">
+            <div>
               <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-              <FileStat :hcie="value" :fileName="selection" />
+              <FileStat v-model="fileCandidate" :hcie="value" :fileName="fileCandidate" />
               <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="downloadFile">Download</SubmitButton></div>
             </div>
           </div>
@@ -119,10 +119,10 @@ const { fileStat, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
+const fileCandidate = ref(computed(() => isFiles && get(selection).length && !get(selection).includes('\n') ? get(value) + '/' + get(selection) : ''))
 
 watch(selection, (n, o) => {
-  if (isFiles && get(selection).length && !get(selection).includes('\n'))
-    stat(get(value), get(title) + '/' + get(selection))
+  stat(get(value), get(fileCandidate))
 })
 
 const titleLabel = ref(computed(() => get(title).length < 20 ? get(title) : get(title)[0]+'…/'+get(title).split('/').at(-1)))
