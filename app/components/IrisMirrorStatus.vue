@@ -30,8 +30,8 @@ let archiveAgo: string = "unknown"
 let backupAgo: string = "unknown"
 status()
 
-function status() {
-  endpoint(props.hcie, 'status').then((status:mirrorset) => {
+async function status() {
+  await endpoint(props.hcie, 'status').then((status:mirrorset) => {
     mirrorSet.value[props.hcie] = status
     archiveAgo = formatTimeAgo(new Date(status.lastArchive)) || "unclear"
     backupAgo = formatTimeAgo(new Date(status.lastBackup)) || "unclear"
