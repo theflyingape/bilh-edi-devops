@@ -124,9 +124,10 @@ const fileCandidate = ref('')
 watch(selection, () => {
   if (isFiles && get(selection).length && !get(selection).includes('\n')) {
     const sessionId = get(value)
-    await stat(sessionId, get(title) + '/' + get(selection))
-    if (get(fileStat)[sessionId]?.fileName)
-      set(fileCandidate, get(fileStat)[sessionId]?.fileName)
+    stat(sessionId, get(title) + '/' + get(selection)).finally(() => {
+      if (get(fileStat)[sessionId]?.fileName)
+        set(fileCandidate, get(fileStat)[sessionId]?.fileName)
+    })
   }
 })
 
