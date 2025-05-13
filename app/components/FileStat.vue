@@ -2,13 +2,14 @@
   <UCard v-model="fileStat[props.hcie]" variant="subtle">
     <template #default>
       <div class="text-sm font-mono">
-        <div>{{ fileStat[props.hcie]?.owner }} : {{ fileStat[props.hcie]?.group }}</div>
-        <div>{{ fileStat[props.hcie]?.size }} : {{ new Date(fileStat[props.hcie]!.modified).toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' }) }}</div>
+        <div>{{ fileStat[props.hcie]?.owner ?? 'owner' }}:{{ fileStat[props.hcie]?.group ?? 'group' }}</div>
+        <div>{{ fileStat[props.hcie]?.size }} bytes</div>
+        <div>{{ new Date(fileStat[props.hcie]!.modified).toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' }) }}</div>
       </div>
     </template>
     <template #footer>
       <div class="flex font-mono justify-end italic text-sm">
-        <UIcon name="i-lucide-file-text" class="align-middle size-5" />Filename: {{ props.fileName }}
+        <UIcon name="i-lucide-file-text" class="align-middle size-5" />&nbsp;{{ props.fileName ?? 'highlight file' }}
       </div>
     </template>
   </UCard>

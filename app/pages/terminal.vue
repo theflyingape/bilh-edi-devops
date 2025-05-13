@@ -119,7 +119,7 @@ const { fileStat, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
-const fileCandidate = ref(computed(() => isFiles && get(selection).length && !get(selection).includes('\n') ? get(value) + '/' + get(selection) : ''))
+const fileCandidate = ref(computed(() => isFiles && get(selection).length && !get(selection).includes('\n') ? get(title) + '/' + get(selection) : ''))
 
 watch(selection, (n, o) => {
   stat(get(value), get(fileCandidate))
