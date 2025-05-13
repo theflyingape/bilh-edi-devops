@@ -56,7 +56,8 @@
 <script setup lang="ts">
 definePageMeta({
   auth:false,
-  pageTransition: { name: 'rotate', mode: 'out-in' }
+  pageTransition: { name: 'page', mode: 'out-in' }
+  //pageTransition: { name: 'rotate', mode: 'out-in' }
 })
 
 import { get, set, useNow } from '@vueuse/core'
