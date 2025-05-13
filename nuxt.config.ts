@@ -144,12 +144,14 @@ export default defineNuxtConfig({
 */
     routeRules: {
       '/': { prerender: true },
-      '/home': { swr: true },
       '/api/**': { cache: false },
       '/assets/**': { headers: { 'cache-control': 's-maxage=0' } },
       '/components/**': { ssr: false },
       '/composables/**': { ssr: false },
+      '/code': { ssr: false },
+      '/home': { ssr: false },
       '/terminal': { ssr: false },
+      '/utility': { ssr: false },
       //'/faq': { cache: { maxAge: 600 } },
       //'/home': { cache: { maxAge: 600, swr: false } },
       //'/index': { cache: { maxAge: 600, swr: false } },
