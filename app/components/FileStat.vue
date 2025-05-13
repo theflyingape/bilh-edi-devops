@@ -19,13 +19,7 @@ const props = defineProps<{
   fileName?: string
 }>()
 
-const { endpoint, fileStat } = useIrisSessions()
+const { endpoint, fileStat, stat } = useIrisSessions()
 
-await stat()
-
-async function stat() {
-  await endpoint(props.hcie, 'filestat', 'POST', { fileName: props.fileName }).then((result:filestat) => {
-    fileStat.value[props.hcie] = result
-  })
-}
+if (props.fileName) await stat(props.hcie, props.fileName)
 </script>
