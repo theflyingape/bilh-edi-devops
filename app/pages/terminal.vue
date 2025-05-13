@@ -121,8 +121,8 @@ const { sessionList, cols, rows, selection, title, connect, attach, detach, conn
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
 
 watch(selection, (n, o) => {
-  if (get(selection).length && !get(selection).includes('\n'))
-    stat(get(value), get(selection))
+  if (isFiles && get(selection).length && !get(selection).includes('\n'))
+    stat(get(value), get(title) + '/' + get(selection))
 })
 
 const titleLabel = ref(computed(() => get(title).length < 20 ? get(title) : get(title)[0]+'…/'+get(title).split('/').at(-1)))
