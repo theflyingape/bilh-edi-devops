@@ -141,6 +141,11 @@ export default function useIrisTokens() {
 
   async function refresh(hcie: string, jwt: IRIStoken) {
     if (dev) return
+    if (jwt && jwt.exp) {
+      const secs = (jwt.exp - Date.now()) % 100000 / 1000
+      if (secs > 2) return
+    }
+
     await fetch(`https://${HCIE[hcie]}${API[hcie]}/refresh`, {
       method: 'POST',
       headers: {
