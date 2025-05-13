@@ -175,7 +175,7 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie: string, route: string, method:'GET'|'POST' = 'GET', send = {}): Promise<any|null> {
+  async function endpoint(hcie: string, route: string, method:'GET'|'POST' = 'GET', send:{}): Promise<any|null> {
     let payload = null
     let jwt = tokens[hcie]
     if (dev) return payload
@@ -200,7 +200,7 @@ export default function useIrisTokens() {
             Authorization: `Bearer ${jwt.access_token}`,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(send)
+          body: send ? JSON.stringify(send) : undefined
         }).then(async (res) => {
           try {
             await res.json().then(async (js) => {
