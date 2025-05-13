@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' }),
-    version: '0.7.6'
+    version: '0.7.7'
   },
   auth: {
     baseURL: '/api/auth',
@@ -116,14 +116,14 @@ export default defineNuxtConfig({
         title: 'BILH Interface Engine',
         contentCollection: 'docs',
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/1-bilh-interface-engine%' }
+          { field: 'path', operator: 'LIKE', value: '/docs/1-bilh-interface-engine%' }
         ]
       },
       {
         title: 'Technology & Innovation',
         contentCollection: 'docs',
         contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/2-technology-and-innovation%' }
+          { field: 'path', operator: 'LIKE', value: '/docs/2-technology-and-innovation%' }
         ]
       }
     ]
@@ -135,20 +135,26 @@ export default defineNuxtConfig({
     experimental: {
       websocket: true
     },
+/*
     prerender: {
       routes: [ '/' ],
       crawlLinks: true,
       failOnError: false,
     },
+*/
     routeRules: {
+      '/': { prerender: true },
+      '/home': { swr: true },
       '/api/**': { cache: false },
       '/assets/**': { headers: { 'cache-control': 's-maxage=0' } },
       '/components/**': { ssr: false },
       '/composables/**': { ssr: false },
-      '/home': { cache: { maxAge: 600, swr: false } },
-      '/index': { cache: { maxAge: 600, swr: false } },
-      '/mission/**': { cache: { maxAge: 3600 } },
-      '/terminal': { cache: { maxAge: 6, swr: false }, ssr: false },
+      '/terminal': { ssr: false },
+      //'/faq': { cache: { maxAge: 600 } },
+      //'/home': { cache: { maxAge: 600, swr: false } },
+      //'/index': { cache: { maxAge: 600, swr: false } },
+      //'/mission/**': { cache: { maxAge: 600 } },
+      //'/terminal': { cache: false, ssr: false },
     }
   },
   vite: {

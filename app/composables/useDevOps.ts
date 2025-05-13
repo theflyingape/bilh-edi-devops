@@ -1,5 +1,5 @@
 import { get, set, useFetch } from '@vueuse/core'
-
+const { user } = useIrisSessions()
 const online = ref(computed(() => get(useAuth().status) !== 'unauthenticated'))
 const sideMenu = ref(false)
 const stale = ref(false)
@@ -19,6 +19,8 @@ export default function usePortal() {
 
   function reload() {
     console.log('app reload')
+    user.value.enabled = false
+    user.value.scope = []
     reloadNuxtApp({force:true, path:'/'})
   }
 

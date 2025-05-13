@@ -4,8 +4,9 @@
 </template>
 
 <script setup lang="ts">
+type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
 const props = defineProps<{
-  session: string     //  key identifier
+  session: INSTANCE     //  key identifier
   theme: keyof theme  //  pick a color
   fontSize?: number   //  20
   rows?: number       //  25

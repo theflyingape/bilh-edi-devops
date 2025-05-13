@@ -62,7 +62,18 @@ export interface processes {
 
 const processList:Ref<{[key: string]: processes}> = ref({ Dev:<processes>{}, Test:<processes>{}, Live:<processes>{} })
 
-const HCIE: {[key: string]: string} = {
+export interface filestat {
+  fileName: string
+  size: number
+  permissions: string
+  owner: string
+  group: string
+  modified: number
+}
+
+const fileStat:Ref<{[key: string]: filestat}> = ref({ Dev:<filestat>{}, Test:<filestat>{}, Live:<filestat>{} })
+
+const HCIE: { [key:string]: string } = {
   Dev: "hciedev.laheyhealth.org",
   Test: "hcietst.laheyhealth.org",
   Live: "hcieprd.laheyhealth.org"
@@ -164,7 +175,7 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie: string, route: string, method:'GET'|'POST' = 'GET'): Promise<any|null> {
+  async function endpoint(hcie: string, route: string, method:'GET'|'POST' = 'GET', send = {}): Promise<any|null> {
     let payload = null
     let jwt = tokens[hcie]
     if (dev) return payload
@@ -188,7 +199,8 @@ export default function useIrisTokens() {
           headers: {
             Authorization: `Bearer ${jwt.access_token}`,
             'Content-Type': 'application/json'
-          }
+          },
+          body: JSON.stringify(send)
         }).then(async (res) => {
           try {
             await res.json().then(async (js) => {
@@ -204,5 +216,5 @@ export default function useIrisTokens() {
     return payload
   }
 
-  return { HCIE, ICON, mirrorSet, processList, credentials, user, getSession, endSession, refresh, endpoint }
+  return { HCIE, ICON, mirrorSet, processList, fileStat, credentials, user, getSession, endSession, refresh, endpoint }
 }

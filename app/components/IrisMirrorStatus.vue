@@ -33,8 +33,10 @@ await status()
 async function status() {
   await endpoint(props.hcie, 'status').then((status:mirrorset) => {
     mirrorSet.value[props.hcie] = status
-    archiveAgo = formatTimeAgo(new Date(status.lastArchive)) || "unclear"
-    backupAgo = formatTimeAgo(new Date(status.lastBackup)) || "unclear"
+    if (status) {
+      archiveAgo = formatTimeAgo(new Date(status.lastArchive)) || "unclear"
+      backupAgo = formatTimeAgo(new Date(status.lastBackup)) || "unclear"
+    }
   })
 }
 </script>

@@ -5,9 +5,9 @@
       <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-1/2 h-11/12 max-h-11/12 overflow-hidden resize resizer">
         <ClientOnly>
           <DevOnly><XtermJs v-show="value == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
-          <XtermJs v-show="value == 'Development'" @vue:mounted="" session="Development" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+          <XtermJs v-show="value == 'Dev'" @vue:mounted="" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
           <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-          <XtermJs v-show="value == 'LIVE'" @vue:mounted="" session="LIVE" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+          <XtermJs v-show="value == 'Live'" @vue:mounted="" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         </ClientOnly>
         <!-- bottom control panel -->
         <div class="flex flex-nowrap justify-between ml-5 mr-5">
@@ -72,6 +72,11 @@
             <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
             <UInput class="w-60" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
             <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
+            <div v-if="selection.length && fileStat?.fileName">
+              <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
+              <FileStat :hcie="value" :fileName="selection" />
+              <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="downloadFile">Download</SubmitButton></div>
+            </div>
           </div>
         </div>
       </div>
@@ -110,6 +115,7 @@ const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth(
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
 
+const { fileStat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
@@ -123,8 +129,9 @@ function titleClick() {
 
 const isFiles = ref(computed(() => get(title) == '/files' || get(title).startsWith('/files/')))
 
-const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Development', 'Test', 'LIVE'])
-const value = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
+type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
+const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Dev', 'Test', 'Live'])
+const value:Ref<INSTANCE> = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
 
 watch(value, async (n, o) => {
   connected(n)
@@ -164,8 +171,8 @@ function fontSize(delta:number) {
   localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
   save.value.fontSize = prefs.fontSize
   for(const session in sessionList) {
-    xterm(session)!.options.fontSize = prefs.fontSize
-    resize(session)
+    xterm(<INSTANCE>session)!.options.fontSize = prefs.fontSize
+    resize(<INSTANCE>session)
   }
 }
 

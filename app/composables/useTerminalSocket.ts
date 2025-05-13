@@ -2,24 +2,27 @@
  * used for any instance of an <XtermJs> component that may
  * require a WebSocket connection
  **/
-import { get, set, useDevicesList } from '@vueuse/core'
+import { get, set } from '@vueuse/core'
 import { Terminal, type ITerminalOptions } from '@xterm/xterm'
 import { WebglAddon } from '@xterm/addon-webgl'
 import { Unicode11Addon } from '@xterm/addon-unicode11'
 import { FitAddon } from '@xterm/addon-fit'
 import { SearchAddon } from '@xterm/addon-search'
 import { AttachAddon } from '~/lib/addon-attach.client'
+
 const { audio, BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } = useMultiMedia()
 
-interface TS {
-  [key: string]: {
+type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
+
+type TS = {
+  [key in INSTANCE]: {
     xterm: Terminal
     options?: ITerminalOptions
     fit?: FitAddon
     rows?: number
     cols?: number
     url?: string
-    ws?: Ref<WebSocket|undefined>
+    ws?: Ref<WebSocket | undefined>
     status?: string
     attach?: AttachAddon
     search?: SearchAddon
@@ -34,7 +37,7 @@ const selection = ref('')
 const title = ref('')
 
 export default function useTerminalSocket() {
-  function prepare(sessionId: string, term: Terminal, url?: string, rows?: number, cols?: number) {
+  function prepare(sessionId: INSTANCE, term: Terminal, url?: string, rows?: number, cols?: number) {
     term.loadAddon(new WebglAddon())
     term.loadAddon(new Unicode11Addon())
     term.unicode.activeVersion = '11'
@@ -53,7 +56,7 @@ export default function useTerminalSocket() {
     term.loadAddon(session.search)
   }
 
-  function connect(sessionId: string, tmux = false) {
+  function connect(sessionId: INSTANCE, tmux = false) {
     const session = sessionList[sessionId]!
 
     const { ws, status } = useWebSocket(session.url! + (tmux ? '&tmux=true' : ''))
@@ -80,7 +83,7 @@ export default function useTerminalSocket() {
     })
   }
 
-  function attach(sessionId: string) {
+  function attach(sessionId: INSTANCE) {
     const session = sessionList[sessionId]!
     if (session.ws?.value) {
       session.attach = new AttachAddon(session.ws.value)
@@ -108,12 +111,12 @@ export default function useTerminalSocket() {
     }
   }
 
-  function detach(sessionId: string) {
+  function detach(sessionId: INSTANCE) {
     const session = sessionList[sessionId]!
     if (session.ws?.value) session.ws?.value.close()
   }
 
-  function connected(sessionId: string) {
+  function connected(sessionId: INSTANCE) {
     const session = sessionList[sessionId]!
     set(isConnected, session.attach?.checkOpenSocket() || false)
     resize(sessionId)
@@ -121,7 +124,7 @@ export default function useTerminalSocket() {
 
   const isConnected = ref(false)
 
-  function resize(sessionId: string) {
+  function resize(sessionId: INSTANCE) {
     const session = sessionList[sessionId]!
 
     if (session.fit) {
