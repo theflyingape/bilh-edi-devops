@@ -2,19 +2,15 @@
   <div v-if="online" class="m-1">
     <div class="grid grid-cols-2 gap-8">
       <div class="grid auto-rows-auto gap-4">
-        <div class="text-center underline">LIVE</div>
+        <div class="font-bold text-center">LIVE</div>
         <div class="flex justify-center gap-2">
           <IrisProcesses hcie="Live" />
         </div>
       </div>
       <div class="grid auto-rows-auto gap-4">
-        <div class="text-center underline">TEST</div>
+        <div class="font-bold text-center">TEST</div>
         <div class="flex justify-center gap-2">
           <IrisProcesses hcie="Test" />
-        </div>
-        <div class="text-center underline">DEVELOPMENT</div>
-        <div class="flex justify-center gap-2">
-          <IrisProcesses hcie="Dev" />
         </div>
       </div>
     </div>
