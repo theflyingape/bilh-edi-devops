@@ -74,7 +74,7 @@
             <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
             <div>
               <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-              <FileStat v-model="fileCandidate" :hcie="value" :fileName="fileCandidate" />
+              <FileStat v-model="fileCandidate" :hcie="value" />
               <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="downloadFile">Download</SubmitButton></div>
             </div>
           </div>
@@ -119,10 +119,15 @@ const { fileStat, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
-const fileCandidate = ref(computed(() => isFiles && get(selection).length && !get(selection).includes('\n') ? get(title) + '/' + get(selection) : ''))
+const fileCandidate = ref('')
 
-watch(selection, (n, o) => {
-  stat(get(value), get(fileCandidate))
+watch(selection, () => {
+  if (isFiles && get(selection).length && !get(selection).includes('\n')) {
+    const sessionId = get(value)
+    await stat(sessionId, get(title) + '/' + get(selection))
+    if (get(fileStat)[sessionId]?.fileName)
+      set(fileCandidate, get(fileStat)[sessionId]?.fileName)
+  }
 })
 
 const titleLabel = ref(computed(() => get(title).length < 20 ? get(title) : get(title)[0]+'…/'+get(title).split('/').at(-1)))

@@ -9,7 +9,7 @@
     </template>
     <template #footer>
       <div class="flex font-mono justify-end italic text-sm">
-        <UIcon name="i-lucide-file-text" class="align-middle size-5" />&nbsp;{{ props.fileName ?? 'highlight file' }}
+        <UIcon name="i-lucide-file-text" class="align-middle size-5" />&nbsp;{{ fileStat[props.hcie]?.fileName ?? 'highlight file' }}
       </div>
     </template>
   </UCard>
@@ -17,10 +17,8 @@
 <script setup lang="ts">
 const props = defineProps<{
   hcie: 'localhost'|'Dev'|'Test'|'Live'  // instance identifier
-  fileName?: string
 }>()
 
-const { endpoint, fileStat, stat } = useIrisSessions()
+const { fileStat } = useIrisSessions()
 
-if (props.fileName) await stat(props.hcie, props.fileName)
 </script>
