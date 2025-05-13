@@ -97,6 +97,11 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+    pageTransition: false,
+    layoutTransition: false
+})
+
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 
