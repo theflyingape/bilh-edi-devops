@@ -56,7 +56,6 @@
 <script setup lang="ts">
 definePageMeta({
   auth:false,
-  pageTransition: { name: 'page', mode: 'out-in' }
   //pageTransition: { name: 'rotate', mode: 'out-in' }
 })
 
