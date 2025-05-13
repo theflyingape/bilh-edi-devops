@@ -142,8 +142,7 @@ export default function useIrisTokens() {
   async function refresh(hcie: string, jwt: IRIStoken) {
     if (dev) return
     if (jwt && jwt.exp) {
-      const secs = (jwt.exp - Date.now()) % 100000 / 1000
-      console.log(hcie, 'seconds:', secs)
+      const secs = jwt.exp - Date.now() / 1000
       if (secs > 2) return
     }
 
