@@ -103,8 +103,7 @@
 
 <script setup lang="ts">
 definePageMeta({
-    pageTransition: false,
-    layoutTransition: false
+  pageTransition: { name: 'page', mode: 'out-in' }
 })
 
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
