@@ -52,6 +52,16 @@ export interface mirrorset {
 
 const mirrorSet:Ref<{[key: string]: mirrorset}> = ref({ Dev:<mirrorset>{}, Test:<mirrorset>{}, Live:<mirrorset>{} })
 
+export interface processes {
+  Production:string
+  File:number
+  Net:number
+  Queue:number
+  Misc?:number
+}
+
+const processList:Ref<{[key: string]: processes}> = ref({ Dev:<processes>{}, Test:<processes>{}, Live:<processes>{} })
+
 const HCIE: {[key: string]: string} = {
   Dev: "hciedev.laheyhealth.org",
   Test: "hcietst.laheyhealth.org",
@@ -189,5 +199,5 @@ export default function useIrisTokens() {
     return payload
   }
 
-  return { HCIE, ICON, mirrorSet, credentials, user, getSession, endSession, refresh, endpoint }
+  return { HCIE, ICON, mirrorSet, processList, credentials, user, getSession, endSession, refresh, endpoint }
 }

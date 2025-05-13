@@ -4,25 +4,17 @@
       <div class="grid auto-rows-auto gap-4">
         <div class="text-center underline">LIVE</div>
         <div class="flex justify-center gap-2">
-          <UCard variant="outline"><em>future card</em></UCard>
-        </div>
-        <div class="flex justify-center gap-2">
-          <UCard variant="soft"><em>future card</em></UCard>
-          <UCard variant="solid"><em>future card</em></UCard>
-        </div>
-        <div class="flex justify-center gap-2">
-          <UCard variant="subtle"><em>future card</em></UCard>
+          <IrisProcesses hcie="LIVE" />
         </div>
       </div>
       <div class="grid auto-rows-auto gap-4">
         <div class="text-center underline">TEST</div>
         <div class="flex justify-center gap-2">
-          <UCard variant="soft"><em>future card</em></UCard>
-          <UCard variant="solid"><em>future card</em></UCard>
+          <IrisProcesses hcie="Test" />
         </div>
         <div class="text-center underline">DEVELOPMENT</div>
         <div class="flex justify-center gap-2">
-          <UCard variant="subtle"><em>future card</em></UCard>
+          <IrisProcesses hcie="Dev" />
         </div>
       </div>
     </div>

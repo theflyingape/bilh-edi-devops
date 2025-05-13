@@ -7,7 +7,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle:'full', timeStyle:'short' }),
-    version: '0.7.5'
+    version: '0.7.6'
   },
   auth: {
     baseURL: '/api/auth',
@@ -148,7 +148,7 @@ export default defineNuxtConfig({
       '/home': { cache: { maxAge: 600, swr: false } },
       '/index': { cache: { maxAge: 600, swr: false } },
       '/mission/**': { cache: { maxAge: 3600 } },
-      '/terminal': { cache: { maxAge: 600, swr: false }, ssr: false },
+    //'/terminal': { cache: { maxAge: 600, swr: false }, ssr: false },
     }
   },
   vite: {
