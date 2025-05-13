@@ -21,14 +21,14 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-  hcie: string     //  instance identifier
+  hcie: 'Live'|'Test'|'Dev'     //  instance identifier
 }>()
 
 import { formatTimeAgo } from '@vueuse/core'
 const { ICON, mirrorSet, endpoint } = useIrisSessions()
 let archiveAgo: string = "unknown"
 let backupAgo: string = "unknown"
-status()
+await status()
 
 async function status() {
   await endpoint(props.hcie, 'status').then((status:mirrorset) => {

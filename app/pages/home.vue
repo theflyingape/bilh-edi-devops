@@ -4,7 +4,7 @@
       <div class="grid auto-rows-auto gap-4">
         <div class="text-center underline">LIVE</div>
         <div class="flex justify-center gap-2">
-          <IrisProcesses hcie="LIVE" />
+          <IrisProcesses hcie="Live" />
         </div>
       </div>
       <div class="grid auto-rows-auto gap-4">

@@ -3,12 +3,12 @@
 </template>
 <script setup lang="ts">
 const props = defineProps<{
-  hcie: string     //  instance identifier
+  hcie: 'Live'|'Test'|'Dev'     //  instance identifier
 }>()
 
 import type { processes } from '~/composables/useIrisSessions'
 const { processList, endpoint } = useIrisSessions()
-processes()
+await processes()
 
 async function processes() {
   await endpoint(props.hcie, 'processes').then((results) => {
