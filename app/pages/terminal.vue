@@ -128,7 +128,7 @@ watch(selection, () => {
       const trim = (str:string, chars:string) => str.split(chars).filter(Boolean).join(chars)
       filename = trim(filename, "'")
     }
-    filename = `"${get(title)}/filename"`
+    filename = `${get(title)}/${filename}`
     stat(sessionId, filename).finally(() => {
       if (get(fileStat)[sessionId]?.fileName) {
         set(fileCandidate, get(fileStat)[sessionId]?.fileName)
