@@ -9,8 +9,8 @@
       </div>
     </template>
     <template #footer>
-      <div class="flex font-mono justify-end italic text-sm">
-        <UIcon name="i-lucide-file-text" class="align-middle size-5" />&nbsp;{{ fileStat[props.hcie]?.fileName ?? 'highlight file' }}
+      <div class="flex font-mono justify-start italic text-sm">
+        <UTextarea v-model="fileStat[props.hcie]!.fileName" disabled autoresize color="neutral" icon="i-lucide-file-text" placeholder="highlight file..." :rows="1" size="sm" variant="subtle" />
       </div>
     </template>
   </UCard>

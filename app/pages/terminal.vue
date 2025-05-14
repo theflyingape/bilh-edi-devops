@@ -66,7 +66,7 @@
           <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" color="secondary" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-lock-keyhole" :label="termType" />
         </div>
         <div v-if="isConnected">
-          <div v-if="isFiles">
+          <div v-if="isFiles" class="flex-wrap">
             <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
             <UInput class="w-60" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
             <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
