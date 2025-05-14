@@ -73,7 +73,7 @@
             <div>
               <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
               <FileStat v-model="fileCandidate" :hcie="value" />
-              <div class="flex justify-end"><SubmitButton :disabled="!fileCandidate.length" @click.prevent="downloadFile">Download</SubmitButton></div>
+              <div class="flex justify-end"><SubmitButton :disabled="!fileCandidate.length || fileStat[value]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
             </div>
           </div>
         </div>
