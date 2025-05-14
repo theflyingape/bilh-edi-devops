@@ -4,7 +4,7 @@
       <div class="text-sm font-mono">
         <div>{{ fileStat[props.hcie]?.owner ?? 'owner' }}:{{ fileStat[props.hcie]?.group ?? 'group' }}</div>
         <div>{{ fileStat[props.hcie]?.size }} bytes</div>
-        <div>{{ fileStat[props.hcie]?.type }} bytes</div>
+        <div>{{ fileStat[props.hcie]?.type }} type</div>
         <div>{{ new Date(fileStat[props.hcie]!.modified).toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' }) }}</div>
       </div>
     </template>
