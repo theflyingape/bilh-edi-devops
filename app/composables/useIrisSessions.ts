@@ -63,12 +63,13 @@ export interface processes {
 const processList:Ref<{[key: string]: processes}> = ref({ Dev:<processes>{}, Test:<processes>{}, Live:<processes>{} })
 
 export interface filestat {
-  fileName: string
   size: number
   permissions: string
   owner: string
   group: string
   modified: number
+  fileName: string
+  type: string
 }
 
 const fileStat:Ref<{[key: string]: filestat}> = ref({ Dev:<filestat>{}, Test:<filestat>{}, Live:<filestat>{} })

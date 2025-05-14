@@ -123,9 +123,16 @@ const fileCandidate = ref('')
 watch(selection, () => {
   if (isFiles && get(selection).length && !get(selection).includes('\n')) {
     const sessionId = get(value)
-    stat(sessionId, get(title) + '/' + get(selection)).finally(() => {
-      if (get(fileStat)[sessionId]?.fileName)
+    let filename = get(selection)
+    if (filename[0] == "'" && filename.lastIndexOf("'") == filename.length - 1) {
+      const trim = (str:string, chars:string) => str.split(chars).filter(Boolean).join(chars)
+      filename = trim(filename, "'")
+    }
+    filename = `"${get(title)}/filename"`
+    stat(sessionId, filename).finally(() => {
+      if (get(fileStat)[sessionId]?.fileName) {
         set(fileCandidate, get(fileStat)[sessionId]?.fileName)
+      }
     })
   }
 })
