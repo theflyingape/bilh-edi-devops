@@ -1,5 +1,5 @@
 <template>
-  <UPageHero
+  <UPageHero :ui="{root: '-mt-24'}"
     title="EDI DevOps"
     description="The Team's single point of access to the essential suite of apps, tools, and documentation for efficiency, effectiveness, and success!"
     orientation="horizontal"

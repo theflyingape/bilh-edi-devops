@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-lvh">
+  <div class="flex flex-col items-center justify-center h-lvh -mt-48">
     <UCard class="drop-shadow-2xl" variant="subtle">
       <template #header>
         <div class="flex justify-end text-xl">
