@@ -315,27 +315,23 @@ async function downloadFile() {
     useToast().add({ title: 'Not connected', description: 'Connect to host and switch directory into /files' })
     return
   }
-  if (get(isFiles)) {
-    const sessionId = get(value)
-    const folder = get(title)
-    const file = get(selection)
-    await useFetch('/api/download', {
-      method: 'POST', body: {
-        user: id!, host: sessionId, file: `${folder}/${file}`
-      },
-      onResponse({ request, response, options }) {
-        const downloaded = <Blob>response._data
-        //  invoke browser download chooser action
-        const link = document.createElement('a')
-        link.href = window.URL.createObjectURL(downloaded)
-        link.download = file
-        link.click()
-        useToast().add({ title: file, description: `size: ${downloaded.size}` })
-      }
-    })
-  }
-  else
-    useToast().add({ title: 'Not allowed!', description: 'change directory into /files' })
+
+  const sessionId = get(value)
+  await useFetch('/api/download', {
+    method: 'POST', body: {
+      user: id!, host: sessionId, file: get(fileCandidate)
+    },
+    onResponse({ request, response, options }) {
+      const downloaded = <Blob>response._data
+      const file = get(fileCandidate).split('/').at(-1)!
+      //  invoke browser download chooser action
+      const link = document.createElement('a')
+      link.href = window.URL.createObjectURL(downloaded)
+      link.download = file
+      link.click()
+      useToast().add({ title: file, description: `size: ${downloaded.size}` })
+    }
+  })
 }
 
 const uploadFiles = async () => {
