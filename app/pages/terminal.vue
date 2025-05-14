@@ -317,9 +317,14 @@ async function downloadFile() {
   }
 
   const sessionId = get(value)
+  let ask = get(fileCandidate)
+  if (ask[0] == "'" && ask.lastIndexOf("'") == ask.length - 1) {
+    const trim = (str:string, chars:string) => str.split(chars).filter(Boolean).join(chars)
+    ask = trim(ask, "'")
+  }
   await useFetch('/api/download', {
     method: 'POST', body: {
-      user: id!, host: sessionId, file: get(fileCandidate)
+      user: id!, host: sessionId, file: ask
     },
     onResponse({ request, response, options }) {
       const downloaded = <Blob>response._data
