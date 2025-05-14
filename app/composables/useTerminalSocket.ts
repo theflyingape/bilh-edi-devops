@@ -38,7 +38,7 @@ const title = ref('')
 
 export default function useTerminalSocket() {
   function prepare(sessionId: INSTANCE, term: Terminal, url?: string, rows?: number, cols?: number) {
-    term.loadAddon(new WebglAddon())
+    //term.loadAddon(new WebglAddon())
     term.loadAddon(new Unicode11Addon())
     term.unicode.activeVersion = '11'
 

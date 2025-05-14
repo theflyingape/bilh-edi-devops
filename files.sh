@@ -11,14 +11,15 @@ cd files
 [ -n "$3" ] && host="$3" || exit 3
 [ -n "$4" ] && artifact="$4" || exit 4
 folder=$( dirname "${artifact}" )
-file=$( basename "${artifact}" )
+file=$( basename "${artifact}" | tr -d "'" )
 
 [ "$cmd" = "download" -o "$cmd" = "upload" ] || exit 5
 
 ssh-copy-id -i "${SSLKEY}.pub" ${user}@${host} 2>/dev/null || exit 6
 
 if [ "$cmd" == "download" ]; then
-    scp -i "${SSLKEY}" ${user}@${host}:"${artifact}" . || exit 7
+    scp -i "${SSLKEY}" ${user}@${host}:"${folder}/${file}" . || exit 7
+    #rsync -a "${host}::disk${folder}/${file}" . || exit 7
 fi
 
 if [ "$cmd" == "upload" ]; then

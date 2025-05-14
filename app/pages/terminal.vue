@@ -1,5 +1,5 @@
 <template>
-  <div ref="monitor" class="bg-zinc-200 min-h-dvh h-dvh min-w-full w-full">
+  <div class="bg-zinc-200 min-h-dvh h-dvh min-w-full w-full">
     <div class="flex flex-nowrap h-full w-full justify-center pt-2">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-1/2 h-11/12 max-h-11/12 overflow-hidden resize resizer">
@@ -11,6 +11,7 @@
         <div class="flex flex-nowrap justify-between ml-5 mr-5">
           <!-- session controls -->
           <div v-if="isConnected" class="flex flex-nowrap space-x-2">
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="capture screen"><UButton size="sm" icon="i-lucide-camera" color="neutral" variant="subtle" @click="snap" /></UTooltip>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="btop: resource monitors"><UButton size="sm" icon="i-heroicons-rectangle-group" color="neutral" variant="subtle" @click="btop" /></UTooltip>
             <div v-if="mcRef">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="press Ctrl-O anywhere">
@@ -106,6 +107,7 @@ definePageMeta({
 
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
+import * as htmlToImage from 'html-to-image'
 
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth().data)?.id
@@ -308,6 +310,15 @@ function search(query:boolean) {
 function sendCurl() {
   set(isCurl, false)
   send(`curl ${curl.value.insecure ? '-k' : ''} ${curl.value.url}`)
+}
+
+function snap() {
+  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.95 }).then((dataUrl:string) => {
+    const link = document.createElement('a')
+    link.download = `${get(value)}-crt-snap.jpg`
+    link.href = dataUrl
+    link.click()
+  })  
 }
 
 async function downloadFile() {
