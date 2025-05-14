@@ -328,7 +328,7 @@ async function downloadFile() {
     },
     onResponse({ request, response, options }) {
       const downloaded = <Blob>response._data
-      const file = get(fileCandidate).split('/').at(-1)!
+      const file = ask.split('/').at(-1)!
       //  invoke browser download chooser action
       const link = document.createElement('a')
       link.href = window.URL.createObjectURL(downloaded)
