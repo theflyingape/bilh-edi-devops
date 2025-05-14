@@ -12,7 +12,11 @@ export default defineEventHandler(async (event) => {
     execFileSync('./files.sh',
       [ 'download', user, terminal[host].host, file ], { timeout:3600 }
     )
-    const fileName = file.split('/').at(-1)!
+    let fileName = file.split('/').at(-1)!
+    if (fileName[0] == "'" && fileName.lastIndexOf("'") == fileName.length - 1) {
+      const trim = (str:string, chars:string) => str.split(chars).filter(Boolean).join(chars)
+      fileName = trim(fileName, "'")
+    }
     const downloaded = 'files/' + fileName
     const got = statSync(downloaded)
     log('LOG_NOTICE', `file downloaded -> ${downloaded} size: ${got.size}`)
