@@ -50,18 +50,18 @@
         </div>
       </div>
       <!-- top-right action controls -->
-      <div class="flex-nowrap justify-items-start m-1 space-x-1 space-y-1">
-        <USelect v-model="value" :items="items" class="p-2 w-36" />
+      <div class="flex-nowrap justify-items-start m-1 max-w-1/6 space-x-1 space-y-1">
+        <USelect v-model="value" :items="items" class="p-2 w-28" />
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
-        <div v-if="isConnected" class="m-1 pl-4">
+        <div v-if="isConnected" class="m-1 pl-2">
           <UChip color="success">
-            <UButton color="action" variant="soft" @click="terminate">Disconnect</UButton>
+            <UButton color="action" size="lg" variant="soft" @click="terminate">Disconnect</UButton>
           </UChip>
         </div>
-        <div v-else class="flex m-2 p-2 space-x-2">
+        <div v-else class="flex m-1 space-x-2">
           <UChip color="neutral">
-            <UButton color="secondary" size="xl" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
+            <UButton color="secondary" size="lg" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
           </UChip>
           <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" color="secondary" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-lock-keyhole" :label="termType" />
         </div>
