@@ -21,12 +21,12 @@
       <div class="grid grid-cols-2">
         <div class="space-y-4">
           <div class="flex justify-center">
-            <IrisMirrorStatus hcie="Live" />
+            <IrisMirrorStatus v-if="pending.Live" hcie="Live" />
           </div>
         </div>
         <div class="space-y-4">
           <div class="flex justify-center">
-            <IrisMirrorStatus hcie="Test" />
+            <IrisMirrorStatus v-if="pending.Test" hcie="Test" />
           </div>
           <div class="flex justify-center">
             <IrisMirrorStatus hcie="Dev" />
@@ -69,5 +69,8 @@ const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] 
 
 const now = useNow()
 const { online, toggleSideMenu } = useDevOps()
-const { user } = useIrisSessions()
+const { pending, user } = useIrisSessions()
+
+for (const hcie in get(pending))
+  pending.value[hcie] = 0
 </script>

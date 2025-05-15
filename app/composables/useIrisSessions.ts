@@ -88,6 +88,9 @@ const credentials = ref({
   IRIStoken: <IRIStoken>{}
 })
 
+const pending: Ref<{ [key: string]: number }>
+  = ref({ Dev: 0, Test: 0, Live: 0 })
+
 const user = ref(<User>{})
 const dev = import.meta.dev || false
 
@@ -218,5 +221,5 @@ export default function useIrisTokens() {
     })
   }
 
-  return { HCIE, ICON, mirrorSet, processList, fileStat, credentials, user, getSession, endSession, refresh, endpoint, stat }
+  return { HCIE, ICON, pending, mirrorSet, processList, fileStat, credentials, user, getSession, endSession, refresh, endpoint, stat }
 }

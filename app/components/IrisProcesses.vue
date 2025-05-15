@@ -7,14 +7,15 @@
 import type { processes } from '~/composables/useIrisSessions'
 
 const props = defineProps<{
-  hcie: 'Live'|'Test'|'Dev'     //  instance identifier
+  hcie: 'Live' | 'Test' | 'Dev' //  instance identifier
 }>()
 
-const { processList, endpoint } = useIrisSessions()
+const { pending, processList, endpoint } = useIrisSessions()
 
 async function processes() {
   await endpoint(props.hcie, 'processes').then((results) => {
     processList.value[props.hcie] = results?.productions || [{}]
+    pending.value[props.hcie] = 1
   })
 }
 
