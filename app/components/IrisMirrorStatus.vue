@@ -1,13 +1,14 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <UCard v-model="mirrorSet[props.hcie]" variant="subtle">
     <template #default>
       <div class="font-bold font-sans underline">{{ mirrorSet[props.hcie]?.systemMode }}</div>
-      <div class="text-sm font-mono" v-for="status in mirrorSet[props.hcie]?.mirrorStatus">
-        <div v-if="status.currentRole == 'Primary'" class="font-semibold text-success">
-          {{ status.memberName }} {{ status.currentRole }}
+      <div v-for="mirror in mirrorSet[props.hcie]?.mirrorStatus" :key="mirror.currentRole" class="text-sm font-mono">
+        <div v-if="mirror.currentRole == 'Primary'" class="font-semibold text-success">
+          {{ mirror.memberName }} {{ mirror.currentRole }}
         </div>
         <div v-else>
-          {{ status.memberName }} {{ status.currentRole }} {{ status.journalTimeLatency }} {{ status.databaseLatency }}
+          {{ mirror.memberName }} {{ mirror.currentRole }} {{ mirror.journalTimeLatency }} {{ mirror.databaseLatency }}
         </div>
       </div>
     </template>
@@ -19,24 +20,29 @@
     </template>
   </UCard>
 </template>
+
 <script setup lang="ts">
+import { get, formatTimeAgo, set } from '@vueuse/core'
+
 const props = defineProps<{
-  hcie: 'Live'|'Test'|'Dev'     //  instance identifier
+  hcie: 'Live' | 'Test' | 'Dev' //  instance identifier
 }>()
 
-import { formatTimeAgo } from '@vueuse/core'
 const { ICON, mirrorSet, endpoint } = useIrisSessions()
-let archiveAgo: string = "unknown"
-let backupAgo: string = "unknown"
-await status()
+let archiveAgo: string = 'unknown'
+let backupAgo: string = 'unknown'
 
 async function status() {
-  await endpoint(props.hcie, 'status').then((status:mirrorset) => {
-    mirrorSet.value[props.hcie] = status
+  await endpoint(props.hcie, 'status').then((status) => {
     if (status) {
-      archiveAgo = formatTimeAgo(new Date(status.lastArchive)) || "unclear"
-      backupAgo = formatTimeAgo(new Date(status.lastBackup)) || "unclear"
+      mirrorSet.value[props.hcie] = <mirrorset>status
+      archiveAgo = formatTimeAgo(new Date(mirrorSet.value[props.hcie]!.lastArchive)) || "unclear"
+      backupAgo = formatTimeAgo(new Date(mirrorSet.value[props.hcie]!.lastBackup)) || "unclear"
     }
   })
 }
+
+onMounted(() => {
+  status()
+})
 </script>

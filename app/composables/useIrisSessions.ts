@@ -172,7 +172,7 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie: string, route: string, method: 'GET' | 'POST' = 'GET', send: object | undefined): Promise<any | null> {
+  async function endpoint(hcie: string, route: string, method: 'GET' | 'POST' = 'GET', send: object | undefined): Promise<unknown | null> {
     let payload = null
     let jwt = tokens.get(hcie)
     if (dev) return payload
@@ -213,8 +213,8 @@ export default function useIrisTokens() {
   }
 
   async function stat(hcie: string, fileName: string) {
-    await endpoint(hcie, 'filestat', 'POST', { fileName: fileName }).then((result: filestat) => {
-      fileStat.value[hcie] = result
+    await endpoint(hcie, 'filestat', 'POST', { fileName: fileName }).then((result) => {
+      fileStat.value[hcie] = <filestat>result
     })
   }
 
