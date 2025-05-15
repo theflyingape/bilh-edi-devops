@@ -35,7 +35,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '0.7.10'
+    version: '0.7.11'
   },
   runtimeConfig: {
     public: {

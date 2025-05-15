@@ -17,7 +17,8 @@ await processes()
 async function processes() {
   await endpoint(props.hcie, 'processes').then((results) => {
     processList.value[props.hcie] = results?.productions || [{}]
-    pending.value[props.hcie] = 1
+    if (pending.value[props.hcie])
+      pending.value[props.hcie]!--
   })
 }
 </script>

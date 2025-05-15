@@ -108,6 +108,7 @@ definePageMeta({
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 import * as htmlToImage from 'html-to-image'
+import html2canvas from 'html2canvas-pro'
 
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'rhurst' : get(useAuth().data)?.id
@@ -313,7 +314,8 @@ function sendCurl() {
 }
 
 function snap() {
-  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.95 }).then((dataUrl:string) => {
+// html2canvas(<HTMLDivElement>document.getElementById('monitor')).then((canvas) => {
+  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
     const link = document.createElement('a')
     link.download = `${get(value)}-crt-snap.jpg`
     link.href = dataUrl

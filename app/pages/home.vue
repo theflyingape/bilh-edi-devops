@@ -21,12 +21,12 @@
       <div class="grid grid-cols-2">
         <div class="space-y-4">
           <div class="flex justify-center">
-            <IrisMirrorStatus v-if="pending.Live" hcie="Live" />
+            <IrisMirrorStatus v-if="!pending.Live" hcie="Live" />
           </div>
         </div>
         <div class="space-y-4">
           <div class="flex justify-center">
-            <IrisMirrorStatus v-if="pending.Test" hcie="Test" />
+            <IrisMirrorStatus v-if="!pending.Test" hcie="Test" />
           </div>
           <div class="flex justify-center">
             <IrisMirrorStatus hcie="Dev" />
@@ -72,5 +72,5 @@ const { online, toggleSideMenu } = useDevOps()
 const { pending, user } = useIrisSessions()
 
 for (const hcie in get(pending))
-  pending.value[hcie] = 0
+  pending.value[hcie]!++
 </script>
