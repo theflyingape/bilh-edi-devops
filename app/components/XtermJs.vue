@@ -1,41 +1,45 @@
 <template>
-  <div class="h-full w-full" ref="terminalContainer"></div>
+  <div
+    ref="terminalContainer"
+    class="h-full w-full"
+  />
 </template>
 
 <script setup lang="ts">
-type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
-const props = defineProps<{
-  session: INSTANCE     //  key identifier
-  theme: keyof theme  //  pick a color
-  fontSize?: number   //  20
-  rows?: number       //  25
-  cols?: number       //  80
-  wsUrl?: string      //  wss://${location.host}/node-pty
-}>()
-
 import { get } from '@vueuse/core'
-import { type ITerminalOptions, type ITheme } from '@xterm/xterm'
+import type { ITerminalOptions, ITheme } from '@xterm/xterm'
 import { Terminal } from '@xterm/xterm'
 
-interface theme {
+type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
+
+interface itheme {
   [key: string]: ITheme
 }
 
-const theme: theme = {
+const props = defineProps<{
+  session: INSTANCE //  key identifier
+  theme: keyof itheme // pick a color
+  fontSize?: number //  20
+  rows?: number //      25
+  cols?: number //      80
+  wsUrl?: string //     wss://${location.host}/node-pty
+}>()
+
+const themes: itheme = {
   Amber: {
-    cursor: 'Gold', cursorAccent: 'DarkRed', foreground: "#c1c2c8", background: "#403010",
-    selectionBackground: 'LightYellow', selectionForeground: 'Red',
+    cursor: 'Gold', cursorAccent: 'DarkRed', foreground: '#c1c2c8', background: '#403010',
+    selectionBackground: 'LightYellow', selectionForeground: 'Red'
   },
   Green: {
-    cursor: 'Silver', cursorAccent: 'DarkCyan', foreground: "#d0d0d0", background: "#103020",
+    cursor: 'Silver', cursorAccent: 'DarkCyan', foreground: '#d0d0d0', background: '#103020',
     selectionBackground: 'LightYellow', selectionForeground: 'ForestGreen',
-    black: "#000000", red: "#c80000", green: "#00c800", yellow: "#c8c000",
-    blue: "#4547d8", magenta: "#c800c8", cyan: "#00c8c8", white: "#c8c8c8",
-    brightBlack: "#606060", brightRed: "#fa0000", brightGreen: "#00fa00", brightYellow: "#fafa00",
-    brightBlue: "#4547ff", brightMagenta: "#fa00fa", brightCyan: "#00fafa", brightWhite: "#ffffff"
+    black: '#000000', red: '#c80000', green: '#00c800', yellow: '#c8c000',
+    blue: '#4547d8', magenta: '#c800c8', cyan: '#00c8c8', white: '#c8c8c8',
+    brightBlack: '#606060', brightRed: '#fa0000', brightGreen: '#00fa00', brightYellow: '#fafa00',
+    brightBlue: '#4547ff', brightMagenta: '#fa00fa', brightCyan: '#00fafa', brightWhite: '#ffffff'
   },
   White: {
-    cursor: 'PowderBlue', cursorAccent: 'Midnight', foreground: 'LightGray', background: '#102040', 
+    cursor: 'PowderBlue', cursorAccent: 'Midnight', foreground: 'LightGray', background: '#102040',
     selectionBackground: 'LightYellow', selectionForeground: 'DarkOrchid',
     black: 'Black', red: 'DarkRed', green: 'ForestGreen', yellow: 'SandyBrown',
     blue: 'MediumBlue', magenta: 'MediumOrchid', cyan: 'DarkCyan', white: 'Silver',
@@ -44,11 +48,11 @@ const theme: theme = {
   }
 }
 
-let startup: ITerminalOptions = {
+const startup: ITerminalOptions = {
   allowProposedApi: true, scrollback: 8000, scrollSensitivity: 5, smoothScrollDuration: 250,
   cursorBlink: false, drawBoldTextInBrightColors: true,
   fontFamily: 'Consolas,Lucida Console,monospace', fontSize: props?.fontSize || 20, fontWeight: 'normal', fontWeightBold: 'bold',
-  theme: theme[props.theme],
+  theme: themes[props.theme],
   wordSeparator: ` :;?!"'<>[=]`
 }
 

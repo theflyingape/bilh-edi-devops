@@ -3,11 +3,11 @@
  * require a WebSocket connection
  **/
 import { get, set } from '@vueuse/core'
-import { Terminal, type ITerminalOptions } from '@xterm/xterm'
-import { WebglAddon } from '@xterm/addon-webgl'
-import { Unicode11Addon } from '@xterm/addon-unicode11'
+import type { Terminal, ITerminalOptions } from '@xterm/xterm'
 import { FitAddon } from '@xterm/addon-fit'
 import { SearchAddon } from '@xterm/addon-search'
+import { Unicode11Addon } from '@xterm/addon-unicode11'
+// import { WebglAddon } from '@xterm/addon-webgl'
 import { AttachAddon } from '~/lib/addon-attach.client'
 
 const { audio, BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } = useMultiMedia()
@@ -38,11 +38,11 @@ const title = ref('')
 
 export default function useTerminalSocket() {
   function prepare(sessionId: INSTANCE, term: Terminal, url?: string, rows?: number, cols?: number) {
-    //term.loadAddon(new WebglAddon())
+  // term.loadAddon(new WebglAddon())
     term.loadAddon(new Unicode11Addon())
     term.unicode.activeVersion = '11'
 
-    let prep = <TS>{}
+    const prep = <TS>{}
     prep[sessionId] = { xterm: term }
     prep[sessionId].rows = rows || get(rows)
     prep[sessionId].cols = cols || get(cols)
@@ -71,8 +71,7 @@ export default function useTerminalSocket() {
         resize(sessionId)
         get(audio).src = CONNECT_SOUND
         get(audio).play()
-      }
-      else {
+      } else {
         set(title, '')
         session.attach?.dispose()
         session.xterm.options.cursorBlink = false
@@ -129,14 +128,14 @@ export default function useTerminalSocket() {
 
     if (session.fit) {
       session.fit.fit()
-      let xy = session.fit.proposeDimensions()
+      const xy = session.fit.proposeDimensions()
       //  sanity checks
       if (xy?.rows && xy?.cols) {
         if (Number.isNaN(xy.rows) == false && xy.rows >= 12)
           set(rows, xy.rows)
         if (Number.isNaN(xy.cols) == false && xy.cols >= 40)
           set(cols, xy.cols)
-        //console.log(get(cols), 'x', get(rows), '<-', session.xterm.cols,':',session.xterm.rows)
+        // console.log(get(cols), 'x', get(rows), '<-', session.xterm.cols,':',session.xterm.rows)
         session.xterm.resize(get(cols), get(rows))
       }
       session.xterm.focus()
