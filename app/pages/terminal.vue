@@ -108,7 +108,6 @@ definePageMeta({
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 import * as htmlToImage from 'html-to-image'
-import html2canvas from 'html2canvas-pro'
 
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'rhurst' : get(useAuth().data)?.id
