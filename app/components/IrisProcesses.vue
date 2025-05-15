@@ -18,7 +18,7 @@ async function processes() {
   })
 }
 
-onMounted(() => {
-  processes()
+onMounted(async () => {
+  await processes()
 })
 </script>

@@ -42,7 +42,7 @@ async function status() {
   })
 }
 
-onMounted(() => {
-  status()
+onMounted(async () => {
+  await status()
 })
 </script>
