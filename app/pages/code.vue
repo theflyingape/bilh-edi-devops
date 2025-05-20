@@ -16,8 +16,8 @@
       <template #default>
         <div class="flex flex-col gap-4 items-center">
           <div v-if="pin.length" class="space-y-8">
-            <UPinInput v-model="pin" type="number" length="3" class="font-semibold text-center text-2xl" disabled />
-            <div><UButton class="text-2xl" icon="i-vscode-icons-file-type-vscode" color="info" variant="soft" target="_blank" :to="url" :label="`Start hacking`" /></div>
+            Password <UPinInput v-model="pin" type="number" length="3" class="font-semibold text-center text-2xl" disabled />
+            <div><UButton class="text-2xl" icon="i-vscode-icons-file-type-vscode" color="info" variant="soft" target="_blank" :to="url" label="Start hacking" /></div>
           </div>
           <div v-else class="space-y-8">
             <div class="font-semibold text-center text-2xl text-sky-600"><UIcon class="align-middle" name="i-vscode-icons-file-type-vscode" size="48" />&nbsp; Code Server</div>
@@ -50,7 +50,7 @@ onFetchResponse((response) => {
   response.json().then((value) => {
     console.log('code-server response:', JSON.stringify(value))
     if (value?.status == 'OK') {
-      set(message, `${value.status}: PID #${value.pid} started on PORT #${value.port}`)
+      set(message, `${value.status}: your PID #${value.pid} has started on PORT #${value.port}`)
       set(pin, value?.pin)
       set(url, value?.url)
     }

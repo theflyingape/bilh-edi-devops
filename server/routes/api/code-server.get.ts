@@ -1,9 +1,8 @@
-import { getServerSession } from '#auth'
 import child from 'child_process'
-import { log } from '~/lib/syslog.server'
-import useCodeServer from './code-sessions'
 import url from 'url'
-import { H3Event, EventHandlerRequest } from 'h3'
+import useCodeServer from './code-sessions'
+import { getServerSession } from '#auth'
+import { log } from '~/lib/syslog.server'
 
 export default defineEventHandler(async (event)  => {
   //  TODO: future implementation for server-side auth
@@ -13,7 +12,7 @@ export default defineEventHandler(async (event)  => {
   //  const session = await getServerSession(event)
   //  if (!session)
   //    return { status: 'unauthenticated' }
-  
+
   const { ports, sessions, generatePIN } = useCodeServer()
   log('LOG_NOTICE', `code-server ${event}`)
   const params = url.parse(event.path, true).query
@@ -41,12 +40,14 @@ export default defineEventHandler(async (event)  => {
       //  wait for a PORT=#### assignment to echo and the first idle dot
       vscode.stdout?.on('data', (data) => {
         log('LOG_NOTICE', `code-server: ${data}`)
-        const ini = data.toString().split("=")
+        const ini = data.toString().split('=')
         if (ini[0] == 'PORT') {
           const port = parseInt(ini[1])
           ports[port] = { id: username, pid: vscode.pid! }
-          sessions[username] = { pin: pin, port: port,
-            url: `https://hciedev.laheyhealth.org/code-server/6501/?workspace=/home/${username}/.local/share/code-server/User/Workspaces/${username}-devops.code-workspace`}
+          sessions[username] = {
+            pin: pin, port: port,
+            url: `https://hciedev.laheyhealth.org/code-server/${port}/?workspace=/home/${username}/.local/share/code-server/User/Workspaces/${username}-devops.code-workspace`
+          }
         }
         if (ini[0] == '.')
           resolve(sessions[username].port)
@@ -62,8 +63,7 @@ export default defineEventHandler(async (event)  => {
       log('LOG_ERROR', `code-server exit ${reason}: rejected ${username} request`)
       response = { status: `rejected: ${reason}` }
     })
-  }
-  else {
+  } else {
     response = { status: `spawn error #${vscode.exitCode}` }
   }
   return response
