@@ -15,7 +15,7 @@
       <div class="flex font-mono justify-start italic text-sm">
         <UTextarea v-if="fileStat[props.hcie]?.type == 'regular file'" v-model="fileStat[props.hcie]!.fileName" disabled autoresize color="neutral" icon="i-lucide-file-text" placeholder="highlight file..." :rows="1" size="sm" variant="subtle" />
         <div v-else>
-          {{ fileStat[props.hcie]?.type }}
+          <b>{{ fileStat[props.hcie]?.type }}</b>
         </div>
       </div>
     </template>
