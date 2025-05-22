@@ -132,8 +132,6 @@ watch(selection, () => {
     stat(sessionId, filename).finally(() => {
       if (get(fileStat)[sessionId]?.fileName) {
         set(fileCandidate, get(fileStat)[sessionId]?.fileName)
-      } else {
-        clear()
       }
     })
   }
