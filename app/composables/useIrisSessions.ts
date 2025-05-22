@@ -220,8 +220,11 @@ export default function useIrisTokens() {
   }
 
   async function stat(hcie: string, fileName: string) {
+    fileStat.value[hcie] = <filestat>{}
     await endpoint(hcie, 'filestat', 'POST', { fileName: fileName }).then((result) => {
       fileStat.value[hcie] = <filestat>result
+    }).catch((err) => {
+      console.error(err)
     })
   }
 
