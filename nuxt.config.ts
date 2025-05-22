@@ -26,6 +26,9 @@ export default defineNuxtConfig({
           searchDepth: 1
         }
       }
+    },
+    renderer: {
+      anchorLinks: { h1: true, h2: true, h3: true, h4: false }
     }
   },
   ui: {
@@ -35,7 +38,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '0.7.12'
+    version: '0.7.13'
   },
   runtimeConfig: {
     public: {

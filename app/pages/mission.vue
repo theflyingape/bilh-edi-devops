@@ -5,12 +5,14 @@
     :prose="false"
   />
 </template>
+
 <script setup lang="ts">
+import { get } from '@vueuse/core'
+
 definePageMeta({
-  auth:false,
+  auth: false,
   pageTransition: { name: 'page', mode: 'out-in' }
 })
-import { get } from '@vueuse/core'
 
 const { data: page } = await useAsyncData('index', () => queryCollection('landing').path('/').first())
 if (!get(page)) {

@@ -1,6 +1,6 @@
 {
   "name": "edi-devops",
-  "version": "0.7.12",
+  "version": "0.7.13",
   "license": "MIT",
   "type": "module",
   "description": "The team's single point of access to the essential suite of apps, tools, and documentation for efficiency, effectiveness, and success!",
@@ -39,16 +39,16 @@
     "jsonwebtoken": "^9.0.2",
     "modern-syslog": "^1.2.0",
     "node-pty": "^1.1.0-beta9",
-    "nuxt": "^3.17.3",
+    "nuxt": "^3.17.4",
     "nuxt-llms": "^0.1.2",
-    "zod": "^3.25.7"
+    "zod": "^3.25.20"
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.2.2",
     "@iconify-json/vscode-icons": "^1.2.21",
     "@nuxt/eslint": "^1.4.1",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^22.15.20",
+    "@types/node": "^22.15.21",
     "eslint": "^9.27.0",
     "nuxt-file-storage": "^0.3.0",
     "typescript": "^5.8.3"
