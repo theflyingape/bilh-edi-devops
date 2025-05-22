@@ -25,11 +25,6 @@ definePageMeta({
 
 const { buildDate, version } = useAppConfig()
 const { isStale, reload, stale } = useDevOps()
-const ts = ref(buildDate)
-const v = ref(version)
-
-isStale(version)
-
 const links = ref([
   {
     label: 'Get started',
@@ -39,10 +34,15 @@ const links = ref([
   {
     label: 'Learn more',
     to: 'https://bilh.sharepoint.com/:b:/s/BIDMC-TechnologyOffice/EY3XzMlMufhJlEyV8IvU0sABgRaS0E3KguczgJFZmZ0fiQ?e=EpwRAj',
+    icon: 'i-vscode-icons-file-type-pdf2',
     target: '_blank',
     color: 'neutral',
-    variant: 'subtle',
+    variant: 'outline',
     trailingIcon: 'i-lucide-arrow-right'
   }
 ])
+const ts = ref(buildDate)
+const v = ref(version)
+
+isStale(version)
 </script>
