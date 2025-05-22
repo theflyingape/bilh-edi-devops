@@ -129,10 +129,11 @@ Learn what each menu topic represents and how each item allows for quick access 
 
 ::u-page-section
 #title
-Topology
+# Topology
 
 #description
-For ease of reference, a simpler formatted table for select & copy/paste needs.
+_For ease of reference, a simpler formatted table for your copy/paste need:_
+
 :::prose-code
 |⠀Boston DC⠀|⠀VIP address / NAT⠀|⠀Hostname⠀|⠀IP address⠀|
 | ---------- |:----------------- |:--------- |:---------- |
@@ -142,10 +143,7 @@ For ease of reference, a simpler formatted table for select & copy/paste needs.
 |⠀hcietst⠀|⠀172.21.26.240⠀|⠀lvhshcadt01ss⠀|⠀172.21.26.241⠀|
 ||⠀208.64.113.141⠀|⠀lvhshcadt02ss⠀|⠀172.21.26.242⠀|
 |⠀|⠀|⠀|⠀|
-|⠀|⠀|⠀|⠀|
-|⠀|⠀|⠀|⠀|
-:::
-:::prose-code
+
 |⠀Gordon DC⠀|⠀VIP address / NAT⠀|⠀Hostname⠀|⠀IP address⠀|
 | --------- |:------------------ |:--------- |:---------- |
 |⠀hcieprd⠀|⠀172.27.129.130⠀|⠀lvhshcadp01g1⠀|⠀172.27.129.131⠀|
@@ -157,4 +155,5 @@ For ease of reference, a simpler formatted table for select & copy/paste needs.
 |⠀hciedev⠀|⠀172.26.5.112⠀|⠀lvhshcadd01g1⠀|⠀172.21.26.253⠀|
 |||⠀lvhshcadd02g1⠀|⠀172.26.5.252⠀|
 :::
+🖧
 ::

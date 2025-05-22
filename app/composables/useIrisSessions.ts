@@ -146,6 +146,7 @@ export default function useIrisTokens() {
         headers: { Authorization: `Bearer ${jwt.access_token}` }
       }).then(async (res) => {
         tokens.delete(hcie)
+        console.info(res)
       })
     }
   }
@@ -172,6 +173,9 @@ export default function useIrisTokens() {
       } catch (err) {
         console.error(err)
       }
+    }).catch((err) => {
+      console.error(err)
+      tokens.delete(hcie)
     })
   }
 
