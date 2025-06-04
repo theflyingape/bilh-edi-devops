@@ -106,12 +106,12 @@
       "terminal.ansiBrightWhite": "#FFFFFF",
       "terminalCursor.foreground": "#6AE0FA"
     },
+    "window.zoomLevel": 1.5,
     "workbench.activityBar.location": "top",
     "workbench.colorTheme": "Solarized Dark",
     "workbench.iconTheme": "vscode-icons",
     "workbench.productIconTheme": "Default",
     "workbench.sideBar.location": "right",
-    "window.zoomLevel": 1.5,
   },
   "extensions": {
     "recommendations": [
