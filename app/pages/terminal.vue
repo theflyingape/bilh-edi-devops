@@ -184,11 +184,11 @@ const termType = ref(prefs.tmux ? 'tmux' : 'ssh')
 const tmux = ref(prefs.tmux)
 
 function fontSize(delta:number) {
-  prefs.fontSize = xterm()!.options.fontSize! + delta
+  prefs.fontSize = xterm().options.fontSize! + delta
   localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
   save.value.fontSize = prefs.fontSize
   for(const session in sessionList) {
-    xterm(<INSTANCE>session)!.options.fontSize = prefs.fontSize
+    xterm(<INSTANCE>session).options.fontSize = prefs.fontSize
     resize(<INSTANCE>session)
   }
 }
