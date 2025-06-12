@@ -48,6 +48,11 @@
         <div class="p-4">
           <UColorModeSelect class="m-auto" />
         </div>
+        <div v-if="isAdmin" class="justify-end mt-4">
+          <UButton color="info" variant="soft" to="admin">
+            Admin
+          </UButton>
+        </div>
       </div>
     </template>
     <template #footer>
@@ -123,6 +128,7 @@ import { ModalInfo } from '#components'
 import { User } from '~/composables/useIrisSessions'
 
 const { status, signIn, signOut } = useAuth()
+const { isAdmin } = useDevOps()
 const { credentials, user, getSession, endSession, endpoint } = useIrisSessions()
 const overlay = useOverlay()
 const toast = useToast()

@@ -64,7 +64,7 @@ definePageMeta({
 })
 
 const { status } = useAuth()
-const isAdmin = ref(computed(() => get(user)?.scope?.includes('admin') || get(user)?.scope?.includes('systems')))
+const { isAdmin } = useDevOps()
 const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
 
 const now = useNow()
