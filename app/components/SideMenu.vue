@@ -125,7 +125,7 @@
 <script setup lang="ts">
 import { get, set } from '@vueuse/core'
 import { ModalInfo } from '#components'
-import { User } from '~/composables/useIrisSessions'
+// import { User } from '~/composables/useIrisSessions'
 
 const { status, signIn, signOut } = useAuth()
 const { isAdmin } = useDevOps()

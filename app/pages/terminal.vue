@@ -107,6 +107,7 @@ definePageMeta({
 
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
+import { saveAs } from 'file-saver'
 import * as htmlToImage from 'html-to-image'
 
 const config = useRuntimeConfig()
@@ -313,13 +314,18 @@ function sendCurl() {
 }
 
 function snap() {
+  /*
 // html2canvas(<HTMLDivElement>document.getElementById('monitor')).then((canvas) => {
   htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
     const link = document.createElement('a')
     link.download = `${get(value)}-crt-snap.jpg`
     link.href = dataUrl
     link.click()
-  })  
+  })
+  */
+  htmlToImage.toBlob(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0]).then((blob) => {
+    saveAs(blob, `${get(value)}-crt-snap.png`)
+  })
 }
 
 async function downloadFile() {

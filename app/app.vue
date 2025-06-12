@@ -1,12 +1,14 @@
+<!-- eslint-disable vue/first-attribute-linebreak -->
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <UApp :toaster="{ duration: 3583, position: 'top-left' }">
     <NuxtLoadingIndicator />
-    <!--UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close
-      close-icon="i-lucide-x-circle" id="wip" /-->
-    <!--UBanner color="success" icon="i-lucide-wand" title="Feat! Terminal allows you to connect into all remote sessions" close
-      close-icon="i-lucide-x-circle" id="feat1" /-->
-    <!--UBanner color="success" icon="i-lucide-wand" title="Feat! built-in managed session into your Code workspace" close
-      close-icon="i-lucide-x-circle" id="feat2" /-->
+    <!-- UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close
+      close-icon="i-lucide-x-circle" id="wip" / -->
+    <!-- UBanner color="success" icon="i-lucide-wand" title="Feat! Terminal allows you to connect into all remote sessions" close
+      close-icon="i-lucide-x-circle" id="feat1" / -->
+    <!-- UBanner color="success" icon="i-lucide-wand" title="Feat! built-in managed session into your Code workspace" close
+      close-icon="i-lucide-x-circle" id="feat2" / -->
     <UHeader>
       <template #title>
         <Logo class="h-10 w-auto" />
@@ -16,41 +18,45 @@
         <div class="flex flex-cols gap-2">
           <div class="m-auto">
             <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="click to toggle fullscreen">
-              <USwitch color="secondary" unchecked-icon="i-heroicons-tv" checked-icon="i-lucide-scaling" size="xl"
-                v-model="isFullscreen" @click="toggle" />
+              <USwitch v-model="isFullscreen" color="secondary" unchecked-icon="i-heroicons-tv" checked-icon="i-lucide-scaling" size="xl" @click="toggle" />
             </UTooltip>
           </div>
           <div class="m-auto">
             <UChip class="mt-2" :color="chip" inset>
               <UTooltip arrow :content="{ align: 'center', side: 'left', sideOffset: 8 }"
-                :text="`${get(user)?.id || 'click to login'}`">
+                        :text="`${get(user)?.id || 'click to login'}`"
+              >
                 <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
-                  icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu" />
+                         icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu"
+                />
               </UTooltip>
             </UChip>
           </div>
           <div class="m-auto">
-            <UBadge :color="chip" variant="outline">{{ who }}</UBadge>
+            <UBadge :color="chip" variant="outline">
+              {{ who }}
+            </UBadge>
           </div>
           <SideMenu v-model:open="sideMenu" />
         </div>
       </template>
-      <template #body>
-      </template>
+      <template #body />
     </UHeader>
     <UMain>
       <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
     </UMain>
-    <!--AppFooter /-->
-    <!--ClientOnly>
+    <!-- AppFooter / -->
+    <!-- ClientOnly>
       <LazyUContentSearch :files="files" :navigation="navigation" />
-    </ClientOnly-->
+    </ClientOnly -->
   </UApp>
 </template>
 
 <script setup lang="ts">
+import { get } from '@vueuse/core'
+
 const { seo } = useAppConfig()
 /*
 const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('landing'))
@@ -69,8 +75,6 @@ useSeoMeta({
   ogSiteName: seo?.siteName,
   twitterCard: 'summary_large_image'
 })
-
-import { get, set, watchImmediate } from '@vueuse/core'
 
 const { online, sideMenu, toggleSideMenu } = useDevOps()
 const { ICON, user } = useIrisSessions()
@@ -97,44 +101,44 @@ const items = ref([
           icon: 'i-vscode-icons-file-type-manifest',
           description: 'The Documatic rendered pages off our class definitions',
           to: 'https://hciedev.laheyhealth.org/csp/documatic/%25CSP.Documatic.cls?LIBRARY=HSCUSTOM',
-          target: '_blank',
+          target: '_blank'
         },
         {
           label: 'Interoperability production adapters',
           icon: 'i-vscode-icons-file-type-rake',
           description: 'The built-in business services and operations with adapters',
           to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=PAGE_interop_protocols',
-          target: '_blank',
+          target: '_blank'
         },
         {
           label: 'Healthcare Data Formats',
           icon: 'i-vscode-icons-file-type-funding',
           description: 'Ingest and transform healthcare data in your application using built-in standard-compliant tools',
           to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=PAGE_healthcare',
-          target: '_blank',
+          target: '_blank'
         },
         {
           label: 'Using ObjectScript',
           icon: 'i-vscode-icons-file-type-script',
           description: 'When there is need to write code to extend a built-in component or to create a component from scratch',
           to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=GCOS',
-          target: '_blank',
+          target: '_blank'
         },
         {
           label: 'Introducing Productions',
           description: 'Production basics, settings, and message flow',
           icon: 'i-lucide-house',
           to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=EGIN_intro',
-          target: '_blank',
+          target: '_blank'
         },
         {
           label: 'Production Best Practices',
           description: 'Project goals, delivery and documentation',
           icon: 'i-lucide-cloud-download',
           to: 'https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls?KEY=EGBP_development_overview',
-          target: '_blank',
-        },
-      ],
+          target: '_blank'
+        }
+      ]
     },
     {
       label: 'Dasboards',
@@ -160,7 +164,7 @@ const items = ref([
           description: 'The Workday interfaces showing the Prior and Current payroll cycles for SLA trending and comparison',
           to: 'https://hcieprd.laheyhealth.org/csp/healthshare/hscustom/EDI.WorkdayDashboard.zen',
           target: '_blank'
-        },
+        }
       ]
     },
     {
@@ -218,7 +222,7 @@ const items = ref([
           description: 'InterSystems Application Catalog for end user portal access to their software and support. Or call: (617) 621-0700',
           to: 'https://login.intersystems.com/login/SSO.UI.User.Catalog.cls',
           target: '_blank'
-        },
+        }
       ]
     }
   ],
@@ -228,10 +232,11 @@ const items = ref([
       icon: 'i-lucide-target',
       to: '/mission',
       disabled: false
-    },
+    }
   ]
 ])
 </script>
+
 <style>
 .page-enter-active,
 .page-leave-active {
