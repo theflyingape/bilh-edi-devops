@@ -14,6 +14,8 @@ orientation: horizontal
   filename: HCIEDEV terminal session
   ---
   ```bash
+  # update & startup this portal ... 
+  $ sudo curl -fsSL https://code-server.dev/install.sh | sh
   $ cd /opt/devops
   $ git pull
   $ source nvm && npm install

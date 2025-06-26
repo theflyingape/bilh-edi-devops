@@ -11,7 +11,7 @@
         <div class="flex flex-nowrap justify-between ml-5 mr-5">
           <!-- session controls -->
           <div v-if="isConnected" class="flex flex-nowrap space-x-2">
-            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="capture screen"><UButton size="sm" icon="i-lucide-camera" color="neutral" variant="subtle" @click="snap" /></UTooltip>
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="capture screen"><UButton size="sm" icon="i-lucide-camera" color="neutral" variant="subtle" @click.prevent="snap" /></UTooltip>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="btop: resource monitors"><UButton size="sm" icon="i-heroicons-rectangle-group" color="neutral" variant="subtle" @click="btop" /></UTooltip>
             <div v-if="mcRef">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="press Ctrl-O anywhere">
@@ -314,7 +314,6 @@ function sendCurl() {
 }
 
 function snap() {
-  /*
 // html2canvas(<HTMLDivElement>document.getElementById('monitor')).then((canvas) => {
   htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
     const link = document.createElement('a')
@@ -322,10 +321,35 @@ function snap() {
     link.href = dataUrl
     link.click()
   })
-  */
+  /*
   htmlToImage.toBlob(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0]).then((blob) => {
-    saveAs(blob, `${get(value)}-crt-snap.png`)
+    saveAs(<Blob>blob, `${get(value)}-crt-snap.png`)
   })
+  */
+  /*
+  //const canvas = <HTMLCanvasElement>xterm().element?.querySelector('.xterm-screen canvas')
+  const canvasList = xterm().element?.querySelectorAll('.xterm-screen canvas')
+  if (canvasList) {
+    console.log(canvasList)
+    const canvas = <HTMLCanvasElement>canvasList[1]
+    const context = canvas.getContext('webgl2', { preserveDrawingBuffer: true })
+    console.log(context)
+    if (context) {
+      xterm().refresh(0, xterm().rows)
+      const off = <HTMLCanvasElement>context.canvas
+      off.toBlob((blob) => {
+        console.log(blob)
+        const url = URL.createObjectURL(blob!)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = `${get(value)}-snap.jpg`
+        a.click()
+        canvas.getContext('webgl', { preserveDrawingBuffer: false })
+        URL.revokeObjectURL(url)
+      }, 'image/jpeg', 0.95)
+    }
+  }
+  */
 }
 
 async function downloadFile() {
