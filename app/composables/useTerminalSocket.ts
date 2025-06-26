@@ -118,7 +118,10 @@ export default function useTerminalSocket() {
   function connected(sessionId: INSTANCE) {
     const session = sessionList[sessionId]!
     set(isConnected, session.attach?.checkOpenSocket() || false)
-    resize(sessionId)
+    if (get(isConnected)) {
+      resize(sessionId)
+      session.xterm.refresh(0, session.xterm.rows - 1)
+    }
   }
 
   const isConnected = ref(false)
