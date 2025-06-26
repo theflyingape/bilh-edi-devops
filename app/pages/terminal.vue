@@ -31,6 +31,7 @@
             <div v-if="tmux" class="space-x-2">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="shortcuts"><UButton class="rounded-full bg-amber-100 hover:bg-amber-300" color="neutral" size="sm" variant="link" icon="i-lucide-badge-help" @click="tmuxHelp" /></UTooltip>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="split window"><UButton class="rounded bg-gray-100 hover:bg-gray-300" color="neutral" size="sm" variant="link" icon="i-ic-twotone-add-to-queue" @click="tmuxSplit" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="switch to previous"><UButton class="rounded bg-sky-100 hover:bg-sky-300" color="neutral" size="sm" variant="link" icon="i-ic-twotone-swipe-vertical" @click="tmuxSwitch" /></UTooltip>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="enter Copy Mode & search"><UButton class="rounded-full bg-violet-100 hover:bg-violet-300" color="neutral" size="sm" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" /></UTooltip>
               
             </div>
@@ -217,6 +218,14 @@ function tmuxSplit() {
   xterm()?.focus()
   setTimeout(() => {
     send('"')
+  }, 100)
+}
+
+function tmuxSwitch() {
+  send('\x02')
+  xterm()?.focus()
+  setTimeout(() => {
+    send(';')
   }, 100)
 }
 
