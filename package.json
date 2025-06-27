@@ -1,6 +1,6 @@
 {
   "name": "edi-devops",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "license": "MIT",
   "type": "module",
   "description": "The team's single point of access to the essential suite of apps, tools, and documentation for efficiency, effectiveness, and success!",
@@ -23,12 +23,12 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.52",
+    "@iconify-json/lucide": "^1.2.53",
     "@iconify-json/simple-icons": "^1.2.40",
     "@nuxt/content": "^3.6.1",
     "@nuxt/image": "^1.10.0",
     "@nuxt/ui-pro": "^3.2.0",
-    "@sidebase/nuxt-auth": "^0.10.1",
+    "@sidebase/nuxt-auth": "^1.0.0",
     "@vueuse/nuxt": "^13.4.0",
     "@xterm/addon-fit": "^0.11.0-beta.105",
     "@xterm/addon-image": "^0.9.0-beta.110",

@@ -5,7 +5,7 @@
       :description="page.description"
       :links="page.links"
     />
-    <!-- :headline="headline" -->
+    :headline="headline"
     <UPageBody>
       <ContentRenderer
         v-if="page"
@@ -25,7 +25,7 @@
         :title="toc?.title"
         :links="page.body?.toc?.links"
       >
-        <!-- template
+        <template
           v-if="toc?.bottom"
           #bottom
         >
@@ -43,7 +43,7 @@
               :links="links"
             />
           </div>
-        </template -->
+        </template>
       </UContentToc>
     </template>
   </UPage>
@@ -51,8 +51,8 @@
 
 <script setup lang="ts">
 import { get } from '@vueuse/core'
-// import type { ContentNavigationItem } from '@nuxt/content'
-// import { findPageHeadline } from '#ui-pro/utils/content'
+import type { ContentNavigationItem } from '@nuxt/content'
+import { findPageHeadline } from '@nuxt/content/utils'
 
 definePageMeta({
   auth: false,
@@ -61,7 +61,7 @@ definePageMeta({
 
 const route = useRoute()
 const { toc, seo } = useAppConfig()
-// const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
+const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
 const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
 if (!get(page)) {
@@ -81,7 +81,7 @@ useSeoMeta({
   ogDescription: get(page)?.seo.description
 })
 
-// const headline = computed(() => findPageHeadline(get(navigation), get(page)))
+const headline = computed(() => findPageHeadline(get(navigation)))
 /*
 defineOgImageComponent('Docs', {
   title: page.value.title,
@@ -100,7 +100,7 @@ const links = computed(() => {
       target: '_blank'
     })
   }
-*/
+  */
   return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
 })
 </script>

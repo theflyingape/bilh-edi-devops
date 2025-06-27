@@ -54,7 +54,7 @@
         </div>
       </div>
       <!-- top-right action controls -->
-      <div class="flex-nowrap justify-items-start m-1 max-w-1/6 space-x-1 space-y-1">
+      <div class="flex-nowrap justify-items-start m-1 min-w-1/6 max-w-1/6 space-x-1 space-y-1">
         <USelect v-model="value" :items="items" class="p-2 w-28" />
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
