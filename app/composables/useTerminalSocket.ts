@@ -26,6 +26,7 @@ type TS = {
     status?: string
     attach?: AttachAddon
     search?: SearchAddon
+    tmux?: boolean
   }
 }
 
@@ -62,6 +63,7 @@ export default function useTerminalSocket() {
     const { ws, status } = useWebSocket(session.url! + (tmux ? '&tmux=true' : ''))
     session.ws = ws
     session.status = get(status)
+    session.tmux = tmux
 
     watch(status, async (n, o) => {
       session.status = get(status)
@@ -120,7 +122,14 @@ export default function useTerminalSocket() {
     set(isConnected, session.attach?.checkOpenSocket() || false)
     if (get(isConnected)) {
       resize(sessionId)
-      session.xterm.refresh(0, session.xterm.rows - 1)
+      if (session.tmux) {
+        session.attach?.sendData('\x02')
+        session.xterm.focus()
+        setTimeout(() => {
+          session.attach?.sendData('r')
+        }, 50)
+      } else
+        session.xterm.refresh(0, session.xterm.rows - 1)
     }
   }
 

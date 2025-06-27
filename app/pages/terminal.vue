@@ -202,7 +202,7 @@ function tmuxHelp() {
   xterm()?.focus()
   setTimeout(() => {
     send('?')
-  }, 100)
+  }, 50)
 }
 
 function tmuxSearch() {
@@ -210,7 +210,7 @@ function tmuxSearch() {
   xterm()?.focus()
   setTimeout(() => {
     send('\x12')
-  }, 100)
+  }, 50)
 }
 
 function tmuxSplit() {
@@ -218,7 +218,7 @@ function tmuxSplit() {
   xterm()?.focus()
   setTimeout(() => {
     send('"')
-  }, 100)
+  }, 50)
 }
 
 function tmuxSwitch() {
@@ -226,7 +226,7 @@ function tmuxSwitch() {
   xterm()?.focus()
   setTimeout(() => {
     send(';')
-  }, 100)
+  }, 50)
 }
 
 function tmuxToggle() {
