@@ -155,7 +155,7 @@ const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Dev', 
 const value:Ref<INSTANCE> = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
 
 watch(value, async (n, o) => {
-  connected(n)
+  connected(n, true)
 })
 
 const { handleFileInput, files } = useFileStorage({ clearOldFiles: true })

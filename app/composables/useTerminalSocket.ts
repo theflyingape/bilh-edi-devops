@@ -70,7 +70,6 @@ export default function useTerminalSocket() {
       console.info(sessionId, 'websocket status now:', n, 'from:', o)
       connected(sessionId)
       if (n == 'OPEN') {
-        resize(sessionId)
         get(audio).src = CONNECT_SOUND
         get(audio).play()
       } else {
@@ -117,17 +116,21 @@ export default function useTerminalSocket() {
     if (session.ws?.value) session.ws?.value.close()
   }
 
-  function connected(sessionId: INSTANCE) {
+  function connected(sessionId: INSTANCE, force = false) {
     const session = sessionList[sessionId]!
-    set(isConnected, session.attach?.checkOpenSocket() || false)
-    if (get(isConnected)) {
+    const ready = session.attach?.checkOpenSocket() || false
+    set(isConnected, ready)
+    // upon open or a session switch
+    if (ready || force) {
       resize(sessionId)
       if (session.tmux) {
-        session.attach?.sendData('\x02')
-        session.xterm.focus()
         setTimeout(() => {
-          session.attach?.sendData('r')
-        }, 50)
+          session.attach?.sendData('\x02')
+          session.xterm.focus()
+          setTimeout(() => {
+            session.attach?.sendData('r')
+          }, 50)
+        }, 200)
       } else
         session.xterm.refresh(0, session.xterm.rows - 1)
     }
