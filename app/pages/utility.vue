@@ -1,4 +1,5 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
+<!-- eslint-disable vue/singleline-html-element-content-newline -->
 <template>
   <div class="flex flex-col items-center justify-center">
     <UCard class="m-2" variant="subtle">
@@ -7,7 +8,7 @@
           <div class="w-1/4"><b>Base64</b> (<i>also known as tetrasexagesimal</i>) is a group of binary-to-text encoding schemes that transforms binary data into a sequence of printable characters.</div>
           <div><UButton class="h-10 m-4" @click="open64">Choose file</UButton></div>
           <div class="ml-2 w-1/4">
-            <UTextarea v-model="ascii" class="font-mono w-full" color="neutral" autoresize :maxrows="4" placeholder="Plaintext ..."/>
+            <UTextarea v-model="ascii" class="font-mono w-full" color="neutral" autoresize :maxrows="4" placeholder="Plaintext ..." />
           </div>
           <div class="flex flex-col justify-start">
             <UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="link" @click="ascii=''" />
