@@ -49,6 +49,16 @@ export interface mirrorset {
 const mirrorSet: Ref<{ [key: string]: mirrorset }>
   = ref({ Dev: <mirrorset>{}, Test: <mirrorset>{}, Live: <mirrorset>{} })
 
+export interface production {
+  status: string
+  instance: string
+  systemMode: string
+  productions: string[]
+}
+
+const productions: Ref<{ [key: string]: production }>
+  = ref({ Dev: <production>{}, Test: <production>{}, Live: <production>{} })
+
 export interface processes {
   Production: string
   File: number
@@ -81,6 +91,9 @@ const HCIE: { [key: string]: string }
 
 const ICON: { [key: string]: string }
   = { Dev: 'i-vscode-icons-file-type-apib', Test: 'i-vscode-icons-file-type-light-todo', Live: 'i-vscode-icons-file-type-plsql-package' }
+
+export type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
+const instance: Ref<INSTANCE> = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
 
 const credentials = ref({
   username: '',
@@ -179,7 +192,7 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie: string, route: string, method: 'GET' | 'POST' = 'GET', send: object | undefined): Promise<unknown | null> {
+  async function endpoint(hcie: string, route: string, method: 'GET' | 'POST' = 'GET', send?: object): Promise<unknown | null> {
     let payload = null
     let jwt = tokens.get(hcie)
     if (dev) return payload
@@ -230,5 +243,5 @@ export default function useIrisTokens() {
     })
   }
 
-  return { HCIE, ICON, pending, mirrorSet, processList, fileStat, credentials, user, getSession, endSession, refresh, endpoint, stat }
+  return { HCIE, ICON, instance, pending, mirrorSet, productions, processList, fileStat, credentials, user, getSession, endSession, refresh, endpoint, stat }
 }

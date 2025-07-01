@@ -1,10 +1,6 @@
 /*
-HyDE provides xdg/share/fastfetch/presets/hyde/*.config.jsonc files for different layouts. 
-You can also create your own config.jsonc file in the same directory to create a custom theme. 
-
-To test HyDE's fastfetch theme, run:
-fastfetch --config hyde/*.jsonc
-
+	custom theme with BILH logo ascii art built for Health Connect team
+	by Robert Hurst <rhurst@bilh.org> 18-Jun-2025
 */
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
@@ -21,12 +17,6 @@ fastfetch --config hyde/*.jsonc
     },
   },
   "modules": [
-    {
-      "type": "command",
-      "key": "  ",
-      "keyColor": "blue",
-      "text": "splash=$(hyprctl splash);echo $splash"
-    },
     "break",
     {
       "type": "colors",
@@ -51,7 +41,7 @@ fastfetch --config hyde/*.jsonc
     },
     {
       "type": "uptime",
-      "key": "  ⌚ Uptime",
+      "key": "  ⏳ Uptime",
       "keyColor": "red"
     },
     {
@@ -65,7 +55,15 @@ fastfetch --config hyde/*.jsonc
     },
     "break",
     {
-      "key": "  🤖",
+      "type": "command",
+      "key": "  🏥 IRIS",
+      "keyColor": "blue",
+      "text": "iris qlist | awk -F^ 'match($4, /(.*), \\w* \\w* (\\w*) (.\\w*)/, a) { print $12\" \"$1\" \"a[1]\" \"a[2]\" \"a[3]\" (\"$9\")\" }'",
+      "format": "{1}"
+    },
+    {
+      "key": "  ☕ User",
+      "keyColor": "0;37",
       "type": "title",
       "color": {
         "user": "36",
@@ -91,7 +89,7 @@ fastfetch --config hyde/*.jsonc
     },
     {
       "type": "swap",
-      "key": "  ♽  Swap",
+      "key": "  ♻  Swap",
       "keyColor": "magenta"
     },
     {

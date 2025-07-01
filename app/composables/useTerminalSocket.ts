@@ -130,7 +130,7 @@ export default function useTerminalSocket() {
           setTimeout(() => {
             session.attach?.sendData('r')
           }, 50)
-        }, 200)
+        }, force ? 50 : 1000)
       } else
         session.xterm.refresh(0, session.xterm.rows - 1)
     }

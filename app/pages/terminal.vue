@@ -1,17 +1,17 @@
 <template>
-  <div class="bg-zinc-200 min-h-dvh h-dvh min-w-full w-full">
+  <div ref="Terminal" class="bg-zinc-200 min-h-dvh h-dvh min-w-full w-full">
     <div class="flex flex-nowrap h-full w-full justify-center pt-2">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-1/2 h-11/12 max-h-11/12 overflow-hidden resize resizer">
-        <DevOnly><XtermJs v-show="value == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
-        <XtermJs v-show="value == 'Dev'" @vue:mounted="" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="value == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="value == 'Live'" @vue:mounted="" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <DevOnly><XtermJs v-show="instance == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
+        <XtermJs v-show="instance == 'Dev'" @vue:mounted="" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="instance == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="instance == 'Live'" @vue:mounted="" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <!-- bottom control panel -->
         <div class="flex flex-nowrap justify-between ml-5 mr-5">
           <!-- session controls -->
           <div v-if="isConnected" class="flex flex-nowrap space-x-2">
-            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="capture screen"><UButton size="sm" icon="i-lucide-camera" color="neutral" variant="subtle" @click.prevent="snap" /></UTooltip>
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="capture Terminal"><UButton size="sm" icon="i-lucide-camera" color="neutral" variant="subtle" @click.prevent="snap" /></UTooltip>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="btop: resource monitors"><UButton size="sm" icon="i-heroicons-rectangle-group" color="neutral" variant="subtle" @click="btop" /></UTooltip>
             <div v-if="mcRef">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="press Ctrl-O anywhere">
@@ -55,7 +55,7 @@
       </div>
       <!-- top-right action controls -->
       <div class="flex-nowrap justify-items-start m-1 min-w-1/6 max-w-1/6 space-x-1 space-y-1">
-        <USelect v-model="value" :items="items" class="p-2 w-28" />
+        <IrisSelect />
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
         <div v-if="isConnected" class="m-1 pl-2">
@@ -76,8 +76,8 @@
             <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
             <div>
               <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-              <FileStat v-model="fileCandidate" :hcie="value" />
-              <div class="flex justify-end"><SubmitButton :disabled="!fileCandidate.length || fileStat[value]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
+              <FileStat v-model="fileCandidate" :hcie="instance" />
+              <div class="flex justify-end"><SubmitButton :disabled="!fileCandidate.length || fileStat[instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
             </div>
           </div>
         </div>
@@ -118,7 +118,7 @@ const id = process.env.NODE_ENV == 'development' ? 'rhurst' : get(useAuth().data
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
 
-const { fileStat, stat } = useIrisSessions()
+const { instance, fileStat, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
@@ -126,7 +126,7 @@ const fileCandidate = ref('')
 
 watch(selection, () => {
   if (isFiles && get(selection).length && !get(selection).includes('\n')) {
-    const sessionId = get(value)
+    const sessionId = get(instance)
     let filename = get(selection)
     if (filename[0] == "'" && filename.lastIndexOf("'") == filename.length - 1) {
       const trim = (str:string, chars:string) => str.split(chars).filter(Boolean).join(chars)
@@ -150,20 +150,18 @@ function titleClick() {
 
 const isFiles = ref(computed(() => get(title) == '/files' || get(title).startsWith('/files/')))
 
-type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
-const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Dev', 'Test', 'Live'])
-const value:Ref<INSTANCE> = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
-
-watch(value, async (n, o) => {
+watch(instance, async (n, o) => {
   connected(n, true)
 })
 
 const { handleFileInput, files } = useFileStorage({ clearOldFiles: true })
 const filesRef = useTemplateRef('filesInput')
 
+const TerminalRef = useTemplateRef('Terminal')
 const crtRef = useTemplateRef('crt')
 useResizeObserver(crtRef, (entries) => {
-  resize(get(value))
+  const sessionId = get(instance)
+  resize(sessionId)
 })
 
 const curl = ref({
@@ -192,8 +190,8 @@ function fontSize(delta:number) {
   localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
   save.value.fontSize = prefs.fontSize
   for(const session in sessionList) {
-    xterm(<INSTANCE>session).options.fontSize = prefs.fontSize
-    resize(<INSTANCE>session)
+    xterm(session).options.fontSize = prefs.fontSize
+    resize(session)
   }
 }
 
@@ -238,11 +236,11 @@ function tmuxToggle() {
 }
 
 function send(text: string) {
-  sessionList[get(value)]?.ws?.value?.send(text)
+  sessionList[get(instance)]?.ws?.value?.send(text)
 }
 
 function terminal() {
-  const sessionId = get(value)
+  const sessionId = get(instance)
   //  establish WebSocket pipe for client <-> shell
   connect(sessionId, get(tmux))
   attach(sessionId)
@@ -251,13 +249,13 @@ function terminal() {
 }
 
 function terminate() {
-  const sessionId = get(value)
+  const sessionId = get(instance)
   xterm()?.writeln(`\r\n\x1B[2mDisconnecting \x1B[0;1m${sessionId}\x1B[0;2m shell session`)
   set(titleLabel, '')
   detach(sessionId)
 }
 
-function xterm(sessionId = get(value)) {
+function xterm(sessionId = get(instance)) {
   const session = sessionList[sessionId]
   return session?.xterm
 }
@@ -309,7 +307,7 @@ const searchInput = ref({ entry: '' })
 function search(query:boolean) {
   let keepFocus = true
   if (get(searchInput).entry) {
-    sessionList[get(value)]?.search?.findPrevious(get(searchInput).entry)
+    sessionList[get(instance)]?.search?.findPrevious(get(searchInput).entry)
   }
   else {
     set(selection, '')
@@ -333,10 +331,11 @@ function sendCurl() {
 }
 
 function snap() {
-// html2canvas(<HTMLDivElement>document.getElementById('monitor')).then((canvas) => {
-  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
+// html2canvas(<HTMLDivElement>document.getElementById('crt')).then((canvas) => {
+//  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
+  htmlToImage.toJpeg(get(TerminalRef)!, { quality: 0.9 }).then((dataUrl:string) => {
     const link = document.createElement('a')
-    link.download = `${get(value)}-crt-snap.jpg`
+    link.download = `${get(instance)}-crt-snap.jpg`
     link.href = dataUrl
     link.click()
   })
@@ -377,7 +376,7 @@ async function downloadFile() {
     return
   }
 
-  const sessionId = get(value)
+  const sessionId = get(instance)
   let ask = get(fileCandidate)
   if (ask[0] == "'" && ask.lastIndexOf("'") == ask.length - 1) {
     const trim = (str:string, chars:string) => str.split(chars).filter(Boolean).join(chars)
@@ -401,7 +400,7 @@ async function downloadFile() {
 }
 
 const uploadFiles = async () => {
-  const sessionId = get(value)
+  const sessionId = get(instance)
   const response = await $fetch('/api/upload', {
     method: 'POST', body: {
       files: get(files),
