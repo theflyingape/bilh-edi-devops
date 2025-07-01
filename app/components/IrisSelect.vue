@@ -2,7 +2,7 @@
   <USelect
     v-model="instance"
     :items="items"
-    class="p-2 w-28"
+    class="w-40"
   />
 </template>
 
