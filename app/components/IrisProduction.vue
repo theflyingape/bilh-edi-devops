@@ -1,12 +1,13 @@
 <template>
   <USelect
+    v-model="Production"
     :items="items"
-    class="p-2 w-28"
+    class="w-48"
   />
 </template>
 
 <script setup lang="ts">
-import { get, set } from '@vueuse/core'
+import { set } from '@vueuse/core'
 import type { INSTANCE, production } from '~/composables/useIrisSessions'
 
 const props = defineProps<{
@@ -15,11 +16,17 @@ const props = defineProps<{
 
 const { instance, productions, endpoint } = useIrisSessions()
 const items = ref([])
+const Production = ref('')
+
+watch(instance, async (n, o) => {
+  await load()
+})
 
 async function load() {
   await endpoint(props.hcie, 'productions').then((status) => {
     Object.assign(productions.value[props.hcie]!, <production>status)
     set(items, productions.value[props.hcie]?.productions)
+    set(Production, '')
   })
 }
 
