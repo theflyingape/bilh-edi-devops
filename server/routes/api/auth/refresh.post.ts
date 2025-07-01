@@ -1,5 +1,5 @@
-import { createError, deleteCookie, eventHandler, getRequestHeader, readBody } from 'h3'
-import { sign, Secret, SignOptions, verify } from 'jsonwebtoken'
+import { deleteCookie, eventHandler, getRequestHeader, readBody } from 'h3'
+import { sign, type Secret, type SignOptions, verify } from 'jsonwebtoken'
 import { type JwtPayload, ACCESS_TOKEN_TTL, SECRET, extractToken, tokensByUser } from './login.post'
 
 export default eventHandler(async (event) => {
@@ -7,7 +7,7 @@ export default eventHandler(async (event) => {
   const authorizationHeader = getRequestHeader(event, 'Authorization')
   const accessToken = body.accessToken
   const refreshToken = body.refreshToken
-  let token = { token: { accessToken:accessToken, refreshToken:refreshToken } }
+  let token = { token: { accessToken: accessToken, refreshToken: refreshToken } }
 
   if (!refreshToken || !authorizationHeader) {
     return dumpSession('Unauthorized, no refreshToken or no Authorization header', 'invalid session')
@@ -51,16 +51,15 @@ export default eventHandler(async (event) => {
     token = { token: { accessToken, refreshToken } }
 
     return token
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err)
-    return dumpSession(`${ err }`, 'refresh error')
+    return dumpSession(`${err}`, 'refresh error')
   }
 
-  function dumpSession(respond:string, message:string) {
+  function dumpSession(respond: string, message: string) {
     setResponseStatus(event, 401, respond)
     deleteCookie(event, 'auth.refresh-token')
     deleteCookie(event, 'auth.token')
-    return { status:respond, message:message }
+    return { status: respond, message: message }
   }
 })

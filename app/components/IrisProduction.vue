@@ -7,27 +7,30 @@
 </template>
 
 <script setup lang="ts">
-import { set } from '@vueuse/core'
+import { get, set } from '@vueuse/core'
 import type { INSTANCE, production } from '~/composables/useIrisSessions'
 
 const props = defineProps<{
-  hcie: INSTANCE //  key identifier
+  hcie: Ref<INSTANCE> //  key identifier
 }>()
 
-const { instance, productions, endpoint } = useIrisSessions()
-const items = ref([])
+const { Productions, endpoint } = useIrisSessions()
 const Production = ref('')
+const items = ref([])
 
-watch(instance, async (n, o) => {
+watch(props.hcie, async (n, o) => {
   await load()
 })
 
 async function load() {
-  await endpoint(props.hcie, 'productions').then((status) => {
-    Object.assign(productions.value[props.hcie]!, <production>status)
-    set(items, productions.value[props.hcie]?.productions)
-    set(Production, '')
-  })
+  const hcie = get(props.hcie)
+  if (! Productions.get(hcie)) {
+    await endpoint(get(props.hcie), 'productions').then((status) => {
+      Productions.set(hcie, <production>status)
+      set(items, Productions.get(hcie)?.productions)
+      set(Production, '')
+    })
+  }
 }
 
 onMounted(async () => {

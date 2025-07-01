@@ -3,10 +3,10 @@
     <div class="flex flex-nowrap h-full w-full justify-center pt-2">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-1/2 h-11/12 max-h-11/12 overflow-hidden resize resizer">
-        <DevOnly><XtermJs v-show="instance == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
-        <XtermJs v-show="instance == 'Dev'" @vue:mounted="" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="instance == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="instance == 'Live'" @vue:mounted="" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <DevOnly><XtermJs v-show="Instance == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
+        <XtermJs v-show="Instance == 'Dev'" @vue:mounted="" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="Instance == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="Instance == 'Live'" @vue:mounted="" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <!-- bottom control panel -->
         <div class="flex flex-nowrap justify-between ml-5 mr-5">
           <!-- session controls -->
@@ -76,8 +76,8 @@
             <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
             <div>
               <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-              <FileStat v-model="fileCandidate" :hcie="instance" />
-              <div class="flex justify-end"><SubmitButton :disabled="!fileCandidate.length || fileStat[instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
+              <FileStat v-model="fileCandidate" :hcie="Instance" />
+              <div class="flex justify-end"><SubmitButton :disabled="!fileCandidate.length || fileStat[Instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
             </div>
           </div>
         </div>
@@ -118,15 +118,16 @@ const id = process.env.NODE_ENV == 'development' ? 'rhurst' : get(useAuth().data
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
 
-const { instance, fileStat, stat } = useIrisSessions()
+const { InstanceDefault, fileStat, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
+const Instance = ref(InstanceDefault)
 
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
 const fileCandidate = ref('')
 
 watch(selection, () => {
   if (isFiles && get(selection).length && !get(selection).includes('\n')) {
-    const sessionId = get(instance)
+    const sessionId = get(Instance)
     let filename = get(selection)
     if (filename[0] == "'" && filename.lastIndexOf("'") == filename.length - 1) {
       const trim = (str:string, chars:string) => str.split(chars).filter(Boolean).join(chars)
@@ -150,7 +151,7 @@ function titleClick() {
 
 const isFiles = ref(computed(() => get(title) == '/files' || get(title).startsWith('/files/')))
 
-watch(instance, async (n, o) => {
+watch(Instance, async (n, o) => {
   connected(n, true)
 })
 
@@ -160,7 +161,7 @@ const filesRef = useTemplateRef('filesInput')
 const TerminalRef = useTemplateRef('Terminal')
 const crtRef = useTemplateRef('crt')
 useResizeObserver(crtRef, (entries) => {
-  const sessionId = get(instance)
+  const sessionId = get(Instance)
   resize(sessionId)
 })
 
@@ -236,11 +237,11 @@ function tmuxToggle() {
 }
 
 function send(text: string) {
-  sessionList[get(instance)]?.ws?.value?.send(text)
+  sessionList[get(Instance)]?.ws?.value?.send(text)
 }
 
 function terminal() {
-  const sessionId = get(instance)
+  const sessionId = get(Instance)
   //  establish WebSocket pipe for client <-> shell
   connect(sessionId, get(tmux))
   attach(sessionId)
@@ -249,13 +250,13 @@ function terminal() {
 }
 
 function terminate() {
-  const sessionId = get(instance)
+  const sessionId = get(Instance)
   xterm()?.writeln(`\r\n\x1B[2mDisconnecting \x1B[0;1m${sessionId}\x1B[0;2m shell session`)
   set(titleLabel, '')
   detach(sessionId)
 }
 
-function xterm(sessionId = get(instance)) {
+function xterm(sessionId = get(Instance)) {
   const session = sessionList[sessionId]
   return session?.xterm
 }
@@ -307,7 +308,7 @@ const searchInput = ref({ entry: '' })
 function search(query:boolean) {
   let keepFocus = true
   if (get(searchInput).entry) {
-    sessionList[get(instance)]?.search?.findPrevious(get(searchInput).entry)
+    sessionList[get(Instance)]?.search?.findPrevious(get(searchInput).entry)
   }
   else {
     set(selection, '')
@@ -335,7 +336,7 @@ function snap() {
 //  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
   htmlToImage.toJpeg(get(TerminalRef)!, { quality: 0.9 }).then((dataUrl:string) => {
     const link = document.createElement('a')
-    link.download = `${get(instance)}-crt-snap.jpg`
+    link.download = `${get(Instance)}-crt-snap.jpg`
     link.href = dataUrl
     link.click()
   })
@@ -376,7 +377,7 @@ async function downloadFile() {
     return
   }
 
-  const sessionId = get(instance)
+  const sessionId = get(Instance)
   let ask = get(fileCandidate)
   if (ask[0] == "'" && ask.lastIndexOf("'") == ask.length - 1) {
     const trim = (str:string, chars:string) => str.split(chars).filter(Boolean).join(chars)
@@ -400,7 +401,7 @@ async function downloadFile() {
 }
 
 const uploadFiles = async () => {
-  const sessionId = get(instance)
+  const sessionId = get(Instance)
   const response = await $fetch('/api/upload', {
     method: 'POST', body: {
       files: get(files),

@@ -46,7 +46,7 @@
                 <Placeholder class="aspect-video">
                   <div class="flex flex-row">
                     <IrisSelect />
-                    <IrisProduction :hcie="instance" />
+                    <IrisProduction :hcie="Instance" />
                     <URadioGroup v-model="xfer" :items="xfers" />
                     start
                   </div>
@@ -127,7 +127,9 @@ const items: StepperItem[] = [
     description: 'Summarize config to build interface'
   }
 ]
-const { instance } = useIrisSessions()
+
+const InstanceDefault = useIrisSessions()
+const Instance = ref(InstanceDefault)
 const stepper = useTemplateRef('stepper')
 const xfers = ref<RadioGroupItem[]>(['Pick-up', 'Drop-off'])
 const xfer = ref<RadioGroupValue>('Pick-up')

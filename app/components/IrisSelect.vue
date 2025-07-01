@@ -1,12 +1,14 @@
 <template>
   <USelect
-    v-model="instance"
+    v-model="Instance"
     :items="items"
     class="w-28"
   />
 </template>
 
 <script setup lang="ts">
-const { instance } = useIrisSessions()
-const items = ref([process.env.NODE_ENV == 'development' ? 'localhost' : 'Dev', 'Test', 'Live'])
+const { Instances } = useIrisSessions()
+
+const items = ref(Instances)
+const Instance = ref(process.env.NODE_ENV == 'development' ? 'localhost' : 'Test')
 </script>
