@@ -45,8 +45,8 @@
               <template #start>
                 <Placeholder class="aspect-video">
                   <div class="flex flex-row">
-                    <IrisSelect />
-                    <IrisProduction :hcie="Instance" />
+                    <!-- IrisSelect v-model="Instance" @change="sftpInstance" / -->
+                    <IrisProduction v-model:instance="Instance" v-model:production="Production" />
                     <URadioGroup v-model="xfer" :items="xfers" />
                     start
                   </div>
@@ -128,8 +128,10 @@ const items: StepperItem[] = [
   }
 ]
 
-const InstanceDefault = useIrisSessions()
+const { InstanceDefault } = useIrisSessions()
 const Instance = ref(InstanceDefault)
+const Production = ref('')
+
 const stepper = useTemplateRef('stepper')
 const xfers = ref<RadioGroupItem[]>(['Pick-up', 'Drop-off'])
 const xfer = ref<RadioGroupValue>('Pick-up')

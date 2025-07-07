@@ -233,6 +233,14 @@ export default function useIrisTokens() {
     return payload
   }
 
+  async function loadProductions(hcie: INSTANCE) {
+    if (!Productions.get(hcie)) {
+      await endpoint(hcie, 'productions').then((status) => {
+        Productions.set(hcie, <production>status)
+      })
+    }
+  }
+
   async function stat(hcie: string, fileName: string) {
     fileStat.value[hcie] = <filestat>{}
     await endpoint(hcie, 'filestat', 'POST', { fileName: fileName }).then((result) => {
@@ -242,5 +250,5 @@ export default function useIrisTokens() {
     })
   }
 
-  return { HCIE, ICON, Productions, Instances, InstanceDefault, pending, mirrorSet, processList, fileStat, credentials, user, getSession, endSession, refresh, endpoint, stat }
+  return { HCIE, ICON, Productions, Instances, InstanceDefault, pending, mirrorSet, processList, fileStat, loadProductions, credentials, user, getSession, endSession, refresh, endpoint, stat }
 }

@@ -55,7 +55,7 @@
       </div>
       <!-- top-right action controls -->
       <div class="flex-nowrap justify-items-start m-1 min-w-1/6 max-w-1/6 space-x-1 space-y-1">
-        <IrisSelect />
+        <IrisSelect v-model="Instance" />
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
         <div v-if="isConnected" class="m-1 pl-2">
@@ -112,6 +112,7 @@ import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 import { saveAs } from 'file-saver'
 import * as htmlToImage from 'html-to-image'
+import type { RefSymbol } from '@vue/reactivity'
 
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'rhurst' : get(useAuth().data)?.id

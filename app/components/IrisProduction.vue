@@ -1,39 +1,25 @@
 <template>
+  <IrisSelect
+    v-model="instance"
+    @change="loadProductions(instance)"
+  />
   <USelect
-    v-model="Production"
+    v-model="production"
     :items="items"
     class="w-48"
   />
+  {{ instance }}
+  {{ production }}
 </template>
 
 <script setup lang="ts">
-import { get, set } from '@vueuse/core'
-import type { INSTANCE, production } from '~/composables/useIrisSessions'
+const { InstanceDefault, Productions, loadProductions } = useIrisSessions()
+const instance = defineModel<INSTANCE>('instance', { required: true, default: InstanceDefault })
+const production = defineModel<string>('production')
+let items = ['']
 
-const props = defineProps<{
-  hcie: Ref<INSTANCE> //  key identifier
-}>()
-
-const { Productions, endpoint } = useIrisSessions()
-const Production = ref('')
-const items = ref([])
-
-watch(props.hcie, async (n, o) => {
-  await load()
-})
-
-async function load() {
-  const hcie = get(props.hcie)
-  if (! Productions.get(hcie)) {
-    await endpoint(get(props.hcie), 'productions').then((status) => {
-      Productions.set(hcie, <production>status)
-      set(items, Productions.get(hcie)?.productions)
-      set(Production, '')
-    })
-  }
-}
-
-onMounted(async () => {
-  await load()
+watch(instance, () => {
+  loadProductions(instance.value)
+  items = Productions.get(instance.value)!.productions
 })
 </script>

@@ -9,8 +9,7 @@
 import { get } from '@vueuse/core'
 import type { ITerminalOptions, ITheme } from '@xterm/xterm'
 import { Terminal } from '@xterm/xterm'
-
-type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
+import type { INSTANCE } from '~/composables/useIrisSessions'
 
 interface itheme {
   [key: string]: ITheme
