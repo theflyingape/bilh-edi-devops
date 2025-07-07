@@ -17,7 +17,7 @@ export interface User {
   name?: string
   comment?: string
   loggedInAt?: number
-  scope: Array<'guest' | 'user' | 'analyst' | 'developer' | 'admin' | 'systems'>
+  scope: Array<'guest' | 'associate' | 'user' | 'analyst' | 'developer' | 'admin' | 'systems'>
 }
 
 //  keep tokens by HCIE endpoint
@@ -83,16 +83,15 @@ const ICON: { [key: string]: string }
   = { Dev: 'i-vscode-icons-file-type-apib', Test: 'i-vscode-icons-file-type-light-todo', Live: 'i-vscode-icons-file-type-plsql-package' }
 
 export interface production {
-  status: string
-  instance: string
-  systemMode: string
+  status?: string
+  instance?: string
+  systemMode?: string
   productions: string[]
 }
 export type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
 const Instances: INSTANCE[] = [process.env.NODE_ENV == 'development' ? 'localhost' : 'Dev', 'Test', 'Live']
 const InstanceDefault: INSTANCE = process.env.NODE_ENV == 'development' ? 'localhost' : 'Test'
-const Productions: Map<INSTANCE, production>
-  = new Map([['Dev', <production>{}], ['Test', <production>{}], ['Live', <production>{}]])
+const Productions: Map<INSTANCE, production> = new Map()
 
 const credentials = ref({
   username: '',
@@ -234,10 +233,14 @@ export default function useIrisTokens() {
   }
 
   async function loadProductions(hcie: INSTANCE) {
-    if (!Productions.get(hcie)) {
-      await endpoint(hcie, 'productions').then((status) => {
-        Productions.set(hcie, <production>status)
-      })
+    if (!Productions.get(hcie)?.productions) {
+      if (process.env.NODE_ENV == 'development') {
+        Productions.set(hcie, { productions: hcie == 'localhost' ? ['HSCUSTOM', 'TRAINING'] : hcie == 'Test' ? ['BILHPN', 'BILHSFTP'] : ['BILHHOSPITALS', 'BILHSFTP'] })
+      } else {
+        await endpoint(hcie, 'productions').then((status) => {
+          Productions.set(hcie, <production>status)
+        })
+      }
     }
   }
 

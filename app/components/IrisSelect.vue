@@ -1,6 +1,7 @@
 <template>
   <USelect
     :items="items"
+    placeholder="instance"
     class="w-28"
   />
 </template>

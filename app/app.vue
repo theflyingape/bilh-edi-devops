@@ -78,10 +78,17 @@ useSeoMeta({
 
 const { online, sideMenu, toggleSideMenu } = useDevOps()
 const { ICON, user } = useIrisSessions()
-const { status } = useAuth()
+const { status, signOut } = useAuth()
 const { isFullscreen, toggle } = useFullscreen()
 const chip = ref(computed(() => get(online) ? 'success' : 'action'))
 const who = ref(computed(() => get(status) == 'unauthenticated' ? 'Guest' : get(user).scope?.length ? get(user).scope[0] : 'Associate'))
+
+// sanity check for a broken app/page but had a lingering browser session token
+if (get(who) == 'Associate') {
+  user.value.enabled = false
+  user.value.scope = []
+  await signOut({ callbackUrl: '/logout', external: true })
+}
 
 const items = ref([
   [
