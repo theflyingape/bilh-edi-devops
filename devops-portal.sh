@@ -8,7 +8,7 @@ find node_modules -name xterm.js -exec mv -v {} {}-old  \;
 # flush any transition files for download
 rm -fv files/*
 
-NODE_VERSION=lts/iron NODE_ENV=production .nvm/nvm-exec npm run build
+NODE_VERSION=$( cat .nvmrc ) NODE_ENV=production .nvm/nvm-exec npm run build
 
 umask 002
 export NITRO_SSL_CERT="`cat /etc/pki/tls/certs/hcie-san.crt /etc/pki/tls/certs/hcie-san.int`"
