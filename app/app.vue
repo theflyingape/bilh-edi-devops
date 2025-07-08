@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/first-attribute-linebreak -->
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <UApp :toaster="{ duration: 3583, position: 'top-left' }">
+  <UApp :toaster="{ duration: 3000, position: 'top-left' }">
     <NuxtLoadingIndicator />
     <!-- UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close
       close-icon="i-lucide-x-circle" id="wip" / -->
@@ -245,22 +245,18 @@ const items = ref([
 </script>
 
 <style>
-.page-enter-active,
-.page-leave-active {
+.page-enter-active, .page-leave-active {
   transition: all 0.4s;
 }
-.page-enter-from,
-.page-leave-to {
+.page-enter-from, .page-leave-to {
   opacity: 0;
   filter: blur(1rem);
 }
 
-.rotate-enter-active,
-.rotate-leave-active {
+.rotate-enter-active, .rotate-leave-active {
   transition: all 0.5s;
 }
-.rotate-enter-from,
-.rotate-leave-to {
+.rotate-enter-from, .rotate-leave-to {
   opacity: 0;
   transform: rotate3d(1, 1, 1, -100deg);
 }

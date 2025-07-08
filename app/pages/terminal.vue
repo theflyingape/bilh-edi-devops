@@ -76,7 +76,7 @@
             <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
             <div>
               <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-              <FileStat v-model="fileCandidate" :hcie="Instance" />
+              <FileStat v-model="fileCandidate" :hcie="Instance" :tmux="tmux!" />
               <div class="flex justify-end"><SubmitButton :disabled="!fileCandidate.length || fileStat[Instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
             </div>
           </div>
@@ -110,9 +110,8 @@ definePageMeta({
 
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
-import { saveAs } from 'file-saver'
+// import { saveAs } from 'file-saver'
 import * as htmlToImage from 'html-to-image'
-import type { RefSymbol } from '@vue/reactivity'
 
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'rhurst' : get(useAuth().data)?.id
@@ -127,8 +126,10 @@ const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(se
 const fileCandidate = ref('')
 
 watch(selection, () => {
+  const sessionId = get(Instance)
+  set(fileCandidate, '')
+  fileStat.value[sessionId] = <filestat>{}
   if (isFiles && get(selection).length && !get(selection).includes('\n')) {
-    const sessionId = get(Instance)
     let filename = get(selection)
     if (filename[0] == "'" && filename.lastIndexOf("'") == filename.length - 1) {
       const trim = (str:string, chars:string) => str.split(chars).filter(Boolean).join(chars)
