@@ -45,10 +45,16 @@
               <template #start>
                 <Placeholder class="aspect-video">
                   <div class="flex flex-row">
-                    <!-- IrisSelect v-model="Instance" @change="sftpInstance" / -->
                     <IrisProduction v-model:instance="Instance" v-model:production="Production" />
-                    <URadioGroup v-model="xfer" :items="xfers" />
-                    start
+                    <USeparator class="p-2" orientation="vertical" />
+                    <UInput ref="input" v-model="sftpEndpoint.entry" color="info" icon="i-vscode-icons-file-type-search-result" placeholder="endpoint" :ui="{ trailing: 'pe-1' }">
+                      <template v-if="sftpEndpoint.entry?.length" #trailing>
+                        <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" @click="{ sftpEndpoint.entry = ''; search(false); }" />
+                      </template>
+                    </UInput>
+                    <UInputMenu v-model="sftpEndpoint.entry" placeholder="endpoint" :items="sftpCredentials" />
+                    <USeparator class="p-2" orientation="vertical" />
+                    <UInputMenu v-model="sftpAuth" multiple placeholder="authentication" :items="sftpCredentials" />
                   </div>
                 </Placeholder>
               </template>
@@ -59,7 +65,7 @@
               </template>
               <template #review>
                 <Placeholder class="aspect-video">
-                  review
+                  <URadioGroup v-model="xfer" :items="xfers" />
                 </Placeholder>
               </template>
             </UStepper>
@@ -131,8 +137,15 @@ const items: StepperItem[] = [
 const { InstanceDefault } = useIrisSessions()
 const Instance = ref(InstanceDefault)
 const Production = ref('')
+const input = useTemplateRef('input')
+const sftpEndpoint = ref({ entry: '' })
+const sftpAuth = ref([])
+const sftpCredentials = ref(['Account', 'Password', 'Key'])
 
 const stepper = useTemplateRef('stepper')
 const xfers = ref<RadioGroupItem[]>(['Pick-up', 'Drop-off'])
 const xfer = ref<RadioGroupValue>('Pick-up')
+
+function search(query:boolean) {
+}
 </script>

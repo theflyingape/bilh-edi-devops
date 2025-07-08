@@ -36,7 +36,7 @@
               
             </div>
             <UForm v-else :state=searchInput @submit.prevent="search(true)">
-              <UInput v-model="searchInput.entry" ref="input" color="info" icon="i-vscode-icons-file-type-search-result" size="sm" variant="subtle" placeholder="Search..." :ui="{ trailing: 'pe-1' }">
+              <UInput ref="input" v-model="searchInput.entry" color="info" icon="i-vscode-icons-file-type-search-result" size="sm" variant="subtle" placeholder="Search..." :ui="{ trailing: 'pe-1' }">
               <template v-if="searchInput.entry?.length" #trailing>
                 <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" @click="{ searchInput.entry = ''; search(false); }" />
               </template>

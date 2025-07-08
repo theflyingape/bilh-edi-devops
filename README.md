@@ -92,3 +92,10 @@ $ npm run preview
 ```
 
 Check out the Nuxt [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Change Log of major events
+
+**08-Jul-2025** switch Node.js v20 (Iron) to active LTS v22 (Jod)
+```
+In essence, Node.js 22 refines and expands upon the features of Node.js 20, with a focus on performance, developer experience, and enhanced interoperability between module systems. While Node.js 20 was a significant release, Node.js 22 represents the latest stable version with the most recent performance gains and feature set.
+```
