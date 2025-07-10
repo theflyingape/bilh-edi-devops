@@ -29,10 +29,10 @@
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
             <div v-if="tmux" class="space-x-2">
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="Ctrl/B shortcuts"><UButton class="rounded-full bg-amber-100 hover:bg-amber-300" color="neutral" size="sm" variant="link" icon="i-lucide-badge-help" @click="tmuxHelp" /></UTooltip>
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="split window"><UButton class="rounded bg-gray-100 hover:bg-gray-300" color="neutral" size="sm" variant="link" icon="i-ic-twotone-add-to-queue" @click="tmuxSplit" /></UTooltip>
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="switch to previous"><UButton class="rounded bg-sky-100 hover:bg-sky-300" color="neutral" size="sm" variant="link" icon="i-ic-twotone-swipe-vertical" @click="tmuxSwitch" /></UTooltip>
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="enter Copy Mode & search"><UButton class="rounded-full bg-violet-100 hover:bg-violet-300" color="neutral" size="sm" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="Ctrl/B shortcuts"><UButton class="rounded-full bg-amber-100 hover:bg-amber-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-lucide-badge-help" @click="tmuxHelp" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="split window"><UButton class="rounded bg-gray-100 hover:bg-gray-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-ic-twotone-add-to-queue" @click="tmuxSplit" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="switch to previous"><UButton class="rounded bg-sky-100 hover:bg-sky-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-ic-twotone-swipe-vertical" @click="tmuxSwitch" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="enter Copy Mode & search"><UButton class="rounded-full bg-violet-100 hover:bg-violet-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" /></UTooltip>
               
             </div>
             <UForm v-else :state=searchInput @submit.prevent="search(true)">
@@ -79,6 +79,23 @@
               <FileStat v-model="fileCandidate" :hcie="Instance" :tmux="tmux!" />
               <div class="flex justify-end"><SubmitButton :disabled="!fileCandidate.length || fileStat[Instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
             </div>
+          </div>
+        </div>
+        <div v-else>
+          <div v-if="tmux" class="space-x-2">
+            <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
+            <UCard variant="subtle">
+              <template #default>
+                <b>tmux</b> connect <i>can <b>resume</b> your running session after a <b>disconnect</b> and provides for additional screen functions</i>
+                <USeparator class="h-2" color="" orientation="horizontal" type="dotted" />
+                <ul class="list-disc text-sm/6">
+                  <li>use <UKbd value="meta" /><UKbd value="b" /> to prefix commands</li>
+                  <li>hold SHIFT <UKbd value="shift" />+<UKbd value="mouse" /> for selection</li>
+                  <li>use <UKbd value="mouse scroll" /> <b>or</b> press <UKbd value="meta" /><UKbd value="b" /> then <UKbd value="page up" /><UKbd value="page down" /> for scroll history</li>
+                  <li>exit scrolling using <UKbd value="esc" /> or <UKbd value="q" /></li>
+                </ul>
+              </template>
+            </UCard>
           </div>
         </div>
       </div>

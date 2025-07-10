@@ -123,14 +123,13 @@ export default function useTerminalSocket() {
     // upon open or a session switch
     if (ready || force) {
       resize(sessionId)
-      if (session.tmux) {
+      if (session.tmux && force) {
         setTimeout(() => {
           session.attach?.sendData('\x02')
-          session.xterm.focus()
           setTimeout(() => {
             session.attach?.sendData('r')
-          }, 50)
-        }, force ? 50 : 1000)
+          }, 100)
+        }, 100)
       } else
         session.xterm.refresh(0, session.xterm.rows - 1)
     }
