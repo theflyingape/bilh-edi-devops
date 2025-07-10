@@ -29,7 +29,7 @@
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
             <div v-if="tmux" class="space-x-2">
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="shortcuts"><UButton class="rounded-full bg-amber-100 hover:bg-amber-300" color="neutral" size="sm" variant="link" icon="i-lucide-badge-help" @click="tmuxHelp" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="Ctrl/B shortcuts"><UButton class="rounded-full bg-amber-100 hover:bg-amber-300" color="neutral" size="sm" variant="link" icon="i-lucide-badge-help" @click="tmuxHelp" /></UTooltip>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="split window"><UButton class="rounded bg-gray-100 hover:bg-gray-300" color="neutral" size="sm" variant="link" icon="i-ic-twotone-add-to-queue" @click="tmuxSplit" /></UTooltip>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="switch to previous"><UButton class="rounded bg-sky-100 hover:bg-sky-300" color="neutral" size="sm" variant="link" icon="i-ic-twotone-swipe-vertical" @click="tmuxSwitch" /></UTooltip>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="enter Copy Mode & search"><UButton class="rounded-full bg-violet-100 hover:bg-violet-300" color="neutral" size="sm" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" /></UTooltip>
@@ -45,7 +45,7 @@
           </div>
           <!-- right terminal controls -->
           <div class="flex flex-nowrap font-mono space-x-2 text-gray-400 text-lg">
-            <USeparator v-if="title.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" :text="title"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
+            <USeparator v-if="title.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="click to copy"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
             <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UButton size="sm" color="warning" variant="link" :label="selectionLabel" />
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
@@ -290,7 +290,7 @@ function mc() {
     send('\x0f')
   }
   else {
-    send('mc /files /files\r')
+    send(`mc ${get(tmux) ? '-x ' : ' '}/files /files\r`)
     set(mcRef, true)
   }
   xterm()?.focus()

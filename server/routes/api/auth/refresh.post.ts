@@ -1,3 +1,4 @@
+/* eslint-disable import/consistent-type-specifier-style */
 import { deleteCookie, eventHandler, getRequestHeader, readBody } from 'h3'
 import { sign, type Secret, type SignOptions, verify } from 'jsonwebtoken'
 import { type JwtPayload, ACCESS_TOKEN_TTL, SECRET, extractToken, tokensByUser } from './login.post'
@@ -30,7 +31,7 @@ export default eventHandler(async (event) => {
     const requestAccessToken = extractToken(authorizationHeader)
     const knownAccessToken = userTokens.refresh.get(body.refreshToken)
     if (!knownAccessToken || knownAccessToken !== requestAccessToken) {
-      return dumpSession('toekn mismatch', 'token mismatch')
+      return dumpSession('token mismatch', 'token mismatch')
     }
 
     // Invalidate old access token

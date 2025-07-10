@@ -52,7 +52,7 @@
                         <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" @click="{ sftpEndpoint.entry = ''; search(false); }" />
                       </template>
                     </UInput>
-                    <UInputMenu v-model="sftpEndpoint.entry" placeholder="endpoint" :items="sftpCredentials" />
+                    <UInputMenu v-model="sftpEndpoint.entry" placeholder="endpoint" />
                     <USeparator class="p-2" orientation="vertical" />
                     <UInputMenu v-model="sftpAuth" multiple placeholder="authentication" :items="sftpCredentials" />
                   </div>
