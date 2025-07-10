@@ -85,13 +85,14 @@
           <div v-if="tmux" class="space-x-2">
             <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
             <UCard variant="subtle">
-              <template #default>
+              <template #header>
                 <b>tmux</b> connect <i>can <b>resume</b> your running session after a <b>disconnect</b> and provides for additional screen functions</i>
-                <USeparator class="h-2" color="" orientation="horizontal" type="dotted" />
-                <ul class="list-disc text-sm/6">
+              </template>
+              <template #default>
+                <ul class="list-disc space-y-1.5 text-sm">
                   <li>use <UKbd value="meta" /><UKbd value="b" /> to prefix commands</li>
                   <li>hold SHIFT <UKbd value="shift" /> with mouse <UKbd class="font-bold rounded-full" value="btn" variant="subtle" /> to select text into copy buffer</li>
-                  <li>use <UKbd value="mouse scroll" /> <b>or</b> press <UKbd value="meta" /><UKbd value="b" /> then <UKbd value="page up" /><UKbd value="page down" /> for scroll history</li>
+                  <li>use mouse <UKbd class="font-bold rounded-full" value="wheel" variant="subtle" /> <i>or</i> press <UKbd value="meta" /><UKbd value="b" /> then <UKbd value="page up" /><UKbd value="page down" /> for scroll history</li>
                   <li>exit scrolling using <UKbd value="esc" /> or <UKbd value="q" /></li>
                 </ul>
               </template>

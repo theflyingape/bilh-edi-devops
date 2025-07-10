@@ -46,15 +46,15 @@
                 <Placeholder class="aspect-video">
                   <div class="flex flex-row justify-center">
                     <IrisProduction v-model:instance="Instance" v-model:production="Production" />
-                    <UCard class="grid grid-flow-row auto-rows-max max-w-1/5">
+                    <UCard class="grid grid-flow-row auto-rows-max max-w-1/4">
                       <template #header>
                         Client connection requirements
                       </template>
                       <template #default>
                         <UInputMenu v-model="sftpEndpoint" placeholder="enter or pick endpoint" create-item :items="sftpEndpoints" @create="onCreateSftp" />
-                        <UInputMenu v-model="sftpUsername" placeholder="username" create-item :items="sftpEndpoints" @create="onCreateUsername" />
-                        <UInputMenu v-model="sftpPassword" placeholder="password" create-item :items="sftpEndpoints" @create="onCreatePassword" />
-                        <UInputMenu v-model="sftpKeyfile" placeholder="keyfile" create-item :items="sftpEndpoints" @create="onCreateKey" />
+                        <UInputMenu v-model="sftpUsername" placeholder="username" create-item :items="sftpUsernames" @create="onCreateUsername" />
+                        <UInputMenu v-model="sftpPassword" placeholder="password" create-item :items="sftpPasswords" @create="onCreatePassword" />
+                        <UInputMenu v-model="sftpKeyfile" placeholder="keyfile" create-item :items="sftpKeyfiles" @create="onCreateKeyfile" />
                       </template>
                     </UCard>
                   </div>
@@ -142,8 +142,11 @@ const Production = ref('')
 const sftpEndpoint = ref('')
 const sftpEndpoints = ref([])
 const sftpUsername = ref('')
+const sftpUsernames = ref([])
 const sftpPassword = ref('')
+const sftpPasswords = ref([])
 const sftpKeyfile = ref('')
+const sftpKeyfiles = ref([])
 
 const stepper = useTemplateRef('stepper')
 const xfers = ref<RadioGroupItem[]>(['Pick-up', 'Drop-off'])
@@ -152,6 +155,21 @@ const xfer = ref<RadioGroupValue>('Pick-up')
 function onCreateSftp(endpoint: string) {
   get(sftpEndpoints).push(endpoint)
   set(sftpEndpoint, endpoint)
+}
+
+function onCreateUsername(username: string) {
+  get(sftpUsernames).push(username)
+  set(sftpUsername, username)
+}
+
+function onCreatePassword(password: string) {
+  get(sftpPasswords).push(password)
+  set(sftpPassword, password)
+}
+
+function onCreateKeyfile(keyfile: string) {
+  get(sftpKeyfiles).push(keyfile)
+  set(sftpKeyfile, keyfile)
 }
 
 function search(query:boolean) {
