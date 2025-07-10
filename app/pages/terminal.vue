@@ -90,7 +90,7 @@
                 <USeparator class="h-2" color="" orientation="horizontal" type="dotted" />
                 <ul class="list-disc text-sm/6">
                   <li>use <UKbd value="meta" /><UKbd value="b" /> to prefix commands</li>
-                  <li>hold SHIFT <UKbd value="shift" />+<UKbd value="mouse" /> for selection</li>
+                  <li>hold SHIFT <UKbd value="shift" /> with mouse <UKbd class="font-bold rounded-full" value="btn" variant="subtle" /> to select text into copy buffer</li>
                   <li>use <UKbd value="mouse scroll" /> <b>or</b> press <UKbd value="meta" /><UKbd value="b" /> then <UKbd value="page up" /><UKbd value="page down" /> for scroll history</li>
                   <li>exit scrolling using <UKbd value="esc" /> or <UKbd value="q" /></li>
                 </ul>

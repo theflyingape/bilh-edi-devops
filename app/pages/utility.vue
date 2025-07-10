@@ -44,17 +44,19 @@
             <UStepper ref="stepper" :items="items">
               <template #start>
                 <Placeholder class="aspect-video">
-                  <div class="flex flex-row">
+                  <div class="flex flex-row justify-center">
                     <IrisProduction v-model:instance="Instance" v-model:production="Production" />
-                    <USeparator class="p-2" orientation="vertical" />
-                    <UInput ref="input" v-model="sftpEndpoint.entry" color="info" icon="i-vscode-icons-file-type-search-result" placeholder="endpoint" :ui="{ trailing: 'pe-1' }">
-                      <template v-if="sftpEndpoint.entry?.length" #trailing>
-                        <UButton color="neutral" variant="link" size="sm" icon="i-lucide-circle-x" @click="{ sftpEndpoint.entry = ''; search(false); }" />
+                    <UCard class="grid grid-flow-row auto-rows-max max-w-1/5">
+                      <template #header>
+                        Client connection requirements
                       </template>
-                    </UInput>
-                    <UInputMenu v-model="sftpEndpoint.entry" placeholder="endpoint" />
-                    <USeparator class="p-2" orientation="vertical" />
-                    <UInputMenu v-model="sftpAuth" multiple placeholder="authentication" :items="sftpCredentials" />
+                      <template #default>
+                        <UInputMenu v-model="sftpEndpoint" placeholder="enter or pick endpoint" create-item :items="sftpEndpoints" @create="onCreateSftp" />
+                        <UInputMenu v-model="sftpUsername" placeholder="username" create-item :items="sftpEndpoints" @create="onCreateUsername" />
+                        <UInputMenu v-model="sftpPassword" placeholder="password" create-item :items="sftpEndpoints" @create="onCreatePassword" />
+                        <UInputMenu v-model="sftpKeyfile" placeholder="keyfile" create-item :items="sftpEndpoints" @create="onCreateKey" />
+                      </template>
+                    </UCard>
                   </div>
                 </Placeholder>
               </template>
@@ -86,8 +88,8 @@
 </template>
 
 <script setup lang="ts">
-import { set, useFileSystemAccess } from '@vueuse/core'
-import type { RadioGroupItem, RadioGroupValue, StepperItem } from '@nuxt/ui'
+import { get, set, useFileSystemAccess } from '@vueuse/core'
+import type { InputMenuItem, RadioGroupItem, RadioGroupValue, StepperItem } from '@nuxt/ui'
 
 definePageMeta({
   auth: false,
@@ -137,14 +139,20 @@ const items: StepperItem[] = [
 const { InstanceDefault } = useIrisSessions()
 const Instance = ref(InstanceDefault)
 const Production = ref('')
-const input = useTemplateRef('input')
-const sftpEndpoint = ref({ entry: '' })
-const sftpAuth = ref([])
-const sftpCredentials = ref(['Account', 'Password', 'Key'])
+const sftpEndpoint = ref('')
+const sftpEndpoints = ref([])
+const sftpUsername = ref('')
+const sftpPassword = ref('')
+const sftpKeyfile = ref('')
 
 const stepper = useTemplateRef('stepper')
 const xfers = ref<RadioGroupItem[]>(['Pick-up', 'Drop-off'])
 const xfer = ref<RadioGroupValue>('Pick-up')
+
+function onCreateSftp(endpoint: string) {
+  get(sftpEndpoints).push(endpoint)
+  set(sftpEndpoint, endpoint)
+}
 
 function search(query:boolean) {
 }

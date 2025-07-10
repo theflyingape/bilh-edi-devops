@@ -2,7 +2,7 @@
   <USelect
     :items="items"
     placeholder="instance"
-    class="w-28"
+    class="max-h-fit w-28"
   />
 </template>
 
