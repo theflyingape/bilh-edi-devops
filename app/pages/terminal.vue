@@ -296,7 +296,7 @@ function reset() {
 
 //  btop: resource monitors
 function btop() {
-  send('btop\r')
+  send('fastfetch && btop\r')
   xterm()?.focus()
 }
 
