@@ -6,10 +6,14 @@ export default defineContentConfig({
       type: 'page',
       source: 'index.md'
     }),
+    faq: defineCollection({
+      type: 'page',
+      source: 'faq.md'
+    }),
     docs: defineCollection({
       type: 'page',
       source: {
-        include: '**',
+        include: 'docs/**',
         exclude: ['index.md']
       },
       schema: z.object({

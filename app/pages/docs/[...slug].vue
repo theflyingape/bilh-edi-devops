@@ -5,7 +5,6 @@
       :description="page.description"
       :links="page.links"
     />
-    :headline="headline"
     <UPageBody>
       <ContentRenderer
         v-if="page"
@@ -24,35 +23,13 @@
       <UContentToc
         :title="toc?.title"
         :links="page.body?.toc?.links"
-      >
-        <template
-          v-if="toc?.bottom"
-          #bottom
-        >
-          <div
-            class="hidden lg:block space-y-6"
-            :class="{ '!mt-6': page.body?.toc?.links?.length }"
-          >
-            <USeparator
-              v-if="page.body?.toc?.links?.length"
-              type="dashed"
-            />
-
-            <UPageLinks
-              :title="toc.bottom.title"
-              :links="links"
-            />
-          </div>
-        </template>
-      </UContentToc>
+      />
     </template>
   </UPage>
 </template>
 
 <script setup lang="ts">
 import { get } from '@vueuse/core'
-import type { ContentNavigationItem } from '@nuxt/content'
-import { findPageHeadline } from '@nuxt/content/utils'
 
 definePageMeta({
   auth: false,
@@ -61,7 +38,6 @@ definePageMeta({
 
 const route = useRoute()
 const { toc, seo } = useAppConfig()
-const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 
 const { data: page } = await useAsyncData(route.path, () => queryCollection('docs').path(route.path).first())
 if (!get(page)) {
@@ -79,28 +55,5 @@ useSeoMeta({
   ogTitle: `${get(page)?.seo.title} - ${seo?.siteName}`,
   description: get(page)?.seo.description,
   ogDescription: get(page)?.seo.description
-})
-
-const headline = computed(() => findPageHeadline(get(navigation)))
-/*
-defineOgImageComponent('Docs', {
-  title: page.value.title,
-  description: page.value.description,
-  headline: headline.value
-})
-*/
-const links = computed(() => {
-  const links: never[] = []
-  /*
-  if (toc?.bottom?.edit) {
-    links.push({
-      icon: 'i-lucide-external-link',
-      label: 'Edit this page',
-      to: `${toc.bottom.edit}/${page?.value?.stem}.${page?.value?.extension}`,
-      target: '_blank'
-    })
-  }
-  */
-  return [...links, ...(toc?.bottom?.links || [])].filter(Boolean)
 })
 </script>

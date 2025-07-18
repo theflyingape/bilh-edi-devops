@@ -9,7 +9,7 @@
           <div>{{ new Date(fileStat[hcie]!.modified).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) }}</div>
         </div>
         <div v-else>
-          <b>cd</b> to the source folder and use <b>{{ tmux ? 'SHIFT + ' : '' }}mouse</b> to highlight the <b>file name</b> for downloading
+          <b>cd</b> to a subfolder and use {{ tmux ? 'SHIFT ⇧ +' : '' }} mouse <UKbd class="font-bold rounded-full" value="btn" variant="subtle" /> to highlight a <b>file name</b>
         </div>
       </div>
       <div class="flex font-mono justify-start italic text-sm">
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   hcie: INSTANCE
   tmux: boolean
 }>()

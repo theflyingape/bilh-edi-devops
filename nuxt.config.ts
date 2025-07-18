@@ -1,7 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: [
-    '@nuxt/devtools', '@nuxt/eslint', '@nuxt/image', '@nuxt/ui-pro', '@nuxt/content', '@sidebase/nuxt-auth', '@vueuse/nuxt', 'nuxt-file-storage', 'nuxt-llms'
+    '@nuxt/devtools',
+    '@nuxt/eslint',
+    '@nuxt/image',
+    '@nuxt/ui-pro',
+    '@nuxt/content',
+    '@nuxtjs/mdc',
+    '@sidebase/nuxt-auth',
+    '@vueuse/nuxt',
+    'nuxt-file-storage',
+    'nuxt-llms',
+    'nuxt-tiptap-editor'
   ],
 
   imports: {
@@ -38,7 +48,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '0.8.6'
+    version: '0.9.0'
   },
   runtimeConfig: {
     public: {
@@ -53,13 +63,9 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
     port: 6500
   },
-  future: {
-    compatibilityVersion: 4
-  },
-  compatibilityDate: '2025-03-09',
 
   nitro: {
-    preset: 'node_server',
+    preset: 'node-server',
     // baseURL: '/devops',
     experimental: {
       websocket: true
@@ -79,15 +85,18 @@ export default defineNuxtConfig({
       '/composables/**': { ssr: false },
       '/code': { ssr: false },
       '/home': { ssr: false },
+      '/profile': { ssr: false },
       '/terminal': { ssr: false },
       '/utility': { ssr: false }
+      // '/docs/**': { cache: { maxAge: 600 } },
       // '/faq': { cache: { maxAge: 600 } },
       // '/home': { cache: { maxAge: 600, swr: false } },
       // '/index': { cache: { maxAge: 600, swr: false } },
-      // '/mission/**': { cache: { maxAge: 600 } },
+      // '/mission': { cache: { maxAge: 600 } },
       // '/terminal': { cache: false, ssr: false },
     }
   },
+
   vite: {
     optimizeDeps: {
       exclude: ['@xterm/xterm']
@@ -187,19 +196,16 @@ export default defineNuxtConfig({
     sections: [
       {
         title: 'BILH Interface Engine',
-        contentCollection: 'docs',
-        contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/docs/1-bilh-interface-engine%' }
-        ]
+        description: 'Health Connect'
       },
       {
         title: 'Technology & Innovation',
-        contentCollection: 'docs',
-        contentFilters: [
-          { field: 'path', operator: 'LIKE', value: '/docs/2-technology-and-innovation%' }
-        ]
+        description: 'Our service line'
       }
     ]
+  },
+  tiptap: {
+    prefix: 'Tiptap'
   },
   uiPro: {
     content: true

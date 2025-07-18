@@ -122,10 +122,6 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({
-  //pageTransition: { name: 'page', mode: 'out-in' }
-})
-
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
 // import { saveAs } from 'file-saver'

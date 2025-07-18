@@ -42,38 +42,16 @@ The [topics below](#topics) describe what you can do on & off this main portal. 
   ---
   size: xl
   icon: i-vscode-icons-file-type-docz
-  to: /bilh-interface-engine
+  to: /docs/bilh-interface-engine
   trailing-icon: i-lucide-arrow-right
   ---
   EDI DevOps content
-  :::
-
-  :::u-button
-  ---
-  color: info
-  icon: i-lucide-message-circle-question
-  size: xl
-  to: /faq
-  trailing-icon: i-lucide-arrow-right
-  ---
-  FAQ
-  :::
-
-  :::u-button
-  ---
-  color: neutral
-  icon: i-heroicons-academic-cap
-  size: xl
-  to: https://learning.intersystems.com
-  target: blank
-  variant: subtle
-  ---
-  Visit InterSystems Learning services
   :::
 ::
 
 ::u-page-section
 #title
+
 # Topics
 
 #description
@@ -126,6 +104,31 @@ Learn what each menu topic represents and how each item allows for quick access 
   
   #description
   Essential applications to work within the IRIS database environments.
+  :::
+
+  :::u-page-feature
+  ---
+  icon: i-lucide-message-circle-question
+  to: /faq
+  ---
+  #title
+  FAQ
+
+  #description
+  Frequently asked questions about our technology
+  :::
+
+  :::u-page-feature
+  ---
+  icon: i-heroicons-academic-cap
+  to: https://learning.intersystems.com
+  target: blank
+  ---
+  #title
+  InterSystems Learning services
+
+  #description
+  Paid for technical support. Visit online training tracks at your own pace
   :::
 ::
 

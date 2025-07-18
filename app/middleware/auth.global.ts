@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const { isAdmin } = useDevOps()
     const { user } = useIrisSessions()
     const notAdmin = ['admin']
-    const notAllowed = ['code', 'terminal', 'utility']
+    const notAllowed = ['code', 'profile', 'terminal', 'utility']
 
     //  a little negative, but steer any visitors away ...
     if (notAdmin.includes(to.name!.toString()) && !isAdmin)

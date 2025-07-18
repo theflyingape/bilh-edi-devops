@@ -44,14 +44,19 @@
           </UForm>
         </UCard>
       </div>
-      <div class="flex">
-        <div class="p-4">
-          <UColorModeSelect class="m-auto" />
-        </div>
-        <div v-if="isAdmin" class="justify-end mt-4">
-          <UButton color="info" variant="soft" to="admin">
+      <div class="flex justify-end">
+        <div v-if="isAdmin" class="m-2">
+          <UButton color="info" icon="i-heroicons-briefcase" variant="soft" to="admin">
             Admin
           </UButton>
+        </div>
+        <div v-if="user.enabled" class="m-2">
+          <UButton color="neutral" icon="i-heroicons-user-circle" variant="soft" to="profile">
+            Profile
+          </UButton>
+        </div>
+        <div class="m-2">
+          <UColorModeSelect />
         </div>
       </div>
     </template>
