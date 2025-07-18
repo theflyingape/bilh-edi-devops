@@ -25,7 +25,7 @@ orientation: horizontal
   :::tip
   ---
   target: _blank
-  to: https://openexchange.intersystems.com/?categories=Developer-Environment,Frameworks,Integration,Solutions,Technology-Example&work-with=Ensemble&industries=Healthcare&sort=d.desc
+  to: https://openexchange.intersystems.com/?categories=Developer-Environment,Frameworks,Integration,Solutions,Technology-Example&work-with=HealthShare,Ensemble&industries=Healthcare&sort=d.desc
   ---
   Explore rapid innovation enabled by open-source development: enhances the scope of our team development service catalog and aligns with the business motivators to solve data orchestrations critical for success.
   :::
