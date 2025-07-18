@@ -1,6 +1,6 @@
 <template>
   <div ref="Terminal" class="bg-zinc-200 min-h-dvh h-dvh min-w-full w-full">
-    <div class="flex flex-nowrap h-full w-full justify-center pt-2">
+    <div class="flex flex-nowrap h-full w-full justify-center">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-1/2 h-11/12 max-h-11/12 overflow-hidden resize resizer">
         <DevOnly><XtermJs v-show="Instance == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
@@ -350,7 +350,7 @@ function sendCurl() {
 function snap() {
 // html2canvas(<HTMLDivElement>document.getElementById('crt')).then((canvas) => {
 //  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
-  htmlToImage.toJpeg(get(TerminalRef)!, { quality: 0.9 }).then((dataUrl:string) => {
+  htmlToImage.toJpeg(get(TerminalRef)!, { height: get(TerminalRef)!.clientHeight - 88, width: Math.ceil(get(TerminalRef)!.clientWidth * 0.83), quality: 0.9 }).then((dataUrl:string) => {
     const link = document.createElement('a')
     link.download = `${get(Instance)}-crt-snap.jpg`
     link.href = dataUrl
