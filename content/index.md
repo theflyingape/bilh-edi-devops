@@ -115,7 +115,7 @@ Learn what each menu topic represents and how each item allows for quick access 
   FAQ
 
   #description
-  Frequently asked questions about our technology
+  Frequently asked questions about this technology.
   :::
 
   :::u-page-feature
@@ -128,7 +128,7 @@ Learn what each menu topic represents and how each item allows for quick access 
   InterSystems Learning services
 
   #description
-  Paid for technical support. Visit online training tracks at your own pace
+  Paid for technical support. Visit online training tracks at your own pace.
   :::
 ::
 
