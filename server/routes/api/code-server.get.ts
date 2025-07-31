@@ -1,10 +1,10 @@
 import child from 'child_process'
 import url from 'url'
 import useCodeServer from './code-sessions'
-import { getServerSession } from '#auth'
+// import { getServerSession } from '#auth'
 import { log } from '~/lib/syslog.server'
 
-export default defineEventHandler(async (event)  => {
+export default defineEventHandler(async (event) => {
   //  TODO: future implementation for server-side auth
   //  inspired by the getServerSession of NextAuth.js
   //  it also avoids an external HTTP GET request to the /api/auth/sessions endpoint,
@@ -26,6 +26,7 @@ export default defineEventHandler(async (event)  => {
       process.kill(pid, 0)
       return { status: 'OK', ...sessions[username], ...ports[port] }
     } catch (e) {
+      log('LOG_WARN', `code-server ${e}`)
       //  process had shutdown -- free from lists and re-instantiate a new one
       delete sessions[username], ports[port]
     }
