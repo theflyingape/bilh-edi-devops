@@ -33,7 +33,7 @@ const links = ref([
   },
   {
     label: 'Learn more',
-    to: 'https://bilh.sharepoint.com/:b:/s/BIDMC-TechnologyOffice/EY3XzMlMufhJlEyV8IvU0sABsVEdDGcEn1mXCfk-HhjuGg?e=PJI7cs',
+    to: 'https://bilh.sharepoint.com/:b:/s/BIDMC-TechnologyOffice/EY3XzMlMufhJlEyV8IvU0sABsVEdDGcEn1mXCfk-HhjuGg',
     icon: 'i-vscode-icons-file-type-pdf2',
     target: '_blank',
     color: 'neutral',
