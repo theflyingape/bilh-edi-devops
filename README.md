@@ -4,7 +4,7 @@ In steps [Code Server](https://code.visualstudio.com/docs/remote/vscode-server) 
 
 As a future objective, promoting the team's activities off the home page, suitable for guest browsing too, that provides the latest news and events out of their space. Some content may be generated programmatically, while others from a post by the team (moderated by its admins).
 
-![screenshot](https://github.com/theflyingape/bilh-edi-devops/blob/1304cd49be4fa9a1f72cb4042e9899324017cc0d/screenshot.png "DevOps portal")
+![screenshot](https://github.com/theflyingape/bilh-edi-devops/blob/main/screenshot.png "DevOps portal")
 
 ## Linux host setup
 
