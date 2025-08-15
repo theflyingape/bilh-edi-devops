@@ -50,6 +50,7 @@ export default function useTerminalSocket() {
     prep[sessionId].cols = cols || get(cols)
     if (url) prep[sessionId].url = url + `&profile=${sessionId}`
     prep[sessionId].status = 'CLOSED'
+    prep[sessionId].title = 'offline'
     sessionList = Object.assign(sessionList, prep)
     const session = sessionList[sessionId]!
     session.fit = new FitAddon()
