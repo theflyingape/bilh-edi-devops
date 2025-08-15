@@ -60,6 +60,18 @@ Learn what each menu topic represents and how each item allows for quick access 
 #features
   :::u-page-feature
   ---
+  icon: i-lucide-message-circle-question
+  to: /faq
+  ---
+  #title
+  FAQ
+
+  #description
+  Frequently asked questions about this technology.
+  :::
+
+  :::u-page-feature
+  ---
   icon: i-lucide-book-open
   to: https://hciedev.laheyhealth.org/csp/docbook/DocBook.UI.Page.cls
   ---
@@ -104,18 +116,6 @@ Learn what each menu topic represents and how each item allows for quick access 
   
   #description
   Essential applications to work within the IRIS database environments.
-  :::
-
-  :::u-page-feature
-  ---
-  icon: i-lucide-message-circle-question
-  to: /faq
-  ---
-  #title
-  FAQ
-
-  #description
-  Frequently asked questions about this technology.
   :::
 
   :::u-page-feature

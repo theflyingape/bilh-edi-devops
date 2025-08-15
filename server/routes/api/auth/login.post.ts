@@ -1,10 +1,11 @@
-import { PrivateKey, sign, SignOptions } from 'jsonwebtoken'
-import { IRIStoken } from '~/composables/useIrisSessions'
+import type { PrivateKey, SignOptions } from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
+import type { IRIStoken } from '~/composables/useIrisSessions'
 import { log } from '~/lib/syslog.server'
 import { z } from 'zod'
 
-//  supply trivial values for testing -- make .env to better secure your site implementation
-//const dev = process.dev || false
+// supply trivial values for testing -- make .env to better secure your site implementation
+// const dev = process.dev || false
 const dev = import.meta.dev || false
 export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || '30s'
 export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '1h'
@@ -40,7 +41,7 @@ const credentialsSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const { username, password, IRIStoken } = await readValidatedBody(event, credentialsSchema.parse)
-  let session: JwtPayload = { id: username, enabled: false }
+  const session: JwtPayload = { id: username, enabled: false }
   let token
 
   //  this allows me to test out-of-band
@@ -66,8 +67,7 @@ export default defineEventHandler(async (event) => {
 
       setResponseStatus(event, 200, 'logged in')
       token = { token: { accessToken, refreshToken } }
-    }
-    else
+    } else
       setResponseStatus(event, 401, 'invalid credentials')
   }
 
@@ -94,8 +94,7 @@ export default defineEventHandler(async (event) => {
 
       setResponseStatus(event, 200, 'logged in')
       token = { token: { accessToken, refreshToken } }
-    }
-    catch (err) {
+    } catch (err) {
       setResponseStatus(event, 401, `${err}`)
       log('LOG_NOTICE', `${username} ${event} ${JSON.stringify(err)}`)
     }

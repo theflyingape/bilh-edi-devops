@@ -24,6 +24,7 @@ type TS = {
     url?: string
     ws?: Ref<WebSocket | undefined>
     status?: string
+    title?: string
     attach?: AttachAddon
     search?: SearchAddon
     tmux?: boolean
@@ -107,6 +108,7 @@ export default function useTerminalSocket() {
           value = value.split(':').at(1)!
         value = value.trim()
         set(title, value)
+        session.title = value
       })
     }
   }
@@ -118,6 +120,7 @@ export default function useTerminalSocket() {
 
   function connected(sessionId: INSTANCE, force = false) {
     const session = sessionList[sessionId]!
+    set(title, session.title)
     const ready = session.attach?.checkOpenSocket() || false
     set(isConnected, ready)
     // upon open or a session switch
@@ -131,8 +134,13 @@ export default function useTerminalSocket() {
           }, 100)
         }, 100)
       } else
-        session.xterm.refresh(0, session.xterm.rows - 1)
+        setTimeout(() => {
+          session.xterm.refresh(0, session.xterm.rows - 1)
+        }, 100)
     }
+    setTimeout(() => {
+      session.xterm.clearSelection()
+    }, 50)
   }
 
   const isConnected = ref(false)

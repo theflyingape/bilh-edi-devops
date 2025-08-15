@@ -1,13 +1,18 @@
 // @ts-expect-error missing types
 import syslog from 'modern-syslog'
+
 syslog.open('DevOps')
 log('LOG_NOTICE', `syslog events are available from ssr`)
 
 //  syslog wrapper
-export function log(priority:string|number, message:string, loglevel:string|number = 'LOG_NOTICE') {
-    if (isNaN(+loglevel)) loglevel = syslog.level[loglevel]
-    syslog.upto(loglevel)
-    syslog.log(priority, message)
+export function log(
+  priority: string | number,
+  message: string,
+  loglevel: string | number = 'LOG_NOTICE'
+) {
+  if (isNaN(+loglevel)) loglevel = syslog.level[loglevel]
+  syslog.upto(loglevel)
+  syslog.log(priority, message)
 }
 /*
 syslog.level are listed from highest to lowest priority:
