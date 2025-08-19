@@ -207,8 +207,8 @@ function fontSize(delta:number) {
   localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
   save.value.fontSize = prefs.fontSize
   for(const session in sessionList) {
-    xterm(session).options.fontSize = prefs.fontSize
-    resize(session)
+    xterm(<INSTANCE>session).options.fontSize = prefs.fontSize
+    resize(<INSTANCE>session)
   }
 }
 

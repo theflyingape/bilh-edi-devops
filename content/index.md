@@ -27,7 +27,7 @@ orientation: horizontal
   target: _blank
   to: https://openexchange.intersystems.com/?categories=Developer-Environment,Frameworks,Integration,Solutions,Technology-Example&work-with=HealthShare,Ensemble&industries=Healthcare&sort=d.desc
   ---
-  Explore rapid innovation enabled by open-source development: enhances the scope of our team development service catalog and aligns with the business motivators to solve data orchestrations critical for success.
+  **Open Exchange** empowers organizations with innovative open-source solutions to effectively orchestrate critical data, optimizing operations, and driving strategic business outcomes.
   :::
   :::
 
@@ -35,7 +35,7 @@ orientation: horizontal
 About
 
 #description
-The [topics below](#topics) describe what you can do on & off this main portal. Much more systems, development, and operational details follow in the EDI DevOps content.
+The [topics below](#topics) describe what can be done on & off this main portal.
 
 #links
   :::u-button
@@ -84,6 +84,19 @@ Learn what each menu topic represents and how each item allows for quick access 
 
   :::u-page-feature
   ---
+  icon: i-heroicons-academic-cap
+  to: https://learning.intersystems.com
+  target: blank
+  ---
+  #title
+  InterSystems Learning services
+
+  #description
+  Paid for technical support. Visit online training tracks at your own pace.
+  :::
+
+  :::u-page-feature
+  ---
   icon: i-lucide-chart-bar-stacked
   to: /home
   ---
@@ -116,19 +129,6 @@ Learn what each menu topic represents and how each item allows for quick access 
   
   #description
   Essential applications to work within the IRIS database environments.
-  :::
-
-  :::u-page-feature
-  ---
-  icon: i-heroicons-academic-cap
-  to: https://learning.intersystems.com
-  target: blank
-  ---
-  #title
-  InterSystems Learning services
-
-  #description
-  Paid for technical support. Visit online training tracks at your own pace.
   :::
 ::
 

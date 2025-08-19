@@ -6,7 +6,6 @@
 </template>
 
 <script setup lang="ts">
-import { get } from '@vueuse/core'
 import type { ITerminalOptions, ITheme } from '@xterm/xterm'
 import { Terminal } from '@xterm/xterm'
 import type { INSTANCE } from '~/composables/useIrisSessions'
@@ -56,11 +55,11 @@ const startup: ITerminalOptions = {
 }
 
 const { sessionList, prepare } = useTerminalSocket()
-const terminalContainer = templateRef('terminalContainer')
+const terminalContainer = useTemplateRef('terminalContainer')
 const term = new Terminal({ ...startup, rows: props.rows || 25, cols: props.cols || 80 })
 
 onMounted(() => {
-  term.open(get(terminalContainer))
+  term.open(terminalContainer.value!)
   prepare(props.session, term, props.wsUrl, props.rows, props.cols)
 })
 
