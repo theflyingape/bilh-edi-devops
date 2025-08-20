@@ -2,7 +2,7 @@
   <div ref="Terminal" class="bg-zinc-200 min-h-dvh h-dvh min-w-full w-full">
     <div class="flex flex-nowrap h-full w-full justify-center">
       <!-- monitor with a thin bezel -->
-      <div ref="crt" class="bg-zinc-800 p-3 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-1/2 h-11/12 max-h-11/12 overflow-hidden resize resizer">
+      <div ref="crt" class="bg-zinc-800 p-2 pb-8 rounded-md min-w-5/12 w-5/6 max-w-11/12 min-h-2/3 h-11/12 max-h-11/12 overflow-hidden resize resizer">
         <DevOnly><XtermJs v-show="Instance == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
         <XtermJs v-show="Instance == 'Dev'" @vue:mounted="" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />

@@ -154,9 +154,9 @@ export default function useTerminalSocket() {
       const xy = session.fit.proposeDimensions()
       //  sanity checks
       if (xy?.rows && xy?.cols) {
-        if (Number.isNaN(xy.rows) == false && xy.rows >= 12)
+        if (Number.isNaN(xy.rows) == false && xy.rows >= 24)
           set(rows, xy.rows)
-        if (Number.isNaN(xy.cols) == false && xy.cols >= 40)
+        if (Number.isNaN(xy.cols) == false && xy.cols >= 64)
           set(cols, xy.cols)
         // console.log(get(cols), 'x', get(rows), '<-', session.xterm.cols,':',session.xterm.rows)
         session.xterm.resize(get(cols), get(rows))
