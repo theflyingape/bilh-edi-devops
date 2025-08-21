@@ -1,6 +1,11 @@
 @import "tailwindcss";
 @import "@nuxt/ui-pro";
-
+/*
 @theme {
+
   --font-sans: 'Public Sans', sans-serif;
+}
+*/
+:root {
+  --ui-header-height: -1;
 }
