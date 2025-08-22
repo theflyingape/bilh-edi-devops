@@ -350,7 +350,7 @@ function sendCurl() {
 function snap() {
 // html2canvas(<HTMLDivElement>document.getElementById('crt')).then((canvas) => {
 //  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
-  htmlToImage.toJpeg(get(TerminalRef)!, { height: get(TerminalRef)!.clientHeight - 80, width: Math.ceil(get(TerminalRef)!.clientWidth * 0.83), quality: 0.9 }).then((dataUrl:string) => {
+  htmlToImage.toJpeg(get(TerminalRef)!, { height: get(TerminalRef)!.clientHeight * 0.918, width: Math.ceil(get(TerminalRef)!.clientWidth * 0.828), quality: 0.8 }).then((dataUrl:string) => {
     const link = document.createElement('a')
     link.download = `${get(Instance)}-crt-snap.jpg`
     link.href = dataUrl
