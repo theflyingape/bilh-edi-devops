@@ -287,7 +287,14 @@ function clear() {
 function reset() {
   xterm()?.reset()
   xterm()?.focus()
-  send('\r')
+  if (get(termType) == 'tmux') {
+    send('\x02')
+    setTimeout(() => {
+      send('r')
+    }, 50)
+  }
+  else
+    send('\r')
 }
 
 //  btop: resource monitors
