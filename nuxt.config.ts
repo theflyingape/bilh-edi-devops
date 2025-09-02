@@ -48,7 +48,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '0.9.1'
+    version: '0.9.2'
   },
   runtimeConfig: {
     public: {
@@ -59,6 +59,7 @@ export default defineNuxtConfig({
   build: {
     transpile: ['jsonwebtoken']
   },
+  compatibilityDate: '2025-09-02',
   devServer: {
     host: '0.0.0.0',
     port: 6500
