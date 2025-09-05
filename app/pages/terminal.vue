@@ -48,7 +48,12 @@
             <USeparator v-if="title.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="click to copy"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
             <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UButton size="sm" color="warning" variant="link" :label="selectionLabel" />
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
-            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
+            <div v-if="tmux">
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="screensaver"><UButton size="sm" icon="i-lucide-lock-keyhole" color="neutral" variant="subtle" @click="reset" /></UTooltip>
+            </div>
+            <div v-else>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="reset terminal"><UButton size="sm" icon="i-lucide-trash-2" color="neutral" variant="subtle" @click="reset" /></UTooltip>
+            </div>
             <USeparator orientation="vertical" class="h-6" />&nbsp;{{rows}}x{{cols}}
           </div>
         </div>
@@ -287,12 +292,14 @@ function clear() {
 function reset() {
   xterm()?.focus()
   if (get(termType) == 'tmux') {
+    //  show time to hide content
     send('\x02')
     setTimeout(() => {
-      send('r')
+      send('t')
     }, 50)
   }
   else {
+    //  emulator reset
     xterm()?.write('\x1bc')
     setTimeout(() => {
       send('\r')
