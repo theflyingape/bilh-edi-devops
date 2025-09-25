@@ -4,7 +4,7 @@ export default defineNuxtConfig({
     '@nuxt/devtools',
     '@nuxt/eslint',
     '@nuxt/image',
-    '@nuxt/ui-pro',
+    '@nuxt/ui',
     '@nuxt/content',
     '@nuxtjs/mdc',
     '@sidebase/nuxt-auth',
@@ -42,13 +42,14 @@ export default defineNuxtConfig({
     }
   },
   ui: {
+    content: true,
     theme: {
       colors: ['primary', 'secondary', 'tertiary', 'info', 'success', 'warning', 'error', 'action']
     }
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '0.9.4'
+    version: '0.9.5'
   },
   runtimeConfig: {
     public: {
@@ -59,11 +60,11 @@ export default defineNuxtConfig({
   build: {
     transpile: ['jsonwebtoken']
   },
-  compatibilityDate: '2025-09-02',
   devServer: {
     host: '0.0.0.0',
     port: 6500
   },
+  compatibilityDate: '2025-09-02',
 
   nitro: {
     preset: 'node-server',
@@ -207,8 +208,5 @@ export default defineNuxtConfig({
   },
   tiptap: {
     prefix: 'Tiptap'
-  },
-  uiPro: {
-    content: true
   }
 })
