@@ -13,12 +13,7 @@
           <div v-if="isConnected" class="flex flex-nowrap space-x-2">
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="capture Terminal"><UButton size="sm" icon="i-lucide-camera" color="neutral" variant="subtle" @click.prevent="snap" /></UTooltip>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="btop: resource monitors"><UButton size="sm" icon="i-heroicons-rectangle-group" color="neutral" variant="subtle" @click="btop" /></UTooltip>
-            <div v-if="mcRef">
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="press Ctrl-O anywhere">
-                <UButton color="neutral" @click="mc"><UKbd size="sm" value="ctrl" variant="subtle" /><UKbd size="sm" value="o" variant="subtle" /></UButton>
-              </UTooltip>
-            </div>
-            <div v-else>
+            <div>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="launch Midnight Commander"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
             </div>
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="curl builder"><UButton size="sm" icon="i-lucide-biceps-flexed" color="neutral" variant="subtle" @click="isCurl = true" /></UTooltip>
@@ -45,7 +40,7 @@
           </div>
           <!-- right terminal controls -->
           <div class="flex flex-nowrap font-mono space-x-2 text-gray-400 text-lg">
-            <USeparator v-if="title.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="click to copy"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
+            <USeparator v-if="title.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="click to copy current path"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
             <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UButton size="sm" color="warning" variant="link" :label="selectionLabel" />
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
             <div v-if="tmux">
@@ -314,16 +309,9 @@ function btop() {
 }
 
 //  Midnight Commander
-const mcRef = ref(false)
-
 function mc() {
-  if (get(mcRef)) {
-    send('\x0f')
-  }
-  else {
-    send(`mc ${get(tmux) ? '-x ' : ' '}/files /files\r`)
-    set(mcRef, true)
-  }
+  send('\x0f')
+  send(`pgrep -au ${id} mc && echo 'use Ctrl-O for Midnight Commander' || mc ${get(tmux) ? '-x ' : ' '}/files /files\r`)
   xterm()?.focus()
 }
 

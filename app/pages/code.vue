@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <div class="flex h-dvh">
     <UCard class="m-auto" variant="outline">
@@ -20,16 +21,27 @@
             <div><UButton class="text-2xl" icon="i-vscode-icons-file-type-vscode" color="info" variant="soft" target="_blank" :to="url" label="Start hacking" /></div>
           </div>
           <div v-else class="space-y-8">
-            <div class="font-semibold text-center text-2xl text-sky-600"><UIcon class="align-middle" name="i-vscode-icons-file-type-vscode" size="48" />&nbsp; Code Server</div>
-            <div class="text-center"><UIcon name="i-lucide-construction" />&nbsp;<ULink to="https://docs.intersystems.com/healthconnectlatest/csp/docbook/DocBook.UI.Page.cls?KEY=AB_idesetup#AB_idesetup_isc" target="_blank">ObjectScript IDEs</ULink></div>
+            <div class="font-semibold text-center text-2xl text-sky-600">
+              <UIcon class="align-middle" name="i-vscode-icons-file-type-vscode" size="48" />
+              &nbsp; Code Server
+            </div>
+            <div class="text-center">
+              <UIcon name="i-lucide-construction" />&nbsp;<ULink to="https://docs.intersystems.com/healthconnectlatest/csp/docbook/DocBook.UI.Page.cls?KEY=AB_idesetup#AB_idesetup_isc" target="_blank">ObjectScript IDEs</ULink>
+            </div>
             <div><SubmitButton class="text-2xl" color="action" target="_blank" :to="url" :label="`Prepare my session`" @click="execute" /></div>
           </div>
-          <div v-if="message" class="text-center text-sm text-info-600">{{ message }}</div>
-          <div v-if="aborted" class="text-center text-error-600">Aborted by timeout!</div>
-      </div>
+          <div v-if="message" class="text-center text-sm text-info-600">
+            {{ message }}
+          </div>
+          <div v-if="aborted" class="text-center text-error-600">
+            Aborted by timeout!
+          </div>
+        </div>
       </template>
       <template #footer>
-        <div class="text-start text-nowrap font-mono">{{ now }}</div>
+        <div class="text-start text-nowrap font-mono">
+          {{ now }}
+        </div>
       </template>
     </UCard>
   </div>
@@ -37,6 +49,7 @@
 
 <script setup lang="ts">
 import { get, set, useNow, useFetch } from '@vueuse/core'
+
 const { data } = useAuth()
 const now = useNow()
 const message = ref('')
@@ -44,17 +57,16 @@ const pin = ref([])
 const url = ref('')
 const username = get(data)?.id
 const headers = useRequestHeaders(['cookie']) as HeadersInit
-const { aborted, execute, onFetchResponse } = useFetch(`/api/code-server?username=${username}`, { headers: headers }, { immediate: false, timeout: 12345 } )
+const { aborted, execute, onFetchResponse } = useFetch(`/api/code-server?username=${username}`, { headers: headers }, { immediate: false, timeout: 12345 })
 
 onFetchResponse((response) => {
   response.json().then((value) => {
     console.log('code-server response:', JSON.stringify(value))
     if (value?.status == 'OK') {
-      set(message, `${value.status}: your PID #${value.pid} has started on PORT #${value.port}`)
+      set(message, `${value.status}: code-server.sh PID #${value.pid} started on PORT #${value.port}`)
       set(pin, value?.pin)
       set(url, value?.url)
-    }
-    else {
+    } else {
       set(message, `${value.status}`)
       set(pin, [])
       set(url, '')
@@ -66,7 +78,7 @@ onFetchResponse((response) => {
 
 onMounted(() => {
   const style = document.body.style
-  style.backgroundImage = "url('/vscode-background.png')"
+  style.backgroundImage = `url('/vscode-background.png')`
   style.backgroundPosition = 'center'
   style.backgroundRepeat = 'no-repeat'
   style.backgroundSize = 'contain'
