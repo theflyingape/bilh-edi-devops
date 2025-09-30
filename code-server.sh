@@ -9,7 +9,13 @@ sudo -v || exit
 [ -n "$IDLE" ] || IDLE=3600
 let idle=$IDLE
 pname=/usr/lib/code-server/lib/node
-pgrep -c -f $pname -U $USER && exit
+
+# if PREPARE requested but a session is already running ... 
+if pgrep -c -f $pname -U $USER &> /dev/null ; then
+	PORT=`pgrep -a sudo | grep 'code-server' | grep " ${USER} " | awk -FPORT= '{ print $2 }' | awk '{ print $1 }'`
+	[ -n "$PORT" ] && sudo pkill -f $pname -U $USER && sleep 2
+	PORT=
+fi
 
 for pool in `seq 4 -1 1`; do
 	let port=( 6500+pool )
