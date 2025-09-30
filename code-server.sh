@@ -41,6 +41,7 @@ if [ ! -f "${DEVOPS}" ]; then
 fi
 
 sudo su - $USER -c "PASSWORD=$PASSWORD PORT=$PORT code-server	\
+	-an 'EDI DevOps' --i18n /files/.code-server/custom.json		\
 	--auth password --disable-telemetry --disable-update-check	\
 	--extensions-dir /files/.code-server/extensions" &
 
@@ -48,7 +49,7 @@ echo "`date`  Launched ... "
 sleep 3
 sudo pgrep -c -f $pname -U $USER &> /dev/null || exit
 echo -n "... and waiting until it goes idle after $idle-seconds"
-sudo touch "${HB}"
+touch "${HB}"
 
 while (( alive < idle )); do
 	now=$( date +%s )
