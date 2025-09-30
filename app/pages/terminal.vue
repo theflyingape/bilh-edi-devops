@@ -261,7 +261,6 @@ function terminal() {
   //  establish WebSocket pipe for client <-> shell
   connect(sessionId, get(tmux))
   attach(sessionId)
-  set(mcRef, false)
   xterm()?.writeln(`\r\n\x1B[2mConnecting to a \x1B[0;1m${sessionId}\x1B[0;2m shell session ${prefs.tmux ? 'with tmux' : 'just ssh'} as \x1B[m${id} ... \n`)
 }
 
