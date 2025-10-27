@@ -16,8 +16,6 @@ export default eventHandler((event) => {
   let decoded: JwtPayload | undefined = undefined
   try {
     // decoded = jwt.verify(extractedToken, <Secret>SECRET) as JwtPayload
-    console.info(event.context)
-    console.info('auth', event.context.auth)
     decoded = { auth: event.context.auth! }
   } catch (error) {
     console.error({

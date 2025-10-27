@@ -26,7 +26,6 @@ export default defineNitroPlugin((nitroApp) => {
 
     // Get the token from the Authorization header
     const token = event.node.req.headers.authorization?.split(' ')[1]
-    console.info('token', token)
 
     if (!token) {
       // If no token is provided, respond with an unauthorized error
@@ -45,7 +44,6 @@ export default defineNitroPlugin((nitroApp) => {
           exp?: number
         }
       }
-      console.info('decoded', decoded)
 
       // Attach the user to the event context for access in other handlers
       event.context.auth = decoded.auth
