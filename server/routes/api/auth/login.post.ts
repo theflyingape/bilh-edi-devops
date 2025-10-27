@@ -12,9 +12,11 @@ export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '1h'
 export const SECRET: PrivateKey = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
 
 export interface JwtPayload {
-  id: string
-  enabled: boolean
-  exp?: number
+  auth: {
+    id: string
+    enabled: boolean
+    exp?: number
+  }
 }
 
 interface TokensByUser {
@@ -41,13 +43,13 @@ const credentialsSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const { username, password, IRIStoken } = await readValidatedBody(event, credentialsSchema.parse)
-  const session: JwtPayload = { id: username, enabled: false }
+  const session: JwtPayload = { auth: { id: username, enabled: false } }
   let token
 
   //  this allows me to test out-of-band
   if (dev) {
     if (username == 'dev' && password == 'tester') {
-      session.enabled = true
+      session.auth.enabled = true
       //  create separate JWT for Nuxt auth session handling
       const tokenData: JwtPayload = session
       const accessToken = sign(tokenData, SECRET, <SignOptions>{
@@ -72,7 +74,7 @@ export default defineEventHandler(async (event) => {
   }
 
   if (IRIStoken) {
-    session.enabled = true
+    session.auth.enabled = true
     try {
       //  create separate JWT for Nuxt auth session handling
       const tokenData: JwtPayload = session

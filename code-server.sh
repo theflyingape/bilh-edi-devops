@@ -25,19 +25,20 @@ done
 [ -n "$PORT" ] || exit 1
 echo "PORT=$PORT"
 
-HB=${HOME}/.local/share/code-server/heartbeat
-WS=${HOME}/.local/share/code-server/User/Workspaces
-DEVOPS=${WS}/${USER}-devops.code-workspace
+CS=${HOME}/.local/share/code-server
+HB=${CS}/heartbeat
+DEVOPS=${CS}/User/Workspaces/${USER}-devops.code-workspace
 
 # redirect this new developer session to shared space
-if [ ! -d /files/.code-server/home/${USER} ]; then
-    mkdir -p /files/.code-server/home/${USER}/.local/share/code-server
-    ln -sf /files/.code-server/home/${USER}/.local/share/code-server ${HOME}/.local/share/code-server
+if [ ! -d "/files/.code-server${CS}" ]; then
+    sudo su - $USER -c "mkdir -p "/files/.code-server${CS}"
+    ln -sf "/files/.code-server${CS}" "${CS}"
 fi
 
 if [ ! -f "${DEVOPS}" ]; then
-	sudo su - $USER -c "mkdir -p ${HOME}/.local/share/code-server/User/Workspaces"
+	sudo su - $USER -c "mkdir -p ${CS}/User/Workspaces"
 	sudo su - $USER -c "cp '/files/.code-server/BILH HCIE DevOps.code-workspace' ${DEVOPS}"
+	sudo su - $USER -c "cp '/files/.code-server/settings.json' ${CS}/User/"
 fi
 
 sudo su - $USER -c "PASSWORD=$PASSWORD PORT=$PORT code-server	\

@@ -1,6 +1,7 @@
-/* eslint-disable import/consistent-type-specifier-style */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { deleteCookie, eventHandler, getRequestHeader, readBody } from 'h3'
-import { sign, type Secret, type SignOptions, verify } from 'jsonwebtoken'
+import type { Secret, SignOptions } from 'jsonwebtoken'
+import { sign } from 'jsonwebtoken'
 import { type JwtPayload, ACCESS_TOKEN_TTL, SECRET, extractToken, tokensByUser } from './login.post'
 
 export default eventHandler(async (event) => {
@@ -16,7 +17,8 @@ export default eventHandler(async (event) => {
 
   // Verify
   try {
-    const decoded = verify(refreshToken, <Secret>SECRET) as JwtPayload | undefined
+    // const decoded = jwt.verify(refreshToken, <Secret>SECRET) as JwtPayload | undefined
+    const decoded = event.context.auth
     if (!decoded) {
       return dumpSession(`Unauthorized, refreshToken can't be verified`, 'invalid refresh token')
     }
@@ -38,8 +40,10 @@ export default eventHandler(async (event) => {
     userTokens.access.delete(knownAccessToken)
 
     const user: JwtPayload = {
-      id: decoded.id,
-      enabled: decoded.enabled
+      auth: {
+        id: decoded.id,
+        enabled: decoded.enabled
+      }
     }
 
     const accessToken = sign({ ...user }, SECRET, <SignOptions>{

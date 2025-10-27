@@ -1,5 +1,7 @@
-import { createError, eventHandler, getRequestHeader } from 'h3'
-import { Secret, verify } from 'jsonwebtoken'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { eventHandler, getRequestHeader } from 'h3'
+// import type { Secret } from 'jsonwebtoken'
+// import jwt from 'jsonwebtoken'
 import { type JwtPayload, SECRET, extractToken, tokensByUser } from './login.post'
 
 export default eventHandler((event) => {
@@ -7,26 +9,28 @@ export default eventHandler((event) => {
   if (typeof authorizationHeader === 'undefined') {
     setResponseStatus(event, 403, 'Need to pass valid Bearer-authorization header to access this endpoint')
     return null
-    //throw createError({ statusCode: 403, statusMessage: 'Need to pass valid Bearer-authorization header to access this endpoint' })
+    // throw createError({ statusCode: 403, statusMessage: 'Need to pass valid Bearer-authorization header to access this endpoint' })
   }
 
   const extractedToken = extractToken(authorizationHeader)
-  let decoded: JwtPayload
+  let decoded: JwtPayload | undefined = undefined
   try {
-    decoded = verify(extractedToken, <Secret>SECRET) as JwtPayload
-  }
-  catch (error) {
+    // decoded = jwt.verify(extractedToken, <Secret>SECRET) as JwtPayload
+    console.info(event.context)
+    console.info('auth', event.context.auth)
+    decoded = { auth: event.context.auth! }
+  } catch (error) {
     console.error({
       msg: `Login failed. Here's the raw error:`,
       error
     })
     setResponseStatus(event, 401, 'Unauthorized')
     return null
-    //throw createError({ statusCode: 403, statusMessage: 'You must be logged in to use this endpoint' })
+    // throw createError({ statusCode: 403, statusMessage: 'You must be logged in to use this endpoint' })
   }
 
   // Check against known token
-  const userTokens = tokensByUser.get(decoded.id)
+  const userTokens = tokensByUser.get(decoded!.auth.id)
   if (!userTokens || !userTokens.access.has(extractedToken)) {
     return null
     /*
@@ -38,6 +42,6 @@ export default eventHandler((event) => {
   }
 
   // All checks successful
-  const { id, enabled } = decoded
+  const { id, enabled } = decoded!.auth
   return { id, enabled }
 })

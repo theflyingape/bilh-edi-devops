@@ -52,6 +52,7 @@ export default defineNuxtConfig({
     version: '0.9.5'
   },
   runtimeConfig: {
+    jwtSecret: process.env.NUXT_JWT_PASSWORD || '!$ecure!',
     public: {
       websocket: process.env.NODE_ENV == 'development' ? 'ws' : 'wss'
     }
@@ -145,7 +146,7 @@ export default defineNuxtConfig({
       },
       refresh: {
         isEnabled: true,
-        // ndpoint: { path: '/refresh', method: 'post' },
+        // endpoint: { path: '/refresh', method: 'post' },
         token: {
           signInResponseRefreshTokenPointer: '/token/refreshToken',
           refreshResponseTokenPointer: '',
