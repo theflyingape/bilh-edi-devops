@@ -10,7 +10,7 @@
     :links="links"
   >
     <div class="flex-nowrap justify-items-center p-2 text-slate-500 text-sm">
-      <img src="~/assets/images/HCIE.jpg" alt="App screenshot" class="rounded-lg shadow-2xl ring ring-(--ui-border)" />
+      <img src="~/assets/images/HCIE.jpg" alt="App screenshot" class="rounded-lg shadow-2xl ring ring-(--ui-border)">
       <UButton class="m-1 align-middle" :color="stale ? 'error' : 'neutral'" leading-icon="i-lucide-refresh-cw" size="sm" variant="subtle" @click.prevent="reload">reload</UButton>
       &nbsp;<em>v<b>{{ v }}</b> built {{ ts }}</em>
     </div>

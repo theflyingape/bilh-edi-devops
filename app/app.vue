@@ -22,9 +22,11 @@
             </UTooltip>
           </div>
           <div class="m-auto">
-            <UButton class="pl-2 pr-2" color="neutral" variant="ghost" to="https://m365.cloud.microsoft/chat" target="_blank">
-              <CopilotLogo class="h-6 w-auto" />
-            </UButton>
+            <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="M365 Chat">
+              <UButton class="pl-2 pr-2" color="neutral" variant="ghost" to="https://m365.cloud.microsoft/chat" target="_blank">
+                <CopilotLogo class="h-6 w-auto" />
+              </UButton>
+            </UTooltip>
           </div>
           <div class="m-auto">
             <UChip class="mt-2" :color="chip" inset>
