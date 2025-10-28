@@ -13,6 +13,7 @@
       <img src="~/assets/images/HCIE.jpg" alt="App screenshot" class="rounded-lg shadow-2xl ring ring-(--ui-border)">
       <UButton class="m-1 align-middle" :color="stale ? 'error' : 'neutral'" leading-icon="i-lucide-refresh-cw" size="sm" variant="subtle" @click.prevent="reload">reload</UButton>
       &nbsp;<em>v<b>{{ v }}</b> built {{ ts }}</em>
+      <blockquote>The document serves as a technical guide for managing and operating the BILH Interface Engine and HealthShare Health Connect platform. It provides detailed instructions for system setup, configuration, monitoring, failover, and backup processes, ensuring efficient and reliable healthcare data integration and management.</blockquote>
     </div>
   </UPageHero>
 </template>
@@ -38,7 +39,8 @@ const links = ref([
     target: '_blank',
     color: 'neutral',
     variant: 'outline',
-    trailingIcon: 'i-lucide-arrow-right'
+    trailingIcon: 'i-lucide-arrow-right',
+    title: 'This document provides a comprehensive overview of the BILH Interface Engine, specifically focusing on the HealthShare Health Connect platform powered by InterSystems IRIS. It outlines the system\'s architecture, capabilities, benefits, and operational details.'
   }
 ])
 const ts = ref(buildDate)
