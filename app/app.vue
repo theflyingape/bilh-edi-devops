@@ -11,7 +11,7 @@
       close-icon="i-lucide-x-circle" id="feat2" / -->
     <UHeader>
       <template #title>
-        <Logo class="h-10 w-auto" />
+        <ISCLogo class="h-12 w-auto" />
       </template>
       <UNavigationMenu :items="items" content-orientation="horizontal" />
       <template #right>
@@ -20,6 +20,11 @@
             <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="click to toggle fullscreen">
               <USwitch v-model="isFullscreen" color="secondary" unchecked-icon="i-heroicons-tv" checked-icon="i-lucide-scaling" size="xl" @click="toggle" />
             </UTooltip>
+          </div>
+          <div class="m-auto">
+            <UButton class="pl-2 pr-2" color="neutral" variant="ghost" to="https://m365.cloud.microsoft/chat" target="_blank">
+              <CopilotLogo class="h-6 w-auto" />
+            </UButton>
           </div>
           <div class="m-auto">
             <UChip class="mt-2" :color="chip" inset>

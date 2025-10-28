@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.71",
-    "@iconify-json/simple-icons": "^1.2.55",
+    "@iconify-json/simple-icons": "^1.2.56",
     "@intersystems/intersystems-iris-native": "^2.0.2",
     "@nuxt/content": "^3.7.1",
     "@nuxt/image": "^1.11.0",
