@@ -15,7 +15,7 @@ export default defineNitroPlugin((nitroApp) => {
   const secret = useRuntimeConfig().jwtSecret
 
   nitroApp.hooks.hook('request', async (event) => {
-    const publicRoutes = ['/api/auth/login', '/api/auth/logout']
+    const publicRoutes = ['/api/auth/login', '/api/auth/refresh']
     const url = event.node.req.url
 
     // skip middleware for public routes

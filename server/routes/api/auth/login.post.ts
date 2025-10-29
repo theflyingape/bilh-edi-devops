@@ -9,13 +9,13 @@ import { z } from 'zod'
 const dev = import.meta.dev || false
 export const ACCESS_TOKEN_TTL = process.env.NUXT_JWT_ACCESS || '30s'
 export const REFRESH_TOKEN_TTL = process.env.NUXT_JWT_REFRESH || '1h'
-export const SECRET: PrivateKey = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
+// export const SECRET: PrivateKey = process.env.NUXT_JWT_PASSWORD || '!$ecure!'
+export const SECRET: PrivateKey = useRuntimeConfig().jwtSecret
 
 export interface JwtPayload {
   auth: {
     id: string
     enabled: boolean
-    exp?: number
   }
 }
 
