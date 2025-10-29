@@ -6,7 +6,6 @@ declare module 'h3' {
     auth?: {
       id: string
       enabled: boolean
-      exp?: number
     }
   }
 }
@@ -17,18 +16,17 @@ export default defineNitroPlugin((nitroApp) => {
 
   nitroApp.hooks.hook('request', async (event) => {
     const publicRoutes = ['/api/auth/login', '/api/auth/logout']
+    const url = event.node.req.url
 
-    // Skip middleware for public routes
-    if (publicRoutes.includes(event.node.req.url || '')) {
+    // skip middleware for public routes
+    if (!url || !url.includes('/api/auth') || publicRoutes.includes(url))
       return
-    }
 
-    // Get the token from the Authorization header
+    // get the token from the Authorization header
     const token = event.node.req.headers.authorization?.split(' ')[1]
 
     if (!token) {
-      // If no token is provided, respond with an unauthorized error
-      console.error('jwt-auth missing token')
+      console.error('jwt-auth missing token for', url)
       throw createError({
         statusCode: 401,
         statusMessage: 'Unauthorized: Missing token'
@@ -41,7 +39,6 @@ export default defineNitroPlugin((nitroApp) => {
         auth: {
           id: string
           enabled: boolean
-          exp?: number
         }
       }
 
