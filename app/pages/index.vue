@@ -10,10 +10,9 @@
     :links="links"
   >
     <div class="flex-nowrap justify-items-center p-2 text-slate-500 text-sm">
-      <img src="~/assets/images/HCIE.jpg" alt="App screenshot" class="rounded-lg shadow-2xl ring ring-(--ui-border)">
+      <a href="https://bilh.sharepoint.com/:b:/s/BIDMC-TechnologyOffice/EY3XzMlMufhJlEyV8IvU0sABsVEdDGcEn1mXCfk-HhjuGg" target="_blank"><img src="~/assets/images/HCIE.jpg" alt="App screenshot" class="rounded-lg shadow-2xl ring ring-(--ui-border)" title="This document serves as a technical guide for managing and operating the BILH Interface Engine and HealthShare Health Connect platform. It provides detailed instructions for system setup, configuration, monitoring, failover, and backup processes, ensuring efficient and reliable healthcare data integration and management."></a>
       <UButton class="m-1 align-middle" :color="stale ? 'error' : 'neutral'" leading-icon="i-lucide-refresh-cw" size="sm" variant="subtle" @click.prevent="reload">reload</UButton>
       &nbsp;<em>v<b>{{ v }}</b> built {{ ts }}</em>
-      <blockquote>The document serves as a technical guide for managing and operating the BILH Interface Engine and HealthShare Health Connect platform. It provides detailed instructions for system setup, configuration, monitoring, failover, and backup processes, ensuring efficient and reliable healthcare data integration and management.</blockquote>
     </div>
   </UPageHero>
 </template>
@@ -40,7 +39,7 @@ const links = ref([
     color: 'neutral',
     variant: 'outline',
     trailingIcon: 'i-lucide-arrow-right',
-    title: 'This document provides a comprehensive overview of the BILH Interface Engine, specifically focusing on the HealthShare Health Connect platform powered by InterSystems IRIS. It outlines the system\'s architecture, capabilities, benefits, and operational details.'
+    title: 'Click for a comprehensive overview of the BILH Interface Engine, specifically focusing on the HealthShare Health Connect platform powered by InterSystems IRIS. It outlines the system\'s architecture, capabilities, benefits, and operational details.'
   }
 ])
 const ts = ref(buildDate)

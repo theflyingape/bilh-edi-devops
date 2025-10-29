@@ -31,7 +31,7 @@ DEVOPS=${CS}/User/Workspaces/${USER}-devops.code-workspace
 
 # redirect this new developer session to shared space
 if [ ! -d "/files/.code-server${CS}" ]; then
-    sudo su - $USER -c "mkdir -p "/files/.code-server${CS}"
+    sudo su - $USER -c "mkdir -p /files/.code-server${CS}"
     ln -sf "/files/.code-server${CS}" "${CS}"
 fi
 

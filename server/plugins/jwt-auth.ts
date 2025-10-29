@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { verify } from 'jsonwebtoken'
 
 // typing this h3 event context
@@ -29,6 +28,7 @@ export default defineNitroPlugin((nitroApp) => {
 
     if (!token) {
       // If no token is provided, respond with an unauthorized error
+      console.error('jwt-auth missing token')
       throw createError({
         statusCode: 401,
         statusMessage: 'Unauthorized: Missing token'
@@ -49,6 +49,7 @@ export default defineNitroPlugin((nitroApp) => {
       event.context.auth = decoded.auth
     } catch (error) {
       // If verification fails, respond with an invalid token error
+      console.error('jwt-auth', error)
       throw createError({
         statusCode: 401,
         statusMessage: 'Unauthorized: Invalid token'
