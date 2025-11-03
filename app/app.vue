@@ -231,6 +231,13 @@ const items = ref([
           to: '/utility'
         },
         {
+          label: 'Ask Developer Community AI',
+          icon: 'i-heroicons-sparkles',
+          description: 'An assistant for answering your questions using advanced AI technologies, including InterSystems IRIS Vector Search and SerenityGPT. It sources answers from the InterSystems Developer Community and official InterSystems IRIS documentation, offering context-aware and highly relevant responses.',
+          to: 'https://community.intersystems.com/ask-dc-ai',
+          target: '_blank'
+        },
+        {
           label: 'Worldwide Response Center',
           icon: 'i-heroicons-globe-americas-solid',
           description: 'InterSystems Application Catalog for end user portal access to their software and support. Or call: (617) 621-0700',
