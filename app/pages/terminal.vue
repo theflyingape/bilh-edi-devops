@@ -92,7 +92,9 @@
                 <ul class="list-disc space-y-1.5 text-sm">
                   <li>use <UKbd value="meta" /><UKbd value="b" /> to prefix <b>tmux</b> commands</li>
                   <li>hold <UKbd value="SHIFT" /> with mouse <UKbd class="font-bold rounded-full" value="btn" variant="subtle" /> to highlight text selection into the copy buffer</li>
-                  <li>use mouse <UKbd class="font-bold rounded-full" value="wheel" variant="subtle" /> <i>or</i> press <UKbd value="meta" /><UKbd value="b" /> then <UKbd value="page up" /><UKbd value="page down" /> for scroll history</li>
+                  <li>use mouse <UKbd class="font-bold rounded-full" value="wheel" variant="subtle" /> <i>or</i><br>
+                  press <UKbd value="meta" /><UKbd value="b" /> then <UKbd value="PgUp" />/<UKbd value="PgDn" /><br>
+                  for scroll history</li>
                   <li>exit scrolling using <UKbd value="esc" /> <i>or</i> <UKbd value="q" /></li>
                 </ul>
               </template>
