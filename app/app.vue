@@ -166,6 +166,13 @@ const items = ref([
           target: '_blank'
         },
         {
+          label: 'BILHPN ETLs',
+          icon: 'i-lucide-database-backup',
+          description: 'The Epic Healthy Planet data loads showing the weekly current & past counts to meet BILHPN clinics\' population health deliverables',
+          to: 'https://hcieprd.laheyhealth.org/csp/healthshare/hscustom/EDI.BILHPN.zen',
+          target: '_blank'
+        },
+        {
           label: 'Enterprise Monitor',
           icon: 'i-lucide-building-2',
           description: 'Displays the overall status of all running productions.',
