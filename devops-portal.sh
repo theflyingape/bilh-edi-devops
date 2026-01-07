@@ -2,8 +2,9 @@
 
 [ -d /opt/devops ] && cd /opt/devops
 
+# removed 7-Jan-2026 with xterm 6.0
 # let's try renaming CommonJs module to steer bundle to use ESM (.mjs) only
-find node_modules -name xterm.js -exec mv -v {} {}-old  \;
+#find node_modules -name xterm.js -exec mv -v {} {}-old  \;
 
 # flush any transition files for download
 rm -fv files/*

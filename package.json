@@ -29,7 +29,7 @@
     "@nuxt/content": "^3.10.0",
     "@nuxt/image": "^2.0.0",
     "@nuxt/ui": "^4.3.0",
-    "@nuxtjs/mdc": "^0.18.4",
+    "@nuxtjs/mdc": "^0.19.2",
     "@sidebase/nuxt-auth": "^1.1.1",
     "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/vite": "^4.1.18",
