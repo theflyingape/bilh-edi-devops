@@ -132,7 +132,7 @@ import { useTemplateRef } from 'vue'
 import * as htmlToImage from 'html-to-image'
 
 const config = useRuntimeConfig()
-const id = process.env.NODE_ENV == 'development' ? 'rhurst' : get(useAuth().data)?.id
+const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth().data)?.id
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
 
