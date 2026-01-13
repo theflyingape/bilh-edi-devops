@@ -23,8 +23,8 @@
     "lint:fix": "eslint --fix ."
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.82",
-    "@iconify-json/simple-icons": "^1.2.65",
+    "@iconify-json/lucide": "^1.2.84",
+    "@iconify-json/simple-icons": "^1.2.66",
     "@intersystems/intersystems-iris-native": "^2.0.3",
     "@nuxt/content": "^3.10.0",
     "@nuxt/image": "^2.0.0",
@@ -40,7 +40,7 @@
     "@xterm/addon-unicode11": "^0.9.0",
     "@xterm/addon-webgl": "^0.19.0",
     "@xterm/xterm": "^6.0.0",
-    "better-sqlite3": "^12.5.0",
+    "better-sqlite3": "^12.6.0",
     "file-saver": "^2.0.5",
     "html-to-image": "^1.11.13",
     "jsonwebtoken": "^9.0.3",
@@ -54,11 +54,11 @@
   },
   "devDependencies": {
     "@iconify-json/heroicons": "^1.2.3",
-    "@iconify-json/vscode-icons": "^1.2.37",
+    "@iconify-json/vscode-icons": "^1.2.38",
     "@nuxt/eslint": "^1.12.1",
     "@types/file-saver": "^2.0.7",
     "@types/jsonwebtoken": "^9.0.10",
-    "@types/node": "^22.19.3",
+    "@types/node": "^22.19.6",
     "eslint": "^9.39.2",
     "nuxt-file-storage": "^0.3.1",
     "typescript": "^5.9.3"
