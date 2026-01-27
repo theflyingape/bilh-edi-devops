@@ -49,7 +49,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '0.9.9'
+    version: '0.9.10'
   },
   runtimeConfig: {
     jwtSecret: process.env.NUXT_JWT_PASSWORD || '!$ecure!',
