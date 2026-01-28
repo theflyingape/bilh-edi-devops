@@ -11,6 +11,9 @@ rm -fv files/*
 
 NODE_VERSION=$( cat .nvmrc ) NODE_ENV=production .nvm/nvm-exec npm run build
 
+# this hack works, but found mechanism in nitro to have it included
+#rsync -a node_modules/node-pty/ .output/server/node_modules/node-pty/
+
 umask 002
 export NITRO_SSL_CERT="`cat /etc/pki/tls/certs/hcie-san.crt /etc/pki/tls/certs/hcie-san.int`"
 export NITRO_SSL_KEY="`cat /etc/pki/tls/private/hcie-san.key`"

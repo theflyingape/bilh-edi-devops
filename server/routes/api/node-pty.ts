@@ -13,11 +13,11 @@ export default defineWebSocketHandler({
     const id = <string>wsOpts?.id || 'unknown'
     const profile = <string>wsOpts?.profile || 'localhost'
     const tmux = <string>wsOpts?.tmux == 'true'
-    const cfg = terminal[profile]
+    const cfg = terminal[profile]!
 
     log('LOG_DEBUG', `node-pty ${peer.id} open for ${id} on ${profile} - ${peer.request.url}`, cfg.loglevel)
     //  prepare server-side command arguments
-    let params = [ ...cfg.params ]
+    const params = [...cfg.params]
     params.push(id)
     if (profile !== 'localhost') params.push(cfg.host)
     if (tmux) {
@@ -25,7 +25,7 @@ export default defineWebSocketHandler({
       params.push('tmux')
     }
     //  execute
-    let spawn = pty.spawn(cfg.cmd, params, {
+    const spawn = pty.spawn(cfg.cmd, params, {
       name: cfg.pty?.term || 'xterm-256color',
       cols: cfg.pty?.cols || 80, rows: cfg.pty?.rows || 25,
       cwd: cfg.pty?.cwd || '.',
@@ -38,7 +38,7 @@ export default defineWebSocketHandler({
     log('LOG_DEBUG', `node-pty sessions[${pid}] = ${JSON.stringify(session)}`, cfg.loglevel)
 
     if (pid) {
-      log('LOG_NOTICE', `node-pty ${pid} started PID #${sessions[pid].term.pid}: ${[cfg.cmd, ...cfg.params, id].join(" ")}`)
+      log('LOG_NOTICE', `node-pty ${pid} started PID #${sessions[pid].term.pid}: ${[cfg.cmd, ...cfg.params, id].join(' ')}`)
 
       session.term.onData((data) => {
         try {
@@ -49,23 +49,22 @@ export default defineWebSocketHandler({
       })
 
       session.term.onExit((ev) => {
-        log('LOG_NOTICE', `node-pty ${pid} exit ${ev.exitCode} from PID #${sessions[pid].term.pid}`)
+        log('LOG_NOTICE', `node-pty ${pid} exit ${ev.exitCode} from PID #${sessions[pid]!.term.pid}`)
         if (peer.websocket && peer.websocket.readyState != 3)
           peer.websocket.close!()
         else if (sessions[pid])
           delete sessions[pid]
       })
-    }
-    else {
-      log('LOG_ERROR', `node-pty spawn failure to run: ${cfg.cmd} ${cfg.params.join(" ")}`, cfg.loglevel)
+    } else {
+      log('LOG_ERROR', `node-pty spawn failure to run: ${cfg.cmd} ${cfg.params.join(' ')}`, cfg.loglevel)
     }
   },
 
   message(peer, message) {
-    const session = sessions[peer.id]
+    const session = sessions[peer.id]!
     const term = session.term
     const profile = session.profile
-    const cfg = terminal[profile]
+    const cfg = terminal[profile]!
     //  allow for JSON "events" to passthru this pipe, in place of negotiating
     //  the WebSocket peer.id back to the client and using REST endpoint(s)
     let text = message.text()
@@ -83,8 +82,7 @@ export default defineWebSocketHandler({
               log('LOG_DEBUG', `node-pty ${peer.id} ${req}`, cfg.loglevel)
               term.resize(event.resize.cols, event.resize.rows)
             }
-          }
-          catch(err) {
+          } catch (err) {
             log('LOG_ERROR', `node-pty ${peer.id} ${err}`, cfg.loglevel)
           }
         }
@@ -94,10 +92,10 @@ export default defineWebSocketHandler({
   },
 
   close(peer) {
-    const session = sessions[peer.id]
+    const session = sessions[peer.id]!
     const term = session?.term
-    const profile = session?.profile
-    const cfg = terminal[profile]
+    const profile = session.profile
+    const cfg = terminal[profile]!
     log('LOG_INFO', `node-pty ${peer.id} close`, cfg.loglevel)
     if (term)
       term.kill('SIGTERM')
@@ -106,14 +104,14 @@ export default defineWebSocketHandler({
   },
 
   error(peer, error) {
-    const session = sessions[peer.id]
+    const session = sessions[peer.id]!
     const term = session.term
     const profile = session.profile
-    const cfg = terminal[profile]
+    const cfg = terminal[profile]!
     log('LOG_ERROR', `node-pty ${peer.id} error: ${error}`, cfg.loglevel)
     if (term)
       term.kill('SIGTERM')
     else
       delete sessions[peer.id]
-   },
+  }
 })
