@@ -74,7 +74,9 @@ export default defineNuxtConfig({
       websocket: true
     },
     externals: {
-      traceInclude: ['node_modules/node-pty/build/Release/pty.node']
+      traceInclude: [
+        'node_modules/node-pty/build/Release/pty.node'
+      ]
     },
     /*
     prerender: {

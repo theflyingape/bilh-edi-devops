@@ -45,6 +45,7 @@ export default eventHandler(async (event) => {
     }
 
     const accessToken = sign({ ...user }, SECRET, <SignOptions>{
+      algorithm: 'HS384',
       expiresIn: ACCESS_TOKEN_TTL
     })
     userTokens.refresh.set(refreshToken, accessToken)
