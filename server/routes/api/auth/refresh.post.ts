@@ -44,8 +44,10 @@ export default eventHandler(async (event) => {
       }
     }
 
+    // algorithm still defaults to 'HS256',
+    // but override sign.js isValid function to use isString
+    // issue #991
     const accessToken = sign({ ...user }, SECRET, <SignOptions>{
-      algorithm: 'HS384',
       expiresIn: ACCESS_TOKEN_TTL
     })
     userTokens.refresh.set(refreshToken, accessToken)
