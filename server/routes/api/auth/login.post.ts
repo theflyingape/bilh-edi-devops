@@ -102,7 +102,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  log('LOG_NOTICE', `${username} ${event} ${REFRESH_TOKEN_TTL} return token ${ACCESS_TOKEN_TTL} with size: ${JSON.stringify(token).length}`)
+  log('LOG_NOTICE', `${username} ${event} ${REFRESH_TOKEN_TTL} return token ${ACCESS_TOKEN_TTL} with size: ${JSON.stringify(token)?.length}`)
   return token
 })
 
