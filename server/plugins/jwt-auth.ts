@@ -38,7 +38,6 @@ export default defineNitroPlugin(async (nitroApp) => {
       const decoded = await jwtVerify(token, secret)
 
       // Attach the user to the event context for access in other handlers
-      console.log(decoded)
       event.context = decoded.payload
     } catch (error) {
       // If verification fails, respond with an invalid token error
