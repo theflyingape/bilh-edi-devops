@@ -1,4 +1,4 @@
-import { verify } from 'jsonwebtoken'
+import { JWTPayload, jwtVerify } from 'jose'
 
 // typing this h3 event context
 declare module 'h3' {
@@ -10,9 +10,9 @@ declare module 'h3' {
   }
 }
 
-export default defineNitroPlugin((nitroApp) => {
+export default defineNitroPlugin(async (nitroApp) => {
   // Get the JWT secret from runtime configuration
-  const secret = useRuntimeConfig().jwtSecret
+  const secret = new TextEncoder().encode(useRuntimeConfig().jwtSecret)
 
   nitroApp.hooks.hook('request', async (event) => {
     const publicRoutes = ['/api/auth/login', '/api/auth/refresh']
@@ -35,15 +35,11 @@ export default defineNitroPlugin((nitroApp) => {
 
     try {
       // Verify and decode the JWT
-      const decoded = verify(token, secret) as {
-        auth: {
-          id: string
-          enabled: boolean
-        }
-      }
+      const decoded = await jwtVerify(token, secret)
 
       // Attach the user to the event context for access in other handlers
-      event.context.auth = decoded.auth
+      console.log(decoded)
+      event.context = decoded.payload
     } catch (error) {
       // If verification fails, respond with an invalid token error
       console.error('jwt-auth', error)

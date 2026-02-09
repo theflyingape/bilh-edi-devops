@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { SignJWT, jwtVerify } from 'jose'
 import type { IRIStoken } from '~/composables/useIrisSessions'
 import { log } from '~/lib/syslog.server'
