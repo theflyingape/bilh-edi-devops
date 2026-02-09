@@ -1,5 +1,6 @@
 //  terminal sessions
-import { IPty } from 'node-pty'
+import type { IPty } from 'node-pty'
+import profiles from '~/assets/terminals.json'
 
 interface config {
   [key: string]: {
@@ -12,21 +13,18 @@ interface config {
       cols: number
       rows: number
       cwd: string
-      env: {}
+      env: NodeJS.ProcessEnv
     }
   }
 }
 
 interface sessions {
-  [key: string]: {
-    profile: string
-    term: IPty
-  }
+  profile: string
+  term: IPty
 }
 
-import profiles from '~/assets/terminals.json'
-let terminal: config = Object.assign(profiles)
-let sessions: sessions = {}
+const terminal: config = Object.assign(profiles)
+const sessions = new Map<string | number, sessions>()
 
 export default function useTerminalSessions() {
   return { terminal, sessions }

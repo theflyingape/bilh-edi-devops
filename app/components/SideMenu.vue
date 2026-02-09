@@ -137,7 +137,6 @@ interface irisUser {
 async function login() {
   const username = get(credentials).username
   await getSession('Dev', username, get(credentials).password).then(async (jwt) => {
-    console.log('jwt =', jwt)
     Object.assign(get(credentials).IRIStoken, jwt)
     await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
       if (!get(user).enabled) {

@@ -1,23 +1,19 @@
 //  code-server
 interface ports {
-  [key: number]: {
-    id: string
-    pid: number
-  }
+  id: string
+  pid: number
 }
 
 interface sessions {
-  [key: string]: {
-    pin: string[]
-    port: number
-    url: string
-  }
+  pin: string[]
+  port: number
+  url: string
 }
 
-export let ports: ports = {}
-export let sessions: sessions = {}
+const ports = new Map<number, ports>()
+const sessions = new Map<string, sessions>()
 
-export function generatePIN(): string[] {
+function generatePIN(): string[] {
   return [d10(), d10(), d10()]
 }
 

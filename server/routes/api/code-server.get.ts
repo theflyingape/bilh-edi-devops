@@ -1,5 +1,4 @@
 import child from 'child_process'
-import url from 'url'
 import useCodeServer from './code-sessions'
 // import { getServerSession } from '#auth'
 import { log } from '~/lib/syslog.server'
@@ -15,20 +14,22 @@ export default defineEventHandler(async (event) => {
 
   const { ports, sessions, generatePIN } = useCodeServer()
   log('LOG_NOTICE', `code-server ${event}`)
-  const params = url.parse(event.path, true).query
-  const username = <string>params?.username || 'guest'
+  const parsed = new URL(event.path)
+  const username = parsed.searchParams.get('username') || 'guest'
   let response = { status: 'unknown' }
+  const session = sessions?.get(username)
 
-  if (sessions[username]) {
-    const port = sessions[username].port
-    const pid = ports[port].pid
+  if (session) {
+    const port = ports.get(session.port)!
+    const pid = port.pid
     try {
       process.kill(pid, 0)
-      return { status: 'OK', ...sessions[username], ...ports[port] }
+      return { status: 'OK', ...session, ...port }
     } catch (e) {
       log('LOG_WARN', `code-server ${e}`)
       //  process had shutdown -- free from lists and re-instantiate a new one
-      delete sessions[username], ports[port]
+      ports.delete(session.port)
+      sessions.delete(username)
     }
   }
 
@@ -44,14 +45,14 @@ export default defineEventHandler(async (event) => {
         const ini = data.toString().split('=')
         if (ini[0] == 'PORT') {
           const port = parseInt(ini[1])
-          ports[port] = { id: username, pid: vscode.pid! }
-          sessions[username] = {
+          ports.set(port, { id: username, pid: vscode.pid! })
+          sessions.set(username, {
             pin: pin, port: port,
             url: `https://hciedev.laheyhealth.org/code-server/${port}/?workspace=/home/${username}/.local/share/code-server/User/Workspaces/${username}-devops.code-workspace`
-          }
+          })
         }
         if (ini[0] == '.')
-          resolve(sessions[username].port)
+          resolve(sessions.get(username)!.port)
       })
       //  script aborted
       vscode.on('close', (code) => {
@@ -59,7 +60,7 @@ export default defineEventHandler(async (event) => {
       })
     }).then((reason) => {
       log('LOG_NOTICE', `code-server ${username} assigned #${reason}`)
-      response = { status: 'OK', ...sessions[username], ...ports[sessions[username].port] }
+      response = { status: 'OK', ...sessions.get(username), ...ports.get(sessions.get(username)!.port) }
     }).catch((reason) => {
       log('LOG_ERROR', `code-server exit ${reason}: rejected ${username} request`)
       response = { status: `rejected: ${reason}` }

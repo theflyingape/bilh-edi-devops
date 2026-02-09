@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { eventHandler, getRequestHeader } from 'h3'
-import { jwtVerify } from 'jose'
-import { type JwtPayload, SECRET, extractToken, tokensByUser } from './login.post'
+import { type JwtPayload, extractToken, tokensByUser } from './login.post'
 
 export default eventHandler(async (event) => {
   const authorizationHeader = getRequestHeader(event, 'Authorization')
@@ -14,6 +13,7 @@ export default eventHandler(async (event) => {
   const extractedToken = extractToken(authorizationHeader)
   const decoded: JwtPayload = { auth: { id: '', enabled: false } }
   try {
+    //  server/plugins/jwt-auth.ts
     decoded.auth = event.context.auth!
   } catch (error) {
     console.error({
@@ -26,7 +26,7 @@ export default eventHandler(async (event) => {
   }
 
   // Check against known token
-  const userTokens = tokensByUser.get(decoded.auth.id)
+  const userTokens = tokensByUser.get(decoded.auth?.id)
   if (!userTokens || !userTokens.access.has(extractedToken)) {
     return null
     /*

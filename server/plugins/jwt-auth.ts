@@ -1,4 +1,4 @@
-import { JWTPayload, jwtVerify } from 'jose'
+import { jwtVerify } from 'jose'
 
 // typing this h3 event context
 declare module 'h3' {
