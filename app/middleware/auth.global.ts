@@ -1,6 +1,6 @@
 import { get } from '@vueuse/core'
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to, _from) => {
   try {
     const { isAdmin } = useDevOps()
     const { user } = useIrisSessions()

@@ -16,11 +16,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     }
 
     if (get(online)) {
-      await refresh().then((result) => {
+      await refresh().then((_result) => {
       /*
-        console.log('get-session result:', result)
-        getSession().then((result) => {
-          console.log('get-session result:', result)
+        console.log('get-session result:', _result)
+        getSession().then((_result) => {
+          console.log('get-session result:', _result)
         })
       */
       }).catch(async (err) => {

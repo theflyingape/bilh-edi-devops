@@ -126,6 +126,7 @@ export default defineNuxtConfig({
     globalAppMiddleware: true,
     // disableServerSideAuth: false,
     originEnvKey: 'AUTH_ORIGIN',
+    // https://auth.sidebase.io/guide/local/quick-start
     provider: {
       type: 'local',
       endpoints: {
@@ -154,7 +155,7 @@ export default defineNuxtConfig({
         // endpoint: { path: '/refresh', method: 'post' },
         token: {
           signInResponseRefreshTokenPointer: '/token/refreshToken',
-          refreshResponseTokenPointer: '',
+          // refreshResponseTokenPointer: '',
           refreshRequestTokenPointer: '/refreshToken'
         }
       },
@@ -168,6 +169,7 @@ export default defineNuxtConfig({
         maxAgeInSeconds: 12 * 60 * 60
         // sameSiteAttribute: 'lax',
         // secureCookieAttribute: false,
+        // httpOnlyCookieAttribute: false,
       }
     },
     sessionRefresh: {

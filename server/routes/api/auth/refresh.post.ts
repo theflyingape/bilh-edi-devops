@@ -1,6 +1,5 @@
 import { deleteCookie, eventHandler, getRequestHeader, readBody } from 'h3'
-import type { Secret, SignOptions } from 'jsonwebtoken'
-import { sign, verify } from 'jsonwebtoken'
+import { SignJWT, jwtVerify } from 'jose'
 import { type JwtPayload, ACCESS_TOKEN_TTL, SECRET, extractToken, tokensByUser } from './login.post'
 
 export default eventHandler(async (event) => {
@@ -16,13 +15,14 @@ export default eventHandler(async (event) => {
 
   // Verify
   try {
-    const decoded = verify(refreshToken, <Secret>SECRET) as JwtPayload | undefined
-    if (!decoded) {
+    const { payload } = await jwtVerify(refreshToken, SECRET)
+    if (!payload) {
       return dumpSession(`Unauthorized, refreshToken can't be verified`, 'invalid refresh token')
     }
+    const session = <JwtPayload>{ auth: payload.auth }
 
     // Get tokens
-    const userTokens = tokensByUser.get(decoded.auth.id)
+    const userTokens = tokensByUser.get(session.auth.id)
     if (!userTokens) {
       return dumpSession('Unauthorized, user is not logged in', 'invalid login')
     }
@@ -36,20 +36,10 @@ export default eventHandler(async (event) => {
 
     // Invalidate old access token
     userTokens.access.delete(knownAccessToken)
-
-    const user: JwtPayload = {
-      auth: {
-        id: decoded.auth.id,
-        enabled: decoded.auth.enabled
-      }
-    }
-
-    // algorithm still defaults to 'HS256',
-    // but override sign.js isValid function to use isString
-    // issue #991
-    const accessToken = sign({ ...user }, SECRET, <SignOptions>{
-      expiresIn: ACCESS_TOKEN_TTL
-    })
+    const accessToken = await new SignJWT({ auth: session.auth })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setExpirationTime(ACCESS_TOKEN_TTL)
+      .sign(SECRET)
     userTokens.refresh.set(refreshToken, accessToken)
     userTokens.access.set(accessToken, refreshToken)
 

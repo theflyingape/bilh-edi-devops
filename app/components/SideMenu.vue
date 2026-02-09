@@ -97,7 +97,7 @@
             </svg>
           </div>
           <div>
-            <UButton label="Documentation" icon="i-lucide-square-play" :animated="true" to="https://ui.nuxt.com/getting-started/installation/nuxt" target="_blank" />
+            <UButton label="Documentation" icon="i-lucide-square-play" :animated="true" to="https://ui.nuxt.com/getting-started" target="_blank" />
           </div>
         </div>
         <div class="justify-items-center">
@@ -117,7 +117,7 @@
 <script setup lang="ts">
 import { get, set } from '@vueuse/core'
 import { ModalInfo } from '#components'
-// import { User } from '~/composables/useIrisSessions'
+import type { User } from '~/composables/useIrisSessions'
 
 const { status, signIn, signOut } = useAuth()
 const { isAdmin } = useDevOps()
@@ -125,24 +125,36 @@ const { credentials, user, getSession, endSession, endpoint } = useIrisSessions(
 const overlay = useOverlay()
 const toast = useToast()
 
+interface irisUser {
+  Enabled: boolean
+  Groups?: string[]
+  Roles?: string[]
+  FullName?: string
+  Comment?: string
+}
+
 //  authenticate against the development instance and render scope off the groups returned
 async function login() {
   const username = get(credentials).username
   await getSession('Dev', username, get(credentials).password).then(async (jwt) => {
-    Object.assign(credentials.value.IRIStoken, jwt)
+    console.log('jwt =', jwt)
+    Object.assign(get(credentials).IRIStoken, jwt)
     await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
       if (!get(user).enabled) {
-        await endpoint('Dev', `user/${username}`, undefined, undefined).then(async (hcie) => {
-          set(user, {
-            id: username,
-            enabled: hcie.Enabled ?? false,
-            groups: hcie.Groups ?? [],
-            roles: hcie.Roles ?? [],
-            name: hcie.FullName ?? '',
-            comment: hcie.Comment ?? '',
-            loggedInAt: Date.now(),
-            scope: []
-          })
+        await endpoint('Dev', `user/${username}`, undefined, undefined).then(async (result) => {
+          if (result) {
+            const hcie = <irisUser>result
+            set(user, {
+              id: username,
+              enabled: hcie.Enabled ?? false,
+              groups: hcie.Groups ?? [],
+              roles: hcie.Roles ?? [],
+              name: hcie.FullName ?? '',
+              comment: hcie.Comment ?? '',
+              loggedInAt: Date.now(),
+              scope: []
+            })
+        }
         }).catch(async (err) => {
           open(`${err.statusCode}: ${err.statusMessage}`)
         })

@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { eventHandler, getRequestHeader } from 'h3'
-// import type { Secret } from 'jsonwebtoken'
-// import jwt from 'jsonwebtoken'
+import { jwtVerify } from 'jose'
 import { type JwtPayload, SECRET, extractToken, tokensByUser } from './login.post'
 
-export default eventHandler((event) => {
+export default eventHandler(async (event) => {
   const authorizationHeader = getRequestHeader(event, 'Authorization')
   if (typeof authorizationHeader === 'undefined') {
     setResponseStatus(event, 403, 'Need to pass valid Bearer-authorization header to access this endpoint')
@@ -13,10 +12,9 @@ export default eventHandler((event) => {
   }
 
   const extractedToken = extractToken(authorizationHeader)
-  let decoded: JwtPayload | undefined = undefined
+  const decoded: JwtPayload = { auth: { id: '', enabled: false } }
   try {
-    // decoded = jwt.verify(extractedToken, <Secret>SECRET) as JwtPayload
-    decoded = { auth: event.context.auth! }
+    decoded.auth = event.context.auth!
   } catch (error) {
     console.error({
       msg: `Login failed. Here's the raw error:`,
@@ -28,7 +26,7 @@ export default eventHandler((event) => {
   }
 
   // Check against known token
-  const userTokens = tokensByUser.get(decoded!.auth.id)
+  const userTokens = tokensByUser.get(decoded.auth.id)
   if (!userTokens || !userTokens.access.has(extractedToken)) {
     return null
     /*
@@ -40,6 +38,6 @@ export default eventHandler((event) => {
   }
 
   // All checks successful
-  const { id, enabled } = decoded!.auth
+  const { id, enabled } = decoded.auth
   return { id, enabled }
 })

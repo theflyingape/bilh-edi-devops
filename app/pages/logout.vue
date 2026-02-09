@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <div class="flex flex-col items-center justify-center h-lvh -mt-48">
     <UCard class="drop-shadow-2xl" variant="subtle">
@@ -13,13 +14,15 @@
         </div>
       </template>
       <template #footer>
-        <div class="text-start text-lg">{{new Date().toDateString()}}<br>{{new Date().toTimeString()}}</div>
+        <div class="text-start text-lg">
+          {{ new Date().toDateString() }}<br>{{ new Date().toTimeString() }}
+        </div>
       </template>
     </UCard>
   </div>
 </template>
 
 <script setup lang="ts">
-definePageMeta({ auth:false })
-//reloadNuxtApp()
+definePageMeta({ auth: false })
+// reloadNuxtApp()
 </script>
