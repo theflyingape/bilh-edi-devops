@@ -59,7 +59,7 @@ export default defineNuxtConfig({
   },
 
   build: {
-    transpile: ['jsonwebtoken']
+    transpile: []
   },
   devServer: {
     host: '0.0.0.0',

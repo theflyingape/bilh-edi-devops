@@ -14,7 +14,8 @@ export default defineEventHandler(async (event) => {
 
   const { ports, sessions, generatePIN } = useCodeServer()
   log('LOG_NOTICE', `code-server ${event}`)
-  const parsed = new URL(event.path)
+  const url = getRequestURL(event)
+  const parsed = new URL(url)
   const username = parsed.searchParams.get('username') || 'guest'
   let response = { status: 'unknown' }
   const session = sessions?.get(username)
