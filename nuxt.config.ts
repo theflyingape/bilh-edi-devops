@@ -91,6 +91,7 @@ export default defineNuxtConfig({
       '/assets/**': { headers: { 'cache-control': 's-maxage=0' } },
       '/components/**': { ssr: false },
       '/composables/**': { ssr: false },
+      '/admin': { ssr: false },
       '/code': { ssr: false },
       '/home': { ssr: false },
       '/profile': { ssr: false },

@@ -97,7 +97,7 @@ Check out the Nuxt [deployment documentation](https://nuxt.com/docs/getting-star
 
 **04-Feb-2026** switch Node.js v22 (Jod) to active LTS v24 (Krypton)
 
-> stronger out-of-the-box encryption for all applications; many APIs now include improved argument and option validation, making it easier to catch errors earlierrefinements lead to more predictable and safer runtime behavior; ongoing alignment between Node.js and browser environments makes cross-platform development more consistent than ever; ESM CommonJS wrapper now exports module.exports by default, simplifying interoperability for hybrid module systems; enhances reliability in stream-based operations for I/O stability and improve performance consistency under heavy workloads
+> stronger out-of-the-box **encryption** for all applications; many APIs now include improved **argument and option validation**, making it easier to catch errors earlier; refinements lead to more predictable and **safer runtime behavior**; ongoing alignment between Node.js and browser environments makes **cross-platform development more consistent** than ever; ESM CommonJS wrapper now exports **module.exports** by default, simplifying interoperability for hybrid module systems; enhances reliability in **stream-based** operations for I/O stability and improve performance consistency under heavy workloads
 
 **15-Jul-2025** upgrade to Nuxt 4
 
