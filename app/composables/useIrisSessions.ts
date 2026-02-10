@@ -9,6 +9,23 @@ export interface IRIStoken {
   exp: number
 }
 
+export interface Account {
+  [key: string]: {
+    name: string
+    enabled: boolean
+    namespace: string
+    admin: boolean
+    analyst: boolean
+    sysadm: boolean
+    shell: boolean
+    comment: string
+    lastlogin: string
+  }
+}
+
+const Accounts: Ref<{ [key: string]: Account }>
+  = ref({ Dev: <Account>{}, Test: <Account>{}, Live: <Account>{} })
+
 export interface User {
   id: string
   enabled: boolean
@@ -256,5 +273,5 @@ export default function useIrisTokens() {
     })
   }
 
-  return { HCIE, ICON, Productions, Instances, InstanceDefault, pending, mirrorSet, processList, fileStat, loadProductions, credentials, user, getSession, endSession, refresh, endpoint, stat }
+  return { HCIE, ICON, Productions, Instances, InstanceDefault, pending, Accounts, mirrorSet, processList, fileStat, loadProductions, credentials, user, getSession, endSession, refresh, endpoint, stat }
 }

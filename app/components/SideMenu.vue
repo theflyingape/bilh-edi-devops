@@ -117,7 +117,6 @@
 <script setup lang="ts">
 import { get, set } from '@vueuse/core'
 import { ModalInfo } from '#components'
-import type { User } from '~/composables/useIrisSessions'
 
 const { status, signIn, signOut } = useAuth()
 const { isAdmin } = useDevOps()
@@ -140,7 +139,7 @@ async function login() {
     Object.assign(get(credentials).IRIStoken, jwt)
     await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
       if (!get(user).enabled) {
-        await endpoint('Dev', `user/${username}`, undefined, undefined).then(async (result) => {
+        await endpoint('Dev', `user/${username}`).then(async (result) => {
           if (result) {
             const hcie = <irisUser>result
             set(user, {
