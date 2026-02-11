@@ -7,7 +7,7 @@
   <UCard v-model="Accounts[props.hcie]" variant="subtle">
     <template #default>
       <div class="font-bold font-sans underline">User Accounts</div>
-      <UTable :data="data" :columns="columns" :loading="status === 'pending'" class="flex-1 h-80" />
+      <UTable :data="data" :columns="columns" class="flex-1 h-80" />
     </template>
     <template #footer>
       <div class="flex font-mono justify-end italic text-sm">
@@ -43,7 +43,7 @@ async function loadAccounts(hcie: INSTANCE = props.hcie) {
   await endpoint(props.hcie, 'account/@').then((status) => {
     if (status) {
       Accounts.value[props.hcie] = <Account>status
-      set(data, Object.keys(Accounts.value[props.hcie]!)
+      set(data, Object.keys(Accounts.value[props.hcie]!))
     }
   })
 }
