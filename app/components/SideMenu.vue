@@ -32,7 +32,7 @@
           <UForm :state="credentials" @submit.prevent="login">
             <div class="flex flex-col items-center justify-center gap-4">
               <UFormField label="Username" name="username">
-                <UInput v-model="credentials.username" type="string" placeholder="itsystems" autofocus />
+                <UInput v-model="credentials.username" type="string" placeholder="BILH account" autofocus />
               </UFormField>
               <UFormField label="Password" name="password">
                 <UInput v-model="credentials.password" type="password" placeholder="BILH password" />

@@ -1,14 +1,14 @@
 <template>
-  <div ref="Terminal" class="bg-zinc-200 min-h-full h-[102vh] min-w-full w-full">
+  <div ref="Terminal" class="bg-zinc-200 min-h-auto h-[95dvh] max-h-[95dvh] min-w-full w-full">
     <div class="flex flex-nowrap h-full w-full justify-center">
       <!-- monitor with a thin bezel -->
-      <div ref="crt" class="bg-zinc-800 p-2 pb-8 rounded-md min-w-1/2 w-5/6 max-w-11/12 min-h-2/3 h-11/12 max-h-11/12 overflow-hidden resize resizer">
+      <div ref="crt" class="bg-zinc-800 p-2 pb-10 rounded-md min-h-1/2 min-w-1/2 h-full w-full max-h-auto max-w-auto overflow-hidden resize resizer">
         <DevOnly><XtermJs v-show="Instance == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
         <XtermJs v-show="Instance == 'Dev'" @vue:mounted="" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Live'" @vue:mounted="" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <!-- bottom control panel -->
-        <div class="flex flex-nowrap justify-between ml-5 mr-5">
+        <div class="flex flex-nowrap justify-between items-center ml-5 mr-5">
           <!-- session controls -->
           <div v-if="isConnected" class="flex flex-nowrap space-x-2">
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="capture Terminal"><UButton size="sm" icon="i-lucide-camera" color="neutral" variant="subtle" @click.prevent="snap" /></UTooltip>
@@ -56,7 +56,7 @@
         </div>
       </div>
       <!-- top-right action controls -->
-      <div class="flex-nowrap justify-items-start m-1 min-w-1/6 max-w-1/6 space-x-1 space-y-1">
+      <div class="flex-nowrap justify-items-start m-1 min-w-9/50 max-w-9/50 space-x-1 space-y-1">
         <IrisSelect v-model="Instance" />
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
