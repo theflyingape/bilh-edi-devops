@@ -3,7 +3,7 @@
   <div v-if="online" class="m-1">
     <div class="grid auto-rows-auto gap-4">
       <div class="flex justify-center gap-2">
-        <IrisAccounts hcie="Dev" />
+        <IrisAccounts hcie="Test" />
       </div>
     </div>
   </div>

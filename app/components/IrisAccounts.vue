@@ -1,12 +1,14 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <IrisSelect
-    v-model="instance"
-    @change.prevent="loadAccounts(instance)"
-  />
   <UCard v-model="Accounts[props.hcie]" variant="subtle">
     <template #default>
-      <div class="font-bold font-sans underline">User Accounts</div>
+      <div class="flex justify-end space-x-2">
+        <UIcon :name="ICON[instance!]" class="align-middle size-8" />
+        <IrisSelect
+          v-model="instance"
+          @change.prevent="loadAccounts(instance)"
+        />
+      </div>
       <UTable :data="data" :columns="columns" class="flex-1 h-full">
         <template #name-cell="{ row }">
           <div>
@@ -31,8 +33,8 @@
       </UTable>
     </template>
     <template #footer>
-      <div class="flex font-mono justify-end italic text-sm">
-        {{ instance }} <UIcon :name="ICON[props.hcie]!" class="align-middle size-5" />
+      <div class="text-start text-nowrap font-mono">
+        {{ now }}
       </div>
     </template>
   </UCard>
@@ -44,15 +46,15 @@ import { get, set } from '@vueuse/core'
 import type { Account } from '~/composables/useIrisSessions';
 
 const props = defineProps<{
-  hcie: 'Live' | 'Test' | 'Dev' //  instance identifier
+  hcie: "Live" | "Test" | "Dev" //  instance identifier
 }>()
 const { ICON, endpoint, Accounts } = useIrisSessions()
-const instance = defineModel<INSTANCE>('instance', { required: true })
+const instance = defineModel<INSTANCE>('instance', { required: false })
 const data = ref([])
 const columns: TableColumn<Account>[] = [
   {
     accessorKey: 'id', header: 'id',
-    cell: ({ row }) => `${row.getValue('name')}`
+    cell: ({ row }) => `${row.getValue('id')}`
   },
   {
     accessorKey: 'name', header: 'name',
@@ -66,6 +68,7 @@ const columns: TableColumn<Account>[] = [
     id: 'action'
   }
 ]
+const now = useNow()
 
 function getDropdownActions(): DropdownMenuItem[][] {
   return [
@@ -84,15 +87,16 @@ function getDropdownActions(): DropdownMenuItem[][] {
 }
 
 async function loadAccounts(hcie: INSTANCE = props.hcie) {
-  await endpoint(props.hcie, 'account/@').then((status) => {
+  await endpoint(hcie, 'account/@').then((status) => {
     if (status) {
-      Accounts.value[props.hcie] = <Account>status
-      set(data, Object.values(Accounts.value[props.hcie]!))
+      Accounts.value[hcie] = <Account>status
+      set(data, Object.values(Accounts.value[hcie]!))
     }
   })
 }
 
 onMounted(async () => {
+  set(instance, props.hcie)
   await loadAccounts()
 })
 </script>

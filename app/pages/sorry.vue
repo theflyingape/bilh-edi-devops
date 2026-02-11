@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/first-attribute-linebreak -->
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <div class="flex flex-col items-center justify-center h-lvh -mt-48">
     <UCard class="drop-shadow-2xl" variant="subtle">
@@ -10,7 +12,8 @@
       <template #default>
         <div class="flex justify-center">
           <UButton class="text-2xl" icon="i-vscode-icons-file-type-devcontainer" color="neutral" variant="soft" to="."
-            :label="`${status} as ${scope} is insufficient`" />
+                   :label="`${status} as ${scope} is insufficient`"
+          />
         </div>
       </template>
       <template #footer>
@@ -22,13 +25,16 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ auth: false })
 import { get } from '@vueuse/core'
+
+definePageMeta({ auth: false })
 const { status } = useAuth()
 const { user } = useIrisSessions()
 const scope = get(user)?.scope?.length ? get(user)?.scope[0] : 'a guest'
 if (!get(user)?.scope?.length) {
   user.value.enabled = false
-  setTimeout(() => { useDevOps().reload() }, 1985)
+  setTimeout(() => {
+    useDevOps().reload()
+  }, 1985)
 }
 </script>
