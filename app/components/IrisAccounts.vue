@@ -7,7 +7,28 @@
   <UCard v-model="Accounts[props.hcie]" variant="subtle">
     <template #default>
       <div class="font-bold font-sans underline">User Accounts</div>
-      <UTable :data="data" :columns="columns" class="flex-1 h-80" />
+      <UTable :data="data" :columns="columns" class="flex-1 h-full">
+        <template #name-cell="{ row }">
+          <div>
+            <p class="font-medium text-highlighted">
+              {{ row.original.name }}
+            </p>
+            <p>
+              {{ row.original.comment }}
+            </p>
+          </div>
+        </template>
+        <template #action-cell="{ row }">
+          <UDropdownMenu :items="getDropdownActions()">
+            <UButton
+              icon="i-lucide-ellipsis-vertical"
+              color="neutral"
+              variant="ghost"
+              aria-label="Actions"
+            />
+          </UDropdownMenu>
+        </template>
+      </UTable>
     </template>
     <template #footer>
       <div class="flex font-mono justify-end italic text-sm">
@@ -18,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TableColumn } from '@nuxt/ui';
+import type { TableColumn, DropdownMenuItem } from '@nuxt/ui';
 import { get, set } from '@vueuse/core'
 import type { Account } from '~/composables/useIrisSessions';
 
@@ -30,20 +51,43 @@ const instance = defineModel<INSTANCE>('instance', { required: true })
 const data = ref([])
 const columns: TableColumn<Account>[] = [
   {
-    accessorKey: 'name', header: '#',
-    cell: ({ row }) => `#${row.getValue('name')}`
+    accessorKey: 'id', header: 'id',
+    cell: ({ row }) => `${row.getValue('name')}`
   },
   {
-    accessorKey: 'comment', header: '#',
-    cell: ({ row }) => `#${row.getValue('comment')}`
+    accessorKey: 'name', header: 'name',
+    cell: ({ row }) => `${row.getValue('name')}`
+  },
+  {
+    accessorKey: 'lastlogin', header: 'last login',
+    cell: ({ row }) => `${row.getValue('lastlogin')}`
+  },
+  {
+    id: 'action'
   }
 ]
+
+function getDropdownActions(): DropdownMenuItem[][] {
+  return [
+    [
+      {
+        label: 'Edit',
+        icon: 'i-lucide-user-pen'
+      },
+      {
+        label: 'Delete',
+        icon: 'i-lucide-trash',
+        color: 'error'
+      }
+    ]
+  ]
+}
 
 async function loadAccounts(hcie: INSTANCE = props.hcie) {
   await endpoint(props.hcie, 'account/@').then((status) => {
     if (status) {
       Accounts.value[props.hcie] = <Account>status
-      set(data, Object.keys(Accounts.value[props.hcie]!))
+      set(data, Object.values(Accounts.value[props.hcie]!))
     }
   })
 }
