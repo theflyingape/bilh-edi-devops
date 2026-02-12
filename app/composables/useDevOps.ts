@@ -21,9 +21,9 @@ export default function usePortal() {
       })
   }
 
-  function queryModal(question = 'Are you sure?', note?: string, title = 'Please confirm', description?: string) {
+  async function queryModal(question = 'Are you sure?', note?: string, title = 'Please confirm', description?: string) {
     set(response, false)
-    overlay.create(ConfirmationDialog, {
+    await overlay.create(ConfirmationDialog, {
       props: {
         title: title,
         description: description,

@@ -16,13 +16,13 @@
       </div>
     </template>
     <template #default>
-      <UTable :data="data" :columns="columns" class="flex-1">
+      <UTable ref="table" :data="data" :columns="columns" :rows="Accounts" class="flex-1" @hover="onRowSelect">
         <template #name-cell="{ row }">
           <p class="font-medium text-highlighted">{{ row.original.name }}</p>
           <p>{{ row.original.comment }}</p>
         </template>
         <template #action-cell="{ row }">
-          <UDropdownMenu :items="getDropdownActions()">
+          <UDropdownMenu v-if="row.original.id == rowSelection.id" :items="getDropdownActions()">
             <UButton
               icon="i-lucide-ellipsis-vertical"
               color="neutral"
@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import type { TableColumn, DropdownMenuItem } from '@nuxt/ui';
+import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui';
 import { get, set } from '@vueuse/core'
 import type { Account } from '~/composables/useIrisSessions';
 
@@ -53,24 +53,28 @@ const dev = import.meta.dev || false
 const { queryModal, response } = useDevOps()
 const { ICON, endpoint, Accounts } = useIrisSessions()
 const instance = defineModel<INSTANCE>('instance', { required: false })
+const table = useTemplateRef('table')
 const data = ref([])
 const columns: TableColumn<Account>[] = [
   {
-    accessorKey: 'id', header: 'id',
+    accessorKey: 'id',
+    header: 'id',
     cell: ({ row }) => `${row.getValue('id')}`
   },
   {
-    accessorKey: 'name', header: 'name',
+    header: 'name',
     cell: ({ row }) => `${row.getValue('name')}`
   },
   {
-    accessorKey: 'lastlogin', header: 'last login',
+    accessorKey: 'lastlogin',
+    header: 'last login',
     cell: ({ row }) => `${row.getValue('lastlogin')}`
   },
   {
     header: 'action'
   }
 ]
+const rowSelection = ref<Account>({})
 const now = useNow()
 
 function getDropdownActions(): DropdownMenuItem[][] {
@@ -84,17 +88,34 @@ function getDropdownActions(): DropdownMenuItem[][] {
         label: 'Delete',
         icon: 'i-lucide-trash',
         color: 'error',
-        onSelect(e) {
-          queryModal('OK to delete?', `This drops the IRIS user's cached storage only, which is useful for trouble-shooting an issue and for hygiene.`)
-        },
+        async onSelect(e) {
+          await queryModal(`OK to delete ${get(rowSelection).name}?`, `This drops the IRIS user's cached storage only, which is useful for trouble-shooting an issue and for hygiene.`)
+          if(get(response)) {
+            await endpoint(get(instance)!, `account/${e}`, 'DELETE')
+            loadAccounts()
+          }
+        }
       }
     ]
   ]
 }
 
+function onRowSelect(e: Event, row: TableRow<Account>|null) {
+  try {
+    table.value?.tableApi.resetRowSelection(false)
+    if(row) {
+      set(rowSelection, row.original)
+      row.toggleSelected(true)
+    }
+  }
+  catch(err) {
+    console.error(err)
+  }
+}
+
 async function loadAccounts(hcie: INSTANCE = props.hcie) {
   if (dev) {
-    set(data, [{id:'dev',name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now'}])
+    set(data, [{id:'dev',name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now'},{id:'ops',name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never'}])
   }
   await endpoint(hcie, 'account/@').then((status) => {
     if (status) {
