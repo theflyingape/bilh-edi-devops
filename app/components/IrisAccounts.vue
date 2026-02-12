@@ -92,7 +92,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
           await queryModal(`OK to delete ${get(rowSelection).id}?`, `This drops the IRIS user's cached storage only, which is useful for trouble-shooting an issue and for hygiene.`)
           if(get(response)) {
             await endpoint(get(instance)!, `account/${get(rowSelection).id}`, 'DELETE')
-            loadAccounts()
+            await loadAccounts()
           }
         }
       }
