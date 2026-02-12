@@ -10,7 +10,7 @@
           <UIcon :name="ICON[instance!]" class="align-middle size-8" />
           <IrisSelect
             v-model="instance"
-            @change.prevent="loadAccounts(instance)"
+            @change.prevent="loadAccounts()"
           />
         </div>
       </div>
@@ -113,16 +113,19 @@ function onRowSelect(e: Event, row: TableRow<Account>|null) {
   }
 }
 
-async function loadAccounts(hcie: INSTANCE = props.hcie) {
+async function loadAccounts() {
   if (dev) {
     set(data, [{id:'dev',name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now'},{id:'ops',name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never'}])
   }
-  await endpoint(hcie, 'account/@').then((status) => {
-    if (status) {
-      Accounts.value[hcie] = <Account>status
-      set(data, Object.values(Accounts.value[hcie]!))
-    }
-  })
+  else {
+    const hcie = get(instance)!
+    await endpoint(hcie, 'account/@').then((status) => {
+      if (status) {
+        Accounts.value[hcie] = <Account>status
+        set(data, Object.values(Accounts.value[hcie]!))
+      }
+    })
+  }
 }
 
 onMounted(async () => {
