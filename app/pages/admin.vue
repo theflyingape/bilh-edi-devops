@@ -10,10 +10,15 @@
 </template>
 
 <script setup lang="ts">
+import { set } from '@vueuse/core'
 import IrisAccounts from '~/components/IrisAccounts.vue'
 
 definePageMeta({
   pageTransition: { name: 'page', mode: 'out-in' }
 })
 const { online } = useDevOps()
+
+onMounted(() => {
+  set(useDevOps().sideMenu, false)
+})
 </script>

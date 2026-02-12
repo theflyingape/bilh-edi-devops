@@ -1,24 +1,25 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <UCard v-model="Accounts[props.hcie]" variant="subtle">
-    <template #default>
-      <div class="flex justify-end space-x-2">
-        <UIcon :name="ICON[instance!]" class="align-middle size-8" />
-        <IrisSelect
-          v-model="instance"
-          @change.prevent="loadAccounts(instance)"
-        />
+    <template #header>
+      <div class="flex flex-nowrap justify-between items-center">
+        <div class="text-lg text-fuchsia-900 text-start text-nowrap font-mono font-bold">
+          IRIS: BILH Delegated Accounts
+        </div>
+        <div class="justify-end">
+          <UIcon :name="ICON[instance!]" class="align-middle size-8" />
+          <IrisSelect
+            v-model="instance"
+            @change.prevent="loadAccounts(instance)"
+          />
+        </div>
       </div>
-      <UTable :data="data" :columns="columns" class="flex-1 h-full">
+    </template>
+    <template #default>
+      <UTable :data="data" :columns="columns" class="flex-1">
         <template #name-cell="{ row }">
-          <div>
-            <p class="font-medium text-highlighted">
-              {{ row.original.name }}
-            </p>
-            <p>
-              {{ row.original.comment }}
-            </p>
-          </div>
+          <p class="font-medium text-highlighted">{{ row.original.name }}</p>
+          <p>{{ row.original.comment }}</p>
         </template>
         <template #action-cell="{ row }">
           <UDropdownMenu :items="getDropdownActions()">
@@ -33,7 +34,7 @@
       </UTable>
     </template>
     <template #footer>
-      <div class="text-start text-nowrap font-mono">
+      <div class="text-stone-600 text-sm text-start text-nowrap font-mono">
         {{ now }}
       </div>
     </template>
@@ -48,6 +49,8 @@ import type { Account } from '~/composables/useIrisSessions';
 const props = defineProps<{
   hcie: "Live" | "Test" | "Dev" //  instance identifier
 }>()
+const dev = import.meta.dev || false
+const { queryModal, response } = useDevOps()
 const { ICON, endpoint, Accounts } = useIrisSessions()
 const instance = defineModel<INSTANCE>('instance', { required: false })
 const data = ref([])
@@ -65,7 +68,7 @@ const columns: TableColumn<Account>[] = [
     cell: ({ row }) => `${row.getValue('lastlogin')}`
   },
   {
-    id: 'action'
+    header: 'action'
   }
 ]
 const now = useNow()
@@ -80,13 +83,19 @@ function getDropdownActions(): DropdownMenuItem[][] {
       {
         label: 'Delete',
         icon: 'i-lucide-trash',
-        color: 'error'
+        color: 'error',
+        onSelect(e) {
+          queryModal('OK to delete?', `This drops the IRIS user's cached storage only, which is useful for trouble-shooting an issue and for hygiene.`)
+        },
       }
     ]
   ]
 }
 
 async function loadAccounts(hcie: INSTANCE = props.hcie) {
+  if (dev) {
+    set(data, [{id:'dev',name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now'}])
+  }
   await endpoint(hcie, 'account/@').then((status) => {
     if (status) {
       Accounts.value[hcie] = <Account>status
