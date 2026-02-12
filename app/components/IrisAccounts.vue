@@ -89,9 +89,9 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-trash',
         color: 'error',
         async onSelect(e) {
-          await queryModal(`OK to delete ${get(rowSelection).name}?`, `This drops the IRIS user's cached storage only, which is useful for trouble-shooting an issue and for hygiene.`)
+          await queryModal(`OK to delete ${get(rowSelection).id}?`, `This drops the IRIS user's cached storage only, which is useful for trouble-shooting an issue and for hygiene.`)
           if(get(response)) {
-            await endpoint(get(instance)!, `account/${get(rowSelection).name}`, 'DELETE')
+            await endpoint(get(instance)!, `account/${get(rowSelection).id}`, 'DELETE')
             loadAccounts()
           }
         }
