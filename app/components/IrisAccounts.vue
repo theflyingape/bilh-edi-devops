@@ -4,7 +4,7 @@
     <template #header>
       <div class="flex flex-nowrap justify-between items-center">
         <div class="text-lg text-fuchsia-900 text-start text-nowrap font-mono font-bold">
-          IRIS: BILH Delegated Accounts
+          IRIS: BILH Delegated Accounts &nbsp;
         </div>
         <div class="justify-end">
           <UIcon :name="ICON[instance!]" class="align-middle size-8" />
@@ -34,8 +34,8 @@
       </UTable>
     </template>
     <template #footer>
-      <div class="text-stone-600 text-sm text-start text-nowrap font-mono">
-        {{ now }}
+      <div class="flex font-mono text-stone-600 text-sm text-start text-nowrap justify-end">
+        {{ now.toString().split(' ')[0] }} {{ now.toLocaleString() }}
       </div>
     </template>
   </UCard>
