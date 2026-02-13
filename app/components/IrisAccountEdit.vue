@@ -46,8 +46,14 @@
             <SubmitButton>Submit</SubmitButton>
           </div>
         </UForm>
+<<<<<<< HEAD
         <div>
           <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="60" :rows="14" :maxrows="14" autoresize placeholder="AD groups ..." />
+=======
+        <div class="flex flex-col items-start gap-4">
+          <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="40" :rows="8" autoresize placeholder="AD groups ..." />
+          <UTextarea v-model="note" class="italic" color="info" variant="subtle" :disabled="true" :cols="40" :rows="6" autoresize placeholder="Note ..." />
+>>>>>>> 6a7db6c9921f5bc086d57a2c0de26cf353ab3a00
         </div>
       </div>
     </template>
