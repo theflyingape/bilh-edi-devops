@@ -7,14 +7,14 @@
         <UForm :state="account" @submit.prevent="submit">
           <div class="flex flex-col items-start gap-4">
             <div>
-              <div class="font-medium text-highlighted">
+              <div class="text-lg font-medium">
                 {{ account.name }}
               </div>
-              &nbsp; {{ account.comment }}
+              <div class="text-sm">
+                &nbsp; {{ account.comment }}
+              </div>
+              <div>Last login: {{ account.lastlogin }}</div>
             </div>
-            <UFormField label="Last login" name="lastlogin">
-              <UInput v-model="account.lastlogin" color="neutral" variant="ghost" :disabled="true" type="string" placeholder="Last login date/time" />
-            </UFormField>
             <UFormField label="Home Production" name="namespace">
               <USelect
                 v-model="account.namespace"
@@ -39,13 +39,15 @@
               <USwitch v-model="account.shell" @focus="note='This role is either determined by AD grp-os-shell-access or local irisdev group.'" @blur="note=''" :disabled="!isSystems" />
             </UFormField>
           </div>
+          <div class="flex justify-center pt-2">
+            <UTextarea v-model="note" class="italic" color="info" variant="subtle" :disabled="true" :cols="54" :rows="4" :maxrows="4" autoresize placeholder="Note ..." />
+          </div>
           <div class="flex justify-end pt-8">
             <SubmitButton>Submit</SubmitButton>
           </div>
         </UForm>
-        <div class="flex flex-col items-start gap-4">
-          <UTextarea v-model="groups" class="italic" color="info" variant="subtle" :disabled="true" :cols="40" :rows="8" autoresize placeholder="AD groups ..." />
-          <UTextarea v-model="note" class="italic" color="info" variant="subtle" :disabled="true" :cols="40" :rows="6" autoresize placeholder="Note ..." />
+        <div>
+          <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="60" :rows="14" :maxrows="14" autoresize placeholder="AD groups ..." />
         </div>
       </div>
     </template>
@@ -67,7 +69,7 @@ const { Productions, loadProductions } = useIrisSessions()
 const account = ref(props.account)
 const emit = defineEmits<{ close: [boolean] }>()
 const hcie = props.instance
-const groups = ref(props.account.groups)
+const groups = ref(props.account.groups?.join(', '))
 const items = ref([])
 const note = ref('')
 
