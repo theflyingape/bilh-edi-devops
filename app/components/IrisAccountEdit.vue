@@ -33,19 +33,20 @@
               <USwitch v-model="account.admin" @focus="note='Admin role elevates this account into the local irisadm group, which in turn, provides access to a restrictive list of Linux shell sudo commands and also expanded access within IRIS for Health Connect operations.'" @blur="note=''" />
             </UFormField>
             <UFormField label="Systems role" name="sysadm">
-              <USwitch v-model="account.sysadm" :disabled="!isSystems" />
+              <USwitch v-model="account.sysadm" @focus="note='Systems role is an elevated AD account for Linux root shell and the IRIS %Manager administration role. Unless assigned, this role does not necessarily have to overlap with the DevOps roles.'" @blur="note=''" :disabled="!isSystems" />
             </UFormField>
-            <UTooltip :content="{ side: 'top' }" :delay-duration="0" text="requires account group member in local irisdev or AD grp-os-shell-access">
-              <UFormField label="Shell access" name="shell">
-                <USwitch v-model="account.shell" :disabled="!isSystems" />
-              </UFormField>
-            </UTooltip>
+            <UFormField label="Shell access" name="shell">
+              <USwitch v-model="account.shell" @focus="note='This role is either determined by AD grp-os-shell-access or local irisdev group.'" @blur="note=''" :disabled="!isSystems" />
+            </UFormField>
           </div>
           <div class="flex justify-end pt-8">
             <SubmitButton>Submit</SubmitButton>
           </div>
         </UForm>
-        <UTextarea v-model="note" class="italic" color="info" variant="subtle" :disabled="true" :cols="48" :rows="8" autoresize placeholder="Note ..." />
+        <div class="flex flex-col items-start gap-4">
+          <UTextarea v-model="groups" class="italic" color="info" variant="subtle" :disabled="true" :cols="40" :rows="8" autoresize placeholder="AD groups ..." />
+          <UTextarea v-model="note" class="italic" color="info" variant="subtle" :disabled="true" :cols="40" :rows="6" autoresize placeholder="Note ..." />
+        </div>
       </div>
     </template>
   </UModal>
@@ -66,6 +67,7 @@ const { Productions, loadProductions } = useIrisSessions()
 const account = ref(props.account)
 const emit = defineEmits<{ close: [boolean] }>()
 const hcie = props.instance
+const groups = ref(props.account.groups)
 const items = ref([])
 const note = ref('')
 

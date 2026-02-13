@@ -131,7 +131,7 @@ async function accountModal() {
 
 async function loadAccounts() {
   if (dev) {
-    set(data, [{id:'dev',name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now', namespace:'%SYS', sysadm:1, shell:1},{id:'ops',name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never', namespace:'BILHPN', analyst:1, admin:1}])
+    set(data, [{id:'dev',groups:['wheel','user'],name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now', namespace:'%SYS', sysadm:1, shell:1},{id:'ops',groups:[],name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never', namespace:'BILHPN', analyst:1, admin:1}])
   }
   else {
     const hcie = get(instance)!

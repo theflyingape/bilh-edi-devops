@@ -11,6 +11,8 @@ export interface IRIStoken {
 
 export interface Account {
   [key: string]: {
+    id: string
+    groups: string[]
     name: string
     enabled: boolean
     namespace: string
