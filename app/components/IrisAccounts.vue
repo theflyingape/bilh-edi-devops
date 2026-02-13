@@ -45,6 +45,7 @@
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui';
 import { get, set } from '@vueuse/core'
 import type { Account } from '~/composables/useIrisSessions';
+import IrisAccountEdit from './IrisAccountEdit.vue';
 
 const props = defineProps<{
   hcie: "Live" | "Test" | "Dev" //  instance identifier
@@ -82,7 +83,10 @@ function getDropdownActions(): DropdownMenuItem[][] {
     [
       {
         label: 'Edit',
-        icon: 'i-lucide-user-pen'
+        icon: 'i-lucide-user-pen',
+        async onSelect(e) {
+          await accountModal()
+        }
       },
       {
         label: 'Delete',
@@ -113,9 +117,21 @@ function onRowSelect(e: Event, row: TableRow<Account>|null) {
   }
 }
 
+async function accountModal() {
+  await useOverlay().create(IrisAccountEdit, {
+    props: {
+      instance: get(instance)!,
+      account: get(rowSelection),
+      title: 'Delegated Account',
+      description: get(rowSelection).id
+    },
+    destroyOnClose: true
+  }).open()
+}
+
 async function loadAccounts() {
   if (dev) {
-    set(data, [{id:'dev',name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now'},{id:'ops',name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never'}])
+    set(data, [{id:'dev',name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now', namespace:'%SYS', sysadm:1, shell:1},{id:'ops',name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never', namespace:'BILHPN', analyst:1, admin:1}])
   }
   else {
     const hcie = get(instance)!
