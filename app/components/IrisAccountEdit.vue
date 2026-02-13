@@ -44,7 +44,7 @@
           </div>
         </UForm>
         <div class="flex flex-col items-start gap-4">
-          <UTextarea v-model="groups" class="italic" color="info" variant="subtle" :disabled="true" :cols="40" :rows="8" autoresize placeholder="AD groups ..." />
+          <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="40" :rows="8" autoresize placeholder="AD groups ..." />
           <UTextarea v-model="note" class="italic" color="info" variant="subtle" :disabled="true" :cols="40" :rows="6" autoresize placeholder="Note ..." />
         </div>
       </div>
@@ -67,7 +67,7 @@ const { Productions, loadProductions } = useIrisSessions()
 const account = ref(props.account)
 const emit = defineEmits<{ close: [boolean] }>()
 const hcie = props.instance
-const groups = ref(props.account.groups)
+const groups = ref(props.account.groups?.join(', '))
 const items = ref([])
 const note = ref('')
 
