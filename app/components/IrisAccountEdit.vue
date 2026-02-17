@@ -77,14 +77,14 @@ const items = ref([])
 const note = ref('')
 
 async function submit() {
-  await endpoint(hcie, `account/${get(account).name}`, 'UPDATE', {
+  await endpoint(hcie, `account/${get(account).id}`, 'UPDATE', {
     admin: get(account).admin,
     analyst: get(account).analyst,
     sysadm: get(account).sysadm,
     namespace: get(account).namespace
   }).then(async (result) => {
     if (result) {
-      const modal = overlay.create(ModalInfo, { props: { title: `${get(account).name} updated ${result?.status} ${result?.error}` } })
+      const modal = overlay.create(ModalInfo, { props: { title: `${get(account).id} updated ${result?.status} ${result?.error}` } })
       modal.open()
     }
   }).catch(async (err) => {
