@@ -136,7 +136,8 @@ async function loadAccounts() {
   else {
     const hcie = get(instance)!
     await endpoint(hcie, 'account/@').then((status) => {
-      if (status) {
+      if (status?.status == "OK") {
+        delete status?.status
         Accounts.value[hcie] = <Account>status
         set(data, Object.values(Accounts.value[hcie]!))
       }

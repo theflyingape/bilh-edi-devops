@@ -84,7 +84,7 @@ async function submit() {
     namespace: get(account).namespace
   }).then(async (result) => {
     if (result) {
-      const modal = overlay.create(ModalInfo, { props: { title: `${get(account).name} updated` } })
+      const modal = overlay.create(ModalInfo, { props: { title: `${get(account).name} updated ${result?.status} ${result?.error}` } })
       modal.open()
     }
   }).catch(async (err) => {
