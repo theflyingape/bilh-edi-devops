@@ -122,7 +122,7 @@ async function accountModal() {
     props: {
       instance: get(instance)!,
       account: get(rowSelection),
-      title: 'Delegated Account',
+      title: 'BILH Delegated Account',
       description: get(rowSelection).id
     },
     destroyOnClose: true

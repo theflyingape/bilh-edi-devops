@@ -212,7 +212,7 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie: string, route: string, method: 'GET' | 'POST' | 'DELETE' = 'GET', send?: object): Promise<unknown | null> {
+  async function endpoint(hcie: string, route: string, method: 'GET' | 'POST' | 'DELETE' | 'UPDATE' = 'GET', send?: object): Promise<unknown | null> {
     let payload = null
     let jwt = tokens.get(hcie)
     if (dev) return payload
