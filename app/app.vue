@@ -30,7 +30,7 @@
           </div>
           <div class="m-auto">
             <UChip class="mt-2" :color="chip" inset>
-              <UTooltip arrow :content="{ align: 'center', side: 'left', sideOffset: 8 }"
+              <UTooltip arrow :content="{ align: 'center', side: 'bottom', sideOffset: 4 }"
                         :text="`${get(user)?.id || 'click to login'}`"
               >
                 <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"

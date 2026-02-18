@@ -25,8 +25,8 @@
           <UDropdownMenu v-if="row.original.id == rowSelection.id" :items="getDropdownActions()">
             <UButton
               icon="i-lucide-ellipsis-vertical"
-              color="neutral"
-              variant="ghost"
+              color="action"
+              variant="subtle"
               aria-label="Actions"
             />
           </UDropdownMenu>
@@ -93,7 +93,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-trash',
         color: 'error',
         async onSelect(e) {
-          await queryModal(`OK to delete ${get(rowSelection).id}?`, `This drops the IRIS user's cached storage only, which is useful for trouble-shooting an issue and for hygiene.`)
+          await queryModal(`OK to delete ${get(rowSelection).id}?`, `Edit to remove any active roles first, as this drops the IRIS user's cached storage only. Dropping the account is useful for trouble-shooting an issue and for security hygiene.`)
           if(get(response)) {
             await endpoint(get(instance)!, `account/${get(rowSelection).id}`, 'DELETE')
             await loadAccounts()
