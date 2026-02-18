@@ -27,17 +27,17 @@
               />
             </UFormField>
           </div>
-          <div class="grid grid-flow-col gap-4 pt-4">
-            <UFormField label="Analyst role" name="analyst">
-              <USwitch v-model="account.analyst" @focus="note='Analyst role manages this account with the local irisdev group, which in turn, allows the essential access to code, data, and files on Linux and in IRIS. Health Connect can further refine its access via User Roles delegated at login.'" @blur="note=''" />
+          <div class="grid grid-flow-col justify-items-center pt-4">
+            <UFormField label="Analyst" name="analyst">
+              <USwitch v-model="account.analyst" @focus="note='Manages core DevOps access using the local irisdev group, which in turn, allows essential access to code, data, and files on Linux and in IRIS. Health Connect can further refine its access via Security User Roles delegated at login.'" @blur="note=''" />
             </UFormField>
-            <UFormField label="Admin role" name="admin">
+            <UFormField label="Admin" name="admin">
               <USwitch v-model="account.admin" @focus="note='Admin role elevates this account into the local irisadm group, which in turn, provides access to a restrictive list of Linux shell sudo commands and also expanded access within IRIS for Health Connect operations.'" @blur="note=''" />
             </UFormField>
-            <UFormField label="Systems role" name="sysadm">
+            <UFormField label="Systems" name="sysadm">
               <USwitch v-model="account.sysadm" color="secondary" @focus="note='Systems role is an elevated AD account for Linux root shell and the IRIS %Manager administration role. Unless assigned, this role alone does not necessarily have to overlap with the DevOps roles.'" @blur="note=''" :disabled="!isSystems" />
             </UFormField>
-            <UFormField label="Shell access" name="shell">
+            <UFormField label="Shell" name="shell">
               <USwitch v-model="account.shell" color="neutral" @focus="note='This role is a deterministic value only - changing it here has no effect. It is enabled by the local irisdev group or as a member in AD grp-os-shell-access that allows for a remote Linux login.'" @blur="note=''" />
             </UFormField>
           </div>
