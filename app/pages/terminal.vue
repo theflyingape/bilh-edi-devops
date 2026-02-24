@@ -1,5 +1,5 @@
 <template>
-  <div ref="Terminal" class="bg-zinc-200 min-h-auto h-[95dvh] max-h-[95dvh] min-w-full w-full">
+  <div ref="Terminal" class="bg-zinc-200 min-h-auto h-[93.5dvh] max-h-[93.5dvh] min-w-full w-full">
     <div class="flex flex-nowrap h-full w-full justify-center">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-2 pb-10 rounded-md min-h-1/2 min-w-1/2 h-full w-full max-h-auto max-w-auto overflow-hidden resize resizer">
@@ -56,30 +56,32 @@
         </div>
       </div>
       <!-- top-right action controls -->
-      <div class="flex-nowrap justify-items-start m-1 min-w-9/50 max-w-9/50 space-x-1 space-y-1">
+      <div class="flex-nowrap ml-1 mt-3 min-w-9/50 max-w-9/50">
+        <div class="flex space-x-1">
         <IrisSelect v-model="Instance" />
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
         <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
-        <div v-if="isConnected" class="m-1 pl-2">
+        </div>
+        <div v-if="isConnected" class="m-1 pl-1">
           <UChip color="success">
             <UButton color="action" size="lg" variant="soft" @click="terminate">Disconnect</UButton>
           </UChip>
         </div>
         <div v-else class="flex m-1 space-x-2">
           <UChip color="neutral">
-            <UButton color="secondary" size="lg" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
+            <UButton size="lg" color="neutral" variant="subtle" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
           </UChip>
-          <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" color="secondary" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-lock-keyhole" :label="termType" />
+          <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" color="neutral" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-lock-keyhole" :label="termType" />
         </div>
         <div v-if="isConnected">
-          <div v-if="isFiles" class="flex-wrap">
+          <div v-if="isFiles || true" class="flex-wrap">
             <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-            <UInput class="w-60" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
-            <div class="flex justify-end"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
+            <UInput class="w-full" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
+            <div class="flex justify-end m-1"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
             <div>
               <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
               <FileStat v-model="fileCandidate" :hcie="Instance" :tmux="tmux!" />
-              <div class="flex justify-end"><SubmitButton :disabled="!fileCandidate.length || fileStat[Instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
+              <div class="flex justify-end m-1"><SubmitButton :disabled="!fileCandidate.length || fileStat[Instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
             </div>
           </div>
         </div>
@@ -358,7 +360,7 @@ function sendCurl() {
 function snap() {
 // html2canvas(<HTMLDivElement>document.getElementById('crt')).then((canvas) => {
 //  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
-  htmlToImage.toJpeg(get(TerminalRef)!, { height: get(TerminalRef)!.clientHeight * 1.0000, width: Math.ceil(get(TerminalRef)!.clientWidth * 0.8167), quality: 0.8 }).then((dataUrl:string) => {
+  htmlToImage.toJpeg(get(TerminalRef)!, { height: get(TerminalRef)!.clientHeight * 1.0000, width: Math.ceil(get(TerminalRef)!.clientWidth * 0.8167), quality: 0.8333 }).then((dataUrl:string) => {
     const link = document.createElement('a')
     link.download = `${get(Instance)}-crt-snap.jpg`
     link.href = dataUrl

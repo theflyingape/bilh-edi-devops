@@ -265,7 +265,7 @@ const items = ref([
 ])
 </script>
 
-<style>
+<style lang="css" scoped>
 .page-enter-active, .page-leave-active {
   transition: all 0.4s;
 }
