@@ -10,8 +10,7 @@ export default defineNuxtConfig({
     '@sidebase/nuxt-auth',
     '@vueuse/nuxt',
     'nuxt-file-storage',
-    'nuxt-llms',
-    'nuxt-tiptap-editor'
+    'nuxt-llms'
   ],
 
   imports: {
@@ -49,7 +48,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '0.9.15'
+    version: '1.0.0'
   },
   runtimeConfig: {
     jwtSecret: process.env.NUXT_JWT_PASSWORD || '!$ecure!',
@@ -108,6 +107,13 @@ export default defineNuxtConfig({
 
   vite: {
     optimizeDeps: {
+      include: [
+        '@nuxt/ui > prosemirror-state',
+        '@nuxt/ui > prosemirror-transform',
+        '@nuxt/ui > prosemirror-model',
+        '@nuxt/ui > prosemirror-view',
+        '@nuxt/ui > prosemirror-gapcursor'
+      ],
       exclude: ['@xterm/xterm']
     },
     preview: {
@@ -214,8 +220,5 @@ export default defineNuxtConfig({
         description: 'Our service line'
       }
     ]
-  },
-  tiptap: {
-    prefix: 'Tiptap'
   }
 })

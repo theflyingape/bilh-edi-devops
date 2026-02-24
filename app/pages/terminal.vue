@@ -1,5 +1,5 @@
 <template>
-  <div ref="Terminal" class="bg-zinc-200 min-h-auto h-[93.5dvh] max-h-[93.5dvh] min-w-full w-full">
+  <div ref="Terminal" class="bg-zinc-200 min-h-auto h-[calc(100vh-50px)] max-h-[calc(100vh-50px)] min-w-full w-full">
     <div class="flex flex-nowrap h-full w-full justify-center">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-2 pb-10 rounded-md min-h-1/2 min-w-1/2 h-full w-full max-h-auto max-w-auto overflow-hidden resize resizer">
