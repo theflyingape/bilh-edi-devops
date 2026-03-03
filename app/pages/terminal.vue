@@ -24,10 +24,10 @@
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
             <div v-if="tmux" class="space-x-2">
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="Ctrl/B shortcuts"><UButton class="rounded-full bg-amber-100 hover:bg-amber-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-lucide-badge-help" @click="tmuxHelp" /></UTooltip>
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="split window"><UButton class="rounded bg-gray-100 hover:bg-gray-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-ic-twotone-add-to-queue" @click="tmuxSplit" /></UTooltip>
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="switch to previous"><UButton class="rounded bg-sky-100 hover:bg-sky-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-ic-twotone-swipe-vertical" @click="tmuxSwitch" /></UTooltip>
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="enter Copy Mode & search"><UButton class="rounded-full bg-violet-100 hover:bg-violet-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="Ctrl/B shortcuts"><UButton class="rounded-full disabled:bg-slate-200 bg-amber-100 hover:bg-amber-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-lucide-badge-help" @click="tmuxHelp" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="split window"><UButton class="rounded  disabled:bg-slate-200 bg-gray-100 hover:bg-gray-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-ic-twotone-add-to-queue" @click="tmuxSplit" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="switch to previous"><UButton class="rounded disabled:bg-slate-200 bg-sky-100 hover:bg-sky-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-ic-twotone-swipe-vertical" @click="tmuxSwitch" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="enter Copy Mode & search"><UButton class="rounded-full disabled:bg-slate-200 bg-violet-100 hover:bg-violet-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" /></UTooltip>
               
             </div>
             <UForm v-else :state=searchInput @submit.prevent="search(true)">
@@ -165,14 +165,14 @@ const { InstanceDefault, fileStat, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 const Instance = ref(InstanceDefault)
 
-const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
+const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 40 ? get(selection) : get(selection).substring(0,31)+'…'+get(selection).slice(-8)))
 const fileCandidate = ref('')
 const titleLabel = ref(computed(() => get(title).length < 20 ? get(title) : get(title)[0]+'…/'+get(title).split('/').at(-1)))
 
 //  allows for component to execute its Clear All items, but also
 //  reset UI here for new selections
 watch(clipBoard.items, (value, _oldValue) => {
-  set(history, get(value)!.length > 1)
+  set(history, get(isConnected) && get(value)!.length > 1)
   if (!get(value)?.length)
     clear()
 })
@@ -203,7 +203,6 @@ function titleClick() {
   set(selection, get(title))
   navigator.clipboard.writeText(get(title))
   clipBoard.copy(get(title))
-  set(history, true)
 }
 
 const isFiles = ref(computed(() => get(title) == '/files' || get(title).startsWith('/files/')))
