@@ -1,6 +1,6 @@
 <template>
   <div ref="Terminal" class="bg-zinc-200 min-h-auto h-[calc(100vh-50px)] max-h-[calc(100vh-50px)] min-w-full w-full">
-    <div class="flex flex-nowrap h-full w-full justify-center">
+    <div class="flex flex-nowrap h-full w-full">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-2 pb-10 rounded-md min-h-1/2 min-w-1/2 h-full w-full max-h-auto max-w-auto overflow-hidden resize resizer">
         <DevOnly><XtermJs v-show="Instance == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
@@ -8,7 +8,7 @@
         <XtermJs v-show="Instance == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Live'" @vue:mounted="" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <!-- bottom control panel -->
-        <div class="flex flex-nowrap justify-between items-center ml-5 mr-5">
+        <div class="flex flex-nowrap justify-between items-center">
           <!-- session controls -->
           <div v-if="isConnected" class="flex flex-nowrap space-x-2">
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="capture Terminal"><UButton size="sm" icon="i-lucide-camera" color="neutral" variant="subtle" @click.prevent="snap" /></UTooltip>
@@ -40,10 +40,10 @@
           </div>
           <!-- right terminal controls -->
           <div class="flex flex-nowrap font-mono space-x-1 text-gray-400 text-lg">
-            <USeparator v-if="title.length" orientation="vertical" class="h-6" /> <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="click to copy current path"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
-            <USeparator v-if="selection.length" orientation="vertical" class="h-6" /> <UButton size="sm" color="warning" variant="link" :label="selectionLabel" />
+            <USeparator v-if="title.length" orientation="vertical" class="h-6" />
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="click to copy current path"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
             <div>
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="clear selection"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" :text="selectionLabel ? `clear last selection: ${selectionLabel}` : ''"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
             </div>
             <div v-if="tmux">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="screensaver"><UButton size="sm" icon="i-lucide-lock-keyhole" color="neutral" variant="subtle" @click="reset" /></UTooltip>
@@ -55,55 +55,79 @@
           </div>
         </div>
       </div>
-      <!-- top-right action controls -->
-      <div class="flex-nowrap ml-1 mt-3 min-w-9/50 max-w-9/50">
-        <div class="flex space-x-1">
-        <IrisSelect v-model="Instance" />
-        <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
-        <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
-        </div>
-        <div v-if="isConnected" class="m-1 pl-1">
-          <UChip color="success">
-            <UButton color="action" size="lg" variant="soft" @click="terminate">Disconnect</UButton>
-          </UChip>
-        </div>
-        <div v-else class="flex m-1 space-x-2">
-          <UChip color="neutral">
+      <!-- side-right action controls -->
+      <div class="grid justify-between ml-1 mt-3 min-w-9/50 max-w-9/50">
+        <!-- top -->
+        <div>
+          <div class="flex space-x-1">
+            <IrisSelect v-model="Instance" />
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="decrease font size"><UButton icon="i-lucide-a-arrow-down" color="neutral" variant="subtle" @click="fontSize(-2)" /></UTooltip>
+            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="increase font size"><UButton icon="i-lucide-a-arrow-up" color="neutral" variant="subtle" @click="fontSize(2)" /></UTooltip>
+          </div>
+          <div v-if="isConnected" class="m-1 pl-1">
+            <UChip color="success">
+              <UButton color="action" size="lg" variant="soft" @click="terminate">Disconnect</UButton>
+            </UChip>
+          </div>
+          <div v-else>
+            <div class="flex m-1 space-x-2">
             <UButton size="lg" color="neutral" variant="subtle" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
-          </UChip>
-          <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" color="neutral" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-lock-keyhole" :label="termType" />
-        </div>
-        <div v-if="isConnected">
-          <div v-if="isFiles || true" class="flex-wrap">
-            <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-            <UInput class="w-full" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
-            <div class="flex justify-end m-1"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
-            <div>
-              <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-              <FileStat v-model="fileCandidate" :hcie="Instance" :tmux="tmux!" />
-              <div class="flex justify-end m-1"><SubmitButton :disabled="!fileCandidate.length || fileStat[Instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
+            <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" :color="tmux ? 'primary' : 'neutral'" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-note" :label="termType" />
+            </div>
+            <div v-if="tmux">
+              <UCard variant="subtle">
+                <template #header>
+                  <UIcon name="i-lucide-lightbulb" /> NOTE: <b>tmux</b> connect <i>can <b>resume</b> your running session after a <b>disconnect</b> and provides for additional screen functions</i>
+                </template>
+                <template #default>
+                  <ul class="list-disc space-y-1.5 text-sm">
+                    <li>use <UKbd value="meta" /><UKbd value="b" /> to prefix <b>tmux</b> commands</li>
+                    <li>hold <UKbd value="SHIFT" /> with mouse <UKbd class="font-bold rounded-full" value="btn" variant="subtle" /> to highlight text selection into the copy buffer</li>
+                    <li>use mouse <UKbd class="font-bold rounded-full" value="wheel" variant="subtle" /> <i>or</i>
+                    press <UKbd value="meta" /><UKbd value="b" /> then <UKbd value="PgUp" />/<UKbd value="PgDn" />
+                    for scroll history</li>
+                    <li>exit scrolling using <UKbd value="esc" /> <i>or</i> <UKbd value="q" /></li>
+                  </ul>
+                </template>
+              </UCard>
             </div>
           </div>
         </div>
-        <div v-else>
-          <div v-if="tmux" class="space-x-2">
-            <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
-            <UCard variant="subtle">
-              <template #header>
-                <b>tmux</b> connect <i>can <b>resume</b> your running session after a <b>disconnect</b> and provides for additional screen functions</i>
-              </template>
-              <template #default>
-                <ul class="list-disc space-y-1.5 text-sm">
-                  <li>use <UKbd value="meta" /><UKbd value="b" /> to prefix <b>tmux</b> commands</li>
-                  <li>hold <UKbd value="SHIFT" /> with mouse <UKbd class="font-bold rounded-full" value="btn" variant="subtle" /> to highlight text selection into the copy buffer</li>
-                  <li>use mouse <UKbd class="font-bold rounded-full" value="wheel" variant="subtle" /> <i>or</i><br>
-                  press <UKbd value="meta" /><UKbd value="b" /> then <UKbd value="PgUp" />/<UKbd value="PgDn" /><br>
-                  for scroll history</li>
-                  <li>exit scrolling using <UKbd value="esc" /> <i>or</i> <UKbd value="q" /></li>
-                </ul>
-              </template>
-            </UCard>
-          </div>
+        <!-- middle -->
+        <div v-if="isConnected && isFiles">
+          <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
+          <UInput class="w-full" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
+          <div class="flex justify-end m-1 pb-3"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
+          <FileStat v-model="fileCandidate" :hcie="Instance" :tmux="tmux!" />
+          <div class="flex justify-end m-1"><SubmitButton :disabled="!fileCandidate.length || fileStat[Instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
+          <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
+        </div>
+        <div v-else class="self-start">
+          <UCard color="info" variant="subtle">
+            <template #default>
+              <UIcon name="i-lucide-lightbulb" /> NOTE: <b><span style="background-color: lightgrey; font-family: monospace;">&nbsp;cd /files&nbsp;</span></b> first to enable any data file transfers.
+            </template>
+          </UCard>
+        </div>
+        <!-- bottom -->
+        <div v-if="clipBoard.items" class="max-h-fit pb-1 self-end">
+          <UCollapsible v-if="clipBoard.items.value.length" v-model:open="history" :unmount-on-hide="false" trailing-icon="i-lucide-chevron-down">
+            <UButton
+              class="group"
+              icon="i-heroicons-clipboard"
+              :label="`Clipboard history (${clipBoard.items.value.length})`"
+              color="neutral"
+              variant="subtle"
+              trailing-icon="i-lucide-chevron-down"
+              :ui="{
+                trailingIcon: 'group-data-[state=open]:rotate-180 transition-transform duration-200'
+              }"
+              block
+            />
+            <template #content>
+              <ClipboardHistory :title=false />
+            </template>
+          </UCollapsible>
         </div>
       </div>
     </div>
@@ -130,22 +154,35 @@
 <script setup lang="ts">
 import { get, set, useResizeObserver, useStorage } from '@vueuse/core'
 import { useTemplateRef } from 'vue'
-// import { saveAs } from 'file-saver'
 import * as htmlToImage from 'html-to-image'
 
+const clipBoard = useClipboardHistory()
 const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth().data)?.id
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
-
 const { InstanceDefault, fileStat, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 const Instance = ref(InstanceDefault)
 
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 30 ? get(selection) : get(selection).substring(0,26)+'…'+get(selection).slice(-3)))
 const fileCandidate = ref('')
+const titleLabel = ref(computed(() => get(title).length < 20 ? get(title) : get(title)[0]+'…/'+get(title).split('/').at(-1)))
+
+//  allows for component to execute its Clear All items, but also
+//  reset UI here for new selections
+watch(clipBoard.items, (value, _oldValue) => {
+  if (!get(value)?.length) {
+    set(selection, '')
+    set(history, false)
+    clear()
+  }
+})
 
 watch(selection, () => {
+  clipBoard.copy(get(selection))
+  set(history, get(clipBoard.items)!.length > 1)
+  //  expand auto-detection
   const sessionId = get(Instance)
   set(fileCandidate, '')
   fileStat.value[sessionId] = <filestat>{}
@@ -159,16 +196,17 @@ watch(selection, () => {
     stat(sessionId, filename).finally(() => {
       if (get(fileStat)[sessionId]?.fileName) {
         set(fileCandidate, get(fileStat)[sessionId]?.fileName)
+        set(history, false)
       }
     })
   }
 })
 
-const titleLabel = ref(computed(() => get(title).length < 20 ? get(title) : get(title)[0]+'…/'+get(title).split('/').at(-1)))
-
 function titleClick() {
   set(selection, get(title))
   navigator.clipboard.writeText(get(title))
+  clipBoard.copy(get(title))
+  set(history, true)
 }
 
 const isFiles = ref(computed(() => get(title) == '/files' || get(title).startsWith('/files/')))
@@ -207,6 +245,7 @@ catch(err) {
 const save = useStorage('prefs-local-storage', prefs, localStorage, { mergeDefaults: true })
 const termType = ref(prefs.tmux ? 'tmux' : 'ssh')
 const tmux = ref(prefs.tmux)
+const history = ref(false)
 
 function fontSize(delta:number) {
   prefs.fontSize = xterm().options.fontSize! + delta
@@ -366,35 +405,6 @@ function snap() {
     link.href = dataUrl
     link.click()
   })
-  /*
-  htmlToImage.toBlob(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0]).then((blob) => {
-    saveAs(<Blob>blob, `${get(value)}-crt-snap.png`)
-  })
-  */
-  /*
-  //const canvas = <HTMLCanvasElement>xterm().element?.querySelector('.xterm-screen canvas')
-  const canvasList = xterm().element?.querySelectorAll('.xterm-screen canvas')
-  if (canvasList) {
-    console.log(canvasList)
-    const canvas = <HTMLCanvasElement>canvasList[1]
-    const context = canvas.getContext('webgl2', { preserveDrawingBuffer: true })
-    console.log(context)
-    if (context) {
-      xterm().refresh(0, xterm().rows)
-      const off = <HTMLCanvasElement>context.canvas
-      off.toBlob((blob) => {
-        console.log(blob)
-        const url = URL.createObjectURL(blob!)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `${get(value)}-snap.jpg`
-        a.click()
-        canvas.getContext('webgl', { preserveDrawingBuffer: false })
-        URL.revokeObjectURL(url)
-      }, 'image/jpeg', 0.95)
-    }
-  }
-  */
 }
 
 async function downloadFile() {

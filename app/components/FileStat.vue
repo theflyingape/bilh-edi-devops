@@ -9,8 +9,7 @@
           <div>{{ new Date(fileStat[hcie]!.modified).toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' }) }}</div>
         </div>
         <div v-else>
-          <b>cd</b> to a subfolder and hold<br>
-          <UKbd v-show="tmux" value="SHIFT" />{{ tmux ? ' +' : '' }} mouse <UKbd class="font-bold rounded-full" value="btn" variant="subtle" /> down to highlight a <b>file name</b> for download
+          <b>cd</b> to a subfolder and hold <UKbd v-show="tmux" value="SHIFT" />{{ tmux ? ' +' : '' }} mouse <UKbd class="font-bold rounded-full" value="btn" variant="subtle" /> down to click-&-drag cursor over the entire <b>file name</b> to select it for download.
         </div>
       </div>
       <div class="flex font-mono justify-start italic text-sm">
