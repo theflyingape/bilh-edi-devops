@@ -172,16 +172,13 @@ const titleLabel = ref(computed(() => get(title).length < 20 ? get(title) : get(
 //  allows for component to execute its Clear All items, but also
 //  reset UI here for new selections
 watch(clipBoard.items, (value, _oldValue) => {
-  if (!get(value)?.length) {
-    set(selection, '')
-    set(history, false)
+  set(history, get(value)!.length > 1)
+  if (!get(value)?.length)
     clear()
-  }
 })
 
 watch(selection, () => {
   clipBoard.copy(get(selection))
-  set(history, get(clipBoard.items)!.length > 1)
   //  expand auto-detection
   const sessionId = get(Instance)
   set(fileCandidate, '')
@@ -196,7 +193,7 @@ watch(selection, () => {
     stat(sessionId, filename).finally(() => {
       if (get(fileStat)[sessionId]?.fileName) {
         set(fileCandidate, get(fileStat)[sessionId]?.fileName)
-        set(history, false)
+        clipBoard.copy(get(fileCandidate))
       }
     })
   }
