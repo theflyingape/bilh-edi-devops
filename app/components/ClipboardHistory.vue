@@ -25,46 +25,55 @@
           <UBadge class="wrap-anywhere" :color="copied == index ? 'primary' : 'neutral'" :variant="copied == index ? 'soft' : 'ghost'">
             {{ item }}
           </UBadge>
-          <div class="flex-none space-x-1 space-y-1">
-            <UButton
-              icon="i-heroicons-clipboard"
-              color="neutral"
-              variant="subtle"
-              @click="handleCopy(index)"
-            />
-            <UButton
-              icon="i-heroicons-trash"
-              color="error"
-              variant="soft"
-              @click="handleDelete(index)"
-            />
+          <div class="flex-none space-x-1 space-y-1 pr-1">
+            <UTooltip arrow :content="{ side: 'left', sideOffset: 2 }" text="copy to clipboard">
+              <UButton
+                icon="i-heroicons-clipboard-document-check"
+                color="neutral"
+                variant="subtle"
+                @click="handleCopy(index)"
+              />
+            </UTooltip>
+            <UTooltip arrow :content="{ side: 'left', sideOffset: 16 }" text="remove">
+              <UButton
+                icon="i-heroicons-archive-box-x-mark"
+                color="error"
+                variant="soft"
+                @click="handleDelete(index)"
+              />
+            </UTooltip>
           </div>
         </div>
       </UScrollArea>
     </template>
-    <template v-if="clipBoard.items.value.length > 1" #footer>
+    <template v-if="clipBoard.items.value.length > 4" #footer>
       <div class="flex justify-between">
         <div class="flex gap-1">
-          <UButton
-            icon="i-lucide-arrow-up-to-line"
-            color="neutral"
-            variant="outline"
-            @click="scrollArea?.virtualizer?.scrollToIndex(0, { align: 'start', behavior: 'smooth' })"
-          />
-          <UButton
-            icon="i-lucide-arrow-down-to-line"
-            color="neutral"
-            variant="outline"
-            @click="scrollArea?.virtualizer?.scrollToIndex(clipBoard.items.value.length - 1, { align: 'end', behavior: 'smooth' })"
-          />
+          <UTooltip arrow :content="{ side: 'top', sideOffset: 1 }" text="move to top">
+            <UButton
+              icon="i-lucide-arrow-up-to-line"
+              color="neutral"
+              variant="outline"
+              @click="scrollArea?.virtualizer?.scrollToIndex(0, { align: 'start', behavior: 'smooth' })"
+            />
+          </UTooltip>
+          <UTooltip arrow :content="{ side: 'right', sideOffset: 1 }" text="move to bottom">
+            <UButton
+              icon="i-lucide-arrow-down-to-line"
+              color="neutral"
+              variant="outline"
+              @click="scrollArea?.virtualizer?.scrollToIndex(clipBoard.items.value.length - 1, { align: 'end', behavior: 'smooth' })"
+            />
+          </UTooltip>
         </div>
         <div class="flex justify-end">
           <UButton
+            class="hover:bg-red-600"
             icon="i-heroicons-trash-solid"
             label="Clear all"
             color="neutral"
             variant="solid"
-            @click="clipBoard.clear(); props.clear"
+            @click="clipBoard.clear()"
           />
         </div>
       </div>
@@ -75,6 +84,7 @@
 <script setup lang="ts">
 import { useTemplateRef } from 'vue'
 import { get, set } from '@vueuse/core'
+import { tooltip } from '#build/ui';
 
 const props = defineProps<{
   title?: false

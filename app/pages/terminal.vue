@@ -110,12 +110,12 @@
           </UCard>
         </div>
         <!-- bottom -->
-        <div v-if="clipBoard.items" class="max-h-fit pb-1 self-end">
+        <div v-if="clipBoard.items" class="max-h-fit pb-1 pr-1 self-end">
           <UCollapsible v-if="clipBoard.items.value.length" v-model:open="history" :unmount-on-hide="false" trailing-icon="i-lucide-chevron-down">
             <UButton
               class="group"
               icon="i-heroicons-clipboard"
-              :label="`Clipboard history (${clipBoard.items.value.length})`"
+              :label="`Shell clipboard history (${clipBoard.items.value.length})`"
               color="neutral"
               variant="subtle"
               trailing-icon="i-lucide-chevron-down"
