@@ -49,7 +49,7 @@ const themes: itheme = {
 const startup: ITerminalOptions = {
   allowProposedApi: true, scrollback: 8000, scrollSensitivity: 5, smoothScrollDuration: 250,
   cursorBlink: false, drawBoldTextInBrightColors: true,
-  fontFamily: 'Consolas,Lucida Console,monospace', fontSize: props?.fontSize || 20, fontWeight: 'normal', fontWeightBold: 'bold',
+  fontFamily: 'Consolas,Lucida Console,monospace', fontSize: props?.fontSize || 20, fontWeight: '400', fontWeightBold: '500',
   theme: themes[props.theme],
   wordSeparator: ` :;?!"'<>[=]`
 }

@@ -1,6 +1,6 @@
 <template>
-  <div ref="Terminal" class="bg-zinc-200 min-h-auto h-[calc(100vh-50px)] max-h-[calc(100vh-50px)] min-w-full w-full">
-    <div class="flex flex-nowrap h-full w-full">
+  <div ref="Terminal" class="bg-zinc-200 min-h-auto h-[calc(100vh-50px)] max-h-[calc(100vh-50px)] min-w-full w-full overflow-hidden">
+    <div class="flex flex-nowrap justify-center h-full w-full">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-2 pb-10 rounded-md min-h-1/2 min-w-1/2 h-full w-full max-h-auto max-w-auto overflow-hidden resize resizer">
         <DevOnly><XtermJs v-show="Instance == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
@@ -218,6 +218,21 @@ const TerminalRef = useTemplateRef('Terminal')
 const crtRef = useTemplateRef('crt')
 useResizeObserver(crtRef, (entries) => {
   const sessionId = get(Instance)
+/*
+  for (let entry of entries) {
+    const cr = entry.contentRect
+    const currentHeight = cr.height
+    const lh = 27
+
+    // Calculate nearest snapped height
+    const snappedHeight = Math.round(currentHeight / lh) * lh + 31
+    
+    // Apply snapped height if it differs from current, preventing infinite loops
+    if (Math.abs(currentHeight - snappedHeight) > 2) {
+      get(crtRef)!.style.height = `${snappedHeight}px`
+    }
+  }
+*/
   resize(sessionId)
 })
 
@@ -393,9 +408,7 @@ function sendCurl() {
 }
 
 function snap() {
-// html2canvas(<HTMLDivElement>document.getElementById('crt')).then((canvas) => {
-//  htmlToImage.toJpeg(<HTMLDivElement>get(crtRef)!.getElementsByClassName('xterm-screen')[0], { quality: 0.9 }).then((dataUrl:string) => {
-  htmlToImage.toJpeg(get(TerminalRef)!, { height: get(TerminalRef)!.clientHeight * 1.0000, width: Math.ceil(get(TerminalRef)!.clientWidth * 0.8167), quality: 0.8333 }).then((dataUrl:string) => {
+  htmlToImage.toJpeg(get(crtRef)!, { quality: 0.833 }).then((dataUrl:string) => {
     const link = document.createElement('a')
     link.download = `${get(Instance)}-crt-snap.jpg`
     link.href = dataUrl

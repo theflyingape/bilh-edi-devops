@@ -275,5 +275,24 @@ export default function useIrisTokens() {
     })
   }
 
-  return { HCIE, ICON, Productions, Instances, InstanceDefault, pending, Accounts, mirrorSet, processList, fileStat, loadProductions, credentials, user, getSession, endSession, refresh, endpoint, stat }
+  return {
+    HCIE,
+    ICON,
+    Productions,
+    Instances,
+    InstanceDefault,
+    pending,
+    Accounts,
+    mirrorSet,
+    processList,
+    fileStat,
+    loadProductions,
+    credentials,
+    user,
+    getSession,
+    endSession,
+    refresh,
+    endpoint,
+    stat
+  }
 }

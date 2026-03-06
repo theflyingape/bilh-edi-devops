@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { SignJWT, jwtVerify } from 'jose'
+import { SignJWT } from 'jose'
 import type { IRIStoken } from '~/composables/useIrisSessions'
 import { log } from '~/lib/syslog.server'
 import { z } from 'zod'
@@ -21,9 +21,6 @@ interface TokensByUser {
   refresh: Map<string, string>
 }
 
-/**
- * Tokens storage :: TO DO harden and stress-test
- */
 export const tokensByUser: Map<string, TokensByUser> = new Map()
 
 const credentialsSchema = z.object({
@@ -56,18 +53,14 @@ export default defineEventHandler(async (event) => {
         .setProtectedHeader({ alg: 'HS256' })
         .setExpirationTime(REFRESH_TOKEN_TTL)
         .sign(SECRET)
-
-      // for regression testing
-      /*
-      const { payload } = await jwtVerify(accessToken, SECRET)
-      log('LOG_NOTICE', `${username} ${event} ${REFRESH_TOKEN_TTL} return token ${ACCESS_TOKEN_TTL} with size: ${JSON.stringify(payload)?.length}`)
-      */
-
-      // Naive implementation - please implement properly yourself!
       const userTokens: TokensByUser = tokensByUser.get(username) ?? {
         access: new Map(),
         refresh: new Map()
       }
+      /* // for any jose / nuxt auth regression testing
+      const { payload } = await jwtVerify(accessToken, SECRET)
+      log('LOG_NOTICE', `${username} ${event} ${REFRESH_TOKEN_TTL} refresh ${ACCESS_TOKEN_TTL} access (${JSON.stringify(payload)?.length} bytes)`)
+      */
       userTokens.access.set(accessToken, refreshToken)
       userTokens.refresh.set(refreshToken, accessToken)
       tokensByUser.set(username, userTokens)
@@ -89,12 +82,11 @@ export default defineEventHandler(async (event) => {
         .setProtectedHeader({ alg: 'HS256' })
         .setExpirationTime(REFRESH_TOKEN_TTL)
         .sign(SECRET)
-
-      // Naive implementation - please implement properly yourself!
       const userTokens: TokensByUser = tokensByUser.get(username) ?? {
         access: new Map(),
         refresh: new Map()
       }
+
       userTokens.access.set(accessToken, refreshToken)
       userTokens.refresh.set(refreshToken, accessToken)
       tokensByUser.set(username, userTokens)
@@ -107,11 +99,11 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  log('LOG_NOTICE', `${username} ${event} ${REFRESH_TOKEN_TTL} return token ${ACCESS_TOKEN_TTL} with size: ${JSON.stringify(token)?.length}`)
+  log('LOG_NOTICE', `${username} ${event} ${REFRESH_TOKEN_TTL} refresh ${ACCESS_TOKEN_TTL} access (${JSON.stringify(token)?.length} bytes)`)
   return token
 })
 
-//  TO DO: determine purpose, unclear why their playground had this here
+//  used to match against what is allowed
 export function extractToken(authorizationHeader: string) {
   return authorizationHeader.startsWith('Bearer ')
     ? authorizationHeader.slice(7)

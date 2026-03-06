@@ -31,7 +31,7 @@ export default eventHandler(async (event) => {
     const requestAccessToken = extractToken(authorizationHeader)
     const knownAccessToken = userTokens.refresh.get(body.refreshToken)
     if (!knownAccessToken || knownAccessToken !== requestAccessToken) {
-      return dumpSession('token mismatch', 'token mismatch')
+      return dumpSession('unknown access token', 'token mismatch')
     }
 
     // Invalidate old access token
