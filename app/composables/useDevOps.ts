@@ -10,8 +10,12 @@ const stale = ref(false)
 const { user } = useIrisSessions()
 
 export default function usePortal() {
-  function ago(value: string, unclear = false): string {
-    return formatTimeAgo(new Date(value)) || unclear ? 'unclear' : value
+  function ago(value: string): string {
+    try {
+      return formatTimeAgo(new Date(value))
+    } catch (err) {
+      return <string>err
+    }
   }
 
   function isStale(version: string) {

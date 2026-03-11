@@ -37,8 +37,8 @@ async function status() {
   await endpoint(props.hcie, 'status').then((status) => {
     if (status) {
       mirrorSet.value[props.hcie] = <mirrorset>status
-      archiveAgo = ago(mirrorSet.value[props.hcie]!.lastArchive, true)
-      backupAgo = ago(mirrorSet.value[props.hcie]!.lastBackup, true)
+      archiveAgo = ago(mirrorSet.value[props.hcie]!.lastArchive)
+      backupAgo = ago(mirrorSet.value[props.hcie]!.lastBackup)
     }
   })
 }
