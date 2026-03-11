@@ -28,6 +28,7 @@ const props = defineProps<{
   hcie: 'Live' | 'Test' | 'Dev' //  instance identifier
 }>()
 
+const { ago } = useDevOps()
 const { ICON, mirrorSet, endpoint } = useIrisSessions()
 let archiveAgo: string = 'unknown'
 let backupAgo: string = 'unknown'
@@ -36,8 +37,8 @@ async function status() {
   await endpoint(props.hcie, 'status').then((status) => {
     if (status) {
       mirrorSet.value[props.hcie] = <mirrorset>status
-      archiveAgo = formatTimeAgo(new Date(mirrorSet.value[props.hcie]!.lastArchive)) || "unclear"
-      backupAgo = formatTimeAgo(new Date(mirrorSet.value[props.hcie]!.lastBackup)) || "unclear"
+      archiveAgo = ago(mirrorSet.value[props.hcie]!.lastArchive, true)
+      backupAgo = ago(mirrorSet.value[props.hcie]!.lastBackup, true)
     }
   })
 }

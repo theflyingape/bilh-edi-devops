@@ -51,7 +51,7 @@ const props = defineProps<{
   hcie: "Live" | "Test" | "Dev" //  instance identifier
 }>()
 const dev = import.meta.dev || false
-const { queryModal, response } = useDevOps()
+const { ago, queryModal, response } = useDevOps()
 const { ICON, endpoint, Accounts } = useIrisSessions()
 const instance = defineModel<INSTANCE>('instance', { required: false })
 const table = useTemplateRef('table')
@@ -69,7 +69,7 @@ const columns: TableColumn<Account>[] = [
   {
     accessorKey: 'lastlogin',
     header: 'last login',
-    cell: ({ row }) => `${row.getValue('lastlogin')}`
+    cell: ({ row }) => `${ago(row.getValue('lastlogin'))}`
   },
   {
     header: 'action'

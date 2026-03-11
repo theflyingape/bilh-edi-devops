@@ -1,4 +1,4 @@
-import { get, set, useFetch } from '@vueuse/core'
+import { get, formatTimeAgo, set, useFetch } from '@vueuse/core'
 import ConfirmationDialog from '~/components/ConfirmationDialog.vue'
 
 const isAdmin = ref(computed(() => get(user)?.scope?.includes('admin') || get(user)?.scope?.includes('systems')))
@@ -10,6 +10,10 @@ const stale = ref(false)
 const { user } = useIrisSessions()
 
 export default function usePortal() {
+  function ago(value: string, unclear = false): string {
+    return formatTimeAgo(new Date(value)) || unclear ? 'unclear' : value
+  }
+
   function isStale(version: string) {
     console.log('check version', version)
     useFetch('/api/version', { immediate: true, timeout: 5678 })
@@ -44,5 +48,5 @@ export default function usePortal() {
   function toggleSideMenu() {
     set(sideMenu, !get(sideMenu))
   }
-  return { isAdmin, isStale, online, queryModal, reload, response, sideMenu, stale, toggleSideMenu }
+  return { ago, isAdmin, isStale, online, queryModal, reload, response, sideMenu, stale, toggleSideMenu }
 }
