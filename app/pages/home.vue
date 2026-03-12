@@ -18,21 +18,29 @@
     </div>
     <div v-if="isAdmin" class="m-1">
       <USeparator class="h-4" color="action" orientation="horizontal" type="dotted" />
-      <div class="grid grid-cols-2">
-        <div class="space-y-4">
-          <div class="flex justify-center">
-            <IrisMirrorStatus v-if="!pending.Live" hcie="Live" />
+      <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" variant="link" class="items-start" :ui="{ list: 'items-start' }">
+        <template #edi>
+        </template>
+        <template #odba>
+          <div class="grid grid-cols-2">
+            <div class="space-y-4">
+              <div class="flex justify-center">
+                <IrisMirrorStatus v-if="!pending.Live" hcie="Live" />
+              </div>
+            </div>
+            <div class="space-y-4">
+              <div class="flex justify-center">
+                <IrisMirrorStatus v-if="!pending.Test" hcie="Test" />
+              </div>
+              <div class="flex justify-center">
+                <IrisMirrorStatus hcie="Dev" />
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="space-y-4">
-          <div class="flex justify-center">
-            <IrisMirrorStatus v-if="!pending.Test" hcie="Test" />
-          </div>
-          <div class="flex justify-center">
-            <IrisMirrorStatus hcie="Dev" />
-          </div>
-        </div>
-      </div>
+        </template>
+        <template #linux>
+        </template>
+      </UTabs>
     </div>
   </div>
   <div v-else class="flex flex-col items-center justify-center h-lvh -mt-48">
@@ -56,20 +64,42 @@
 </template>
 
 <script setup lang="ts">
+import type { TabsItem } from '@nuxt/ui'
 import { get, useNow } from '@vueuse/core'
 
 definePageMeta({
+  // pageTransition: { name: 'rotate', mode: 'out-in' },
   auth: false
-  // pageTransition: { name: 'rotate', mode: 'out-in' }
 })
 
 const { status } = useAuth()
-const { isAdmin } = useDevOps()
-const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
+const { isAdmin, online, toggleSideMenu } = useDevOps()
+const { pending, user } = useIrisSessions()
+
+const adminItems = ref<TabsItem[]>([
+  {
+    label: 'HCIE',
+    icon: 'i-flat-color-icons-parallel-tasks',
+    slot: 'edi',
+    value: 'edi'
+  },
+  {
+    label: 'IRIS',
+    icon: 'i-flat-color-icons-filing-cabinet',
+    slot: 'odba',
+    value: 'odba'
+  },
+  {
+    label: 'SYSTEMS',
+    icon: 'i-flat-color-icons-linux',
+    slot: 'linux',
+    value: 'linux'
+  }
+])
+const adminTab = ref('odba')
 
 const now = useNow()
-const { online, toggleSideMenu } = useDevOps()
-const { pending, user } = useIrisSessions()
+const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
 
 for (const hcie in get(pending))
   pending.value[hcie]!++

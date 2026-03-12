@@ -48,7 +48,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '1.0.2'
+    version: '1.0.3'
   },
   runtimeConfig: {
     jwtSecret: process.env.NUXT_JWT_PASSWORD || '!$ecure!',
@@ -64,7 +64,7 @@ export default defineNuxtConfig({
     host: '0.0.0.0',
     port: 6500
   },
-  compatibilityDate: '2025-09-02',
+  compatibilityDate: '2026-01-04',
 
   nitro: {
     preset: 'node-server',
@@ -79,9 +79,9 @@ export default defineNuxtConfig({
     },
     /*
     prerender: {
-      routes: [ '/' ],
+      routes: ['/'],
       crawlLinks: true,
-      failOnError: false,
+      failOnError: false
     },
     */
     routeRules: {
@@ -112,7 +112,10 @@ export default defineNuxtConfig({
         '@nuxt/ui > prosemirror-transform',
         '@nuxt/ui > prosemirror-model',
         '@nuxt/ui > prosemirror-view',
-        '@nuxt/ui > prosemirror-gapcursor'
+        '@nuxt/ui > prosemirror-gapcursor',
+        '@vue/devtools-core',
+        '@vue/devtools-kit',
+        'tailwindcss/colors'
       ],
       exclude: ['@xterm/xterm']
     },

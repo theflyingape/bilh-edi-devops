@@ -3,6 +3,7 @@
     v-if="page"
     :value="page"
     :prose="false"
+    class="-mt-24"
   />
 </template>
 

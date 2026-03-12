@@ -1,8 +1,5 @@
 <template>
-  <img
-    src="~/assets/images/copilot-icon.svg"
-    alt="EDI DevOps"
-  >
+  <img src="~/assets/images/copilot-icon.svg">
 </template>
 
 <script setup lang="ts">

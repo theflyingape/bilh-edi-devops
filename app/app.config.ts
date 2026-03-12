@@ -1,12 +1,10 @@
 export default defineAppConfig({
   // https://ui3.nuxt.dev/getting-started/theme#design-system
+  theme: {
+    radius: 0.25,
+    blackAsPrimary: false
+  },
   ui: {
-    button: {
-      defaultVariants: {
-        // Set default button color to neutral
-        // color: 'neutral'
-      }
-    },
     colors: {
       primary: 'teal',
       secondary: 'blue',
@@ -17,8 +15,6 @@ export default defineAppConfig({
       error: 'red',
       neutral: 'slate',
       action: 'pink'
-    },
-    icons: {
     },
     editor: {
       slots: {

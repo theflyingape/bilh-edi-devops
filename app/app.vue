@@ -17,14 +17,19 @@
       <template #right>
         <div class="flex flex-cols gap-2">
           <div class="m-auto">
+            <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="theme preferences">
+              <ThemePicker />
+            </UTooltip>
+          </div>
+          <div class="m-auto">
             <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="click to toggle fullscreen">
               <USwitch v-model="isFullscreen" color="secondary" unchecked-icon="i-heroicons-tv" checked-icon="i-lucide-scaling" size="xl" @click="toggle" />
             </UTooltip>
           </div>
           <div class="m-auto">
             <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="M365 Chat">
-              <UButton class="pl-2 pr-2" color="neutral" variant="ghost" to="https://m365.cloud.microsoft/chat" target="_blank">
-                <CopilotLogo class="h-6 w-auto" />
+              <UButton class="pl-1 pr-1" color="neutral" variant="ghost" to="https://m365.cloud.microsoft/chat" target="_blank">
+                <CopilotLogo class="h-5" />
               </UButton>
             </UTooltip>
           </div>
@@ -62,7 +67,14 @@
 </template>
 
 <script setup lang="ts">
+import colors from 'tailwindcss/colors'
 import { get } from '@vueuse/core'
+
+const appConfig = useAppConfig()
+const colorMode = useColorMode()
+const { style, link } = useTheme()
+
+const color = computed(() => colorMode.value === 'dark' ? (colors as any)[appConfig.ui.colors.neutral][900] : 'white')
 
 const { seo } = useAppConfig()
 /*
@@ -72,8 +84,15 @@ const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSe
 })
 */
 useHead({
-  meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }],
-  link: [{ rel: 'icon', href: '/favicon.ico' }],
+  meta: [
+    { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+    { key: 'theme-color', name: 'theme-color', content: color }
+  ],
+  link: computed(() => [
+    { rel: 'icon', href: '/favicon.ico' },
+    ...link.value
+  ]),
+  style,
   htmlAttrs: { lang: 'en' }
 })
 
