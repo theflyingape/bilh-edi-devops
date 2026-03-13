@@ -20,6 +20,7 @@
       <USeparator class="h-4" color="action" orientation="horizontal" type="dotted" />
       <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" variant="link" class="items-start" :ui="{ list: 'items-start' }">
         <template #edi>
+          WIP
         </template>
         <template #odba>
           <div class="grid grid-cols-2">
@@ -44,13 +45,16 @@
               <UCard>
                 <template #default>
                   <div class="flex justify-center font-bold font-sans">{{ index }}</div>
-                  <RedHatCockpit
+                  <UButton
                     class="flex justify-center m-2"
+                    color="info"
+                    variant="subtle"
+                    :icon="ICON[index]"
                     :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
                   />
                   <RedHatCockpit
-                    class="flex m-1"
                     v-for="host in hcie.hosts" :key="host"
+                    class="flex m-1"
                     :label="host.split('.')[0]" target="_blank" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
                   />
                 </template>
@@ -92,7 +96,7 @@ definePageMeta({
 
 const { status } = useAuth()
 const { infrastructure, isAdmin, online, toggleSideMenu } = useDevOps()
-const { HCIE, pending, user } = useIrisSessions()
+const { ICON, pending, user } = useIrisSessions()
 
 const adminItems = ref<TabsItem[]>([
   {
