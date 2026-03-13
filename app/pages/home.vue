@@ -40,19 +40,20 @@
         </template>
         <template #linux>
           <div class="flex flex-rows gap-2">
-            <div
-              v-for="(hcie, index) in infrastructure" :key="index"
-              class="flex"
-            >
+            <div v-for="(hcie, index) in infrastructure" :key="index">
               <UCard>
-                {{ index }}
-                <RedHatCockpit
-                  :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
-                />
-                <RedHatCockpit
-                  v-for="host in hcie.hosts" :key="host"
-                  :label="host.split('.')[0]" target="_blank" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
-                />
+                <template #default>
+                  <div class="flex justify-center font-bold font-sans">{{ index }}</div>
+                  <RedHatCockpit
+                    class="flex justify-center m-2"
+                    :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
+                  />
+                  <RedHatCockpit
+                    class="flex m-1"
+                    v-for="host in hcie.hosts" :key="host"
+                    :label="host.split('.')[0]" target="_blank" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
+                  />
+                </template>
               </UCard>
             </div>
           </div>

@@ -161,7 +161,7 @@ const {
           />
         </div>
       </fieldset>
-
+      <!-- let's not allow for any global change
       <fieldset v-if="hasCSSChanges || hasAppConfigChanges">
         <legend class="text-[11px] leading-none font-semibold mb-2 select-none">
           Export
@@ -200,6 +200,7 @@ const {
           </UTooltip>
         </div>
       </fieldset>
+    -->
     </template>
   </UPopover>
 </template>
