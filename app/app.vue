@@ -17,9 +17,25 @@
       <template #right>
         <div class="flex flex-cols gap-2">
           <div class="m-auto">
-            <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="theme preferences">
-              <ThemePicker />
+            <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="M365 Chat">
+              <UButton class="w-8 pl-1 pr-1" color="neutral" variant="ghost" to="https://m365.cloud.microsoft/chat" target="_blank">
+                <CopilotLogo />
+              </UButton>
             </UTooltip>
+          </div>
+          <div class="m-auto">
+            <UBadge :color="chip" variant="outline">
+              {{ who }}
+            </UBadge>
+          </div>
+          <div class="m-auto">
+            <UChip class="mt-2" :color="chip" inset>
+              <UButton
+                class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
+                icon="i-heroicons-ellipsis-horizontal-16-solid"
+                @click="toggleSideMenu"
+              />
+            </UChip>
           </div>
           <div class="m-auto">
             <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="click to toggle fullscreen">
@@ -27,27 +43,7 @@
             </UTooltip>
           </div>
           <div class="m-auto">
-            <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="M365 Chat">
-              <UButton class="pl-1 pr-1" color="neutral" variant="ghost" to="https://m365.cloud.microsoft/chat" target="_blank">
-                <CopilotLogo class="h-5" />
-              </UButton>
-            </UTooltip>
-          </div>
-          <div class="m-auto">
-            <UChip class="mt-2" :color="chip" inset>
-              <UTooltip arrow :content="{ align: 'center', side: 'bottom', sideOffset: 4 }"
-                        :text="`${get(user)?.id || 'click to login'}`"
-              >
-                <UButton class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
-                         icon="i-heroicons-ellipsis-horizontal-16-solid" @click="toggleSideMenu"
-                />
-              </UTooltip>
-            </UChip>
-          </div>
-          <div class="m-auto">
-            <UBadge :color="chip" variant="outline">
-              {{ who }}
-            </UBadge>
+            <ThemePicker />
           </div>
           <SideMenu v-model:open="sideMenu" />
         </div>

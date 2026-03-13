@@ -90,18 +90,18 @@ export interface filestat {
 }
 
 const fileStat: Ref<{ [key: string]: filestat }>
-  = ref({ Dev: <filestat>{}, Test: <filestat>{}, Live: <filestat>{} })
+  = ref({ Live: <filestat>{}, Test: <filestat>{}, Dev: <filestat>{} })
 
 const API: { [key: string]: string }
-  = { Dev: '/api/hcie', Test: '/api/hcie', Live: '/api/hcie' }
+  = { Live: '/api/hcie', Test: '/api/hcie', Dev: '/api/hcie' }
 
 const HCIE: { [key: string]: string }
-  = { Dev: 'hciedev.laheyhealth.org', Test: 'hcietst.laheyhealth.org', Live: 'hcieprd.laheyhealth.org' }
+  = { Live: 'hcieprd.laheyhealth.org', Test: 'hcietst.laheyhealth.org', Dev: 'hciedev.laheyhealth.org' }
 
 const ICON: { [key: string]: string } = {
-  Dev: 'i-vscode-icons-file-type-apib',
+  Live: 'i-vscode-icons-file-type-plsql-package',
   Test: 'i-vscode-icons-file-type-light-todo',
-  Live: 'i-vscode-icons-file-type-plsql-package'
+  Dev: 'i-vscode-icons-file-type-apib'
 }
 
 export interface production {

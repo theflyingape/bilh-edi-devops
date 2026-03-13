@@ -41,11 +41,10 @@ const {
     <template #default>
       <UButton
         icon="i-lucide-swatch-book"
-        color="neutral"
-        :variant="open ? 'soft' : 'ghost'"
+        color="info"
+        :variant="open ? 'subtle' : 'ghost'"
         square
         aria-label="Color picker"
-        :ui="{ leadingIcon: 'text-primary' }"
       />
     </template>
 

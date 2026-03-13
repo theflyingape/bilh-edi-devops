@@ -39,6 +39,23 @@
           </div>
         </template>
         <template #linux>
+          <div class="flex flex-rows gap-2">
+            <div
+              v-for="(hcie, index) in infrastructure" :key="index"
+              class="flex"
+            >
+              <UCard>
+                {{ index }}
+                <RedHatCockpit
+                  :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
+                />
+                <RedHatCockpit
+                  v-for="host in hcie.hosts" :key="host"
+                  :label="host.split('.')[0]" target="_blank" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
+                />
+              </UCard>
+            </div>
+          </div>
         </template>
       </UTabs>
     </div>
@@ -73,8 +90,8 @@ definePageMeta({
 })
 
 const { status } = useAuth()
-const { isAdmin, online, toggleSideMenu } = useDevOps()
-const { pending, user } = useIrisSessions()
+const { infrastructure, isAdmin, online, toggleSideMenu } = useDevOps()
+const { HCIE, pending, user } = useIrisSessions()
 
 const adminItems = ref<TabsItem[]>([
   {
