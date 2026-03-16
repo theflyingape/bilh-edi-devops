@@ -1,8 +1,8 @@
 import { get, formatTimeAgo, set, useFetch } from '@vueuse/core'
 import ConfirmationDialog from '~/components/ConfirmationDialog.vue'
-import infrastructure from '~/assets/infrastructure.json'
-//  const { HCIE } = useIrisSessions() maps to infrastructure
 
+//  runtime mode: npm run [dev|build]
+const dev = import.meta.dev || false
 const isAdmin = ref(computed(() => get(user)?.scope?.includes('admin') || get(user)?.scope?.includes('systems')))
 const online = ref(computed(() => get(useAuth().status) !== 'unauthenticated'))
 const overlay = useOverlay()
@@ -54,5 +54,18 @@ export default function usePortal() {
   function toggleSideMenu() {
     set(sideMenu, !get(sideMenu))
   }
-  return { ago, infrastructure, isAdmin, isStale, online, queryModal, reload, response, sideMenu, stale, toggleSideMenu }
+
+  return {
+    ago,
+    dev,
+    isAdmin,
+    isStale,
+    online,
+    queryModal,
+    reload,
+    response,
+    sideMenu,
+    stale,
+    toggleSideMenu
+  }
 }

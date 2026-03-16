@@ -1,21 +1,32 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <UCard v-model="mirrorSet[props.hcie]" variant="subtle">
+  <UCard v-model="mirrorSet[hcie]" variant="subtle">
     <template #default>
-      <div class="font-bold font-sans underline">{{ mirrorSet[props.hcie]?.systemMode }}</div>
-      <div v-for="mirror in mirrorSet[props.hcie]?.mirrorStatus" :key="mirror.currentRole" class="text-sm font-mono">
-        <div v-if="mirror.currentRole == 'Primary'" class="font-semibold text-success">
-          {{ mirror.memberName }} {{ mirror.currentRole }}
+      <div class="font-bold font-sans underline">{{ mirrorSet[hcie]?.systemMode || `(${hcie})` }}</div>
+      <div v-if="mirrorSet[hcie]?.mirrorStatus">
+        <div v-for="mirror in mirrorSet[hcie]?.mirrorStatus" :key="mirror.currentRole" class="text-sm font-mono">
+          <div v-if="mirror.currentRole == 'Primary'" class="font-semibold text-success">
+            {{ mirror.memberName }} {{ mirror.currentRole }}
+          </div>
+          <div v-else>
+            {{ mirror.memberName }} {{ mirror.currentRole }} {{ mirror.journalTimeLatency }} {{ mirror.databaseLatency }}
+          </div>
         </div>
-        <div v-else>
-          {{ mirror.memberName }} {{ mirror.currentRole }} {{ mirror.journalTimeLatency }} {{ mirror.databaseLatency }}
-        </div>
+      </div>
+      <div v-else>
+        {{ host(hcie) }} did not return any Mirror status
       </div>
     </template>
     <template #footer>
-      <div class="flex font-mono justify-end italic text-sm">
-        <UIcon :name="ICON[props.hcie]!" class="align-middle size-5" />Last archive: {{ archiveAgo }}&nbsp;
-        <UIcon name="i-lucide-database" class="align-middle size-5" />Last backup: {{ backupAgo }}
+      <div class="flex justify-end italic text-sm space-x-4">
+        <div>
+          <UIcon :name="icon(hcie)" class="align-middle size-5" />
+          last archive: {{ archiveAgo }}
+        </div>
+        <div>
+          <UIcon name="i-lucide-database" class="align-middle size-5" />
+          last backup: {{ backupAgo }}
+        </div>
       </div>
     </template>
   </UCard>
@@ -25,11 +36,11 @@
 import { get, formatTimeAgo, set } from '@vueuse/core'
 
 const props = defineProps<{
-  hcie: 'Live' | 'Test' | 'Dev' //  instance identifier
+  hcie: HCIE
 }>()
 
 const { ago } = useDevOps()
-const { ICON, mirrorSet, endpoint } = useIrisSessions()
+const { host, hosts, icon, mirrorSet, endpoint } = useIrisSessions()
 let archiveAgo: string = 'unknown'
 let backupAgo: string = 'unknown'
 

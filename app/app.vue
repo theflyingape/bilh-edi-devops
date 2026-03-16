@@ -63,8 +63,8 @@
 </template>
 
 <script setup lang="ts">
-import colors from 'tailwindcss/colors'
 import { get } from '@vueuse/core'
+import colors from 'tailwindcss/colors'
 
 const appConfig = useAppConfig()
 const colorMode = useColorMode()
@@ -73,12 +73,11 @@ const { style, link } = useTheme()
 const color = computed(() => colorMode.value === 'dark' ? (colors as any)[appConfig.ui.colors.neutral][900] : 'white')
 
 const { seo } = useAppConfig()
-/*
 const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('landing'))
 const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('landing'), {
   server: false
 })
-*/
+
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -99,7 +98,7 @@ useSeoMeta({
 })
 
 const { online, sideMenu, toggleSideMenu } = useDevOps()
-const { ICON, user } = useIrisSessions()
+const { icon, user } = useIrisSessions()
 const { status, signOut } = useAuth()
 const { isFullscreen, toggle } = useFullscreen()
 const chip = ref(computed(() => get(online) ? 'success' : 'action'))
@@ -209,21 +208,21 @@ const items = ref([
       children: [
         {
           label: 'LIVE',
-          icon: ICON.Live,
+          icon: icon('Live'),
           description: 'Production environment',
           to: 'https://hcieprd.laheyhealth.org/csp/sys/UtilHome.csp',
           target: '_blank'
         },
         {
           label: 'Test',
-          icon: ICON.Test,
+          icon: icon('Test'),
           description: 'Testing & Staging environment',
           to: 'https://hcietst.laheyhealth.org/csp/sys/UtilHome.csp',
           target: '_blank'
         },
         {
           label: 'Development',
-          icon: ICON.Dev,
+          icon: icon('Dev'),
           description: 'Prototyping & Training environment',
           to: 'https://hciedev.laheyhealth.org/csp/sys/UtilHome.csp',
           target: '_blank'

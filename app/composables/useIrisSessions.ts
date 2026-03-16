@@ -1,6 +1,16 @@
 //  IRIS sessions: client-side handling from %SYS.TokenAuth provisioning
 import { get, set } from '@vueuse/core'
+import infrastructure from '~/assets/infrastructure.json'
 
+export type HCIE = keyof typeof infrastructure
+const Instances = Object.keys(infrastructure)
+const host = (hcie: HCIE) => infrastructure[hcie].vip
+const hosts = (hcie: HCIE) => infrastructure[hcie].hosts
+const icon = (hcie: HCIE) => infrastructure[hcie].icon
+const instance = (hcie: HCIE) => infrastructure[hcie].instance
+const API = '/hscustom/api/hcie'
+
+//  POST https://vip/hscustom/api/hcie/[login|refresh]
 export interface IRIStoken {
   access_token: string
   refresh_token: string
@@ -8,7 +18,15 @@ export interface IRIStoken {
   iat: number
   exp: number
 }
+const credentials = ref({
+  username: '',
+  password: '',
+  IRIStoken: <IRIStoken>{}
+})
+//  keep tokens by HCIE endpoint
+const tokens = new Map<string, IRIStoken>()
 
+//  GET|DELETE|UPDATE https://vip/hscustom/api/hcie/account/[@|:id]
 export interface Account {
   [key: string]: {
     id: string
@@ -24,10 +42,10 @@ export interface Account {
     lastlogin: string
   }
 }
-
 const Accounts: Ref<{ [key: string]: Account }>
-  = ref({ Dev: <Account>{}, Test: <Account>{}, Live: <Account>{} })
+  = ref({ Live: <Account>{}, Test: <Account>{}, Dev: <Account>{} })
 
+//  GET https://vip/hscustom/api/hcie/user/:id
 export interface User {
   id: string
   enabled: boolean
@@ -38,10 +56,19 @@ export interface User {
   loggedInAt?: number
   scope: Array<'guest' | 'associate' | 'user' | 'analyst' | 'developer' | 'admin' | 'systems'>
 }
+const user = ref(<User>{})
 
-//  keep tokens by HCIE endpoint
-const tokens = new Map<string, IRIStoken>()
-
+//  GET https://vip/hscustom/api/hcie/status
+export interface mirrorset {
+  status: string
+  instance: string
+  systemMode: string
+  memberStatus: string[]
+  otherStatus: string[]
+  mirrorStatus: mirrorstatus[]
+  lastArchive: string
+  lastBackup: string
+}
 export interface mirrorstatus {
   memberName: string
   currentRole: string
@@ -53,21 +80,19 @@ export interface mirrorstatus {
   displayType: string
   displayStatus: string
 }
-
-export interface mirrorset {
-  status: string
-  instance: string
-  systemMode: string
-  memberStatus: string[]
-  otherStatus: string[]
-  mirrorStatus: mirrorstatus[]
-  lastArchive: string
-  lastBackup: string
-}
-
 const mirrorSet: Ref<{ [key: string]: mirrorset }>
-  = ref({ Dev: <mirrorset>{}, Test: <mirrorset>{}, Live: <mirrorset>{} })
+  = ref({ Live: <mirrorset>{}, Test: <mirrorset>{}, Dev: <mirrorset>{} })
 
+//  GET https://vip/hscustom/api/hcie/productions
+export interface production {
+  status?: string
+  instance?: string
+  systemMode?: string
+  productions: string[]
+}
+const Productions: Map<HCIE, production> = new Map()
+
+//  GET https://vip/hscustom/api/hcie/processes
 export interface processes {
   Production: string
   File: number
@@ -75,10 +100,17 @@ export interface processes {
   Queue: number
   Misc?: number
 }
-
 const processList: Ref<{ [key: string]: processes }>
-  = ref({ Dev: <processes>{}, Test: <processes>{}, Live: <processes>{} })
+  = ref({ Live: <processes>{}, Test: <processes>{}, Dev: <processes>{} })
 
+export interface fastfetch {
+  type: string
+  result?: [object]
+  error?: string
+}
+
+//  POST https://vip/hscustom/api/hcie/filestat
+//  content: { "fileName": "/path/to/filename.ext" }
 export interface filestat {
   size: number
   permissions: string
@@ -88,49 +120,16 @@ export interface filestat {
   fileName: string
   type: string
 }
-
 const fileStat: Ref<{ [key: string]: filestat }>
   = ref({ Live: <filestat>{}, Test: <filestat>{}, Dev: <filestat>{} })
-
-const API: { [key: string]: string }
-  = { Live: '/api/hcie', Test: '/api/hcie', Dev: '/api/hcie' }
-
-const HCIE: { [key: string]: string }
-  = { Live: 'hcieprd.laheyhealth.org', Test: 'hcietst.laheyhealth.org', Dev: 'hciedev.laheyhealth.org' }
-
-const ICON: { [key: string]: string } = {
-  Live: 'i-vscode-icons-file-type-plsql-package',
-  Test: 'i-vscode-icons-file-type-light-todo',
-  Dev: 'i-vscode-icons-file-type-apib'
-}
-
-export interface production {
-  status?: string
-  instance?: string
-  systemMode?: string
-  productions: string[]
-}
-export type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
-const Instances: INSTANCE[] = [process.env.NODE_ENV == 'development' ? 'localhost' : 'Dev', 'Test', 'Live']
-const InstanceDefault: INSTANCE = process.env.NODE_ENV == 'development' ? 'localhost' : 'Test'
-const Productions: Map<INSTANCE, production> = new Map()
-
-const credentials = ref({
-  username: '',
-  password: '',
-  IRIStoken: <IRIStoken>{}
-})
 
 const pending: Ref<{ [key: string]: number }>
   = ref({ Dev: 0, Test: 0, Live: 0 })
 
-const user = ref(<User>{})
-const dev = import.meta.dev || false
-
 export default function useIrisTokens() {
   //  provision a new IRIS REST JWT session off user authentication
-  async function getSession(hcie: string, username: string, password: string): Promise<IRIStoken | undefined> {
-    let iToken: IRIStoken | undefined = dev
+  async function getSession(hcie: HCIE, username: string, password: string): Promise<IRIStoken | undefined> {
+    let iToken: IRIStoken | undefined = useDevOps().dev
       ? {
           access_token: 'access',
           refresh_token: 'refresh',
@@ -152,7 +151,7 @@ export default function useIrisTokens() {
       })
     } else {
       const auth = btoa(`${username}:${password}`)
-      await fetch(`https://${HCIE[hcie]}${API[hcie]}/login`, {
+      await fetch(`https://${host(hcie)}${API}/login`, {
         method: 'POST',
         headers: { Authorization: `Basic ${auth}` }
       }).then(async (res) => {
@@ -170,11 +169,11 @@ export default function useIrisTokens() {
   }
 
   //  bye-bye
-  async function endSession(hcie: string) {
-    if (dev) return
+  async function endSession(hcie: HCIE) {
+    if (useDevOps().dev) return
     const jwt = tokens.get(hcie)
     if (jwt) {
-      await fetch(`https://${HCIE[hcie]}${API[hcie]}/logout`, {
+      await fetch(`https://${host(hcie)}${API}/logout`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${jwt.access_token}` }
       }).then(async (res) => {
@@ -184,15 +183,15 @@ export default function useIrisTokens() {
     }
   }
 
-  async function refresh(hcie: string) {
-    if (dev) return
+  async function refresh(hcie: HCIE) {
+    if (useDevOps().dev) return
     const jwt = tokens.get(hcie)
     if (jwt && jwt.exp) {
       const secs = jwt.exp - Date.now() / 1000
       if (secs > 2) return
     }
 
-    await fetch(`https://${HCIE[hcie]}${API[hcie]}/refresh`, {
+    await fetch(`https://${host(hcie)}${API}/refresh`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${jwt?.access_token}`,
@@ -212,10 +211,10 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie: string, route: string, method: 'GET' | 'POST' | 'DELETE' | 'UPDATE' = 'GET', send?: object): Promise<unknown | null> {
+  async function endpoint(hcie: HCIE, route: string, method: 'GET' | 'POST' | 'DELETE' | 'UPDATE' = 'GET', send?: object): Promise<unknown | null> {
     let payload = null
     let jwt = tokens.get(hcie)
-    if (dev) return payload
+    if (useDevOps().dev) return payload
 
     //  upon first invocation to another instance ...
     if (!jwt) {
@@ -231,7 +230,7 @@ export default function useIrisTokens() {
     if (jwt) {
       await refresh(hcie).then(async () => {
         jwt = tokens.get(hcie)
-        await fetch(`https://${HCIE[hcie]}${API[hcie]}/${route}`, {
+        await fetch(`https://${host(hcie)}${API}/${route}`, {
           method: method,
           headers: {
             'Authorization': `Bearer ${jwt?.access_token}`,
@@ -254,10 +253,10 @@ export default function useIrisTokens() {
     return payload
   }
 
-  async function loadProductions(hcie: INSTANCE) {
+  async function loadProductions(hcie: HCIE) {
     if (!Productions.get(hcie)?.productions) {
       if (process.env.NODE_ENV == 'development') {
-        Productions.set(hcie, { productions: hcie == 'localhost' ? ['HSCUSTOM', 'TRAINING'] : hcie == 'Test' ? ['BILHPN', 'BILHSFTP'] : ['BILHHOSPITALS', 'BILHSFTP'] })
+        Productions.set(hcie, { productions: hcie == 'Dev' ? ['HSCUSTOM', 'TRAINING'] : hcie == 'Test' ? ['BILHPN', 'BILHSFTP'] : ['BILHHOSPITALS', 'BILHSFTP'] })
       } else {
         await endpoint(hcie, 'productions').then((status) => {
           Productions.set(hcie, <production>status)
@@ -266,33 +265,35 @@ export default function useIrisTokens() {
     }
   }
 
-  async function stat(hcie: string, fileName: string) {
+  async function stat(hcie: HCIE, fileName: string) {
     fileStat.value[hcie] = <filestat>{}
     await endpoint(hcie, 'filestat', 'POST', { fileName: fileName }).then((result) => {
       fileStat.value[hcie] = <filestat>result
     }).catch((err) => {
-      console.error(err)
+      console.error(hcie, fileName, err)
     })
   }
 
   return {
-    HCIE,
-    ICON,
-    Productions,
-    Instances,
-    InstanceDefault,
-    pending,
     Accounts,
-    mirrorSet,
-    processList,
-    fileStat,
-    loadProductions,
     credentials,
-    user,
-    getSession,
-    endSession,
-    refresh,
     endpoint,
-    stat
+    endSession,
+    fileStat,
+    getSession,
+    host,
+    hosts,
+    icon,
+    infrastructure,
+    instance,
+    Instances,
+    loadProductions,
+    mirrorSet,
+    pending,
+    processList,
+    Productions,
+    refresh,
+    stat,
+    user
   }
 }

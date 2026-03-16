@@ -3,8 +3,8 @@
     <div class="flex flex-nowrap justify-center h-full w-full">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-2 pb-10 rounded-md min-h-1/2 min-w-1/2 h-full w-full max-h-auto max-w-auto overflow-hidden resize resizer">
-        <DevOnly><XtermJs v-show="Instance == 'localhost'" @vue:mounted="console.log('mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
-        <XtermJs v-show="Instance == 'Dev'" @vue:mounted="" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-if="useDevOps().dev" v-show="Instance == 'Dev'" @vue:mounted="console.info('mounted!')" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-else v-show="Instance == 'Dev'" @vue:mounted="" :session="Instance" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Test'" @vue:mounted="" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Live'" @vue:mounted="" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <!-- bottom control panel -->
@@ -132,7 +132,7 @@
       </div>
     </div>
   </div>
-
+<!--
   <UDrawer v-model:open="isCurl" title="Curl Builder (wip)" description="fill out form below" :ui="{ container: 'max-w-xl mx-auto' }">
     <Placeholder class="h-48" />
     <template #body>
@@ -149,6 +149,7 @@
       </div>
     </template>
   </UDrawer>
+-->
 </template>
 
 <script setup lang="ts">
@@ -161,9 +162,9 @@ const config = useRuntimeConfig()
 const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth().data)?.id
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
-const { InstanceDefault, fileStat, stat } = useIrisSessions()
+const { fileStat, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
-const Instance = ref(InstanceDefault)
+const Instance = ref(useDevOps().dev ? 'Dev' : 'Test' as HCIE)
 
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 40 ? get(selection) : get(selection).substring(0,31)+'…'+get(selection).slice(-8)))
 const fileCandidate = ref('')
@@ -263,8 +264,8 @@ function fontSize(delta:number) {
   localStorage.setItem('prefs-local-storage', JSON.stringify(prefs))
   save.value.fontSize = prefs.fontSize
   for(const session in sessionList) {
-    xterm(<INSTANCE>session).options.fontSize = prefs.fontSize
-    resize(<INSTANCE>session)
+    xterm(<HCIE>session).options.fontSize = prefs.fontSize
+    resize(<HCIE>session)
   }
 }
 

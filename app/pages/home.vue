@@ -24,6 +24,7 @@
         </template>
         <template #odba>
           <div class="grid grid-cols-2">
+            <!--
             <div class="space-y-4">
               <div class="flex justify-center">
                 <IrisMirrorStatus v-if="!pending.Live" hcie="Live" />
@@ -35,6 +36,12 @@
               </div>
               <div class="flex justify-center">
                 <IrisMirrorStatus hcie="Dev" />
+              </div>
+            </div>
+            -->
+            <div v-for="(hcie, index) in infrastructure" :key="index">
+              <div class="flex justify-center">
+                <IrisMirrorStatus :hcie="index" />
               </div>
             </div>
           </div>
@@ -49,9 +56,10 @@
                     class="flex justify-center m-2"
                     color="info"
                     variant="subtle"
-                    :icon="ICON[index]"
+                    :icon="hcie.icon"
                     :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
                   />
+                  {{ JSON.stringify(fastfetch(index)) }}
                   <RedHatCockpit
                     v-for="host in hcie.hosts" :key="host"
                     class="flex m-1"
@@ -95,8 +103,8 @@ definePageMeta({
 })
 
 const { status } = useAuth()
-const { infrastructure, isAdmin, online, toggleSideMenu } = useDevOps()
-const { ICON, pending, user } = useIrisSessions()
+const { isAdmin, online, toggleSideMenu } = useDevOps()
+const { icon, infrastructure, pending, user } = useIrisSessions()
 
 const adminItems = ref<TabsItem[]>([
   {
@@ -120,9 +128,25 @@ const adminItems = ref<TabsItem[]>([
 ])
 const adminTab = ref('odba')
 
+const { endpoint } = useIrisSessions()
 const now = useNow()
 const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
-
+/*
 for (const hcie in get(pending))
   pending.value[hcie]!++
+*/
+async function fastfetch(hcie: HCIE): Promise<fastfetch> {
+  let payload = {} as fastfetch
+  await endpoint(hcie, 'fastfetch').then(async (res) => {
+    if (res) try {
+      await res.json().then(async (js: fastfetch) => {
+        console.log(js)
+        payload = js
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  })
+  return payload
+}
 </script>

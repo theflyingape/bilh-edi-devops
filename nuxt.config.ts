@@ -48,7 +48,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '1.0.4'
+    version: '1.0.5'
   },
   runtimeConfig: {
     jwtSecret: process.env.NUXT_JWT_PASSWORD || '!$ecure!',
@@ -73,9 +73,9 @@ export default defineNuxtConfig({
       websocket: true
     },
     externals: {
-      traceInclude: [
-        'node_modules/node-pty/build/Release/pty.node'
-      ]
+      // traceInclude: [
+      //  'node_modules/node-pty/build/Release/pty.node'
+      // ]
     },
     /*
     prerender: {
@@ -115,6 +115,10 @@ export default defineNuxtConfig({
         '@nuxt/ui > prosemirror-gapcursor',
         '@vue/devtools-core',
         '@vue/devtools-kit',
+        '@xterm/addon-fit',
+        '@xterm/addon-search',
+        '@xterm/addon-unicode11',
+        'html-to-image',
         'tailwindcss/colors'
       ],
       exclude: ['@xterm/xterm']

@@ -12,10 +12,8 @@ import { AttachAddon } from '~/lib/addon-attach.client'
 
 const { audio, BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } = useMultiMedia()
 
-type INSTANCE = 'localhost' | 'Dev' | 'Test' | 'Live'
-
 type TS = {
-  [key in INSTANCE]: {
+  [key in HCIE]: {
     xterm: Terminal
     options?: ITerminalOptions
     fit?: FitAddon
@@ -39,7 +37,7 @@ const selection = ref('')
 const title = ref('')
 
 export default function useTerminalSocket() {
-  function prepare(sessionId: INSTANCE, term: Terminal, url?: string, rows?: number, cols?: number) {
+  function prepare(sessionId: HCIE, term: Terminal, url?: string, rows?: number, cols?: number) {
   // term.loadAddon(new WebglAddon())
     term.loadAddon(new Unicode11Addon())
     term.unicode.activeVersion = '11'
@@ -59,7 +57,7 @@ export default function useTerminalSocket() {
     term.loadAddon(session.search)
   }
 
-  function connect(sessionId: INSTANCE, tmux = false) {
+  function connect(sessionId: HCIE, tmux = false) {
     const session = sessionList[sessionId]!
 
     const { ws, status } = useWebSocket(session.url! + (tmux ? '&tmux=true' : ''))
@@ -85,7 +83,7 @@ export default function useTerminalSocket() {
     })
   }
 
-  function attach(sessionId: INSTANCE) {
+  function attach(sessionId: HCIE) {
     const session = sessionList[sessionId]!
     if (session.ws?.value) {
       session.attach = new AttachAddon(session.ws.value)
@@ -114,12 +112,12 @@ export default function useTerminalSocket() {
     }
   }
 
-  function detach(sessionId: INSTANCE) {
+  function detach(sessionId: HCIE) {
     const session = sessionList[sessionId]!
     if (session.ws?.value) session.ws?.value.close()
   }
 
-  function connected(sessionId: INSTANCE, force = false) {
+  function connected(sessionId: HCIE, force = false) {
     const session = sessionList[sessionId]!
     set(title, session.title)
     const ready = session.attach?.checkOpenSocket() || false
@@ -146,8 +144,9 @@ export default function useTerminalSocket() {
 
   const isConnected = ref(false)
 
-  function resize(sessionId: INSTANCE) {
+  function resize(sessionId: HCIE) {
     const session = sessionList[sessionId]!
+    console.log('resize', sessionId, session)
 
     if (session.fit) {
       session.fit.fit()

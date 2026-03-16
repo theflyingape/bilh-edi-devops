@@ -8,19 +8,18 @@
 <script setup lang="ts">
 import type { ITerminalOptions, ITheme } from '@xterm/xterm'
 import { Terminal } from '@xterm/xterm'
-import type { INSTANCE } from '~/composables/useIrisSessions'
 
 interface itheme {
   [key: string]: ITheme
 }
 
 const props = defineProps<{
-  session: INSTANCE //  key identifier
-  theme: keyof itheme // pick a color
-  fontSize?: number //  20
-  rows?: number //      25
-  cols?: number //      80
-  wsUrl?: string //     wss://${location.host}/node-pty
+  session: HCIE //        key identifier
+  theme: keyof itheme //  pick a color
+  fontSize?: number //    20
+  rows?: number //        25
+  cols?: number //        80
+  wsUrl?: string //       wss://${location.host}/node-pty
 }>()
 
 const themes: itheme = {

@@ -42,10 +42,10 @@
 </template>
 
 <script setup lang="ts">
-import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui';
+import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
-import type { Account } from '~/composables/useIrisSessions';
-import IrisAccountEdit from './IrisAccountEdit.vue';
+import type { Account } from '~/composables/useIrisSessions'
+import IrisAccountEdit from './IrisAccountEdit.vue'
 
 const props = defineProps<{
   hcie: "Live" | "Test" | "Dev" //  instance identifier
