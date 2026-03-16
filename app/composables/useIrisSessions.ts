@@ -8,9 +8,9 @@ const host = (hcie: HCIE) => infrastructure[hcie].vip
 const hosts = (hcie: HCIE) => infrastructure[hcie].hosts
 const icon = (hcie: HCIE) => infrastructure[hcie].icon
 const instance = (hcie: HCIE) => infrastructure[hcie].instance
-const API = '/hscustom/api/hcie'
+const API = '/api/hcie'
 
-//  POST https://vip/hscustom/api/hcie/[login|refresh]
+//  POST https://vip/api/hcie/[login|refresh]
 export interface IRIStoken {
   access_token: string
   refresh_token: string
@@ -26,7 +26,7 @@ const credentials = ref({
 //  keep tokens by HCIE endpoint
 const tokens = new Map<string, IRIStoken>()
 
-//  GET|DELETE|UPDATE https://vip/hscustom/api/hcie/account/[@|:id]
+//  GET|DELETE|UPDATE https://vip/api/hcie/account/[@|:id]
 export interface Account {
   [key: string]: {
     id: string
@@ -45,7 +45,7 @@ export interface Account {
 const Accounts: Ref<{ [key: string]: Account }>
   = ref({ Live: <Account>{}, Test: <Account>{}, Dev: <Account>{} })
 
-//  GET https://vip/hscustom/api/hcie/user/:id
+//  GET https://vip/api/hcie/user/:id
 export interface User {
   id: string
   enabled: boolean
@@ -58,7 +58,7 @@ export interface User {
 }
 const user = ref(<User>{})
 
-//  GET https://vip/hscustom/api/hcie/status
+//  GET https://vip/api/hcie/status
 export interface mirrorset {
   status: string
   instance: string
@@ -83,7 +83,7 @@ export interface mirrorstatus {
 const mirrorSet: Ref<{ [key: string]: mirrorset }>
   = ref({ Live: <mirrorset>{}, Test: <mirrorset>{}, Dev: <mirrorset>{} })
 
-//  GET https://vip/hscustom/api/hcie/productions
+//  GET https://vip/api/hcie/productions
 export interface production {
   status?: string
   instance?: string
@@ -92,7 +92,7 @@ export interface production {
 }
 const Productions: Map<HCIE, production> = new Map()
 
-//  GET https://vip/hscustom/api/hcie/processes
+//  GET https://vip/api/hcie/processes
 export interface processes {
   Production: string
   File: number
@@ -109,7 +109,7 @@ export interface fastfetch {
   error?: string
 }
 
-//  POST https://vip/hscustom/api/hcie/filestat
+//  POST https://vip/api/hcie/filestat
 //  content: { "fileName": "/path/to/filename.ext" }
 export interface filestat {
   size: number
