@@ -39,7 +39,7 @@
               </UFormField>
             </div>
             <div class="flex justify-end pt-8">
-              <SubmitButton>Login</SubmitButton>
+              <SubmitButton :disabled="credentials.username.length < 3 || credentials.password.length < 6">Login</SubmitButton>
             </div>
           </UForm>
         </UCard>
@@ -140,14 +140,14 @@ async function login() {
     await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
       if (!get(user).enabled) {
         await endpoint<irisUser>('Dev', `user/${username}`).then(async (iris) => {
-          if (iris) {
+          if (iris?.Enabled) {
             set(user, {
               id: username,
-              enabled: iris.Enabled ?? false,
-              groups: iris.Groups ?? [],
-              roles: iris.Roles ?? [],
-              name: iris.FullName ?? '',
-              comment: iris.Comment ?? '',
+              enabled: true,
+              groups: iris.Groups,
+              roles: iris.Roles,
+              name: iris.FullName,
+              comment: iris.Comment,
               loggedInAt: Date.now(),
               scope: []
             })

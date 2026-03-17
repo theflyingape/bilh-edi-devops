@@ -74,8 +74,8 @@ const { style, link } = useTheme()
 
 const color = computed(() => colorMode.value === 'dark' ? 'white' : appConfig.ui.colors.neutral)
 
-const { seo } = appConfig
 /*
+const { seo } = appConfig
 const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('landing'))
 const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('landing'), {
   server: false
@@ -93,12 +93,12 @@ useHead({
   style,
   htmlAttrs: { lang: 'en' }
 })
-
+/*
 useSeoMeta({
   titleTemplate: `${seo?.siteName}`,
   ogSiteName: seo?.siteName
 })
-
+*/
 const { online, sideMenu, toggleSideMenu } = useDevOps()
 const { icon, user } = useIrisSessions()
 const { status, signOut } = useAuth()
