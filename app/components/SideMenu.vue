@@ -138,30 +138,34 @@ async function login() {
   await getSession('Dev', username, get(credentials).password).then(async (jwt) => {
     Object.assign(get(credentials).IRIStoken, jwt)
     await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
-      await endpoint<irisUser>('Dev', `user/${username}`).then((iris) => {
-        if (iris?.Enabled) {
-          set(user, {
-            id: username,
-            enabled: true,
-            groups: iris.Groups,
-            roles: iris.Roles,
-            name: iris.FullName,
-            comment: iris.Comment,
-            loggedInAt: Date.now(),
-            scope: []
-          })
-        } else {
-          set(user, {
-            id: username,
-            enabled: get(user).enabled,
-            groups: [],
-            roles: [],
-            name: '',
-            comment: '',
-            loggedInAt: 0,
-            scope: []
-          })
+      await endpoint<irisUser>('Dev', `user/${username}`).then(async (iris) => {
+        console.info('iris', iris)
+        if (!get(user).enabled) {
+          if (iris?.Enabled) {
+            set(user, {
+              id: username,
+              enabled: true,
+              groups: iris.Groups,
+              roles: iris.Roles,
+              name: iris.FullName,
+              comment: iris.Comment,
+              loggedInAt: Date.now(),
+              scope: []
+            })
+          } else {
+            set(user, {
+              id: username,
+              enabled: get(user).enabled,
+              groups: [],
+              roles: [],
+              name: '',
+              comment: '',
+              loggedInAt: 0,
+              scope: []
+            })
+          }
         }
+        console.info('user', get(user))
       }).catch(async (err) => {
         open(`${err.statusCode}: ${err.statusMessage}`)
       })
