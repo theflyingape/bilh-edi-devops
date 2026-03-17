@@ -1,8 +1,8 @@
 <template>
   <img
     src="~/assets/images/copilot-icon.svg"
-    height="21"
-    width="21"
+    height="24"
+    width="24"
   >
 </template>
 

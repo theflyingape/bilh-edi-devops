@@ -24,21 +24,23 @@
             </UTooltip>
           </div>
           <div class="m-auto">
+            <UTooltip arrow :content="{ align: 'center', side: 'bottom' }" text="click to login">
+              <UChip class="mt-2" :color="chip" inset>
+                <UButton
+                  class="pb-2 pl-3 pr-3" color="neutral" variant="ghost"
+                  icon="i-heroicons-ellipsis-horizontal-16-solid"
+                  @click="toggleSideMenu"
+                />
+              </UChip>
+            </UTooltip>
+          </div>
+          <div class="m-auto">
             <UBadge :color="chip" variant="outline">
               {{ who }}
             </UBadge>
           </div>
           <div class="m-auto">
-            <UChip class="mt-2" :color="chip" inset>
-              <UButton
-                class="mb-2 pl-4 pr-4" color="neutral" variant="ghost"
-                icon="i-heroicons-ellipsis-horizontal-16-solid"
-                @click="toggleSideMenu"
-              />
-            </UChip>
-          </div>
-          <div class="m-auto">
-            <UTooltip arrow :content="{ align: 'end', side: 'left', sideOffset: 1 }" text="click to toggle fullscreen">
+            <UTooltip arrow :content="{ align: 'center', side: 'bottom' }" text="click to toggle fullscreen">
               <USwitch v-model="isFullscreen" color="secondary" unchecked-icon="i-heroicons-tv" checked-icon="i-lucide-scaling" size="xl" @click="toggle" />
             </UTooltip>
           </div>
