@@ -64,20 +64,21 @@
 
 <script setup lang="ts">
 import { get } from '@vueuse/core'
-import colors from 'tailwindcss/colors'
+// import colors from 'tailwindcss/colors'
 
 const appConfig = useAppConfig()
 const colorMode = useColorMode()
 const { style, link } = useTheme()
 
-const color = computed(() => colorMode.value === 'dark' ? (colors as any)[appConfig.ui.colors.neutral][900] : 'white')
+const color = computed(() => colorMode.value === 'dark' ? 'white' : appConfig.ui.colors.neutral)
 
-const { seo } = useAppConfig()
+const { seo } = appConfig
+/*
 const { data: navigation } = await useAsyncData('navigation', () => queryCollectionNavigation('landing'))
 const { data: files } = useLazyAsyncData('search', () => queryCollectionSearchSections('landing'), {
   server: false
 })
-
+*/
 useHead({
   meta: [
     { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -93,8 +94,7 @@ useHead({
 
 useSeoMeta({
   titleTemplate: `${seo?.siteName}`,
-  ogSiteName: seo?.siteName,
-  twitterCard: 'summary_large_image'
+  ogSiteName: seo?.siteName
 })
 
 const { online, sideMenu, toggleSideMenu } = useDevOps()
@@ -102,7 +102,7 @@ const { icon, user } = useIrisSessions()
 const { status, signOut } = useAuth()
 const { isFullscreen, toggle } = useFullscreen()
 const chip = ref(computed(() => get(online) ? 'success' : 'action'))
-const who = ref(computed(() => get(status) == 'unauthenticated' ? 'Guest' : get(user).scope?.length ? get(user).scope[0] : 'Associate'))
+const who = ref(computed(() => get(status) == 'unauthenticated' ? 'Guest' : get(user).scope?.length ? get(user).scope[0]! : 'Associate'))
 
 // sanity check for a broken app/page but had a lingering browser session token
 if (get(who) == 'Associate') {

@@ -17,4 +17,9 @@ defineProps<{
   target?: string
   to?: string
 }>()
+
+const { endpoint } = useIrisSessions()
+const ff = ref(endpoint<fastfetch>(hcie, 'fastfetch').then((res) => {
+  return res
+}))
 </script>

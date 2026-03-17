@@ -19,7 +19,7 @@ const props = defineProps<{
   fontSize?: number //    20
   rows?: number //        25
   cols?: number //        80
-  wsUrl?: string //       wss://${location.host}/node-pty
+  wsUrl?: string //       wss://${location.host}/api/node-pty
 }>()
 
 const themes: itheme = {

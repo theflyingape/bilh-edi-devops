@@ -211,10 +211,9 @@ export default function useIrisTokens() {
     })
   }
 
-  async function endpoint(hcie: HCIE, route: string, method: 'GET' | 'POST' | 'DELETE' | 'UPDATE' = 'GET', send?: object): Promise<unknown | null> {
-    let payload = null
+  async function endpoint<T>(hcie: HCIE, route: string, method: 'GET' | 'POST' | 'DELETE' | 'UPDATE' = 'GET', send?: object): Promise<T | undefined> {
+    if (useDevOps().dev) return
     let jwt = tokens.get(hcie)
-    if (useDevOps().dev) return payload
 
     //  upon first invocation to another instance ...
     if (!jwt) {
@@ -240,7 +239,7 @@ export default function useIrisTokens() {
         }).then(async (res) => {
           try {
             await res.json().then(async (js) => {
-              payload = js
+              return js as Promise<T>
             })
           } catch (err) {
             console.error(err)
@@ -250,7 +249,6 @@ export default function useIrisTokens() {
         })
       })
     }
-    return payload
   }
 
   async function loadProductions(hcie: HCIE) {

@@ -59,7 +59,6 @@
                     :icon="hcie.icon"
                     :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
                   />
-                  {{ JSON.stringify(fastfetch(index)) }}
                   <RedHatCockpit
                     v-for="host in hcie.hosts" :key="host"
                     class="flex m-1"
@@ -104,7 +103,7 @@ definePageMeta({
 
 const { status } = useAuth()
 const { isAdmin, online, toggleSideMenu } = useDevOps()
-const { icon, infrastructure, pending, user } = useIrisSessions()
+const { infrastructure, user } = useIrisSessions()
 
 const adminItems = ref<TabsItem[]>([
   {
@@ -135,18 +134,4 @@ const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] 
 for (const hcie in get(pending))
   pending.value[hcie]!++
 */
-async function fastfetch(hcie: HCIE): Promise<fastfetch> {
-  let payload = {} as fastfetch
-  await endpoint(hcie, 'fastfetch').then(async (res) => {
-    if (res) try {
-      await res.json().then(async (js: fastfetch) => {
-        console.log(js)
-        payload = js
-      })
-    } catch (err) {
-      console.error(err)
-    }
-  })
-  return payload
-}
 </script>

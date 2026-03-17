@@ -32,7 +32,7 @@ type TS = {
 }
 
 //  XtermJs instance(s)
-let sessionList = <TS>{}
+let sessionList = {} as TS
 const sessionGet = (sessionId: HCIEdev) => sessionList[sessionId] || sessionList['localhost']
 const cols = ref(80)
 const rows = ref(25)
@@ -40,24 +40,25 @@ const selection = ref('')
 const title = ref('')
 
 export default function useTerminalSocket() {
-  function prepare(sessionId: HCIEdev, term: Terminal, url?: string, rows?: number, cols?: number) {
+  function prepare(sessionId: HCIEdev, term: Terminal, url?: string, lines?: number, columns?: number) {
   // term.loadAddon(new WebglAddon())
     term.loadAddon(new Unicode11Addon())
     term.unicode.activeVersion = '11'
 
     const prep = <TS>{}
     prep[sessionId] = { xterm: term }
-    prep[sessionId].rows = rows || get(rows)
-    prep[sessionId].cols = cols || get(cols)
+    prep[sessionId].rows = lines || get(rows)
+    prep[sessionId].cols = columns || get(cols)
     if (url) prep[sessionId].url = url + `&profile=${sessionId}`
     prep[sessionId].status = 'CLOSED'
     prep[sessionId].title = 'offline'
     sessionList = Object.assign(sessionList, prep)
-    const session = sessionList[sessionId]!
+    const session = sessionList[sessionId]
     session.fit = new FitAddon()
     session.xterm.loadAddon(session.fit)
     session.search = new SearchAddon()
     term.loadAddon(session.search)
+    // console.info(session)
   }
 
   function connect(sessionId: HCIEdev, tmux = false) {
@@ -148,7 +149,6 @@ export default function useTerminalSocket() {
 
   function resize(sessionId: HCIEdev) {
     const session = sessionGet(sessionId)
-    console.log('resize', sessionId, session)
 
     if (session.fit) {
       session.fit.fit()
@@ -167,6 +167,7 @@ export default function useTerminalSocket() {
 
     const event = { resize: { rows: get(rows), cols: get(cols) } }
     session.attach?.sendData('♥' + JSON.stringify(event))
+    // console.log('resize', sessionId, session)
   }
 
   return { sessionList, cols, rows, selection, title, prepare, connect, attach, detach, connected, isConnected, resize }
