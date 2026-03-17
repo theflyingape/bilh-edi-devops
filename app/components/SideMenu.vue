@@ -138,7 +138,7 @@ async function login() {
   await getSession('Dev', username, get(credentials).password).then(async (jwt) => {
     Object.assign(get(credentials).IRIStoken, jwt)
     await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
-      await endpoint<irisUser>('Dev', `user/${username}`).then(async (iris) => {
+      await endpoint<irisUser>('Dev', `user/${username}`).then((iris) => {
         if (iris?.Enabled) {
           set(user, {
             id: username,
