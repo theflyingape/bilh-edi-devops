@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 defineProps<{
-  hcie: INSTANCE
+  hcie: HCIE
   tmux: boolean
 }>()
 const { fileStat } = useIrisSessions()

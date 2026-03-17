@@ -103,9 +103,10 @@ export interface processes {
 const processList: Ref<{ [key: string]: processes }>
   = ref({ Live: <processes>{}, Test: <processes>{}, Dev: <processes>{} })
 
+//  GET https://vip/api/hcie/fastfetch
 export interface fastfetch {
-  type: string
-  result?: [object]
+  type?: string
+  result?: unknown
   error?: string
 }
 
@@ -122,9 +123,6 @@ export interface filestat {
 }
 const fileStat: Ref<{ [key: string]: filestat }>
   = ref({ Live: <filestat>{}, Test: <filestat>{}, Dev: <filestat>{} })
-
-const pending: Ref<{ [key: string]: number }>
-  = ref({ Dev: 0, Test: 0, Live: 0 })
 
 export default function useIrisTokens() {
   //  provision a new IRIS REST JWT session off user authentication
@@ -289,7 +287,6 @@ export default function useIrisTokens() {
     Instances,
     loadProductions,
     mirrorSet,
-    pending,
     processList,
     Productions,
     refresh,

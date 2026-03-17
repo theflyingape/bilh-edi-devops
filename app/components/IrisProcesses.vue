@@ -10,15 +10,13 @@ const props = defineProps<{
   hcie: 'Live' | 'Test' | 'Dev' //  instance identifier
 }>()
 
-const { pending, processList, endpoint } = useIrisSessions()
+const { processList, endpoint } = useIrisSessions()
 
 await processes()
 
 async function processes() {
   await endpoint(props.hcie, 'processes').then((results) => {
     processList.value[props.hcie] = results?.productions || [{}]
-    if (pending.value[props.hcie])
-      pending.value[props.hcie]!--
   })
 }
 </script>

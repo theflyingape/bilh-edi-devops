@@ -23,22 +23,7 @@
           WIP
         </template>
         <template #odba>
-          <div class="grid grid-cols-2">
-            <!--
-            <div class="space-y-4">
-              <div class="flex justify-center">
-                <IrisMirrorStatus v-if="!pending.Live" hcie="Live" />
-              </div>
-            </div>
-            <div class="space-y-4">
-              <div class="flex justify-center">
-                <IrisMirrorStatus v-if="!pending.Test" hcie="Test" />
-              </div>
-              <div class="flex justify-center">
-                <IrisMirrorStatus hcie="Dev" />
-              </div>
-            </div>
-            -->
+          <div class="grid grid-cols-3">
             <div v-for="(hcie, index) in infrastructure" :key="index">
               <div class="flex justify-center">
                 <IrisMirrorStatus :hcie="index" />
@@ -47,23 +32,29 @@
           </div>
         </template>
         <template #linux>
-          <div class="flex flex-rows gap-2">
-            <div v-for="(hcie, index) in infrastructure" :key="index">
-              <UCard>
+          <div class="grid grid-cols-3">
+            <div v-for="(hcie, index) in infrastructure" :key="index" class="flex justify-center">
+              <UCard class="flex justify-center">
                 <template #default>
                   <div class="flex justify-center font-bold font-sans">{{ index }}</div>
-                  <UButton
-                    class="flex justify-center m-2"
-                    color="info"
-                    variant="subtle"
-                    :icon="hcie.icon"
-                    :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
-                  />
-                  <RedHatCockpit
-                    v-for="host in hcie.hosts" :key="host"
-                    class="flex m-1"
-                    :label="host.split('.')[0]" target="_blank" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
-                  />
+                  <div class="grid grid-cols-2 justify-items-start">
+                    <div>
+                      <UButton
+                        class="flex justify-center m-2"
+                        color="info"
+                        variant="subtle"
+                        :icon="hcie.icon"
+                        :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
+                      />
+                      <RedHatCockpit
+                        v-for="host in hcie.hosts" :key="host"
+                        :label="host.split('.')[0]" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
+                      />
+                    </div>
+                    <div class="mt-2">
+                      <FastFetch :hcie="index" />
+                    </div>
+                  </div>
                 </template>
               </UCard>
             </div>
@@ -126,12 +117,6 @@ const adminItems = ref<TabsItem[]>([
   }
 ])
 const adminTab = ref('odba')
-
-const { endpoint } = useIrisSessions()
 const now = useNow()
 const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
-/*
-for (const hcie in get(pending))
-  pending.value[hcie]!++
-*/
 </script>

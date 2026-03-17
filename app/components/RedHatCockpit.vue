@@ -1,11 +1,11 @@
 <template>
-  <div class="flex">
+  <div class="flex m-1">
     <UButton
       color="neutral"
+      target="_blank"
       variant="outline"
-      :avatar="{ src: '/redhat.svg', loading: 'lazy' } "
+      :avatar="{ src: '/redhat.svg', loading: 'lazy' }"
       :label="label"
-      :target="target"
       :to="to"
     />
   </div>
@@ -14,12 +14,6 @@
 <script setup lang="ts">
 defineProps<{
   label?: string
-  target?: string
   to?: string
 }>()
-
-const { endpoint } = useIrisSessions()
-const ff = ref(endpoint<fastfetch>(hcie, 'fastfetch').then((res) => {
-  return res
-}))
 </script>

@@ -3,8 +3,8 @@
   <UCard v-model="mirrorSet[hcie]" variant="subtle">
     <template #default>
       <div class="font-bold font-sans underline">{{ mirrorSet[hcie]?.systemMode || `(${hcie})` }}</div>
-      <div v-if="mirrorSet[hcie]?.mirrorStatus">
-        <div v-for="mirror in mirrorSet[hcie]?.mirrorStatus" :key="mirror.currentRole" class="text-sm font-mono">
+      <div v-if="mirrorSet[hcie]?.mirrorStatus" class="font-mono overflow-hidden text-ellipsis text-nowrap">
+        <div v-for="mirror in mirrorSet[hcie]?.mirrorStatus" :key="mirror.currentRole">
           <div v-if="mirror.currentRole == 'Primary'" class="font-semibold text-success">
             {{ mirror.memberName }} {{ mirror.currentRole }}
           </div>
@@ -13,12 +13,12 @@
           </div>
         </div>
       </div>
-      <div v-else>
+      <div v-else class="overflow-hidden text-ellipsis text-nowrap text-sm">
         {{ host(hcie) }} did not return any Mirror status
       </div>
     </template>
     <template #footer>
-      <div class="flex justify-end italic text-sm space-x-4">
+      <div class="flex justify-end italic text-sm text-nowrap space-x-4">
         <div>
           <UIcon :name="icon(hcie)" class="align-middle size-5" />
           last archive: {{ archiveAgo }}
@@ -33,14 +33,12 @@
 </template>
 
 <script setup lang="ts">
-import { get, formatTimeAgo, set } from '@vueuse/core'
-
 const props = defineProps<{
   hcie: HCIE
 }>()
 
 const { ago } = useDevOps()
-const { host, hosts, icon, mirrorSet, endpoint } = useIrisSessions()
+const { host, icon, mirrorSet, endpoint } = useIrisSessions()
 let archiveAgo: string = 'unknown'
 let backupAgo: string = 'unknown'
 
