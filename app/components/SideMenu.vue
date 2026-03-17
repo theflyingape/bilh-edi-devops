@@ -138,35 +138,33 @@ async function login() {
   await getSession('Dev', username, get(credentials).password).then(async (jwt) => {
     Object.assign(get(credentials).IRIStoken, jwt)
     await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
-      if (!get(user).enabled) {
-        await endpoint<irisUser>('Dev', `user/${username}`).then(async (iris) => {
-          if (iris?.Enabled) {
-            set(user, {
-              id: username,
-              enabled: true,
-              groups: iris.Groups,
-              roles: iris.Roles,
-              name: iris.FullName,
-              comment: iris.Comment,
-              loggedInAt: Date.now(),
-              scope: []
-            })
-          } else {
-            set(user, {
-              id: username,
-              enabled: false,
-              groups: [],
-              roles: [],
-              name: '',
-              comment: '',
-              loggedInAt: 0,
-              scope: []
-            })
-          }
-        }).catch(async (err) => {
-          open(`${err.statusCode}: ${err.statusMessage}`)
-        })
-      }
+      await endpoint<irisUser>('Dev', `user/${username}`).then(async (iris) => {
+        if (iris?.Enabled) {
+          set(user, {
+            id: username,
+            enabled: true,
+            groups: iris.Groups,
+            roles: iris.Roles,
+            name: iris.FullName,
+            comment: iris.Comment,
+            loggedInAt: Date.now(),
+            scope: []
+          })
+        } else {
+          set(user, {
+            id: username,
+            enabled: get(user).enabled,
+            groups: [],
+            roles: [],
+            name: '',
+            comment: '',
+            loggedInAt: 0,
+            scope: []
+          })
+        }
+      }).catch(async (err) => {
+        open(`${err.statusCode}: ${err.statusMessage}`)
+      })
       if (get(user).enabled) {
         if (get(user).groups?.includes('sysadm') || get(user).groups?.includes('wheel')) get(user).scope.push('systems')
         if (get(user).groups?.includes('irisadm')) get(user).scope.push('admin')
