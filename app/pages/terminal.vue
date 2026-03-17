@@ -3,7 +3,7 @@
     <div class="flex flex-nowrap justify-center h-full w-full">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-2 pb-10 rounded-md min-h-1/2 min-w-1/2 h-full w-full max-h-auto max-w-auto overflow-hidden resize resizer">
-        <DevOnly><XtermJs v-show="Instance == 'Dev'" @vue:mounted="console.info('dev mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
+        <DevOnly><XtermJs v-if="useDevOps().dev" v-show="Instance == 'Dev'" @vue:mounted="console.info('dev mounted!')" :session="Instance" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
         <XtermJs v-if="!useDevOps().dev" v-show="Instance == 'Dev'" @vue:mounted="console.info('Dev mounted')" :session="Instance" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Test'" @vue:mounted="console.info('Test mounted')" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Live'" @vue:mounted="console.info('Live mounted')" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />

@@ -33,7 +33,7 @@ type TS = {
 
 //  XtermJs instance(s)
 let sessionList = {} as TS
-const sessionGet = (sessionId: HCIEdev) => sessionList[sessionId] || sessionList['localhost']
+const sessionGet = (sessionId: HCIEdev) => sessionList[sessionId]
 const cols = ref(80)
 const rows = ref(25)
 const selection = ref('')
@@ -49,7 +49,7 @@ export default function useTerminalSocket() {
     prep[sessionId] = { xterm: term }
     prep[sessionId].rows = lines || get(rows)
     prep[sessionId].cols = columns || get(cols)
-    if (url) prep[sessionId].url = url + `&profile=${sessionId}`
+    if (url) prep[sessionId].url = url + `&profile=${useDevOps().dev ? 'localhost' : sessionId}`
     prep[sessionId].status = 'CLOSED'
     prep[sessionId].title = 'offline'
     sessionList = Object.assign(sessionList, prep)

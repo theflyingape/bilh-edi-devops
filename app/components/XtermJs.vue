@@ -14,7 +14,7 @@ interface itheme {
 }
 
 const props = defineProps<{
-  session: HCIE | 'localhost'
+  session: HCIE
   theme: keyof itheme //  pick a color
   fontSize?: number //    20
   rows?: number //        25
