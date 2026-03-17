@@ -20,11 +20,18 @@ const props = defineProps<{
 
 const { ago } = useDevOps()
 const { endpoint } = useIrisSessions()
+
+interface response {
+  status: string
+  instance: string
+  systemMode: string
+  content: fastfetch[]
+}
 const FastFetch: Ref<fastfetch[]> = ref([])
 
 async function sysinfo() {
-  await endpoint<fastfetch[]>(props.hcie, 'fastfetch').then((res) => {
-    set(FastFetch, res || [])
+  await endpoint<response>(props.hcie, 'fastfetch').then((res) => {
+    set(FastFetch, res?.content || [])
   })
 }
 
