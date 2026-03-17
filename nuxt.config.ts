@@ -115,14 +115,14 @@ export default defineNuxtConfig({
         '@nuxt/ui > prosemirror-gapcursor',
         '@vue/devtools-core',
         '@vue/devtools-kit',
-        '@xterm/addon-fit',
-        '@xterm/addon-search',
-        '@xterm/addon-unicode11',
-        '@xterm/xterm',
-        'html-to-image',
+        // '@xterm/addon-fit',
+        // '@xterm/addon-search',
+        // '@xterm/addon-unicode11',
+        // '@xterm/xterm',
+        // 'html-to-image',
         'tailwindcss/colors'
-      ]
-      // exclude: ['@xterm/xterm'],
+      ],
+      exclude: ['@xterm/xterm']
     },
     preview: {
       allowedHosts: ['hciedev.laheyhealth.org']
