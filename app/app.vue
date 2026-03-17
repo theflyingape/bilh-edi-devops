@@ -27,7 +27,7 @@
             <UTooltip arrow :content="{ align: 'center', side: 'bottom' }" text="click to login">
               <UChip class="mt-2" :color="chip" inset>
                 <UButton
-                  class="pb-2 pl-3 pr-3" color="neutral" variant="ghost"
+                  class="mb-1 pb-2 pl-3 pr-3" color="neutral" variant="ghost"
                   icon="i-heroicons-ellipsis-horizontal-16-solid"
                   @click="toggleSideMenu"
                 />

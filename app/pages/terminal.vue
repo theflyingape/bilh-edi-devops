@@ -3,10 +3,10 @@
     <div class="flex flex-nowrap justify-center h-full w-full">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-2 pb-10 rounded-md min-h-1/2 min-w-1/2 h-full w-full max-h-auto max-w-auto overflow-hidden resize resizer">
+        <XtermJs v-show="Instance == 'Live'" @vue:mounted="console.info('Live mounted')" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="Instance == 'Test'" @vue:mounted="console.info('Test mounted')" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-if="useDevOps().dev" v-show="Instance == 'Dev'" @vue:mounted="console.info('dev mounted!')" session="localhost" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-else v-show="Instance == 'Dev'" @vue:mounted="console.info('Dev mounted')" :session="Instance" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="Instance == 'Test'" @vue:mounted="console.info('Test mounted')" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="Instance == 'Live'" @vue:mounted="console.info('Live mounted')" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <!-- bottom control panel -->
         <div class="flex flex-nowrap justify-between items-center">
           <!-- session controls -->
@@ -159,7 +159,7 @@ import * as htmlToImage from 'html-to-image'
 
 const clipBoard = useClipboardHistory()
 const config = useRuntimeConfig()
-const id = process.env.NODE_ENV == 'development' ? 'theflyingape' : get(useAuth().data)?.id
+const id = useDevOps().dev ? 'theflyingape' : get(useAuth().data)?.id
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
 const { fileStat, stat } = useIrisSessions()

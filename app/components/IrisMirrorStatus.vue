@@ -8,7 +8,7 @@
           <div v-if="mirror.currentRole == 'Primary'" class="font-semibold text-success">
             {{ mirror.memberName }} {{ mirror.currentRole }}
           </div>
-          <div v-else>
+          <div v-else class="overflow-hidden text-ellipsis text-nowrap text-sm">
             {{ mirror.memberName }} {{ mirror.currentRole }} {{ mirror.journalTimeLatency }} {{ mirror.databaseLatency }}
           </div>
         </div>
