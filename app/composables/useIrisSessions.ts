@@ -4,10 +4,10 @@ import infrastructure from '~/assets/infrastructure.json'
 
 export type HCIE = keyof typeof infrastructure
 const Instances = Object.keys(infrastructure)
-const host = (hcie: HCIE) => infrastructure[hcie].vip
-const hosts = (hcie: HCIE) => infrastructure[hcie].hosts
-const icon = (hcie: HCIE) => infrastructure[hcie].icon
-const instance = (hcie: HCIE) => infrastructure[hcie].instance
+const host = (hcie: HCIE) => hcie ? infrastructure[hcie].vip : 'localhost'
+const hosts = (hcie: HCIE) => hcie ? infrastructure[hcie].hosts : []
+const icon = (hcie: HCIE) => hcie ? infrastructure[hcie].icon : 'i-lucide-construction'
+const instance = (hcie: HCIE) => hcie ? infrastructure[hcie].instance : ''
 const API = '/api/hcie'
 
 //  POST https://vip/api/hcie/[login|refresh]

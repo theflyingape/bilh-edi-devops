@@ -1,13 +1,13 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <UCard v-model="Accounts[props.hcie]" variant="subtle">
+  <UCard v-model="Accounts[hcie]" variant="subtle">
     <template #header>
       <div class="flex flex-nowrap justify-between items-center">
         <div class="text-lg text-fuchsia-900 text-start text-nowrap font-mono font-bold">
           IRIS: BILH Delegated Accounts &nbsp;
         </div>
         <div class="justify-end">
-          <UIcon :name="ICON[instance!]" class="align-middle size-8" />
+          <UIcon :name="icon(instance!)" class="align-middle size-8" />
           <IrisSelect
             v-model="instance"
             @change.prevent="loadAccounts()"
@@ -48,12 +48,11 @@ import type { Account } from '~/composables/useIrisSessions'
 import IrisAccountEdit from './IrisAccountEdit.vue'
 
 const props = defineProps<{
-  hcie: "Live" | "Test" | "Dev" //  instance identifier
+  hcie: HCIE
 }>()
-const dev = import.meta.dev || false
 const { ago, queryModal, response } = useDevOps()
-const { ICON, endpoint, Accounts } = useIrisSessions()
-const instance = defineModel<INSTANCE>('instance', { required: false })
+const { icon, endpoint, Accounts } = useIrisSessions()
+const instance = defineModel<HCIE>('instance', { required: false })
 const table = useTemplateRef('table')
 const data = ref([])
 const columns: TableColumn<Account>[] = [
@@ -130,7 +129,7 @@ async function accountModal() {
 }
 
 async function loadAccounts() {
-  if (dev) {
+  if (useDevOps().dev) {
     set(data, [{id:'dev',groups:['wheel','user'],name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now', namespace:'%SYS', sysadm:1, shell:1},{id:'ops',groups:[],name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never', namespace:'BILHPN', analyst:1, admin:1}])
   }
   else {

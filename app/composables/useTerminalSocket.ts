@@ -12,8 +12,10 @@ import { AttachAddon } from '~/lib/addon-attach.client'
 
 const { audio, BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } = useMultiMedia()
 
+type HCIEdev = HCIE | 'localhost'
+
 type TS = {
-  [key in HCIE]: {
+  [key in HCIEdev]: {
     xterm: Terminal
     options?: ITerminalOptions
     fit?: FitAddon
@@ -31,13 +33,14 @@ type TS = {
 
 //  XtermJs instance(s)
 let sessionList = <TS>{}
+const sessionGet = (sessionId: HCIEdev) => sessionList[sessionId] || sessionList['localhost']
 const cols = ref(80)
 const rows = ref(25)
 const selection = ref('')
 const title = ref('')
 
 export default function useTerminalSocket() {
-  function prepare(sessionId: HCIE, term: Terminal, url?: string, rows?: number, cols?: number) {
+  function prepare(sessionId: HCIEdev, term: Terminal, url?: string, rows?: number, cols?: number) {
   // term.loadAddon(new WebglAddon())
     term.loadAddon(new Unicode11Addon())
     term.unicode.activeVersion = '11'
@@ -57,9 +60,8 @@ export default function useTerminalSocket() {
     term.loadAddon(session.search)
   }
 
-  function connect(sessionId: HCIE, tmux = false) {
-    const session = sessionList[sessionId]!
-
+  function connect(sessionId: HCIEdev, tmux = false) {
+    const session = sessionGet(sessionId)
     const { ws, status } = useWebSocket(session.url! + (tmux ? '&tmux=true' : ''))
     session.ws = ws
     session.status = get(status)
@@ -83,8 +85,8 @@ export default function useTerminalSocket() {
     })
   }
 
-  function attach(sessionId: HCIE) {
-    const session = sessionList[sessionId]!
+  function attach(sessionId: HCIEdev) {
+    const session = sessionGet(sessionId)
     if (session.ws?.value) {
       session.attach = new AttachAddon(session.ws.value)
       session.xterm.loadAddon(session.attach)
@@ -112,13 +114,13 @@ export default function useTerminalSocket() {
     }
   }
 
-  function detach(sessionId: HCIE) {
-    const session = sessionList[sessionId]!
+  function detach(sessionId: HCIEdev) {
+    const session = sessionGet(sessionId)
     if (session.ws?.value) session.ws?.value.close()
   }
 
-  function connected(sessionId: HCIE, force = false) {
-    const session = sessionList[sessionId]!
+  function connected(sessionId: HCIEdev, force = false) {
+    const session = sessionGet(sessionId)
     set(title, session.title)
     const ready = session.attach?.checkOpenSocket() || false
     set(isConnected, ready)
@@ -144,8 +146,8 @@ export default function useTerminalSocket() {
 
   const isConnected = ref(false)
 
-  function resize(sessionId: HCIE) {
-    const session = sessionList[sessionId]!
+  function resize(sessionId: HCIEdev) {
+    const session = sessionGet(sessionId)
     console.log('resize', sessionId, session)
 
     if (session.fit) {
