@@ -122,7 +122,7 @@ const { status, signIn, signOut } = useAuth()
 const { isAdmin } = useDevOps()
 const { credentials, user, getSession, endSession, endpoint } = useIrisSessions()
 const overlay = useOverlay()
-const toast = useToast()
+// const toast = useToast()
 
 interface irisUser {
   Enabled: boolean
@@ -139,20 +139,30 @@ async function login() {
     Object.assign(get(credentials).IRIStoken, jwt)
     await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
       if (!get(user).enabled) {
-        await endpoint('Dev', `user/${username}`).then(async (result) => {
-          if (result) {
-            const hcie = <irisUser>result
+        await endpoint<irisUser>('Dev', `user/${username}`).then(async (iris) => {
+          if (iris) {
             set(user, {
               id: username,
-              enabled: hcie.Enabled ?? false,
-              groups: hcie.Groups ?? [],
-              roles: hcie.Roles ?? [],
-              name: hcie.FullName ?? '',
-              comment: hcie.Comment ?? '',
+              enabled: iris.Enabled ?? false,
+              groups: iris.Groups ?? [],
+              roles: iris.Roles ?? [],
+              name: iris.FullName ?? '',
+              comment: iris.Comment ?? '',
               loggedInAt: Date.now(),
               scope: []
             })
-        }
+          } else {
+            set(user, {
+              id: username,
+              enabled: false,
+              groups: [],
+              roles: [],
+              name: '',
+              comment: '',
+              loggedInAt: 0,
+              scope: []
+            })
+          }
         }).catch(async (err) => {
           open(`${err.statusCode}: ${err.statusMessage}`)
         })
@@ -162,7 +172,7 @@ async function login() {
         if (get(user).groups?.includes('irisadm')) get(user).scope.push('admin')
         if (get(user).groups?.includes('irisdev')) get(user).scope.push('developer')
         if (get(user).groups?.includes('grp-os-shell-access')) get(user).scope.push('analyst')
-        if (!get(user).scope.length) get(user).scope.push('user')
+        if (!get(user).scope?.length) get(user).scope.push('user')
         // toast.add({ title: `Hello, ${get(user).scope[0]}!`, description: `logged on ${new Date().toTimeString()}` })
       } else
         get(user).scope.push('guest')
