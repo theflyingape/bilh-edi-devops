@@ -12,7 +12,7 @@ import { AttachAddon } from '~/lib/addon-attach.client'
 
 const { audio, BELL_SOUND, CONNECT_SOUND, DISCONNECT_SOUND } = useMultiMedia()
 
-type HCIEdev = HCIE | 'localhost'
+export type HCIEdev = HCIE | 'localhost'
 
 type TS = {
   [key in HCIEdev]: {

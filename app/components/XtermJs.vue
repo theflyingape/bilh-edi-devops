@@ -14,7 +14,7 @@ interface itheme {
 }
 
 const props = defineProps<{
-  session: HCIE
+  session: HCIEdev
   theme: keyof itheme //  pick a color
   fontSize?: number //    20
   rows?: number //        25
@@ -58,6 +58,7 @@ const terminalContainer = useTemplateRef('terminalContainer')
 const term = new Terminal({ ...startup, rows: props.rows || 25, cols: props.cols || 80 })
 
 onMounted(() => {
+  console.info(`${props.session} mounted`)
   term.open(terminalContainer.value!)
   prepare(props.session, term, props.wsUrl, props.rows, props.cols)
 })

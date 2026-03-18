@@ -3,10 +3,9 @@
     <div class="flex flex-nowrap justify-center h-full w-full">
       <!-- monitor with a thin bezel -->
       <div ref="crt" class="bg-zinc-800 p-2 pb-10 rounded-md min-h-1/2 min-w-1/2 h-full w-full max-h-auto max-w-auto overflow-hidden resize resizer">
-        <DevOnly><XtermJs v-if="useDevOps().dev" v-show="Instance == 'Dev'" @vue:mounted="console.info('dev mounted!')" :session="Instance" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize /></DevOnly>
-        <XtermJs v-if="!useDevOps().dev" v-show="Instance == 'Dev'" @vue:mounted="console.info('Dev mounted')" :session="Instance" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="Instance == 'Test'" @vue:mounted="console.info('Test mounted')" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="Instance == 'Live'" @vue:mounted="console.info('Live mounted')" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="Instance == 'Dev'" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="Instance == 'Test'" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="Instance == 'Live'" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <!-- bottom control panel -->
         <div class="flex flex-nowrap justify-between items-center">
           <!-- session controls -->
@@ -98,7 +97,7 @@
           <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
           <UInput class="w-full" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
           <div class="flex justify-end m-1 pb-3"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
-          <FileStat v-model="fileCandidate" :hcie="Instance" :tmux="tmux!" />
+          <FileStat v-model="fileCandidate" :hcie="Instance as HCIE" :tmux="tmux!" />
           <div class="flex justify-end m-1"><SubmitButton :disabled="!fileCandidate.length || fileStat[Instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
           <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
         </div>
@@ -164,7 +163,7 @@ const id = useDevOps().dev ? 'theflyingape' : get(useAuth().data)?.id
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
 const { fileStat, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
-const Instance = ref(useDevOps().dev ? 'Dev' : 'Test' as HCIE)
+const Instance = ref('Test' as HCIE)
 
 const selectionLabel = ref(computed(() => get(selection).includes('\n') ? get(selection).split('\n').length+'-line(s) copied' : get(selection).length < 40 ? get(selection) : get(selection).substring(0,31)+'…'+get(selection).slice(-8)))
 const fileCandidate = ref('')
@@ -181,7 +180,7 @@ watch(clipBoard.items, (value, _oldValue) => {
 watch(selection, () => {
   clipBoard.copy(get(selection))
   //  expand auto-detection
-  const sessionId = get(Instance)
+  const sessionId = get(Instance) as HCIE
   set(fileCandidate, '')
   fileStat.value[sessionId] = <filestat>{}
   if (isFiles && get(selection).length && !get(selection).includes('\n')) {
