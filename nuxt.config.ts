@@ -48,7 +48,7 @@ export default defineNuxtConfig({
   },
   appConfig: {
     buildDate: new Date().toLocaleString('en-us', { dateStyle: 'full', timeStyle: 'short' }),
-    version: '1.0.5'
+    version: '1.0.6'
   },
   runtimeConfig: {
     jwtSecret: process.env.NUXT_JWT_PASSWORD || '!$ecure!',
@@ -115,14 +115,14 @@ export default defineNuxtConfig({
         '@nuxt/ui > prosemirror-gapcursor',
         '@vue/devtools-core',
         '@vue/devtools-kit',
-        // '@xterm/addon-fit',
-        // '@xterm/addon-search',
-        // '@xterm/addon-unicode11',
-        // '@xterm/xterm',
-        // 'html-to-image',
+        '@xterm/addon-fit',
+        '@xterm/addon-search',
+        '@xterm/addon-unicode11',
+        '@xterm/xterm',
+        'html-to-image',
         'tailwindcss/colors'
-      ],
-      exclude: ['@xterm/xterm']
+      ]
+      //  exclude: ['@xterm/xterm']
     },
     preview: {
       allowedHosts: ['hciedev.laheyhealth.org']
