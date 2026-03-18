@@ -3,9 +3,12 @@
   <UCard variant="subtle">
     <template #default>
       <div class="text-sm">
-        OS: {{ OS }}<br>
-        RAM: {{ RAM }} ({{ FREE }})<br>
-        last booted: {{ BOOT }}
+        {{ OS }}<br>
+        {{ CPU }} cores<br>
+        {{ RAM }} ({{ FREE }} avail)<br>
+        &nbsp;<br>
+        last booted:<br>
+        {{ BOOT }}
       </div>
     </template>
   </UCard>
@@ -35,7 +38,8 @@ async function sysinfo() {
   })
 }
 
-const OS = ref(computed(() => get(FastFetch).find(sys => sys.type == 'OS')?.result?.version))
+const OS = ref(computed(() => get(FastFetch).find(sys => sys.type == 'OS')?.result?.id + ' ' + get(FastFetch).find(sys => sys.type == 'OS')?.result?.version))
+const CPU = ref(computed(() => get(FastFetch).find(sys => sys.type == 'CPU')?.result?.cores.online))
 const RAM = ref(computed(() => (
   (get(FastFetch).find(sys => sys.type == 'Memory')?.result?.total || 0)
   / Math.pow(1024, 3)).toFixed(1) + 'gb'))
