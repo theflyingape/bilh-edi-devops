@@ -6,8 +6,8 @@
         <div class="text-nowrap text-sm">
           <div>{{ OS }}</div>
           <hr>
-          <div>{{ CPU }} cores</div>
-          <div>{{ RAM }} ({{ FREE }} avail)</div>
+          <div>{{ CPU }} cores, {{ RAM }} mem</div>
+          <div>&nbsp;({{ FREE }} free)</div>
           <div>IRIS: {{ IRIS }} used</div>
           <div>Jrns: {{ JRN }} used</div>
           <div>&nbsp;</div>
@@ -46,16 +46,16 @@ const OS = ref(computed(() => String(get(FastFetch).find(sys => sys.type == 'OS'
 const CPU = ref(computed(() => get(FastFetch).find(sys => sys.type == 'CPU')?.result?.cores.online))
 const RAM = ref(computed(() => (
   (get(FastFetch).find(sys => sys.type == 'Memory')?.result?.total || 0)
-  / Math.pow(1024, 3)).toFixed(1) + 'gb'))
+  / Math.pow(1024, 3)).toFixed(0) + 'gb'))
 const FREE = ref(computed(() => (
   ((get(FastFetch).find(sys => sys.type == 'Memory')?.result?.total || 0) - (get(FastFetch).find(sys => sys.type == 'Memory')?.result?.used || 0))
   / Math.pow(1024, 3)).toFixed(1) + 'gb'))
 const IRIS = ref(computed(() => (
   (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data$/))?.bytes.used || 0)
-  / Math.pow(1024, 4)).toFixed(2) + 'tb'))
+  / Math.pow(1024, 4)).toFixed(1) + 'tb'))
 const JRN = ref(computed(() => (
   (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data\/jrn$/))?.bytes.used || 0)
-  / Math.pow(1024, 3)).toFixed(1) + 'gb'))
+  / Math.pow(1024, 3)).toFixed(0) + 'gb'))
 const BOOT = ref(computed(() => ago(get(FastFetch).find(sys => sys.type == 'Uptime')?.result?.bootTime) || 'not known'))
 
 onMounted(async () => {
