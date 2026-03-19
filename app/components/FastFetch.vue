@@ -3,15 +3,19 @@
   <div>
     <UCard variant="subtle">
       <template #default>
-        <div class="text-nowrap text-sm">
+        <div class="text-center text-nowrap">
           <div>{{ OS }}</div>
           <hr>
-          <div>{{ CPU }} cores, {{ RAM }} mem</div>
-          <div>&nbsp;({{ FREE }} free)</div>
-          <div>IRIS: {{ IRIS }} used</div>
-          <div>Jrns: {{ JRN }} used</div>
-          <div>&nbsp;</div>
-          <div>rebooted: {{ BOOT }}</div>
+          <div class="text-sm">
+            <div>{{ CPU }} cores, {{ RAM }} mem</div>
+            <div>({{ FREE }} free)</div>
+            <div>&nbsp;</div>
+            <div class="text-left">
+              <div>IRIS: {{ IRIS }} used</div>
+              <div>Jrns: {{ JRN }} used</div>
+              <div>rebooted: {{ BOOT }}</div>
+            </div>
+          </div>
         </div>
       </template>
     </UCard>
@@ -52,7 +56,7 @@ const FREE = ref(computed(() => (
   / Math.pow(1024, 3)).toFixed(1) + 'gb'))
 const IRIS = ref(computed(() => (
   (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data$/))?.bytes.used || 0)
-  / Math.pow(1024, 4)).toFixed(1) + 'tb'))
+  / Math.pow(1024, 3)).toFixed(1) + 'gb'))
 const JRN = ref(computed(() => (
   (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data\/jrn$/))?.bytes.used || 0)
   / Math.pow(1024, 3)).toFixed(0) + 'gb'))
