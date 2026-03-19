@@ -38,7 +38,7 @@
                   <div class="grid grid-cols-2 justify-items-start mt-4">
                     <div>
                       <UButton
-                        class="flex flex-grow mb-4"
+                        class="flex flex-grow mb-4 text-lg"
                         color="info"
                         size="lg"
                         variant="soft"

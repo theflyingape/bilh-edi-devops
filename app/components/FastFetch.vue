@@ -4,8 +4,10 @@
     <UCard variant="subtle">
       <template #default>
         <div class="text-center text-nowrap">
-          <div>{{ OS }}</div>
-          <hr>
+          <div class="text-md">
+            {{ OS }}
+            <hr>
+          </div>
           <div class="text-sm">
             <div>{{ CPU }} cores, {{ RAM }} mem</div>
             <div>({{ FREE }} free)</div>
