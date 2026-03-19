@@ -15,6 +15,7 @@
 
 <script setup lang="ts">
 import { get, set } from '@vueuse/core'
+import { stringFormat } from 'zod';
 
 const props = defineProps<{
   hcie: HCIE
@@ -37,7 +38,7 @@ async function sysinfo() {
   })
 }
 
-const OS = ref(computed(() => get(FastFetch).find(sys => sys.type == 'OS')?.result?.id || 'OS' + ' ' + get(FastFetch).find(sys => sys.type == 'OS')?.result?.version))
+const OS = ref(computed(() => String(get(FastFetch).find(sys => sys.type == 'OS')?.result?.id ?? 'OS').toUpperCase() + ' ' + get(FastFetch).find(sys => sys.type == 'OS')?.result?.version))
 const CPU = ref(computed(() => get(FastFetch).find(sys => sys.type == 'CPU')?.result?.cores.online))
 const RAM = ref(computed(() => (
   (get(FastFetch).find(sys => sys.type == 'Memory')?.result?.total || 0)
@@ -45,7 +46,7 @@ const RAM = ref(computed(() => (
 const FREE = ref(computed(() => (
   ((get(FastFetch).find(sys => sys.type == 'Memory')?.result?.total || 0) - (get(FastFetch).find(sys => sys.type == 'Memory')?.result?.used || 0))
   / Math.pow(1024, 3)).toFixed(1) + 'gb'))
-const BOOT = ref(computed(() => ago(get(FastFetch).find(sys => sys.type == 'Uptime')?.result?.bootTime) || 'unknown'))
+const BOOT = ref(computed(() => ago(get(FastFetch).find(sys => sys.type == 'Uptime')?.result?.bootTime) ?? 'unknown'))
 
 onMounted(async () => {
   await sysinfo()
