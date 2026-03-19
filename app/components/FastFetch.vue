@@ -51,10 +51,10 @@ const FREE = ref(computed(() => (
   ((get(FastFetch).find(sys => sys.type == 'Memory')?.result?.total || 0) - (get(FastFetch).find(sys => sys.type == 'Memory')?.result?.used || 0))
   / Math.pow(1024, 3)).toFixed(1) + 'gb'))
 const IRIS = ref(computed(() => (
-  (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data$/))?.bytes.free || 0)
+  (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data$/))?.bytes.used || 0)
   / Math.pow(1024, 4)).toFixed(2) + 'tb'))
 const JRN = ref(computed(() => (
-  (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data\/jrn$/))?.bytes.free || 0)
+  (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data\/jrn$/))?.bytes.used || 0)
   / Math.pow(1024, 3)).toFixed(1) + 'gb'))
 const BOOT = ref(computed(() => ago(get(FastFetch).find(sys => sys.type == 'Uptime')?.result?.bootTime) || 'not known'))
 
