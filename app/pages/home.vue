@@ -23,20 +23,18 @@
           WIP
         </template>
         <template #odba>
-          <div class="grid grid-cols-3">
+          <div class="flex flex-wrap justify-around">
             <div v-for="(hcie, index) in infrastructure" :key="index">
-              <div class="flex justify-center">
-                <IrisMirrorStatus :hcie="index" />
-              </div>
+              <IrisMirrorStatus :hcie="index" />
             </div>
           </div>
         </template>
         <template #linux>
-          <div class="grid grid-cols-3">
-            <div v-for="(hcie, index) in infrastructure" :key="index" class="flex justify-center">
-              <UCard class="flex justify-center">
+          <div class="flex flex-wrap justify-around">
+            <div v-for="(hcie, index) in infrastructure" :key="index">
+              <UCard>
                 <template #default>
-                  <div class="flex justify-center font-bold font-sans">{{ index }}</div>
+                  <div class="flex justify-center font-semibold font-sans text-lg">{{ index }}</div>
                   <div class="grid grid-cols-2 justify-items-start">
                     <div>
                       <UButton

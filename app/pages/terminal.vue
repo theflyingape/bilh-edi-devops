@@ -15,7 +15,9 @@
             <div>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="launch Midnight Commander"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
             </div>
+            <!--
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="curl builder"><UButton size="sm" icon="i-lucide-biceps-flexed" color="neutral" variant="subtle" @click="isCurl = true" /></UTooltip>
+            -->
           </div>
           <div v-else>
             &nbsp;
