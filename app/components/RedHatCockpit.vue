@@ -1,6 +1,7 @@
 <template>
-  <div class="flex m-1">
+  <div>
     <UButton
+      class="flex flex-grow"
       color="neutral"
       target="_blank"
       variant="outline"

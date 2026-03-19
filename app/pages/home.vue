@@ -23,33 +23,34 @@
           WIP
         </template>
         <template #odba>
-          <div class="flex flex-wrap justify-around">
+          <div class="flex flex-wrap gap-2 justify-around">
             <div v-for="(hcie, index) in infrastructure" :key="index">
               <IrisMirrorStatus :hcie="index" />
             </div>
           </div>
         </template>
         <template #linux>
-          <div class="flex flex-wrap justify-around">
+          <div class="flex flex-wrap gap-2 justify-around">
             <div v-for="(hcie, index) in infrastructure" :key="index">
               <UCard>
                 <template #default>
                   <div class="flex justify-center font-semibold font-sans text-lg">{{ index }}</div>
-                  <div class="grid grid-cols-2 justify-items-start">
+                  <div class="grid grid-cols-2 justify-items-start mt-4">
                     <div>
                       <UButton
-                        class="flex justify-center m-2"
+                        class="flex flex-grow mb-4"
                         color="info"
-                        variant="subtle"
+                        size="lg"
+                        variant="soft"
                         :icon="hcie.icon"
                         :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
                       />
                       <RedHatCockpit
                         v-for="host in hcie.hosts" :key="host"
-                        :label="host.split('.')[0]" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
+                        class="mt-1" :label="host.split('.')[0]" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
                       />
                     </div>
-                    <div class="mt-2">
+                    <div>
                       <FastFetch :hcie="index" />
                     </div>
                   </div>

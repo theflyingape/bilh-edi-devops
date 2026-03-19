@@ -1,21 +1,23 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <UCard variant="subtle">
-    <template #default>
-      <div class="text-sm">
-        {{ OS }}<br>
-        {{ CPU }} cores<br>
-        {{ RAM }} ({{ FREE }} avail)<br>
-        &nbsp;<br>
-        rebooted: {{ BOOT }}
-      </div>
-    </template>
-  </UCard>
+  <div>
+    <UCard variant="subtle">
+      <template #default>
+        <div class="text-nowrap text-sm">
+          <div>{{ OS }}</div>
+          <hr>
+          <div>{{ CPU }} cores</div>
+          <div>{{ RAM }} ({{ FREE }} avail)</div>
+          <div>&nbsp;</div>
+          <div>rebooted: {{ BOOT }}</div>
+        </div>
+      </template>
+    </UCard>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { get, set } from '@vueuse/core'
-import { stringFormat } from 'zod';
 
 const props = defineProps<{
   hcie: HCIE
@@ -46,7 +48,7 @@ const RAM = ref(computed(() => (
 const FREE = ref(computed(() => (
   ((get(FastFetch).find(sys => sys.type == 'Memory')?.result?.total || 0) - (get(FastFetch).find(sys => sys.type == 'Memory')?.result?.used || 0))
   / Math.pow(1024, 3)).toFixed(1) + 'gb'))
-const BOOT = ref(computed(() => ago(get(FastFetch).find(sys => sys.type == 'Uptime')?.result?.bootTime) ?? 'unknown'))
+const BOOT = ref(computed(() => ago(get(FastFetch).find(sys => sys.type == 'Uptime')?.result?.bootTime) || 'not known'))
 
 onMounted(async () => {
   await sysinfo()
