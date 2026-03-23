@@ -9,8 +9,11 @@
             <hr>
           </div>
           <div class="text-sm">
+            <div class="font-mono font-semibold">
+              {{ HOST }}
+            </div>
             <div>{{ CPU }} cores, {{ RAM }} mem</div>
-            <div>({{ FREE }} free)</div>
+            <div>({{ FREE }} avail)</div>
             <div>&nbsp;</div>
             <div class="text-left">
               <div>IRIS: {{ IRIS }} used</div>
@@ -36,33 +39,37 @@ const { endpoint } = useIrisSessions()
 
 interface response {
   status: string
+  hostName: string
   instance: string
   systemMode: string
-  content: fastfetch[]
+  content: [fastfetch]
 }
-const FastFetch: Ref<fastfetch[]> = ref([])
+const FastFetch: Ref<response> = ref({
+  status: '', hostName: 'localhost', instance: '', systemMode: '', content: [{}]
+})
 
 async function sysinfo() {
   await endpoint<response>(props.hcie, 'fastfetch').then((res) => {
-    set(FastFetch, res?.content || [])
+    set(FastFetch, res)
   })
 }
 
-const OS = ref(computed(() => String(get(FastFetch).find(sys => sys.type == 'OS')?.result?.id ?? 'OS').toUpperCase() + ' ' + get(FastFetch).find(sys => sys.type == 'OS')?.result?.version))
-const CPU = ref(computed(() => get(FastFetch).find(sys => sys.type == 'CPU')?.result?.cores.online))
+const OS = ref(computed(() => String(get(FastFetch).content.find(sys => sys.type == 'OS')?.result?.id ?? 'OS').toUpperCase() + ' ' + get(FastFetch).content.find(sys => sys.type == 'OS')?.result?.version))
+const HOST = ref(computed(() => get(FastFetch).hostName.split('.')[0]))
+const CPU = ref(computed(() => get(FastFetch).content.find(sys => sys.type == 'CPU')?.result?.cores.online))
 const RAM = ref(computed(() => (
-  (get(FastFetch).find(sys => sys.type == 'Memory')?.result?.total || 0)
+  (get(FastFetch).content.find(sys => sys.type == 'Memory')?.result?.total || 0)
   / Math.pow(1024, 3)).toFixed(0) + 'gb'))
 const FREE = ref(computed(() => (
-  ((get(FastFetch).find(sys => sys.type == 'Memory')?.result?.total || 0) - (get(FastFetch).find(sys => sys.type == 'Memory')?.result?.used || 0))
+  ((get(FastFetch).content.find(sys => sys.type == 'Memory')?.result?.total || 0) - (get(FastFetch).content.find(sys => sys.type == 'Memory')?.result?.used || 0))
   / Math.pow(1024, 3)).toFixed(1) + 'gb'))
 const IRIS = ref(computed(() => (
-  (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data$/))?.bytes.used || 0)
+  (get(FastFetch).content.find(sys => sys.type == 'Disk')?.result?.find((disk: { mountpoint: string }) => String(disk.mountpoint).match(/^\/hc.*-data$/))?.bytes.used || 0)
   / Math.pow(1024, 3)).toFixed(1) + 'gb'))
 const JRN = ref(computed(() => (
-  (get(FastFetch).find(sys => sys.type == 'Disk')?.result?.find(disk => String(disk.mountpoint).match(/^\/hc.*-data\/jrn$/))?.bytes.used || 0)
+  (get(FastFetch).content.find(sys => sys.type == 'Disk')?.result?.find((disk: { mountpoint: string }) => String(disk.mountpoint).match(/^\/hc.*-data\/jrn$/))?.bytes.used || 0)
   / Math.pow(1024, 3)).toFixed(0) + 'gb'))
-const BOOT = ref(computed(() => ago(get(FastFetch).find(sys => sys.type == 'Uptime')?.result?.bootTime) || 'not known'))
+const BOOT = ref(computed(() => ago(get(FastFetch).content.find(sys => sys.type == 'Uptime')?.result?.bootTime) || 'not known'))
 
 onMounted(async () => {
   await sysinfo()
