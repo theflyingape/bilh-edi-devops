@@ -18,11 +18,13 @@
     <template #default>
       <UTable ref="table" :data="data" :columns="columns" :rows="Accounts" class="flex-1" @hover="onRowSelect">
         <template #name-cell="{ row }">
-          <p class="font-medium text-highlighted">{{ row.original.name }}</p>
+          <p class="font-medium text-highlighted">
+            {{ row.original.name }}
+          </p>
           <p>{{ row.original.comment }}</p>
         </template>
         <template #action-cell="{ row }">
-          <UDropdownMenu v-if="row.original.id == rowSelection.id" :items="getDropdownActions()">
+          <UDropdownMenu v-if="row.original.id == rowSelection?.id" :items="getDropdownActions()">
             <UButton
               icon="i-lucide-ellipsis-vertical"
               color="action"
@@ -44,7 +46,7 @@
 <script setup lang="ts">
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
-import type { hcieAccount, Account } from '~/composables/useIrisSessions'
+import type { hcieAccount } from '~/composables/useIrisSessions'
 import IrisAccountEdit from './IrisAccountEdit.vue'
 
 const props = defineProps<{
@@ -54,8 +56,8 @@ const { ago, queryModal, response } = useDevOps()
 const { icon, endpoint, Accounts } = useIrisSessions()
 const instance = defineModel<HCIE>('instance', { required: false })
 const table = useTemplateRef('table')
-const data = ref([])
-const columns: TableColumn<Account>[] = [
+const data = ref<account[]>([])
+const columns: TableColumn<account>[] = [
   {
     accessorKey: 'id',
     header: 'id',
@@ -75,7 +77,7 @@ const columns: TableColumn<Account>[] = [
   }
 ]
 const interops = ref<interops[]>([])
-const rowSelection = ref<account>({})
+const rowSelection = ref<account>()
 const now = useNow()
 
 function getDropdownActions(): DropdownMenuItem[][] {
@@ -84,7 +86,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
       {
         label: 'Edit',
         icon: 'i-lucide-user-pen',
-        async onSelect(e) {
+        async onSelect(_e) {
           await accountModal()
         }
       },
@@ -93,9 +95,9 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-trash',
         color: 'error',
         async onSelect(e) {
-          await queryModal(`OK to delete ${get(rowSelection).id}?`, `Edit to remove any active roles first, as this drops the IRIS user's cached storage only. Dropping the account is useful for trouble-shooting an issue and for security hygiene.`)
-          if(get(response)) {
-            await endpoint(get(instance)!, `account/${get(rowSelection).id}`, 'DELETE')
+          await queryModal(`OK to delete ${get(rowSelection)?.id}?`, `Edit to remove any active roles first, as this drops the IRIS user's cached storage only. Dropping the account is useful for trouble-shooting an issue and for security hygiene.`)
+          if (get(response)) {
+            await endpoint(get(instance)!, `account/${get(rowSelection)?.id}`, 'DELETE')
             await loadAccounts()
           }
         }
@@ -104,10 +106,10 @@ function getDropdownActions(): DropdownMenuItem[][] {
   ]
 }
 
-function onRowSelect(e: Event, row: TableRow<Account>|null) {
+function onRowSelect(e: Event, row: TableRow<account> | null) {
   try {
     table.value?.tableApi.resetRowSelection(false)
-    if(row) {
+    if (row) {
       set(rowSelection, row.original)
       row.toggleSelected(true)
     }
@@ -122,9 +124,9 @@ async function accountModal() {
     props: {
       instance: get(instance)!,
       interops: interops,
-      account: get(rowSelection),
+      account: get(rowSelection)!,
       title: 'BILH Delegated Account',
-      description: get(rowSelection).id
+      description: get(rowSelection)?.id
     },
     destroyOnClose: true
   }).open()
@@ -132,14 +134,13 @@ async function accountModal() {
 
 async function loadAccounts() {
   if (useDevOps().dev) {
-    set(data, [{id:'dev',groups:['wheel','user'],name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now', namespace:'%SYS', sysadm:true},{id:'ops',groups:[],name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never', namespace:'BILHPN', irisdev:true, irisadm:true}])
-  }
-  else {
+    set(data, [{ id: 'dev', groups: ['wheel', 'user'], access: [], name: 'Devlin Opster', comment: 'Master Inventor', enabled: true, lastlogin: 'now', namespace: '%SYS', irisdev: true, irisadm: false, sysadm: true }, { id: 'ops', groups: [], access: [], name: 'Cruella Deville', comment: 'Original Gangster', enabled: true, lastlogin: 'never', namespace: 'BILHPN', irisdev: true, irisadm: true, sysadm: false }])
+  } else {
     const hcie = get(instance)!
     await endpoint<hcieAccount>(hcie, 'account/@').then((res) => {
-      if (res?.status == "OK") {
+      if (res?.status == 'OK') {
         set(interops, res?.interops)
-        Accounts.value[hcie] = res?.data?
+        Accounts.value[hcie] = res?.data
         set(data, Object.values(Accounts.value[hcie]!))
       }
     })

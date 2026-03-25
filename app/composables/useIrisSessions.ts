@@ -56,11 +56,8 @@ export interface account {
   enabled: boolean
   lastlogin: string
 }
-export interface Account {
-  [key: string]: account
-}
-const Accounts: Ref<{ [key: string]: Account }>
-  = ref({ Live: <Account>{}, Test: <Account>{}, Dev: <Account>{} })
+const Accounts: Ref<{ [key: string]: account[] }>
+  = ref({ Live: <account[]>[], Test: <account[]>[], Dev: <account[]>[] })
 
 //  GET https://vip/api/hcie/user/:id
 export interface User {
