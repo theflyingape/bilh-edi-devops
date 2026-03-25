@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
-import type { Account } from '~/composables/useIrisSessions'
+import type { hcieAccount, Account } from '~/composables/useIrisSessions'
 import IrisAccountEdit from './IrisAccountEdit.vue'
 
 const props = defineProps<{
@@ -74,7 +74,8 @@ const columns: TableColumn<Account>[] = [
     header: 'action'
   }
 ]
-const rowSelection = ref<Account>({})
+const interops = ref<interops[]>([])
+const rowSelection = ref<account>({})
 const now = useNow()
 
 function getDropdownActions(): DropdownMenuItem[][] {
@@ -120,6 +121,7 @@ async function accountModal() {
   await useOverlay().create(IrisAccountEdit, {
     props: {
       instance: get(instance)!,
+      interops: interops,
       account: get(rowSelection),
       title: 'BILH Delegated Account',
       description: get(rowSelection).id
@@ -130,14 +132,14 @@ async function accountModal() {
 
 async function loadAccounts() {
   if (useDevOps().dev) {
-    set(data, [{id:'dev',groups:['wheel','user'],name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now', namespace:'%SYS', sysadm:1, shell:1},{id:'ops',groups:[],name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never', namespace:'BILHPN', analyst:1, admin:1}])
+    set(data, [{id:'dev',groups:['wheel','user'],name:'Devlin Opster',comment:'Master Inventor',lastlogin:'now', namespace:'%SYS', sysadm:true},{id:'ops',groups:[],name:'Cruella Deville',comment:'Original Gangster',lastlogin:'never', namespace:'BILHPN', irisdev:true, irisadm:true}])
   }
   else {
     const hcie = get(instance)!
-    await endpoint(hcie, 'account/@').then((status) => {
-      if (status?.status == "OK") {
-        delete status?.status
-        Accounts.value[hcie] = <Account>status
+    await endpoint<hcieAccount>(hcie, 'account/@').then((res) => {
+      if (res?.status == "OK") {
+        set(interops, res?.interops)
+        Accounts.value[hcie] = res?.data?
         set(data, Object.values(Accounts.value[hcie]!))
       }
     })

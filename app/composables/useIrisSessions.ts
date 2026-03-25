@@ -27,21 +27,37 @@ const credentials = ref({
 //  keep tokens by HCIE endpoint
 const tokens = new Map<string, IRIStoken>()
 
-//  GET|DELETE|UPDATE https://vip/api/hcie/account/[@|:id]
-export interface Account {
-  [key: string]: {
-    id: string
-    groups: string[]
-    name: string
-    enabled: boolean
-    namespace: string
-    admin: boolean
-    analyst: boolean
-    sysadm: boolean
-    shell: boolean
-    comment: string
-    lastlogin: string
+export interface hcieResponse<T> {
+  status?: string
+  error?: string
+  data?: {
+    [key: string]: T
   }
+}
+
+//  GET|DELETE|UPDATE https://vip/api/hcie/account/[@|:id]
+export interface hcieAccount extends hcieResponse<account> {
+  interops?: interops[]
+}
+export interface interops {
+  hs: string
+  scope: string[]
+}
+export interface account {
+  id: string
+  groups: string[]
+  access: string[]
+  namespace: string
+  irisdev: boolean
+  irisadm: boolean
+  sysadm: boolean
+  name: string
+  comment: string
+  enabled: boolean
+  lastlogin: string
+}
+export interface Account {
+  [key: string]: account
 }
 const Accounts: Ref<{ [key: string]: Account }>
   = ref({ Live: <Account>{}, Test: <Account>{}, Dev: <Account>{} })

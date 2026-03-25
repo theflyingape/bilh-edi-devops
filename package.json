@@ -1,6 +1,6 @@
 {
   "name": "edi-devops",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "license": "MIT",
   "type": "module",
   "description": "The team's single point of access to the essential suite of apps, tools, and documentation for efficiency, effectiveness, and success!",
@@ -60,6 +60,6 @@
     "eslint": "^10.1.0",
     "nuxi": "^3.34.0",
     "nuxt": "^4.4.2",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   }
 }

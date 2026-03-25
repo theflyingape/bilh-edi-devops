@@ -15,7 +15,7 @@
 import { get, set } from '@vueuse/core'
 
 const { Productions, loadProductions } = useIrisSessions()
-const instance = defineModel<INSTANCE>('instance', { required: true })
+const instance = defineModel<HCIE>('instance', { required: true })
 const production = defineModel<string>('production')
 const items = ref([])
 
