@@ -30,13 +30,11 @@ const tokens = new Map<string, IRIStoken>()
 export interface hcieResponse<T> {
   status?: string
   error?: string
-  data?: {
-    [key: string]: T
-  }
+  data?: T
 }
 
 //  GET|DELETE|UPDATE https://vip/api/hcie/account/[@|:id]
-export interface hcieAccount extends hcieResponse<account> {
+export interface hcieAccount extends hcieResponse<account[]> {
   interops?: interops[]
 }
 export interface interops {

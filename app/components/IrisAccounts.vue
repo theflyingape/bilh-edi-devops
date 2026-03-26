@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
-import type { hcieAccount } from '~/composables/useIrisSessions'
+import type { account, hcieAccount } from '~/composables/useIrisSessions'
 import IrisAccountEdit from './IrisAccountEdit.vue'
 
 const props = defineProps<{
@@ -138,9 +138,9 @@ async function loadAccounts() {
   } else {
     const hcie = get(instance)!
     await endpoint<hcieAccount>(hcie, 'account/@').then((res) => {
-      if (res?.status == 'OK') {
+      if (res && res.status == 'OK' && res.data) {
         set(interops, res?.interops)
-        Accounts.value[hcie] = res?.data
+        Accounts.value[hcie] = [...res.data]
         set(data, Object.values(Accounts.value[hcie]!))
       }
     })
