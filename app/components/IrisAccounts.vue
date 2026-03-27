@@ -16,7 +16,7 @@
       </div>
     </template>
     <template #default>
-      <UTable ref="table" :data="data" :columns="columns" class="flex-1" @hover="onRowSelect">
+      <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-fit" @hover="onRowSelect">
         <template #name-cell="{ row }">
           <p class="font-medium text-highlighted">
             {{ row.original.name }}

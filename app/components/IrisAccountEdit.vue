@@ -49,7 +49,7 @@
           </UForm>
         </div>
         <div>
-          <UTable :data="data" :columns="columns" class="flex-1 ml-4 mr-4">
+          <UTable sticky :data="data" :columns="columns" class="flex-1 max-h-fit ml-4 mr-4">
             <template #hs-cell="{ row }">
               <div class="font-medium text-highlighted">
                 {{ row.original.hs }}
