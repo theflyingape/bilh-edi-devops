@@ -19,8 +19,7 @@
           <div class="font-mono">
             {{ iris.lastlogin }}
           </div>
-        </div>
-        <div>
+          <br><hr><br>
           <UForm :state="iris" @submit.prevent="submit">
             <div class="flex flex-col items-start gap-4">
               <UFormField label="Start in Production" name="namespace">
@@ -33,19 +32,6 @@
                 />
               </UFormField>
             </div>
-            <UTable :data="data" :columns="columns" class="flex-1 ml-4 mr-4">
-              <template #hs-cell="{ row }">
-                <div class="font-medium text-highlighted">
-                  {{ row.original.hs }}
-                </div>
-              </template>
-              <template #value-cell="{ row }">
-                <USelect v-model="row.original.value" class="min-w-fit" placeholder="not allowed" :items="row.original.items" />
-              </template>
-              <template #deny-cell="{ row }">
-                <UButton color="error" variant="link" icon="i-lucide-circle-x" @click="row.original.value = ''" />
-              </template>
-            </UTable>
             <div class="grid grid-flow-col justify-items-center pt-4">
               <UFormField label="DevOps" name="irisdev">
                 <USwitch v-model:model-value="iris.irisdev" :disabled="isAdm || isSys" @focus="note='Manages core DevOps access using the local irisdev group, which in turn, allows essential access to code, data, and files on Linux and in IRIS. Health Connect can further refine its access via Security User Roles delegated at login.'" @blur="note=''" />
@@ -58,23 +44,34 @@
               </UFormField>
             </div>
             <div class="flex justify-center pt-2">
-              <UTextarea v-model="note" class="italic" color="info" variant="subtle" :disabled="true" :cols="54" :rows="4" :maxrows="4" autoresize placeholder="Note ..." />
-            </div>
-            <div class="flex justify-end pt-8">
-              <SubmitButton>Submit</SubmitButton>
+              <UTextarea v-model="note" class="italic" color="info" variant="subtle" :disabled="true" :cols="32" :rows="4" :maxrows="8" autoresize placeholder="Note ..." />
             </div>
           </UForm>
         </div>
-        <div class="self-end">
+        <div>
+          <UTable :data="data" :columns="columns" class="flex-1 ml-4 mr-4">
+            <template #hs-cell="{ row }">
+              <div class="font-medium text-highlighted">
+                {{ row.original.hs }}
+              </div>
+            </template>
+            <template #value-cell="{ row }">
+              <USelect v-model="row.original.value" class="min-w-fit" placeholder="not allowed" :items="row.original.items" />
+            </template>
+            <template #deny-cell="{ row }">
+              <UButton color="error" variant="link" icon="i-lucide-circle-x" @click="row.original.value = ''" />
+            </template>
+          </UTable>
+          <div class="flex justify-end pt-8">
+            <SubmitButton>Submit</SubmitButton>
+          </div>
+        </div>
+        <div>
           <div class="flex items-center font-medium gap-1 text-sky-800">
             <UIcon name="i-lucide-group" class="text-sky-600" size="24" />
             AD / Linux groups
           </div>
           <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="50" :rows="24" :maxrows="24" autoresize placeholder="empty" />
-          <!-- space filler at bottom -->
-          <div class="h-16">
-            &nbsp;
-          </div>
         </div>
       </div>
     </template>

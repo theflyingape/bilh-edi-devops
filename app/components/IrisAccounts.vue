@@ -25,7 +25,7 @@
         </template>
         <template #lastlogin-cell="{ row }">
           <p class="font-medium text-highlighted">
-            {{ row.original.lastlogin }}
+            {{ ago(row.original.lastlogin) }}
           </p>
         </template>
         <template #action-cell="{ row }">
@@ -141,7 +141,7 @@ async function loadAccounts() {
   } else {
     const hcie = get(instance)!
     await endpoint<hcieResponse<account>>(hcie, 'account/@').then((res) => {
-      if (res && res.status == 'OK' && res.data) {
+      if (res && res.status == 'OK') {
         set(data, Object.values(res.data))
       }
     })
