@@ -16,12 +16,17 @@
       </div>
     </template>
     <template #default>
-      <UTable ref="table" :data="data" :columns="columns" :rows="Accounts" class="flex-1" @hover="onRowSelect">
+      <UTable ref="table" :data="data" :columns="columns" class="flex-1" @hover="onRowSelect">
         <template #name-cell="{ row }">
           <p class="font-medium text-highlighted">
             {{ row.original.name }}
           </p>
           <p>{{ row.original.comment }}</p>
+        </template>
+        <template #lastlogin-cell="{ row }">
+          <p class="font-medium text-highlighted">
+            {{ row.original.lastlogin }}
+          </p>
         </template>
         <template #action-cell="{ row }">
           <UDropdownMenu v-if="row.original.id == rowSelection?.id" :items="getDropdownActions()">
@@ -46,7 +51,7 @@
 <script setup lang="ts">
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
-import type { account, hcieAccount } from '~/composables/useIrisSessions'
+import type { account, hcieResponse } from '~/composables/useIrisSessions'
 import IrisAccountEdit from './IrisAccountEdit.vue'
 
 const props = defineProps<{
@@ -76,7 +81,6 @@ const columns: TableColumn<account>[] = [
     header: 'action'
   }
 ]
-const interops = ref<interops[]>([])
 const rowSelection = ref<account>()
 const now = useNow()
 
@@ -94,7 +98,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         label: 'Delete',
         icon: 'i-lucide-trash',
         color: 'error',
-        async onSelect(e) {
+        async onSelect(_e) {
           await queryModal(`OK to delete ${get(rowSelection)?.id}?`, `Edit to remove any active roles first, as this drops the IRIS user's cached storage only. Dropping the account is useful for trouble-shooting an issue and for security hygiene.`)
           if (get(response)) {
             await endpoint(get(instance)!, `account/${get(rowSelection)?.id}`, 'DELETE')
@@ -113,8 +117,7 @@ function onRowSelect(e: Event, row: TableRow<account> | null) {
       set(rowSelection, row.original)
       row.toggleSelected(true)
     }
-  }
-  catch(err) {
+  } catch (err) {
     console.error(err)
   }
 }
@@ -123,7 +126,6 @@ async function accountModal() {
   await useOverlay().create(IrisAccountEdit, {
     props: {
       instance: get(instance)!,
-      interops: interops,
       account: get(rowSelection)!,
       title: 'BILH Delegated Account',
       description: get(rowSelection)?.id
@@ -134,13 +136,12 @@ async function accountModal() {
 
 async function loadAccounts() {
   if (useDevOps().dev) {
-    set(data, [{ id: 'dev', groups: ['wheel', 'user'], access: [], name: 'Devlin Opster', comment: 'Master Inventor', enabled: true, lastlogin: 'now', namespace: '%SYS', irisdev: true, irisadm: false, sysadm: true }, { id: 'ops', groups: [], access: [], name: 'Cruella Deville', comment: 'Original Gangster', enabled: true, lastlogin: 'never', namespace: 'BILHPN', irisdev: true, irisadm: true, sysadm: false }])
+    const items = ['DEV', 'GUEST', 'OPS']
+    set(data, [{ id: 'dev', groups: ['wheel', 'user'], irisdev: true, irisadm: false, sysadm: true, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }, { hs: 'DFCI', value: '', items: items }], namespace: '%SYS', name: 'Devlin Opster', comment: 'Master Inventor', enabled: true, lastlogin: 'now' }, { id: 'ops', groups: ['user'], irisdev: true, irisadm: true, sysadm: false, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }], namespace: 'BILHPN', name: 'Cruella Deville', comment: 'Original Gangster', enabled: true, lastlogin: 'never' }])
   } else {
     const hcie = get(instance)!
-    await endpoint<hcieAccount>(hcie, 'account/@').then((res) => {
+    await endpoint<hcieResponse<account>>(hcie, 'account/@').then((res) => {
       if (res && res.status == 'OK' && res.data) {
-        set(interops, res?.interops)
-        Accounts.value[hcie] = [...res.data]
         set(data, Object.values(Accounts.value[hcie]!))
       }
     })

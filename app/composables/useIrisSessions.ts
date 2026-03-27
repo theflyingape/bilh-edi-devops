@@ -28,34 +28,32 @@ const credentials = ref({
 const tokens = new Map<string, IRIStoken>()
 
 export interface hcieResponse<T> {
-  status?: string
+  status: string
+  data: T
   error?: string
-  data?: T
 }
 
 //  GET|DELETE|UPDATE https://vip/api/hcie/account/[@|:id]
-export interface hcieAccount extends hcieResponse<account[]> {
-  interops?: interops[]
-}
-export interface interops {
+export interface access {
   hs: string
-  scope: string[]
+  value: string
+  items: string[]
 }
 export interface account {
   id: string
   groups: string[]
-  access: string[]
-  namespace: string
   irisdev: boolean
   irisadm: boolean
   sysadm: boolean
+  access: access[]
+  namespace: string
   name: string
   comment: string
   enabled: boolean
   lastlogin: string
 }
-const Accounts: Ref<{ [key: string]: account[] }>
-  = ref({ Live: <account[]>[], Test: <account[]>[], Dev: <account[]>[] })
+const Accounts: Ref<{ [key: string]: account }>
+  = ref({ Live: <account>{}, Test: <account>{}, Dev: <account>{} })
 
 //  GET https://vip/api/hcie/user/:id
 export interface User {
