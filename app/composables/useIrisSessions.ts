@@ -52,8 +52,8 @@ export interface account {
   enabled: boolean
   lastlogin: string
 }
-const Accounts: Ref<{ [key: string]: account }>
-  = ref({ Live: <account>{}, Test: <account>{}, Dev: <account>{} })
+// const Accounts: Ref<account[]>
+//  = ref({ Live: [], Test: [], Dev: [] })
 
 //  GET https://vip/api/hcie/user/:id
 export interface User {
@@ -283,7 +283,6 @@ export default function useIrisTokens() {
   }
 
   return {
-    Accounts,
     credentials,
     endpoint,
     endSession,

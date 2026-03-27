@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <UCard v-model="Accounts[hcie]" variant="subtle">
+  <UCard variant="subtle">
     <template #header>
       <div class="flex flex-nowrap justify-between items-center">
         <div class="text-lg text-fuchsia-900 text-start text-nowrap font-mono font-bold">
@@ -16,7 +16,7 @@
       </div>
     </template>
     <template #default>
-      <UTable ref="table" :data="data" :columns="columns" :rows="Accounts" class="flex-1" @hover="onRowSelect">
+      <UTable ref="table" :data="data" :columns="columns" class="flex-1" @hover="onRowSelect">
         <template #name-cell="{ row }">
           <p class="font-medium text-highlighted">
             {{ row.original.name }}
@@ -58,7 +58,7 @@ const props = defineProps<{
   hcie: HCIE
 }>()
 const { ago, queryModal, response } = useDevOps()
-const { icon, endpoint, Accounts } = useIrisSessions()
+const { icon, endpoint } = useIrisSessions()
 const instance = defineModel<HCIE>('instance', { required: false })
 const table = useTemplateRef('table')
 const data = ref<account[]>([])
@@ -142,7 +142,7 @@ async function loadAccounts() {
     const hcie = get(instance)!
     await endpoint<hcieResponse<account>>(hcie, 'account/@').then((res) => {
       if (res && res.status == 'OK' && res.data) {
-        set(data, Object.values(Accounts.value[hcie]!))
+        set(data, Object.values(res.data))
       }
     })
   }
