@@ -139,7 +139,6 @@ async function login() {
     Object.assign(get(credentials).IRIStoken, jwt)
     await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
       await endpoint<irisUser>('Dev', `user/${username}`).then(async (iris) => {
-        console.info('iris', iris)
         if (!get(user).enabled) {
           if (iris?.Enabled) {
             set(user, {
@@ -165,7 +164,6 @@ async function login() {
             })
           }
         }
-        console.info('user', get(user))
       }).catch(async (err) => {
         open(`${err.statusCode}: ${err.statusMessage}`)
       })
