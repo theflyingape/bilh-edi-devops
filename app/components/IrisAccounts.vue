@@ -16,7 +16,7 @@
       </div>
     </template>
     <template #default>
-      <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-fit" @hover="onRowSelect">
+      <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" @hover="onRowSelect">
         <template #name-cell="{ row }">
           <p class="font-medium text-highlighted">
             {{ row.original.name }}
@@ -137,7 +137,7 @@ async function accountModal() {
 async function loadAccounts() {
   if (useDevOps().dev) {
     const items = ['DEV', 'GUEST', 'OPS']
-    set(data, [{ id: 'dev', groups: ['wheel', 'user'], irisdev: true, irisadm: false, sysadm: true, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }, { hs: 'DFCI', value: '', items: items }], namespace: '%SYS', name: 'Devlin Opster', comment: 'Master Inventor', enabled: true, lastlogin: 'now' }, { id: 'ops', groups: ['user'], irisdev: true, irisadm: true, sysadm: false, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }], namespace: 'BILHPN', name: 'Cruella Deville', comment: 'Original Gangster', enabled: true, lastlogin: 'never' }])
+    set(data, [{ id: 'dev', groups: ['wheel', 'user'], irisdev: true, irisadm: false, sysadm: true, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }, { hs: 'DFCI', value: '', items: items }, { hs: 'LAHEY', value: '', items: items }, { hs: 'SFTP', value: '', items: items }, { hs: 'WORKDAY', value: '', items: items }], namespace: '%SYS', name: 'Devlin Opster', comment: 'Master Inventor', enabled: true, lastlogin: 'now' }, { id: 'ops', groups: ['user'], irisdev: true, irisadm: true, sysadm: false, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }], namespace: 'BILHPN', name: 'Cruella Deville', comment: 'Original Gangster', enabled: true, lastlogin: 'never' }])
   } else {
     const hcie = get(instance)!
     await endpoint<hcieResponse<account>>(hcie, 'account/@').then((res) => {
