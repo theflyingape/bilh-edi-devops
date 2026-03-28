@@ -49,7 +49,7 @@
           </UForm>
         </div>
         <div>
-          <UTable sticky :data="data" :columns="columns" class="flex-1  max-h-[calc(55vh)] ml-4 mr-4">
+          <UTable sticky :data="data" :columns="columns" class="flex-1  max-h-[calc(60vh)] ml-4 mr-4">
             <template #hs-cell="{ row }">
               <div class="font-medium text-highlighted">
                 {{ row.original.hs }}
@@ -71,7 +71,7 @@
             <UIcon name="i-lucide-group" class="text-sky-600" size="24" />
             AD / Linux groups
           </div>
-          <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="50" :rows="16" :maxrows="24" autoresize placeholder="empty" />
+          <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="50" :rows="10" :maxrows="24" autoresize placeholder="empty" />
         </div>
       </div>
     </template>
