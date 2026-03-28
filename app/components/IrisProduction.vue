@@ -7,7 +7,8 @@
     v-model="production"
     placeholder="select production"
     :items="items"
-    class="max-h-fit w-48"
+    class="max-h-fit"
+    :ui="{ content: 'min-w-fit' }"
   />
 </template>
 

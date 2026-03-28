@@ -25,10 +25,10 @@
               <UFormField label="Start in Production" name="namespace">
                 <USelect
                   v-model="iris.namespace"
-                  class="min-w-fit"
                   placeholder="select production"
                   :autofocus="true"
                   :items="startup"
+                  :ui="{ content: 'min-w-fit' }"
                 />
               </UFormField>
               <div class="self-end">
@@ -59,7 +59,7 @@
               </div>
             </template>
             <template #value-cell="{ row }">
-              <USelect v-model="row.original.value" class="min-w-fit" placeholder="not allowed" :items="row.original.items" />
+              <USelect v-model="row.original.value" class="min-w-fit" placeholder="not allowed" :items="row.original.items" :ui="{ content: 'min-w-fit' }" />
             </template>
             <template #deny-cell="{ row }">
               <UButton color="error" variant="link" icon="i-lucide-circle-x" @click="row.original.value = ''" />

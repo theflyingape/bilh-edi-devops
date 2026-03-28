@@ -264,7 +264,7 @@ export default function useIrisTokens() {
   async function loadProductions(hcie: HCIE) {
     if (!Productions.get(hcie)?.productions) {
       if (process.env.NODE_ENV == 'development') {
-        Productions.set(hcie, { productions: hcie == 'Dev' ? ['HSCUSTOM', 'TRAINING'] : hcie == 'Test' ? ['BILHPN', 'BILHSFTP'] : ['BILHHOSPITALS', 'BILHSFTP'] })
+        Productions.set(hcie, { productions: hcie == 'Dev' ? ['HSCUSTOM', 'TRAINING'] : hcie == 'Test' ? ['BILHHOSPITALS', 'BILHPN', 'BILHSFTP'] : ['BILHHOSPITALS', 'BILHSFTP'] })
       } else {
         await endpoint(hcie, 'productions').then((status) => {
           Productions.set(hcie, <production>status)
