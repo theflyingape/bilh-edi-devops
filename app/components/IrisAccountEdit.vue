@@ -21,7 +21,7 @@
           </div>
           <br><hr><br>
           <UForm :state="iris" @submit.prevent="submit">
-            <div class="flex flex-col items-start gap-4">
+            <div class="flex justify-between">
               <UFormField label="Start in Production" name="namespace">
                 <USelect
                   :v-model="iris.namespace"
@@ -31,16 +31,19 @@
                   :items="startup"
                 />
               </UFormField>
+              <div class="self-end">
+                <SubmitButton>Submit</SubmitButton>
+              </div>
             </div>
             <div class="grid grid-flow-col justify-items-center pt-4">
               <UFormField label="DevOps" name="irisdev">
                 <USwitch v-model:model-value="iris.irisdev" :disabled="isAdm || isSys" @focus="note='Manages core DevOps access using the local irisdev group, which in turn, allows essential access to code, data, and files on Linux and in IRIS. Health Connect can further refine its access via Security User Roles delegated at login.'" @blur="note=''" />
               </UFormField>
               <UFormField label="Admin" name="irisadm">
-                <USwitch v-model="iris.irisadm" @focus="note='Admin role elevates this account into the local irisadm group, which in turn, provides access to a restrictive list of Linux shell sudo commands and also expanded access within IRIS for Health Connect operations.'" @blur="note=''" @update:model-value="() => { if (!iris.irisdev) iris.irisdev = isAdm || isSys }" />
+                <USwitch v-model="iris.irisadm" @focus="note='Admin role elevates this account into the local irisadm group, which in turn, provides access to a restrictive list of Linux shell sudo commands and also expanded access within IRIS for Health Connect operations.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
               </UFormField>
               <UFormField label="Systems" name="sysadm">
-                <USwitch v-model="iris.sysadm" :disabled="!isSystems" color="secondary" @focus="note='Systems role is an elevated AD account for Linux root shell and the IRIS %Manager administration role. Unless assigned, this role alone does not necessarily have to overlap with the DevOps roles.'" @blur="note=''" @update:model-value="() => { if (!iris.irisdev) iris.irisdev = isAdm || isSys }" />
+                <USwitch v-model="iris.sysadm" :disabled="!isSystems" color="secondary" @focus="note='Systems role is an elevated AD account for Linux root shell and the IRIS %Manager administration role. Unless assigned, this role alone does not necessarily have to overlap with the DevOps roles.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
               </UFormField>
             </div>
             <div class="flex justify-center pt-2">
@@ -62,9 +65,6 @@
               <UButton color="error" variant="link" icon="i-lucide-circle-x" @click="row.original.value = ''" />
             </template>
           </UTable>
-          <div class="flex justify-end pt-8">
-            <SubmitButton>Submit</SubmitButton>
-          </div>
         </div>
         <div>
           <div class="flex items-center font-medium gap-1 text-sky-800">
