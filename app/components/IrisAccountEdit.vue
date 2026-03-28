@@ -24,7 +24,7 @@
             <div class="flex justify-between">
               <UFormField label="Start in Production" name="namespace">
                 <USelect
-                  :v-model="iris.namespace"
+                  v-model="iris.namespace"
                   class="min-w-fit"
                   placeholder="select production"
                   :autofocus="true"
@@ -71,7 +71,7 @@
             <UIcon name="i-lucide-group" class="text-sky-600" size="24" />
             AD / Linux groups
           </div>
-          <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="50" :rows="10" :maxrows="24" autoresize placeholder="empty" />
+          <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="50" :rows="10" :maxrows="20" autoresize placeholder="empty" />
         </div>
       </div>
     </template>
