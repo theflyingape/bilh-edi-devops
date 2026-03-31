@@ -24,15 +24,15 @@
           <p>{{ row.original.comment }}</p>
         </template>
         <template #lastlogin-cell="{ row }">
-          <p class="font-medium text-highlighted">
-            {{ ago(row.original.lastlogin) }}
+          <p class="text-highlighted">
+            {{ ago(row.original.lastlogin) || 'never' }}
           </p>
         </template>
         <template #action-cell="{ row }">
-          <UDropdownMenu v-if="row.original.id == rowSelection?.id" :items="getDropdownActions()">
+          <UDropdownMenu :disabled="row.original.id !== rowSelection?.id" :items="getDropdownActions()">
             <UButton
               icon="i-lucide-ellipsis-vertical"
-              color="action"
+              color="neutral"
               variant="subtle"
               aria-label="Actions"
             />
@@ -137,7 +137,7 @@ async function accountModal() {
 async function loadAccounts() {
   if (useDevOps().dev) {
     const items = ['DEV', 'GUEST', 'OPS']
-    set(data, [{ id: 'dev', groups: ['wheel', 'user'], irisdev: true, irisadm: false, sysadm: true, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }, { hs: 'DFCI', value: '', items: items }, { hs: 'LAHEY', value: '', items: items }, { hs: 'SFTP', value: '', items: items }, { hs: 'WORKDAY', value: '', items: items }], namespace: '%SYS', name: 'Devlin Opster', comment: 'Master Inventor', enabled: true, lastlogin: 'now' }, { id: 'ops', groups: ['user'], irisdev: true, irisadm: true, sysadm: false, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }], namespace: 'BILHPN', name: 'Cruella Deville', comment: 'Original Gangster', enabled: true, lastlogin: 'never' }])
+    set(data, [{ id: 'dev', groups: ['wheel', 'user'], irisdev: true, irisadm: false, sysadm: true, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }, { hs: 'DFCI', value: '', items: items }, { hs: 'LAHEY', value: '', items: items }, { hs: 'SFTP', value: '', items: items }, { hs: 'WORKDAY', value: '', items: items }], namespace: '%SYS', name: 'Devlin Opster', comment: 'Master Inventor', enabled: true, lastlogin: Date.now() }, { id: 'ops', groups: ['user'], irisdev: true, irisadm: true, sysadm: false, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }], namespace: 'BILHPN', name: 'Cruella Deville', comment: 'Original Gangster', enabled: true, lastlogin: '' }])
   } else {
     const hcie = get(instance)!
     await endpoint<hcieResponse<account>>(hcie, 'account/@').then((res) => {

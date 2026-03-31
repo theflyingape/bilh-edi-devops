@@ -5,7 +5,7 @@
     <UCard class="drop-shadow-2xl" variant="subtle">
       <template #header>
         <div class="flex justify-end text-xl">
-          <i>"Sorry, I cannot allow that."</i>
+          <i>"Sorry, I cannot allow that."</i> &nbsp;
           <UIcon name="i-vscode-icons-file-type-robots" class="align-middle size-12" />
         </div>
       </template>
