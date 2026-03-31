@@ -66,13 +66,31 @@
     <UCard class="drop-shadow-2xl" variant="subtle">
       <template #header>
         <div class="flex justify-end text-xl">
-          <i>"Welcome{{ scope ? (', ' + scope) : '. Click top-right ellipsis to identify yourself' }}."</i>
+          <i>"Welcome{{ scope ? (', ' + scope) : '. Click top-right ellipsis to identify yourself' }}."</i> &nbsp;
           <UIcon name="i-vscode-icons-file-type-robots" class="align-middle size-12" />
         </div>
       </template>
       <template #default>
-        <div class="flex justify-center">
-          <UButton class="text-2xl" icon="i-vscode-icons-file-type-devcontainer" color="neutral" variant="soft" :label="`You are ${status}`" @click="toggleSideMenu" />
+        <div class="flex-1 justify-items-center">
+          <div>
+            <UButton class="text-2xl" icon="i-vscode-icons-file-type-devcontainer" color="neutral" variant="soft" :label="`You are ${status}`" @click="toggleSideMenu" />
+          </div>
+          <div class="m-4">
+            <em>If you are having problems logging in, please go back to the</em> <u><a href="/">title page</a></u> and<br>
+            <em>click its</em> <UKbd value="reload" /> <em>button</em> (especially if it's colored <span class="text-red-600">red</span>) <em>to update last version cached.</em><br>
+          </div>
+          <div class="mt-4">
+            <em>Additionally, you may have to dump your browser's cache stored for this site entirely:</em>
+            <div class="ml-8 mt-4">
+              <ol class="list-disc space-y-1.5">
+                <li>click the icon to the left of the URL address</li>
+                <li>select Cookies and Site data</li>
+                <li>select manage on-device site data</li>
+                <li>click <UIcon name="i-lucide-trash" /> to delete saved data for this site</li>
+                <li>click <UKbd value="done" /> completes the process and prompts to <UKbd value="reload" /> the page</li>
+              </ol>
+            </div>
+          </div>
         </div>
       </template>
       <template #footer>
