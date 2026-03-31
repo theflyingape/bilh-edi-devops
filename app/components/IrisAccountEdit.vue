@@ -14,7 +14,7 @@
           </div>
           <br>
           <div class="text-sm">
-            last login:
+            <span class="font-medium text-highlighted">{{ instance }}</span> last login:
           </div>
           <div class="font-mono">
             {{ iris.lastlogin }}

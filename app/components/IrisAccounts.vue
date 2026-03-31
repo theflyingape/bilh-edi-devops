@@ -31,9 +31,10 @@
         <template #action-cell="{ row }">
           <UDropdownMenu :disabled="row.original.id !== rowSelection?.id" :items="getDropdownActions()">
             <UButton
+              class="disabled:bg-neutral-200 disabled:text-neutral-600"
               icon="i-lucide-ellipsis-vertical"
-              color="neutral"
-              variant="subtle"
+              color="action"
+              variant="soft"
               aria-label="Actions"
             />
           </UDropdownMenu>
@@ -127,8 +128,8 @@ async function accountModal() {
     props: {
       instance: get(instance)!,
       account: get(rowSelection)!,
-      title: 'BILH Delegated Account',
-      description: get(rowSelection)?.id
+      title: `${get(instance)} :: BILH Delegated Account`,
+      description: `User id: ${get(rowSelection)?.id}`
     },
     destroyOnClose: true
   }).open()
@@ -137,7 +138,7 @@ async function accountModal() {
 async function loadAccounts() {
   if (useDevOps().dev) {
     const items = ['DEV', 'GUEST', 'OPS']
-    set(data, [{ id: 'dev', groups: ['wheel', 'user'], irisdev: true, irisadm: false, sysadm: true, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }, { hs: 'DFCI', value: '', items: items }, { hs: 'LAHEY', value: '', items: items }, { hs: 'SFTP', value: '', items: items }, { hs: 'WORKDAY', value: '', items: items }], namespace: '%SYS', name: 'Devlin Opster', comment: 'Master Inventor', enabled: true, lastlogin: Date.now() }, { id: 'ops', groups: ['user'], irisdev: true, irisadm: true, sysadm: false, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }], namespace: 'BILHPN', name: 'Cruella Deville', comment: 'Original Gangster', enabled: true, lastlogin: '' }])
+    set(data, [{ id: 'dev', groups: ['wheel', 'user'], irisdev: true, irisadm: false, sysadm: true, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }, { hs: 'DFCI', value: '', items: items }, { hs: 'LAHEY', value: '', items: items }, { hs: 'SFTP', value: '', items: items }, { hs: 'WORKDAY', value: '', items: items }], namespace: '%SYS', name: 'Devlin Opster', comment: 'Master Inventor', enabled: true, lastlogin: new Date().toDateString() + ' ' + new Date().toLocaleTimeString() }, { id: 'ops', groups: ['user'], irisdev: true, irisadm: true, sysadm: false, access: [{ hs: 'BIDMC', value: 'GUEST', items: items }, { hs: 'BILH', value: 'DEV', items: items }], namespace: 'BILHPN', name: 'Cruella Deville', comment: 'Original Gangster', enabled: true, lastlogin: '' }])
   } else {
     const hcie = get(instance)!
     await endpoint<hcieResponse<account>>(hcie, 'account/@').then((res) => {
