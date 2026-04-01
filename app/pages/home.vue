@@ -21,18 +21,7 @@
       <USeparator class="h-4" color="secondary" orientation="horizontal" type="dotted" />
       <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" variant="link" class="items-start" :ui="{ list: 'items-start' }">
         <template #edi>
-          <div class="flex flex-wrap">
-            <UCard v-model="portal" variant="subtle">
-              <template #header>
-                <UUser description="Online" />
-              </template>
-              <template #default>
-                <UBadge v-for="id in portal" :key="id" class="m-1" color="neutral" variant="outline">
-                  {{ id }}
-                </UBadge>
-              </template>
-            </UCard>
-          </div>
+          <WhoisOnline />
         </template>
         <template #odba>
           <div class="flex flex-wrap gap-2 justify-around">
@@ -123,7 +112,7 @@ definePageMeta({
 })
 
 const { status } = useAuth()
-const { isAdmin, isDevOps, online, portal, toggleSideMenu, who } = useDevOps()
+const { isAdmin, isDevOps, online, toggleSideMenu } = useDevOps()
 const { infrastructure, user } = useIrisSessions()
 
 const adminItems = ref<TabsItem[]>([
@@ -149,8 +138,4 @@ const adminItems = ref<TabsItem[]>([
 const adminTab = ref('odba')
 const now = useNow()
 const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
-
-onMounted(() => {
-  who()
-})
 </script>
