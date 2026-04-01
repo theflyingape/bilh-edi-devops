@@ -41,15 +41,13 @@ const props = defineProps<{
 
 const { ago } = useDevOps()
 const { host, icon, mirrorSet, endpoint } = useIrisSessions()
-let archiveAgo: string = 'unknown'
-let backupAgo: string = 'unknown'
+const archiveAgo = ref(computed(() => ago(mirrorSet.value[props.hcie]!.lastArchive) || 'not known'))
+const backupAgo = ref(computed(() => ago(mirrorSet.value[props.hcie]!.lastBackup) || 'not known'))
 
 async function status() {
   await endpoint(props.hcie, 'status').then((status) => {
     if (status) {
       mirrorSet.value[props.hcie] = <mirrorset>status
-      archiveAgo = ago(mirrorSet.value[props.hcie]!.lastArchive)
-      backupAgo = ago(mirrorSet.value[props.hcie]!.lastBackup)
     }
   })
 }

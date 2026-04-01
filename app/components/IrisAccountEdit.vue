@@ -37,17 +37,17 @@
             </div>
             <div class="grid grid-flow-col justify-items-center pt-4">
               <UFormField label="DevOps" name="irisdev">
-                <USwitch v-model:model-value="iris.irisdev" :disabled="isAdm || isSys" @focus="note='Manages core DevOps access using the local irisdev group, which in turn, allows essential access to code, data, and files on Linux and in IRIS. Health Connect can further refine its access via Security User Roles delegated at login.'" @blur="note=''" />
+                <USwitch v-model:model-value="iris.irisdev" :disabled="isAdm || isSys" @focus="note=`Option to assign basic DevOps access by adding the user in the local Linux irisdev group:\n\n1) allows user R/W access to Linux /files; and\n2) enables IRIS System Explorer menu option.`" @blur="note=''" />
               </UFormField>
               <UFormField label="Admin" name="irisadm">
-                <USwitch v-model="iris.irisadm" @focus="note='Admin role elevates this account into the local irisadm group, which in turn, provides access to a restrictive list of Linux shell sudo commands and also expanded access within IRIS for Health Connect operations.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
+                <USwitch v-model="iris.irisadm" @focus="note='Option to assign elevated DevOps access by adding the user in the local Linux irisadm group:\n\n1) allows user to a restrictive list of Linux shell sudo commands;\n2) enables IRIS System Operation menu option with shortcuts to some Security functions; and\n3) enables ADMIN functions in this portal.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
               </UFormField>
               <UFormField label="Systems" name="sysadm">
-                <USwitch v-model="iris.sysadm" :disabled="!isSystems" color="secondary" @focus="note='Systems role is an elevated AD account for Linux root shell and the IRIS %Manager administration role. Unless assigned, this role alone does not necessarily have to overlap with the DevOps roles.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
+                <USwitch v-model="iris.sysadm" :disabled="!isSystems" color="secondary" @focus="note='Option to add the user in the local Linux sysadm group:\n\n1) allows user to run a Linux root shell; and\n2) enables IRIS System Administration menu option.\n\nNOTE: this role alone does not necessarily have to overlap with the Admin option.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
               </UFormField>
             </div>
             <div class="flex justify-center pt-2">
-              <UTextarea v-model="note" class="italic" color="info" variant="subtle" :disabled="true" :cols="32" :rows="4" :maxrows="8" autoresize placeholder="Note ..." />
+              <UTextarea v-model="note" color="info" variant="subtle" :disabled="true" :cols="32" :rows="4" :maxrows="8" autoresize placeholder="Note ..." />
             </div>
           </UForm>
         </div>
