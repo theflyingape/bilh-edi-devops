@@ -6,7 +6,9 @@ const dev = process.env.NODE_ENV == 'development'
 const isAdmin = ref(computed(() => get(user)?.scope?.includes('admin') || get(user)?.scope?.includes('systems')))
 const isDevOps = ref(computed(() => get(user)?.scope?.includes('analyst') || get(user)?.scope?.includes('developer')))
 const online = ref(computed(() => get(useAuth().status) !== 'unauthenticated'))
+
 const overlay = useOverlay()
+const portal = ref([])
 const response = ref(false)
 const sideMenu = ref(false)
 const stale = ref(false)
@@ -56,6 +58,15 @@ export default function usePortal() {
     set(sideMenu, !get(sideMenu))
   }
 
+  function who() {
+    useFetch('/api/online', { immediate: true, timeout: 5678 })
+      .onFetchResponse(async (response) => {
+        await response.json().then((value) => {
+          set(portal, value.users)
+        })
+      })
+  }
+
   return {
     ago,
     dev,
@@ -64,10 +75,12 @@ export default function usePortal() {
     isStale,
     online,
     queryModal,
+    portal,
     reload,
     response,
     sideMenu,
     stale,
-    toggleSideMenu
+    toggleSideMenu,
+    who
   }
 }
