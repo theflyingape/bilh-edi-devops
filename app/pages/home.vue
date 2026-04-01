@@ -149,4 +149,8 @@ const adminItems = ref<TabsItem[]>([
 const adminTab = ref('odba')
 const now = useNow()
 const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
+
+onMounted(() => {
+  who()
+})
 </script>
