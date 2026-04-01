@@ -17,6 +17,11 @@
     </template>
     <template #default>
       <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" @hover="onRowSelect">
+        <template #id-cell="{ row }">
+          <p class="font-mono text-lg">
+            {{ row.original.id }}
+          </p>
+        </template>
         <template #name-cell="{ row }">
           <p class="font-medium text-highlighted">
             {{ row.original.name }}
