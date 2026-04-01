@@ -3,18 +3,21 @@
         "hosts": ["lvhshcadp01g1.laheyhealth.org","lvhshcadp02g1.laheyhealth.org","lvhshcadp01ss.laheyhealth.org","lvhshcadp02ss.laheyhealth.org"],
         "icon": "i-vscode-icons-file-type-plsql-package",
         "instance": "HCLIVE",
-        "vip": "hcieprd.laheyhealth.org"
+        "vip": "hcieprd.laheyhealth.org",
+        "os": "rhel"
     },
     "Test": {
         "hosts": ["lvhshcadt01g1.laheyhealth.org","lvhshcadt02g1.laheyhealth.org","lvhshcadt01ss.laheyhealth.org","lvhshcadt02ss.laheyhealth.org"],
         "icon": "i-vscode-icons-file-type-light-todo",
         "instance": "HCTEST",
-        "vip": "hcietst.laheyhealth.org"
+        "vip": "hcietst.laheyhealth.org",
+        "os": "rhel"
     },
     "Dev": {
         "hosts": ["lvhshcadd01g1.laheyhealth.org","lvhshcadd02g1.laheyhealth.org"],
         "icon": "i-vscode-icons-file-type-apib",
         "instance": "HCDEV",
-        "vip": "hciedev.laheyhealth.org"
+        "vip": "hciedev.laheyhealth.org",
+        "os": "rhel"
     }
 }

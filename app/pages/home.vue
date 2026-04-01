@@ -1,4 +1,5 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
+<!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <!-- eslint-disable vue/singleline-html-element-content-newline -->
 <template>
   <div v-if="online" class="m-1">
@@ -16,8 +17,8 @@
         </div>
       </div>
     </div>
-    <div v-if="isAdmin" class="m-1">
-      <USeparator class="h-4" color="action" orientation="horizontal" type="dotted" />
+    <div class="m-1">
+      <USeparator class="h-4" color="secondary" orientation="horizontal" type="dotted" />
       <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" variant="link" class="items-start" :ui="{ list: 'items-start' }">
         <template #edi>
           WIP
@@ -38,16 +39,17 @@
                   <div class="grid grid-cols-2 justify-items-start mt-4">
                     <div>
                       <UButton
-                        class="flex flex-grow mb-4 text-lg"
+                        class="flex mb-4 pr-8 text-lg"
                         color="info"
                         size="lg"
                         variant="soft"
+                        :disabled="!isAdmin && !isDevOps"
                         :icon="hcie.icon"
                         :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
                       />
                       <RedHatCockpit
-                        v-for="host in hcie.hosts" :key="host"
-                        class="mt-1" :label="host.split('.')[0]" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
+                        v-for="host in hcie.hosts" v-if="isAdmin" :key="host"
+                        class="mt-1" :os="hcie.os" :label="host.split('.')[0]" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
                       />
                     </div>
                     <div>
@@ -110,7 +112,7 @@ definePageMeta({
 })
 
 const { status } = useAuth()
-const { isAdmin, online, toggleSideMenu } = useDevOps()
+const { isAdmin, isDevOps, online, toggleSideMenu } = useDevOps()
 const { infrastructure, user } = useIrisSessions()
 
 const adminItems = ref<TabsItem[]>([

@@ -4,7 +4,7 @@
     <UCard class="drop-shadow-2xl" variant="subtle">
       <template #header>
         <div class="flex justify-end text-xl">
-          <i>"Good-bye!"</i>
+          <i>"Good-bye!"</i> &nbsp;
           <UIcon name="i-vscode-icons-file-type-robots" class="align-middle size-12" />
         </div>
       </template>

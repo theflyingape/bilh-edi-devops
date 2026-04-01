@@ -2,11 +2,20 @@ Our [EDI DevOps](https://www.intersystems.com/lp/healthcare-interoperability-sol
 
 In steps [Code Server](https://code.visualstudio.com/docs/remote/vscode-server) to provide a centralized solution that resolves complexity for having to disparately install it on a variety of remote endpoints. Also, there are numerous activities needed to work off the host CLI, so providing a number of self "helpers" to [Xterm.js](https://xtermjs.org/) consoles is beneficial toward the team's overall technical maturity.
 
-As a future objective, promoting the team's activities off the home page, suitable for guest browsing too, that provides the latest news and events out of their space. Some content may be generated programmatically, while others from a post by the team (moderated by its admins).
+For SysOps, the main portal page enumerates a SYSTEMS view and button access to their RHEL Cockpit service.
+
+As a future objective, promoting the HCIE team's activities off the home page, suitable for guest browsing too, that provides the latest news and events out of their space. Some content may be generated programmatically, while others from a post by the team (moderated by its admins).
 
 ![screenshot](https://github.com/theflyingape/bilh-edi-devops/blob/main/screenshot.png "DevOps portal")
 
 ## Linux host setup
+
+### HealthShare
+
+Configure the hosts and instances in your infrastructure:
+```bash
+$ micro app/assets/infrastructure.json
+```
 
 ### SystemD
 

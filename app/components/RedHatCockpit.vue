@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="os == 'rhel'">
     <UButton
       class="flex flex-grow"
       color="neutral"
@@ -14,6 +14,7 @@
 
 <script setup lang="ts">
 defineProps<{
+  os: string
   label?: string
   to?: string
 }>()
