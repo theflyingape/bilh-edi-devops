@@ -8,7 +8,7 @@ const isDevOps = ref(computed(() => get(user)?.scope?.includes('analyst') || get
 const online = ref(computed(() => get(useAuth().status) !== 'unauthenticated'))
 
 const overlay = useOverlay()
-const portal = ref([])
+const portal = ref({ online: <string[]>[], logins: <number[]>[] })
 const response = ref(false)
 const sideMenu = ref(false)
 const stale = ref(false)
@@ -61,8 +61,9 @@ export default function usePortal() {
   function who() {
     useFetch('/api/online', { immediate: true, timeout: 5678 })
       .onFetchResponse(async (response) => {
-        await response.json().then((value) => {
-          set(portal, value.users)
+        await response.json().then((value: { users: string[], logins: number[] }) => {
+          portal.value.online = value.users
+          portal.value.logins = value.logins
         })
       })
   }

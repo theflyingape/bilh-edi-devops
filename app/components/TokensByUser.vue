@@ -1,14 +1,14 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <div class="flex flex-wrap">
+  <div class="grid auto-cols-max grid-flow-col">
     <UCard v-model="portal" variant="subtle">
       <template #header>
         <UUser description="Online" />
       </template>
       <template #default>
-        <UTooltip :text="login">
-          <UBadge v-for="id in portal" :key="id" class="m-1" color="neutral" variant="outline">
-            {{ id }}
+        <UTooltip v-for="(id, index) in portal.logins" :key="index" :text="ago(portal.logins[index]) || 'not known'">
+          <UBadge class="m-1" color="neutral" variant="outline">
+            {{ portal.online[index] }}
           </UBadge>
         </UTooltip>
       </template>
@@ -17,11 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import { get } from '@vueuse/core'
-
 const { ago } = useDevOps()
-const auth = useAuth()
-const login = ref(computed(() => ago(get(auth.data).login) || 'not known'))
 const { portal, who } = useDevOps()
 
 onMounted(() => {

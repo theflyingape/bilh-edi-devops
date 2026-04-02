@@ -19,6 +19,7 @@ export interface JwtPayload {
 export interface TokensByUser {
   access: Map<string, string>
   refresh: Map<string, string>
+  login: number
 }
 
 export const tokensByUser: Map<string, TokensByUser> = new Map()
@@ -55,7 +56,8 @@ export default defineEventHandler(async (event) => {
         .sign(SECRET)
       const userTokens: TokensByUser = tokensByUser.get(username) ?? {
         access: new Map(),
-        refresh: new Map()
+        refresh: new Map(),
+        login: session.auth.login
       }
       /* // for any jose / nuxt auth regression testing
       const { payload } = await jwtVerify(accessToken, SECRET)
@@ -84,7 +86,8 @@ export default defineEventHandler(async (event) => {
         .sign(SECRET)
       const userTokens: TokensByUser = tokensByUser.get(username) ?? {
         access: new Map(),
-        refresh: new Map()
+        refresh: new Map(),
+        login: session.auth.login
       }
 
       userTokens.access.set(accessToken, refreshToken)
