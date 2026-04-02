@@ -10,6 +10,7 @@ export default defineEventHandler(async (event) => {
     if (userTokens) {
       tokensByUser.delete(session.id)
     }
+    console.log(`${session.id} ${event}`)
     log('LOG_NOTICE', `${session.id} ${event}`)
   }
 

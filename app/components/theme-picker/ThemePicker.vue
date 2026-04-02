@@ -10,9 +10,6 @@ watch(open, (isOpen) => {
   }
 })
 
-const { copy: copyCSS, copied: copiedCSS } = useClipboard()
-const { copy: copyAppConfig, copied: copiedAppConfig } = useClipboard()
-
 const {
   neutralColors,
   neutral,
@@ -27,17 +24,15 @@ const {
   icon,
   icons,
   modes,
-  mode,
-  hasCSSChanges,
-  hasAppConfigChanges,
-  exportCSS,
-  exportAppConfig,
-  resetTheme
+  mode
 } = useTheme()
 </script>
 
 <template>
-  <UPopover v-model:open="open" :ui="{ content: 'w-72 px-6 py-4 flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-5rem)]' }">
+  <UPopover
+    v-model:open="open"
+    :ui="{ content: 'w-72 px-6 py-4 flex flex-col gap-4 overflow-y-auto max-h-[calc(100vh-5rem)]' }"
+  >
     <template #default>
       <UButton
         icon="i-lucide-swatch-book"
