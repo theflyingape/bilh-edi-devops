@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { SignJWT } from 'jose'
 import type { IRIStoken } from '~/composables/useIrisSessions'
 import { log } from '~/lib/syslog.server'
@@ -13,10 +12,11 @@ export interface JwtPayload {
   auth: {
     id: string
     enabled: boolean
+    login: number
   }
 }
 
-interface TokensByUser {
+export interface TokensByUser {
   access: Map<string, string>
   refresh: Map<string, string>
 }
@@ -37,7 +37,7 @@ const credentialsSchema = z.object({
 
 export default defineEventHandler(async (event) => {
   const { username, password, IRIStoken } = await readValidatedBody(event, credentialsSchema.parse)
-  const session: JwtPayload = { auth: { id: username, enabled: false } }
+  const session: JwtPayload = { auth: { id: username, enabled: false, login: Date.now() } }
   let token
 
   //  create separate JWT for Nuxt auth session handling

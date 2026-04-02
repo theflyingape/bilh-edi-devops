@@ -21,7 +21,7 @@
       <USeparator class="h-4" color="secondary" orientation="horizontal" type="dotted" />
       <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" variant="link" class="items-start" :ui="{ list: 'items-start' }">
         <template #edi>
-          <WhoisOnline />
+          <TokensByUser />
         </template>
         <template #odba>
           <div class="flex flex-wrap gap-2 justify-around">

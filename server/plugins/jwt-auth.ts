@@ -6,6 +6,7 @@ declare module 'h3' {
     auth?: {
       id: string
       enabled: boolean
+      login: number
     }
   }
 }
@@ -15,7 +16,7 @@ export default defineNitroPlugin(async (nitroApp) => {
   const secret = new TextEncoder().encode(useRuntimeConfig().jwtSecret)
 
   nitroApp.hooks.hook('request', async (event) => {
-    const publicRoutes = ['/api/auth/login', '/api/auth/refresh']
+    const publicRoutes = ['/api/auth/login', '/api/auth/logout', '/api/auth/refresh']
     const url = event.node.req.url
 
     // skip middleware for public routes

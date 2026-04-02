@@ -11,7 +11,7 @@ export default eventHandler(async (event) => {
   }
 
   const extractedToken = extractToken(authorizationHeader)
-  const decoded: JwtPayload = { auth: { id: '', enabled: false } }
+  const decoded: JwtPayload = { auth: { id: '', enabled: false, login: 0 } }
   try {
     //  server/plugins/jwt-auth.ts
     decoded.auth = event.context.auth!
@@ -38,6 +38,6 @@ export default eventHandler(async (event) => {
   }
 
   // All checks successful
-  const { id, enabled } = decoded.auth
-  return { id, enabled }
+  const { id, enabled, login } = decoded.auth
+  return { id, enabled, login }
 })

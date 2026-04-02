@@ -159,6 +159,7 @@ export default defineNuxtConfig({
           id: 'string',
           name: 'string',
           enabled: 'boolean',
+          login: 'number',
           groups: 'string[]',
           roles: 'string',
           comment: 'string',
