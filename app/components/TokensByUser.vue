@@ -3,7 +3,7 @@
   <div class="grid auto-cols-max grid-flow-col">
     <UCard v-model="portal" variant="subtle">
       <template #header>
-        <UUser description="Online" />
+        <UUser description="Logins" />
       </template>
       <template #default>
         <UTooltip v-for="(id, index) in portal.logins" :key="index" :text="ago(portal.logins[index]) || 'not known'">
