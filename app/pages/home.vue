@@ -2,26 +2,25 @@
 <!-- eslint-disable vue/no-use-v-if-with-v-for -->
 <!-- eslint-disable vue/singleline-html-element-content-newline -->
 <template>
-  <div v-if="online" class="m-1">
-    <div class="grid grid-cols-2 gap-8">
-      <div class="grid auto-rows-auto gap-4">
+  <div v-if="online" class="flex m-1 justify-start gap-4">
+    <div class="grid gap-2">
+      <div>
         <div class="font-bold text-center">LIVE</div>
-        <div class="flex justify-center gap-2">
-          <IrisProcesses hcie="Live" />
-        </div>
+        <IrisProcesses hcie="Live" />
       </div>
-      <div class="grid auto-rows-auto gap-4">
+      <div>
         <div class="font-bold text-center">TEST</div>
-        <div class="flex justify-center gap-2">
-          <IrisProcesses hcie="Test" />
-        </div>
+        <IrisProcesses hcie="Test" />
       </div>
     </div>
     <div class="m-1">
-      <USeparator class="h-4" color="secondary" orientation="horizontal" type="dotted" />
       <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" variant="link" class="items-start" :ui="{ list: 'items-start' }">
         <template #edi>
-          <TokensByUser />
+          <div class="flex flex-wrap gap-2 justify-around">
+            <div>
+              <TokensByUser />
+            </div>
+          </div>
         </template>
         <template #odba>
           <div class="flex flex-wrap gap-2 justify-around">

@@ -110,8 +110,9 @@ export interface processes {
   Queue: number
   Misc?: number
 }
-const processList: Ref<{ [key: string]: processes }>
-  = ref({ Live: <processes>{}, Test: <processes>{}, Dev: <processes>{} })
+const processList: Ref<{ [key: string]: processes[] }> = ref(
+  { Live: <processes[]>[{ Production: 'Hospitals', File: 10, Net: 75, Queue: 520, Misc: 1 }, { Production: 'Sample', File: 30, Net: 8, Queue: 20, Misc: 1 }], Test: <processes[]>[{ Production: 'Hospitals', File: 0, Net: 1, Queue: 10 }, { Production: 'Sample', File: 0, Net: 1, Queue: 10 }], Dev: <processes[]>[{}] }
+)
 
 //  GET https://vip/api/hcie/fastfetch
 export interface fastfetch {
