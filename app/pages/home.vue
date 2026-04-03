@@ -14,9 +14,9 @@
       </div>
     </div>
     <div class="m-1">
-      <span class="ml-12 text-lg text-medium">Team</span>
+      <span class="ml-12 font-medium text-lg text-info-500">Team</span>
       <USeparator />
-      <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" variant="link" class="items-start" :ui="{ list: 'items-start' }">
+      <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" color="info" variant="link" class="items-start" :ui="{ list: 'items-start' }">
         <template #edi>
           <div class="flex flex-wrap gap-2 justify-around">
             <div>
@@ -121,19 +121,22 @@ const adminItems = ref<TabsItem[]>([
     label: 'HCIE',
     icon: 'i-flat-color-icons-parallel-tasks',
     slot: 'edi',
-    value: 'edi'
+    value: 'edi',
+    ui: { label: 'hover:bg-emerald-100' }
   },
   {
     label: 'IRIS',
     icon: 'i-flat-color-icons-filing-cabinet',
     slot: 'odba',
-    value: 'odba'
+    value: 'odba',
+    ui: { label: 'hover:bg-amber-100' }
   },
   {
     label: 'SYSTEMS',
     icon: 'i-flat-color-icons-linux',
     slot: 'linux',
-    value: 'linux'
+    value: 'linux',
+    ui: { label: 'hover:bg-red-100' }
   }
 ])
 const adminTab = ref('odba')
