@@ -14,6 +14,8 @@
       </div>
     </div>
     <div class="m-1">
+      <span class="ml-12 text-lg text-medium">Team</span>
+      <USeparator />
       <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" variant="link" class="items-start" :ui="{ list: 'items-start' }">
         <template #edi>
           <div class="flex flex-wrap gap-2 justify-around">
