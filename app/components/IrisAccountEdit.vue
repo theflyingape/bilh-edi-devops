@@ -44,7 +44,7 @@
               </UFormField>
             </div>
             <div class="pt-2">
-              <UTextarea v-model="note" color="info" variant="subtle" :disabled="true" :cols="40" :rows="6" :maxrows="10" autoresize placeholder="Note ..." />
+              <UTextarea v-model="note" color="info" variant="subtle" :disabled="true" :cols="56" :rows="6" :maxrows="10" autoresize placeholder="Note ..." />
             </div>
           </div>
           <div>
@@ -83,7 +83,7 @@
               AD / Linux groups
             </div>
             <div>
-              <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="50" :rows="10" :maxrows="20" autoresize placeholder="empty" />
+              <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="56" :rows="10" :maxrows="20" autoresize placeholder="empty" />
             </div>
           </div>
         </div>
