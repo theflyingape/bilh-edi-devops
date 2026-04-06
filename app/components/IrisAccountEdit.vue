@@ -15,7 +15,7 @@
             </div>
             <br>
             <div class="text-sm">
-              <span class="font-medium text-highlighted">{{ instance }}</span> last login:
+              <span class="font-medium text-indigo-500 text-highlighted">{{ instance }}</span> last login:
             </div>
             <div class="font-mono">
               {{ iris.lastlogin }}
@@ -43,8 +43,8 @@
                 <USwitch v-model="iris.sysadm" :disabled="!isSystems" color="secondary" @focus="note='Option to add the user in the local Linux sysadm group:\n\n1) allows user to run a Linux root shell; and\n2) enables IRIS System Administration menu option; and\n3) enables ADMIN functions in this portal.\n\nNOTE: this role alone does not necessarily have to overlap with the Admin / DevOps option.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
               </UFormField>
             </div>
-            <div class="flex justify-center pt-2">
-              <UTextarea v-model="note" color="info" variant="subtle" :disabled="true" :cols="32" :rows="6" :maxrows="10" autoresize placeholder="Note ..." />
+            <div class="pt-2">
+              <UTextarea v-model="note" color="info" variant="subtle" :disabled="true" :cols="40" :rows="6" :maxrows="10" autoresize placeholder="Note ..." />
             </div>
           </div>
           <div>

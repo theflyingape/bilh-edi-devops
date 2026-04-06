@@ -86,7 +86,7 @@
             <em>Additionally, you may have to dump your browser's cache stored for this site entirely:</em>
             <div class="ml-8 mt-4">
               <ol class="list-disc space-y-1.5">
-                <li>click the icon to the left of the URL address</li>
+                <li>click the browser's icon in the left-side of the URL address bar</li>
                 <li>select Cookies and Site data</li>
                 <li>select manage on-device site data</li>
                 <li>click <UIcon name="i-lucide-trash" /> to delete saved data for this site</li>
