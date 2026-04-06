@@ -14,7 +14,7 @@
               {{ iris.comment }}
             </div>
             <br>
-            <div class="text-sm">
+            <div>
               <span class="font-medium text-indigo-500 text-highlighted">{{ instance }}</span> last login:
             </div>
             <div class="font-mono">
@@ -73,13 +73,12 @@
             </UTable>
           </div>
           <div>
-            <div class="justify-self-end">
+            <div class="flex gap-x-2 justify-self-end">
               <UButton label="Cancel" color="neutral" @click="emit('close', false)" />
-              &nbsp;
               <SubmitButton>Submit</SubmitButton>
             </div>
-            <div class="font-medium gap-1 text-sky-800">
-              <UIcon name="i-lucide-group" class="text-sky-600" size="24" />
+            <div class="flex gap-1 mt-2 text-medium text-sky-800">
+              <UIcon name="i-lucide-group" size="22" />
               AD / Linux groups
             </div>
             <div>

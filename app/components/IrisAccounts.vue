@@ -110,6 +110,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-user-pen',
         async onSelect(_e) {
           await accountModal()
+          await loadAccounts()
         }
       },
       {
