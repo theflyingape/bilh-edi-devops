@@ -4,23 +4,23 @@
 <template>
   <UModal class="max-w-fit" :dismissible="false" :title="title" :description="description">
     <template #body>
-      <div class="grid auto-cols-max grid-flow-col gap-8">
-        <div>
-          <div class="text-lg font-medium">
-            {{ iris.name }}
-          </div>
-          <div class="text-sm">
-            {{ iris.comment }}
-          </div>
-          <br>
-          <div class="text-sm">
-            <span class="font-medium text-highlighted">{{ instance }}</span> last login:
-          </div>
-          <div class="font-mono">
-            {{ iris.lastlogin }}
-          </div>
-          <br><hr><br>
-          <UForm :state="iris" @submit.prevent="submit">
+      <UForm :state="iris" @submit.prevent="submit">
+        <div class="grid auto-cols-max grid-flow-col gap-8">
+          <div>
+            <div class="text-lg font-medium">
+              {{ iris.name }}
+            </div>
+            <div class="text-sm">
+              {{ iris.comment }}
+            </div>
+            <br>
+            <div class="text-sm">
+              <span class="font-medium text-highlighted">{{ instance }}</span> last login:
+            </div>
+            <div class="font-mono">
+              {{ iris.lastlogin }}
+            </div>
+            <br><hr><br>
             <div class="flex justify-between">
               <UFormField label="Start in Production" name="namespace">
                 <USelect
@@ -31,9 +31,6 @@
                   :ui="{ content: 'min-w-fit' }"
                 />
               </UFormField>
-              <div class="self-end">
-                <SubmitButton>Submit</SubmitButton>
-              </div>
             </div>
             <div class="grid grid-flow-col justify-items-center pt-4">
               <UFormField label="DevOps" name="irisdev">
@@ -43,37 +40,54 @@
                 <USwitch v-model="iris.irisadm" @focus="note='Option to assign elevated DevOps access by adding the user in the local Linux irisadm group:\n\n1) allows user to a restrictive list of Linux shell sudo commands;\n2) enables IRIS System Operation menu option with shortcuts to some Security functions; and\n3) enables ADMIN functions in this portal.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
               </UFormField>
               <UFormField label="Systems" name="sysadm">
-                <USwitch v-model="iris.sysadm" :disabled="!isSystems" color="secondary" @focus="note='Option to add the user in the local Linux sysadm group:\n\n1) allows user to run a Linux root shell; and\n2) enables IRIS System Administration menu option.\n\nNOTE: this role alone does not necessarily have to overlap with the Admin option.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
+                <USwitch v-model="iris.sysadm" :disabled="!isSystems" color="secondary" @focus="note='Option to add the user in the local Linux sysadm group:\n\n1) allows user to run a Linux root shell; and\n2) enables IRIS System Administration menu option; and\n3) enables ADMIN functions in this portal.\n\nNOTE: this role alone does not necessarily have to overlap with the Admin / DevOps option.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />
               </UFormField>
             </div>
             <div class="flex justify-center pt-2">
-              <UTextarea v-model="note" color="info" variant="subtle" :disabled="true" :cols="32" :rows="4" :maxrows="8" autoresize placeholder="Note ..." />
+              <UTextarea v-model="note" color="info" variant="subtle" :disabled="true" :cols="32" :rows="6" :maxrows="10" autoresize placeholder="Note ..." />
             </div>
-          </UForm>
-        </div>
-        <div>
-          <UTable sticky :data="data" :columns="columns" class="flex-1  max-h-[calc(60vh)] ml-4 mr-4">
-            <template #hs-cell="{ row }">
-              <div class="font-medium text-highlighted">
-                {{ row.original.hs }}
-              </div>
-            </template>
-            <template #value-cell="{ row }">
-              <USelect v-model="row.original.value" class="min-w-fit" placeholder="not allowed" :items="row.original.items" :ui="{ content: 'min-w-fit' }" />
-            </template>
-            <template #deny-cell="{ row }">
-              <UButton color="error" variant="link" icon="i-lucide-circle-x" @click="row.original.value = ''" />
-            </template>
-          </UTable>
-        </div>
-        <div>
-          <div class="flex items-center font-medium gap-1 text-sky-800">
-            <UIcon name="i-lucide-group" class="text-sky-600" size="24" />
-            AD / Linux groups
           </div>
-          <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="50" :rows="10" :maxrows="20" autoresize placeholder="empty" />
+          <div>
+            <UTable
+              sticky
+              :data="data"
+              :columns="columns"
+              class="flex-1  max-h-[calc(60vh)] ml-4 mr-4"
+              :ui="{
+                th: 'p-1',
+                tr: 'even:bg-olive-50 odd:bg-taupe',
+                td: 'p-2'
+              }"
+            >
+              <template #hs-cell="{ row }">
+                <div class="font-medium text-highlighted">
+                  {{ row.original.hs }}
+                </div>
+              </template>
+              <template #value-cell="{ row }">
+                <USelect v-model="row.original.value" class="min-w-fit" placeholder="not allowed" :items="row.original.items" :ui="{ content: 'min-w-fit' }" />
+              </template>
+              <template #deny-cell="{ row }">
+                <UButton color="error" variant="link" icon="i-lucide-circle-x" @click="row.original.value = ''" />
+              </template>
+            </UTable>
+          </div>
+          <div>
+            <div class="justify-self-end">
+              <UButton label="Cancel" color="neutral" @click="emit('close', false)" />
+              &nbsp;
+              <SubmitButton>Submit</SubmitButton>
+            </div>
+            <div class="font-medium gap-1 text-sky-800">
+              <UIcon name="i-lucide-group" class="text-sky-600" size="24" />
+              AD / Linux groups
+            </div>
+            <div>
+              <UTextarea v-model="groups" color="info" variant="subtle" :disabled="true" :cols="50" :rows="10" :maxrows="20" autoresize placeholder="empty" />
+            </div>
+          </div>
         </div>
-      </div>
+      </UForm>
     </template>
   </UModal>
 </template>
@@ -89,6 +103,11 @@ const props = defineProps<{
   title?: string
   description?: string
 }>()
+
+defineShortcuts({
+  escape: () => emit('close', false)
+})
+
 const { Productions, loadProductions, endpoint, user } = useIrisSessions()
 const overlay = useOverlay()
 const isSystems = get(user)?.scope?.includes('systems')

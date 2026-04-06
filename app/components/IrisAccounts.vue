@@ -16,7 +16,19 @@
       </div>
     </template>
     <template #default>
-      <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" @hover="onRowSelect">
+      <UTable
+        ref="table"
+        sticky
+        :data="data"
+        :columns="columns"
+        class="flex-1 max-h-[calc(72vh)]"
+        :ui="{
+          th: 'p-1',
+          tr: 'even:bg-olive-50 odd:bg-taupe',
+          td: 'p-2'
+        }"
+        @hover="onRowSelect"
+      >
         <template #id-cell="{ row }">
           <p class="font-mono text-lg">
             {{ row.original.id }}
