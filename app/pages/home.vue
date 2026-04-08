@@ -88,7 +88,7 @@
               <ol class="list-disc space-y-1.5">
                 <li>click the browser's icon in the left-side of the URL address bar</li>
                 <li>select Cookies and Site data</li>
-                <li>select manage on-device site data</li>
+                <li>select Manage on-device site data</li>
                 <li>click <UIcon name="i-lucide-trash" /> to delete saved data for this site</li>
                 <li>click <UKbd value="done" /> completes the process and prompts to <UKbd value="reload" /> the page</li>
               </ol>

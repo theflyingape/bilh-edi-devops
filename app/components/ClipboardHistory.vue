@@ -19,9 +19,9 @@
         ref="scrollArea"
         :items="clipBoard.items.value"
         :virtualize="{ estimateSize: 72, skipMeasurement: false }"
-        class="max-h-72 -m-1 -mt-4 -mb-4"
+        class="max-h-72 -m-1 -mt-6 -mb-6"
       >
-        <div class="flex items-center justify-between h-auto">
+        <div class="flex items-start justify-between pt-1">
           <UBadge class="wrap-anywhere" :color="copied == index ? 'primary' : 'neutral'" :variant="copied == index ? 'soft' : 'ghost'">
             {{ item }}
           </UBadge>
@@ -44,6 +44,7 @@
             </UTooltip>
           </div>
         </div>
+        <USeparator />
       </UScrollArea>
     </template>
     <template v-if="clipBoard.items.value.length > 4" #footer>

@@ -15,9 +15,6 @@
             <div>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="launch Midnight Commander"><UButton size="sm" icon="i-vscode-icons-file-type-purescript" color="neutral" variant="subtle" @click="mc" /></UTooltip>
             </div>
-            <!--
-            <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="curl builder"><UButton size="sm" icon="i-lucide-biceps-flexed" color="neutral" variant="subtle" @click="isCurl = true" /></UTooltip>
-            -->
           </div>
           <div v-else>
             &nbsp;
@@ -133,24 +130,6 @@
       </div>
     </div>
   </div>
-<!--
-  <UDrawer v-model:open="isCurl" title="Curl Builder (wip)" description="fill out form below" :ui="{ container: 'max-w-xl mx-auto' }">
-    <Placeholder class="h-48" />
-    <template #body>
-      <UForm :state="curl" @submit.prevent="sendCurl">
-        <UFormField label="URL" name="url">
-          <UInput v-model="curl.url" type="string" placeholder="https://server.com/path/to/endpoint" autofocus />
-        </UFormField>
-      </UForm>
-    </template>
-    <template #footer>
-      <div class="justify-end space-x-2">
-        <SubmitButton label="Submit" />
-        <UButton label="Cancel" color="neutral" variant="outline" @click="isCurl = false" />
-      </div>
-    </template>
-  </UDrawer>
--->
 </template>
 
 <script setup lang="ts">
