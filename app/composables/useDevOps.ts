@@ -5,6 +5,7 @@ import ConfirmationDialog from '~/components/ConfirmationDialog.vue'
 const dev = process.env.NODE_ENV == 'development'
 const isAdmin = ref(computed(() => get(user)?.scope?.includes('admin') || get(user)?.scope?.includes('systems')))
 const isDevOps = ref(computed(() => get(user)?.scope?.includes('analyst') || get(user)?.scope?.includes('developer')))
+const isSysOps = ref(computed(() => get(user)?.scope?.includes('systems')))
 const online = ref(computed(() => get(useAuth().status) !== 'unauthenticated'))
 
 const overlay = useOverlay()
@@ -73,6 +74,7 @@ export default function usePortal() {
     dev,
     isAdmin,
     isDevOps,
+    isSysOps,
     isStale,
     online,
     queryModal,

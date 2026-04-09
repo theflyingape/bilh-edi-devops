@@ -27,14 +27,14 @@
         <template #odba>
           <div class="flex flex-wrap gap-2 justify-around">
             <div v-for="(hcie, index) in infrastructure" :key="index">
-              <IrisMirrorStatus :hcie="index" />
+              <IrisMirrorStatus v-if="hcie.app == 'Health Connect'" :hcie="index" />
             </div>
           </div>
         </template>
         <template #linux>
           <div class="flex flex-wrap gap-2 justify-around">
             <div v-for="(hcie, index) in infrastructure" :key="index">
-              <UCard>
+              <UCard v-if="hcie.app == 'Health Connect' || isSysOps">
                 <template #default>
                   <div class="flex justify-center font-semibold font-sans text-lg">{{ index }}</div>
                   <div class="grid grid-cols-2 justify-items-start mt-4">
@@ -46,11 +46,11 @@
                         variant="soft"
                         :disabled="!isAdmin && !isDevOps"
                         :icon="hcie.icon"
-                        :label="hcie.vip.split('.')[0]" target="_blank" :to="`https://${hcie.vip}/linux/files#/?path=%252Ffiles`"
+                        :label="hcie.vip.split('.')[0]" target="_blank" :to="cockpit(hcie.app, hcie.vip)"
                       />
                       <RedHatCockpit
-                        v-for="host in hcie.hosts" v-if="isAdmin" :key="host"
-                        class="mt-1" :os="hcie.os" :label="host.split('.')[0]" :to="`https://${host}/linux/files#/?path=%252Ffiles`"
+                        v-for="host in hcie.hosts" v-if="isAdmin || isSysOps" :key="host"
+                        class="mt-1" :os="hcie.os" :label="host.split('.')[0]" :to="cockpit(hcie.app, hcie.vip)"
                       />
                     </div>
                     <div>
@@ -113,7 +113,7 @@ definePageMeta({
 })
 
 const { status } = useAuth()
-const { isAdmin, isDevOps, online, toggleSideMenu } = useDevOps()
+const { isAdmin, isDevOps, isSysOps, online, toggleSideMenu } = useDevOps()
 const { infrastructure, user } = useIrisSessions()
 
 const adminItems = ref<TabsItem[]>([
@@ -142,4 +142,8 @@ const adminItems = ref<TabsItem[]>([
 const adminTab = ref('odba')
 const now = useNow()
 const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
+
+function cockpit(app: string, vip: string): string {
+  return app == 'Health Connect' ? `https://${vip}/linux/files#/?path=%252Ffiles` : `https://${vip}:9090`
+}
 </script>

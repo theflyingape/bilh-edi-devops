@@ -4,26 +4,30 @@
         "icon": "i-vscode-icons-file-type-plsql-package",
         "instance": "HCLIVE",
         "vip": "hcieprd.laheyhealth.org",
-        "os": "rhel"
+        "os": "rhel",
+        "app": "Health Connect"
     },
     "Test": {
         "hosts": ["lvhshcadt01g1.laheyhealth.org","lvhshcadt02g1.laheyhealth.org","lvhshcadt01ss.laheyhealth.org","lvhshcadt02ss.laheyhealth.org"],
         "icon": "i-vscode-icons-file-type-light-todo",
         "instance": "HCTEST",
         "vip": "hcietst.laheyhealth.org",
-        "os": "rhel"
+        "os": "rhel",
+        "app": "Health Connect"
     },
     "Dev": {
         "hosts": ["lvhshcadd01g1.laheyhealth.org","lvhshcadd02g1.laheyhealth.org"],
         "icon": "i-vscode-icons-file-type-apib",
         "instance": "HCDEV",
         "vip": "hciedev.laheyhealth.org",
-        "os": "rhel"
+        "os": "rhel",
+        "app": "Health Connect"
     },
-    "Epic POC": {
+    "POC": {
         "icon": "i-flat-ui-pills",
         "instance": "POC",
         "vip": "epicdbpoc.laheyhealth.org",
-        "os": "rhel"
+        "os": "rhel",
+        "app": "Epic"
     }
 }
