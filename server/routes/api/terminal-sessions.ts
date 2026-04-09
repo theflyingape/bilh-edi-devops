@@ -5,6 +5,7 @@ import profiles from '~/assets/terminals.json'
 interface config {
   [key: string]: {
     host: string
+    port?: number
     cmd: string
     params: string[]
     loglevel?: string | number

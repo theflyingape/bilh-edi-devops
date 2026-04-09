@@ -23,6 +23,7 @@ export default defineWebSocketHandler({
       if (profile == 'localhost') params.push('-c')
       params.push('tmux')
     }
+    if (cfg.port) params.push(String(cfg.port))
     //  execute
     const spawn = pty.spawn(cfg.cmd, params, {
       name: cfg.pty?.term || 'xterm-256color',

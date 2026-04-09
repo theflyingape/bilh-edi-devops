@@ -19,5 +19,11 @@
         "instance": "HCDEV",
         "vip": "hciedev.laheyhealth.org",
         "os": "rhel"
+    },
+    "Epic POC": {
+        "icon": "i-flat-ui-pills",
+        "instance": "POC",
+        "vip": "epicdbpoc.laheyhealth.org",
+        "os": "rhel"
     }
 }
