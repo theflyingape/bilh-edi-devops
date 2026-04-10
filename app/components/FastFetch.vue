@@ -32,6 +32,10 @@ import { get, set } from '@vueuse/core'
 
 const props = defineProps<{
   hcie: HCIE
+  app: string
+  instance: string
+  os: string
+  vip: string
 }>()
 
 const { ago } = useDevOps()
@@ -49,9 +53,19 @@ const FastFetch: Ref<response> = ref({
 })
 
 async function sysinfo() {
-  await endpoint<response>(props.hcie, 'fastfetch').then((res) => {
-    set(FastFetch, res)
-  })
+  if (props.app == 'Health Connect') {
+    await endpoint<response>(props.hcie, 'fastfetch').then((res) => {
+      set(FastFetch, res)
+    })
+  } else {
+    set(FastFetch, {
+      status: 'OK',
+      hostName: props.vip,
+      instance: props.instance,
+      systemMode: '',
+      content: [{ type: 'OS', result: { id: props.os } }]
+    })
+  }
 }
 
 const OS = ref(computed(() => String(get(FastFetch).content.find(sys => sys.type == 'OS')?.result?.id ?? 'OS').toUpperCase() + ' ' + get(FastFetch).content.find(sys => sys.type == 'OS')?.result?.version))

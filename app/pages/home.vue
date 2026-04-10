@@ -53,8 +53,8 @@
                         class="mt-1" :os="hcie.os" :label="host.split('.')[0]" :to="cockpit(hcie.app, hcie.vip)"
                       />
                     </div>
-                    <div>
-                      <FastFetch :hcie="index" />
+                    <div v-if="isSysOps || (isAdmin && hcie.app == 'Health Connect')">
+                      <FastFetch :hcie="index" :app="hcie.app" :instance="hcie.instance" :os="hcie.os" :vip="hcie.vip" />
                     </div>
                   </div>
                 </template>
@@ -69,7 +69,7 @@
     <UCard class="drop-shadow-2xl" variant="subtle">
       <template #header>
         <div class="flex justify-end text-xl">
-          <i>"Welcome{{ scope ? (', ' + scope) : '. Click top-right ellipsis to identify yourself' }}."</i> &nbsp;
+          <i>"Welcome. Click top-right ellipsis</i>&nbsp; <UKbd size="lg" value="…" /> &nbsp;<i>button to identify yourself."</i> &nbsp;
           <UIcon name="i-vscode-icons-file-type-robots" class="align-middle size-12" />
         </div>
       </template>
@@ -105,7 +105,7 @@
 
 <script setup lang="ts">
 import type { TabsItem } from '@nuxt/ui'
-import { get, useNow } from '@vueuse/core'
+import { useNow } from '@vueuse/core'
 
 definePageMeta({
   // pageTransition: { name: 'rotate', mode: 'out-in' },
@@ -114,7 +114,7 @@ definePageMeta({
 
 const { status } = useAuth()
 const { isAdmin, isDevOps, isSysOps, online, toggleSideMenu } = useDevOps()
-const { infrastructure, user } = useIrisSessions()
+const { infrastructure } = useIrisSessions()
 
 const adminItems = ref<TabsItem[]>([
   {
@@ -141,7 +141,7 @@ const adminItems = ref<TabsItem[]>([
 ])
 const adminTab = ref('odba')
 const now = useNow()
-const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
+// const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
 
 function cockpit(app: string, vip: string): string {
   return app == 'Health Connect' ? `https://${vip}/linux/files#/?path=%252Ffiles` : `https://${vip}:9090`
