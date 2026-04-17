@@ -7,14 +7,15 @@ Type=simple
 User=root
 Group=irisadm
 SupplementaryGroups=irisdev
-EnvironmentFile=/opt/devops/.env
-ExecStart=/bin/sh /opt/devops/devops-portal.sh
-KillMode=mixed
-Restart=on-failure
-RestartSec=15
 SyslogIdentifier=DevOps
 WorkingDirectory=/opt/devops
-#TasksMax=200
+EnvironmentFile=/opt/devops/.env
+ExecStart=/bin/sh /opt/devops/devops-portal.sh
+KillMode=control-group
+Restart=on-failure
+RestartSec=60
+SendSIGKILL=no
+TimeoutStopSec=60
 
 [Install]
 WantedBy=multi-user.target
