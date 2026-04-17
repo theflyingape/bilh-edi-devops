@@ -1,19 +1,19 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <div class="grid auto-cols-max grid-flow-col">
-    <UCard v-model="portal" variant="subtle">
-      <template #header>
-        <UUser description="Logins" />
-      </template>
-      <template #default>
+  <UCard v-model="portal" variant="subtle">
+    <template #header>
+      Visits
+    </template>
+    <template #default>
+      <div class="grid grid-cols-4">
         <UTooltip v-for="(id, index) in portal.logins" :key="index" :text="ago(portal.logins[index]) || 'not known'">
           <UBadge class="m-1" color="neutral" variant="outline">
             {{ portal.online[index] }}
           </UBadge>
         </UTooltip>
-      </template>
-    </UCard>
-  </div>
+      </div>
+    </template>
+  </UCard>
 </template>
 
 <script setup lang="ts">

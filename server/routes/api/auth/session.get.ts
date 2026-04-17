@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { eventHandler, getRequestHeader } from 'h3'
-import { type JwtPayload, extractToken, tokensByUser } from './login.post'
+import type { JwtPayload } from '../user-logins'
+import useUserLogins from '../user-logins'
 
 export default eventHandler(async (event) => {
+  const { extractToken, tokensByUser } = useUserLogins()
   const authorizationHeader = getRequestHeader(event, 'Authorization')
   if (typeof authorizationHeader === 'undefined') {
     setResponseStatus(event, 403, 'Need to pass valid Bearer-authorization header to access this endpoint')

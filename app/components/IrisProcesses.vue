@@ -5,8 +5,8 @@
     :data="processList[props.hcie]"
     :columns="columns"
     :ui="{
-      th: 'p-2',
-      tr: 'even:bg-gray-50 odd:bg-white',
+      th: 'p-2 dark:bg-black',
+      tr: 'even:bg-gray-50 odd:bg-white dark:bg-gray-900!',
       td: 'p-2'
     }"
   />
@@ -38,8 +38,8 @@ const columns: TableColumn<processes>[] = [
         th: 'text-right',
         td: (cell) => {
           let format = 'text-right '
-          if (cell.getValue() > 9) format += 'text-medium '
-          if (cell.getValue() > 29) format += 'text-red-500 '
+          if (cell.getValue() > 7) format += 'text-medium '
+          if (cell.getValue() > 14) format += 'text-red-500 '
           return format
         }
       }
@@ -53,6 +53,7 @@ const columns: TableColumn<processes>[] = [
         td: (cell) => {
           let format = 'text-right '
           if (cell.getValue() > 99) format += 'text-medium '
+          if (cell.getValue() > 999) format += 'text-red-500 '
           return format
         }
       }
@@ -79,7 +80,8 @@ const columns: TableColumn<processes>[] = [
         th: 'text-right',
         td: (cell) => {
           let format = 'text-right '
-          if (cell.getValue() > 9) format += 'text-medium '
+          if (cell.getValue() > 7) format += 'text-medium '
+          if (cell.getValue() > 14) format += 'text-red-500 '
           return format
         }
       }
@@ -90,8 +92,8 @@ const columns: TableColumn<processes>[] = [
 await processes()
 
 async function processes() {
-  await endpoint(props.hcie, 'processes').then((results) => {
-    if (results) {
+  await endpoint<{ [key: string]: processes[] }>(props.hcie, 'processes').then((results) => {
+    if (results && results.productions) {
       processList.value[props.hcie] = results.productions
     }
   })

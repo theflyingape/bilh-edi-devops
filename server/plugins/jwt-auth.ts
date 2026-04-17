@@ -12,11 +12,9 @@ declare module 'h3' {
 }
 
 export default defineNitroPlugin(async (nitroApp) => {
-  // Get the JWT secret from runtime configuration
-  const secret = new TextEncoder().encode(useRuntimeConfig().jwtSecret)
-
   nitroApp.hooks.hook('request', async (event) => {
-    const publicRoutes = ['/api/auth/login', '/api/auth/refresh']
+    const SECRET = new TextEncoder().encode(useRuntimeConfig().jwtSecret)
+    const publicRoutes = ['/api/auth/login', '/api/auth/logout', '/api/auth/refresh']
     const url = event.node.req.url
 
     // skip middleware for public routes
@@ -36,7 +34,7 @@ export default defineNitroPlugin(async (nitroApp) => {
 
     try {
       // Verify and decode the JWT
-      const decoded = await jwtVerify(token, secret)
+      const decoded = await jwtVerify(token, SECRET)
 
       // Attach the user to the event context for access in other handlers
       event.context = decoded.payload

@@ -1,20 +1,22 @@
 import { deleteCookie, eventHandler, getRequestHeader, readBody } from 'h3'
 import { SignJWT, jwtVerify } from 'jose'
-import { type JwtPayload, ACCESS_TOKEN_TTL, SECRET, extractToken, tokensByUser } from './login.post'
+import type { JwtPayload } from '../user-logins'
+import useUserLogins from '../user-logins'
 
 export default eventHandler(async (event) => {
-  const body = await readBody<{ accessToken: string, refreshToken: string }>(event)
+  const { ACCESS_TOKEN_TTL, SECRET, extractToken, tokensByUser } = useUserLogins()
   const authorizationHeader = getRequestHeader(event, 'Authorization')
-  const accessToken = body.accessToken
-  const refreshToken = body.refreshToken
-  let token = { token: { accessToken: accessToken, refreshToken: refreshToken } }
-
-  if (!refreshToken || !authorizationHeader) {
-    return dumpSession('Unauthorized, no refreshToken or no Authorization header', 'invalid session')
-  }
+  const body = await readBody<{ accessToken: string, refreshToken: string }>(event)
 
   // Verify
   try {
+    //  const accessToken = body.accessToken
+    const refreshToken = body.refreshToken
+
+    if (!refreshToken || !authorizationHeader) {
+      return dumpSession('Unauthorized, no refreshToken or no Authorization header', 'invalid session')
+    }
+
     const { payload } = await jwtVerify(refreshToken, SECRET)
     if (!payload) {
       return dumpSession(`Unauthorized, refreshToken can't be verified`, 'invalid refresh token')
@@ -29,24 +31,20 @@ export default eventHandler(async (event) => {
 
     // Check against known token
     const requestAccessToken = extractToken(authorizationHeader)
-    const knownAccessToken = userTokens.refresh.get(body.refreshToken)
-    if (!knownAccessToken || knownAccessToken !== requestAccessToken) {
+    if (!userTokens.access.get(requestAccessToken)) {
       return dumpSession('unknown access token', 'token mismatch')
     }
 
     // Invalidate old access token
-    userTokens.access.delete(knownAccessToken)
-    const accessToken = await new SignJWT({ auth: session.auth })
+    const newAccessToken = await new SignJWT({ auth: session.auth })
       .setProtectedHeader({ alg: 'HS256' })
       .setExpirationTime(ACCESS_TOKEN_TTL)
       .sign(SECRET)
-    userTokens.refresh.set(refreshToken, accessToken)
-    userTokens.access.set(accessToken, refreshToken)
+    userTokens.access.set(newAccessToken, refreshToken)
+    userTokens.refresh.set(refreshToken, newAccessToken)
 
     setResponseStatus(event, 200, 'refresh ok')
-    token = { token: { accessToken, refreshToken } }
-
-    return token
+    return { token: { accessToken: newAccessToken, refreshToken: refreshToken } }
   } catch (err) {
     console.error(err)
     return dumpSession(`${err}`, 'refresh error')

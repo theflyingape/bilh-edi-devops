@@ -7,13 +7,15 @@ export default defineNuxtRouteMiddleware(async (to, _from) => {
     const notAdmin = ['admin']
     const notAllowed = ['code', 'profile', 'terminal', 'utility']
 
-    //  a little negative, but steer any visitors away ...
-    if (notAdmin.includes(to.name!.toString()) && !isAdmin)
-      return navigateTo('/sorry')
-
-    if (notAllowed.includes(to.name!.toString())) {
-      if (!get(user)?.enabled || !get(user)?.scope?.length || get(user).scope[0] == 'guest' || get(user).scope[0] == 'user')
+    if (to.name) {
+      //  a little negative, but steer any visitors away ...
+      if (notAdmin.includes(to.name.toString()) && !isAdmin)
         return navigateTo('/sorry')
+
+      if (notAllowed.includes(to.name.toString())) {
+        if (!get(user)?.enabled || !get(user)?.scope?.length || get(user).scope[0] == 'guest' || get(user).scope[0] == 'user')
+          return navigateTo('/sorry')
+      }
     }
   } catch (err) {
     console.error(err)
