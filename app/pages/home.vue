@@ -53,7 +53,7 @@
                         class="mt-1" :os="hcie.os" :label="host.split('.')[0]" :to="cockpit(hcie.app, hcie.vip)"
                       />
                     </div>
-                    <div v-if="isSysOps || (isAdmin && hcie.app == 'Health Connect')">
+                    <div v-if="hcie.app == 'Health Connect' && (isSysOps || isAdmin)">
                       <FastFetch :hcie="index" :app="hcie.app" :instance="hcie.instance" :os="hcie.os" :vip="hcie.vip" />
                     </div>
                   </div>
