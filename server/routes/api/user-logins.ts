@@ -45,7 +45,6 @@ try {
       })
     }
   })
-  console.info(`${tokensByUser.size} visitors loaded`)
   log('LOG_NOTICE', `${tokensByUser.size} visitors loaded`)
 } catch (err) {
   console.error(err)
