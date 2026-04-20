@@ -42,6 +42,14 @@ const themes: itheme = {
     blue: 'MediumBlue', magenta: 'MediumOrchid', cyan: 'DarkCyan', white: 'Silver',
     brightBlack: 'DimGray', brightRed: 'Red', brightGreen: 'LightGreen', brightYellow: 'Gold',
     brightBlue: 'RoyalBlue', brightMagenta: 'Violet', brightCyan: 'Cyan', brightWhite: 'Snow'
+  },
+  EPIC: {
+    cursor: 'Lavender', cursorAccent: 'DarkRed', foreground: 'LemonChiffon', background: '#103040',
+    selectionBackground: 'Linen', selectionForeground: 'Maroon',
+    black: 'Black', red: 'DarkRed', green: 'ForestGreen', yellow: 'SandyBrown',
+    blue: 'MediumBlue', magenta: 'MediumOrchid', cyan: 'DarkCyan', white: 'Silver',
+    brightBlack: 'DimGray', brightRed: 'Red', brightGreen: 'LightGreen', brightYellow: 'Gold',
+    brightBlue: 'RoyalBlue', brightMagenta: 'Violet', brightCyan: 'Cyan', brightWhite: 'Snow'
   }
 }
 

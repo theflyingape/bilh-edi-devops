@@ -6,7 +6,7 @@
         <XtermJs v-show="Instance == 'Dev'" session="Dev" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Test'" session="Test" theme="Green" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <XtermJs v-show="Instance == 'Live'" session="Live" theme="Amber" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
-        <XtermJs v-show="Instance == 'Epic POC'" session="Epic POC" theme="White" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
+        <XtermJs v-show="Instance == 'POC'" session="POC" theme="EPIC" :wsUrl="`${wsUrl}`" :fontSize=save.fontSize />
         <!-- bottom control panel -->
         <div class="flex flex-nowrap justify-between items-center">
           <!-- session controls -->
