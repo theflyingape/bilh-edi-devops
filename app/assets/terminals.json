@@ -27,7 +27,7 @@
     "params": [ "/opt/devops/node-pty.sh" ],
     "loglevel": "LOG_INFO"
   },
-  "Epic POC": {
+  "POC": {
     "host": "epicdbpoc.laheyhealth.org",
     "port": 2022,
     "cmd": "/bin/sh",
