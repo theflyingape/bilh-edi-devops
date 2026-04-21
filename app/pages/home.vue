@@ -86,10 +86,10 @@
             <em>Additionally, you may have to dump your browser's cache stored for this site entirely:</em>
             <div class="ml-8 mt-4">
               <ol class="list-disc space-y-1.5">
-                <li>click the browser's icon in the left-side of the URL address bar</li>
-                <li>select Cookies and Site data</li>
-                <li>select Manage on-device site data</li>
-                <li>click <UIcon name="i-lucide-trash" /> to delete saved data for this site</li>
+                <li>click 'View site information' menu icon located within the URL address bar</li>
+                <li>select <UIcon name="i-lucide-cookie" /> <b>Cookies and Site data</b> option</li>
+                <li>select <UIcon name="i-lucide-database" /> <b>Manage on-device site data</b> option</li>
+                <li>click <UIcon name="i-lucide-trash" /> to <b>delete saved data</b> for this site</li>
                 <li>click <UKbd value="done" /> completes the process and prompts to <UKbd value="reload" /> the page</li>
               </ol>
             </div>
