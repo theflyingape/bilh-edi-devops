@@ -85,7 +85,7 @@ export default defineNuxtConfig({
     },
     */
     routeRules: {
-      '/': { prerender: true },
+      '/': { isr: 57600, prerender: true },
       '/api/**': { cache: false },
       '/assets/**': { headers: { 'cache-control': 's-maxage=0' } },
       '/components/**': { ssr: false },

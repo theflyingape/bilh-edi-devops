@@ -70,7 +70,10 @@
           <div v-else>
             <div class="flex m-1 space-x-2">
             <UButton size="lg" color="neutral" variant="subtle" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
-            <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" :color="tmux ? 'primary' : 'neutral'" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-note" :label="termType" />
+            <USwitch v-if="infrastructure[Instance].app == 'Health Connect'"
+              v-model="tmux" @click="tmuxToggle"
+              class="m-2" :color="tmux ? 'primary' : 'neutral'" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-note" :label="termType"
+            />
             </div>
             <div v-if="termType == 'tmux'">
               <UCard variant="subtle">
