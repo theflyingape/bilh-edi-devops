@@ -187,7 +187,6 @@ function titleClick() {
 }
 
 const isFiles = ref(computed(() => get(title) == '/files' || get(title).startsWith('/files/')))
-const isHCIE = ref(computed(() => infrastructure[get(Instance)].app == 'Health Connect'))
 
 watch(Instance, async (n, o) => {
   connected(n, true)
@@ -236,7 +235,7 @@ catch(_err) {
   console.error(_err)
 }
 const save = useStorage('prefs-local-storage', prefs, localStorage, { mergeDefaults: true })
-const termType = ref(isHCIE && prefs.tmux ? 'tmux' : 'ssh')
+const termType = ref(computed(() => infrastructure[get(Instance)].app == 'Health Connect' && prefs.tmux ? 'tmux' : 'ssh'))
 const tmux = ref(prefs.tmux)
 const history = ref(false)
 
