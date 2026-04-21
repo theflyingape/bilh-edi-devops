@@ -41,7 +41,7 @@
             <USeparator v-if="title.length" orientation="vertical" class="h-6" />
             <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="click to copy current path"><UButton size="sm" color="info" variant="link" :label="titleLabel" @click="titleClick" /></UTooltip>
             <div>
-              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" :text="selectionLabel ? `clear last selection: ${selectionLabel}` : ''"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
+              <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" :text="selectionLabel ? `clear last selection: ${selectionLabel}` : ''"><UButton :disabled="!selection" size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
             </div>
             <div v-if="termType == 'tmux'">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="screensaver"><UButton size="sm" icon="i-lucide-lock-keyhole" color="neutral" variant="subtle" @click="reset" /></UTooltip>

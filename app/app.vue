@@ -3,12 +3,7 @@
 <template>
   <UApp :toaster="{ duration: 3000, position: 'top-left' }">
     <NuxtLoadingIndicator />
-    <!-- UBanner color="tertiary" icon="i-lucide-construction" title="Under construction -- check back for updates" close
-      close-icon="i-lucide-x-circle" id="wip" / -->
-    <!-- UBanner color="success" icon="i-lucide-wand" title="Feat! Terminal allows you to connect into all remote sessions" close
-      close-icon="i-lucide-x-circle" id="feat1" / -->
-    <!-- UBanner color="success" icon="i-lucide-wand" title="Feat! built-in managed session into your Code workspace" close
-      close-icon="i-lucide-x-circle" id="feat2" / -->
+    <UBanner id="feat3" color="success" icon="i-lucide-wand" title="Feat! added an Epic terminal instance" close close-icon="i-lucide-x-circle" />
     <UHeader>
       <template #title>
         <ISCLogo class="h-12 w-auto" />
