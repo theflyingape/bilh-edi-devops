@@ -2,7 +2,8 @@
 # 
 # invoked by server/routes/node-pty
 #
-[ -n "$4" ] && PORT=$4 || PORT=22
+let -n PORT=${!#}
+[ $PORT -lt 22 ] && PORT=22
 
 cd "`dirname $0`"
 ssh-copy-id -i .ssh/id_rsa.pub -p $PORT $1@$2 2>/dev/null
