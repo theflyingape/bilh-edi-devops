@@ -22,12 +22,11 @@
           </div>
           <!-- center controls -->
           <div class="flex flex-nowrap space-x-2">
-            <div v-if="tmux" class="space-x-2">
+            <div v-if="isHCIE && tmux" class="space-x-2">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="Ctrl/B shortcuts"><UButton class="rounded-full disabled:bg-slate-200 bg-amber-100 hover:bg-amber-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-lucide-badge-help" @click="tmuxHelp" /></UTooltip>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="split window"><UButton class="rounded  disabled:bg-slate-200 bg-gray-100 hover:bg-gray-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-ic-twotone-add-to-queue" @click="tmuxSplit" /></UTooltip>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="switch to previous"><UButton class="rounded disabled:bg-slate-200 bg-sky-100 hover:bg-sky-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-ic-twotone-swipe-vertical" @click="tmuxSwitch" /></UTooltip>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="enter Copy Mode & search"><UButton class="rounded-full disabled:bg-slate-200 bg-violet-100 hover:bg-violet-300" :disabled="!isConnected" color="neutral" size="sm" variant="link" icon="i-vscode-icons-file-type-search-result" @click="tmuxSearch" /></UTooltip>
-              
             </div>
             <UForm v-else :state=searchInput @submit.prevent="search(true)">
               <UInput ref="input" v-model="searchInput.entry" color="info" icon="i-vscode-icons-file-type-search-result" size="sm" variant="subtle" placeholder="Search..." :ui="{ trailing: 'pe-1' }">
@@ -44,7 +43,7 @@
             <div>
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" :text="selectionLabel ? `clear last selection: ${selectionLabel}` : ''"><UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="subtle" @click="clear" /></UTooltip>
             </div>
-            <div v-if="tmux">
+            <div v-if="isHCIE && tmux">
               <UTooltip arrow :content="{ align:'end', side:'top', sideOffset:1 }" text="screensaver"><UButton size="sm" icon="i-lucide-lock-keyhole" color="neutral" variant="subtle" @click="reset" /></UTooltip>
             </div>
             <div v-else>
@@ -73,7 +72,7 @@
             <UButton size="lg" color="neutral" variant="subtle" trailing-icon="i-vscode-icons-file-type-shell" @click="terminal">Connect</UButton>
             <USwitch v-model="tmux" @click="tmuxToggle" class="m-2" :color="tmux ? 'primary' : 'neutral'" size="xl" unchecked-icon="i-lucide-square-terminal" checked-icon="i-lucide-note" :label="termType" />
             </div>
-            <div v-if="tmux">
+            <div v-if="isHCIE && tmux">
               <UCard variant="subtle">
                 <template #header>
                   <UIcon name="i-lucide-lightbulb" /> NOTE: <b>tmux</b> connect <i>can <b>resume</b> your running session after a <b>disconnect</b> and provides for additional screen functions</i>
@@ -97,7 +96,7 @@
           <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
           <UInput class="w-full" ref="filesInput" icon="i-lucide-upload" color="neutral" variant="subtle" type="file" @input="handleFileInput" multiple />
           <div class="flex justify-end m-1 pb-3"><SubmitButton :disabled="!files.length" @click.prevent="uploadFiles">Upload</SubmitButton></div>
-          <FileStat v-model="fileCandidate" :hcie="Instance as HCIE" :tmux="tmux!" />
+          <FileStat v-model="fileCandidate" :hcie="Instance as HCIE" :tmux="isHCIE && tmux" />
           <div class="flex justify-end m-1"><SubmitButton :disabled="!fileCandidate.length || fileStat[Instance]?.type !== 'regular file'" @click.prevent="downloadFile">Download</SubmitButton></div>
           <USeparator class="h-6" color="secondary" orientation="horizontal" type="dotted" />
         </div>
@@ -143,7 +142,7 @@ const config = useRuntimeConfig()
 const id = useDevOps().dev ? 'theflyingape' : get(useAuth().data)?.id
 // BROKEN: const wsUrl = `${config.public.websocket}://${location.host}${config.app.baseURL}/node-pty?id=${id}`
 const wsUrl = `${config.public.websocket}://${location.host}/api/node-pty?id=${id}`
-const { fileStat, stat } = useIrisSessions()
+const { fileStat, infrastructure, stat } = useIrisSessions()
 const { sessionList, cols, rows, selection, title, connect, attach, detach, connected, isConnected, resize } = useTerminalSocket()
 const Instance = ref('Test' as HCIE)
 
@@ -188,6 +187,7 @@ function titleClick() {
 }
 
 const isFiles = ref(computed(() => get(title) == '/files' || get(title).startsWith('/files/')))
+const isHCIE = ref(computed(() => infrastructure[get(Instance)].app == 'Health Connect'))
 
 watch(Instance, async (n, o) => {
   connected(n, true)
@@ -225,15 +225,15 @@ const curl = ref({
 
 //  some sticky preferences for the terminal session
 interface prefs {
-  fontSize?: number
-  tmux?: boolean
+  fontSize: number
+  tmux: boolean
 }
-let prefs: prefs = {}
+let prefs: prefs = { fontSize:20, tmux:true }
 try {
   prefs = JSON.parse(localStorage.getItem('prefs-local-storage') ?? '{ "fontSize":20, "tmux":true }')
 }
-catch(err) {
-  prefs = { fontSize:20, tmux:true }
+catch(_err) {
+  console.error(_err)
 }
 const save = useStorage('prefs-local-storage', prefs, localStorage, { mergeDefaults: true })
 const termType = ref(prefs.tmux ? 'tmux' : 'ssh')
