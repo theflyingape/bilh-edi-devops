@@ -2,7 +2,7 @@
 # 
 # invoked by server/routes/node-pty
 #
-let -n PORT=${!#}
+let -n PORT=$(( ${@:$#} + 0 ))
 [ $PORT -lt 22 ] && PORT=22
 
 cd "`dirname $0`"
