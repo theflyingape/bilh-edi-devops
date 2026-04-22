@@ -1,6 +1,7 @@
 <template>
   <IrisSelect
     v-model="instance"
+    :epic="false"
     @change.prevent="loadProductions(instance)"
   />
   <USelect
