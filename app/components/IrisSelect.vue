@@ -7,6 +7,21 @@
 </template>
 
 <script setup lang="ts">
-const { Instances } = useIrisSessions()
+interface Props {
+  epic?: boolean
+  hcie?: boolean
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  epic: true,
+  hcie: true
+})
+
+const { infrastructure, Instances } = useIrisSessions()
 const items = ref(Instances)
+
+Object.entries(infrastructure).forEach(([key, value]) => {
+  if (value.app == 'Epic' && !props.epic) items.value.filter(i => i !== key)
+  if (value.app == 'Health Connect' && !props.hcie) items.value.filter(i => i !== key)
+})
 </script>

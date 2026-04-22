@@ -9,7 +9,7 @@
         <div class="justify-end">
           <UIcon :name="icon(instance!)" class="align-middle size-8" />
           <IrisSelect
-            v-model="instance"
+            v-model="instance" :epic="false"
             @change.prevent="loadAccounts()"
           />
         </div>

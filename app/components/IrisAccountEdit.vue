@@ -29,12 +29,13 @@
                   :autofocus="true"
                   :items="startup"
                   :ui="{ content: 'min-w-fit' }"
+                  @update:model-value="() => { console.info('selected:', iris.namespace) }"
                 />
               </UFormField>
             </div>
             <div class="grid grid-flow-col justify-items-center pt-4">
               <UFormField label="DevOps" name="irisdev">
-                <USwitch v-model:model-value="iris.irisdev" :disabled="isAdm || isSys" @focus="note=`Option to assign basic DevOps access by adding the user in the local Linux irisdev group:\n\n1) allows user R/W access to Linux /files; and\n2) enables IRIS System Explorer menu option.`" @blur="note=''" />
+                <USwitch v-model="iris.irisdev" :disabled="isAdm || isSys" @focus="note=`Option to assign basic DevOps access by adding the user in the local Linux irisdev group:\n\n1) allows user R/W access to Linux /files; and\n2) enables IRIS System Explorer menu option.`" @blur="note=''" />
               </UFormField>
               <UFormField label="Admin" name="irisadm">
                 <USwitch v-model="iris.irisadm" @focus="note='Option to assign elevated DevOps access by adding the user in the local Linux irisadm group:\n\n1) allows user to a restrictive list of Linux shell sudo commands;\n2) enables IRIS System Operation menu option with shortcuts to some Security functions; and\n3) enables ADMIN functions in this portal.'" @blur="note=''" @update:model-value="() => { iris.irisdev = isAdm }" />

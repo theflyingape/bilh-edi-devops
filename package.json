@@ -1,6 +1,6 @@
 {
   "name": "edi-devops",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "license": "MIT",
   "type": "module",
   "description": "The team's single point of access to the essential suite of apps, tools, and documentation for efficiency, effectiveness, and success!",
@@ -28,7 +28,7 @@
     "@iconify-json/heroicons": "^1.2.3",
     "@iconify-json/lucide": "^1.2.102",
     "@iconify-json/simple-icons": "^1.2.79",
-    "@iconify-json/vscode-icons": "^1.2.45",
+    "@iconify-json/vscode-icons": "^1.2.46",
     "@intersystems/intersystems-iris-native": "^2.0.3",
     "@nuxt/content": "^3.13.0",
     "@nuxt/eslint": "^1.15.2",
