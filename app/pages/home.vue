@@ -50,7 +50,7 @@
                       />
                       <RedHatCockpit
                         v-for="host in hcie.hosts" v-if="isAdmin || isSysOps" :key="host"
-                        class="mt-1" :os="hcie.os" :label="host.split('.')[0]" :to="cockpit(hcie.app, hcie.vip)"
+                        class="mt-1" :os="hcie.os" :label="host.split('.')[0]" :to="cockpit(hcie.app, host)"
                       />
                     </div>
                     <div v-if="hcie.app == 'Health Connect' && (isSysOps || isAdmin)">
@@ -143,7 +143,7 @@ const adminTab = ref('odba')
 const now = useNow()
 // const scope = ref(computed(() => get(user)?.scope?.length ? get(user)?.scope[0] : ''))
 
-function cockpit(app: string, vip: string): string {
-  return app == 'Health Connect' ? `https://${vip}/linux/files#/?path=%252Ffiles` : `https://${vip}:9090`
+function cockpit(app: string, vm: string): string {
+  return app == 'Health Connect' ? `https://${vm}/linux/files#/?path=%252Ffiles` : `https://${vm}:9090`
 }
 </script>
