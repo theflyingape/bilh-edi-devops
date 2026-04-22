@@ -24,7 +24,7 @@
         "app": "Health Connect"
     },
     "POC": {
-        "hosts": ["lvepicdbb01ss","lvepicdbb02g1"],
+        "hosts": ["lvepicdbb01ss.laheyhealth.org","lvepicdbb02g1.laheyhealth.org"],
         "icon": "i-flat-ui-pills",
         "instance": "POC",
         "vip": "epicdbpoc.laheyhealth.org",
