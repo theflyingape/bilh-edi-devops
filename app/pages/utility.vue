@@ -4,7 +4,7 @@
 <template>
   <div class="flex justify-center">
     <div class="w-5/6">
-      <span class="font-medium text-lg text-info-500">Utility</span>
+      <span class="ml-12 font-medium text-lg text-info-500">Utility</span>
       <USeparator />
       <UTabs v-model="utilityTab" orientation="vertical" :items="utilityItems" class="items-start" size="xl" color="info" variant="link" :ui="{ list: 'items-start' }">
         <template #base64>
@@ -47,9 +47,18 @@
           <UCard class="m-2 w-full" variant="subtle">
             <template #default>
               <div class="flex flex-row gap-2 items-start justify-between">
-                <UInput v-model="input" class="m-2 w-120" placeholder="hostname or ip address" />
-                <div>
-                  <UButton class="h-12 w-24" color="info" variant="subtle" icon="i-vscode-icons-file-type-search-result" loading-auto @click.prevent="getent(input)">Lookup</UButton>
+                <div class="flex flex-col gap-2 items-justify">
+                  <UInput v-model="input" class="m-2 w-120" placeholder="hostname or ip address" />
+                  <div class="w-120">
+                    <b>DNS</b> (<i>Domain Name System</i>) is the phonebook of the internet". It is a hierarchical and distributed naming system that translates human-friendly domain names (<i>like</i> google.com) into the numerical IP addresses (<i>like</i> 142.250.190.46) that computers use to locate each other on a network. 
+                  </div>
+                </div>
+                <div class="flex flex-col gap-2 items-end">
+                  <UButton class="h-12 w-28" color="info" variant="subtle" icon="i-vscode-icons-file-type-search-result" loading-auto @click.prevent="getent(input)">Lookup</UButton>
+                  <div class="flex nowrap">
+                    <UIcon :name="icon(instance!)" class="align-middle size-8" />
+                    <IrisSelect v-model="instance" :epic="false" />
+                  </div>
                 </div>
                 <UTextarea v-model="ascii" class="font-mono w-5/6" color="neutral" autoresize :rows="10" :maxrows="25" placeholder="DNS lookup with any port scan results …" />
                 <div class="flex flex-col justify-start">
@@ -125,7 +134,7 @@
 import type { TabsItem } from '@nuxt/ui'
 import { get, set, useFileSystemAccess } from '@vueuse/core'
 import type { InputMenuItem, RadioGroupItem, RadioGroupValue, StepperItem } from '@nuxt/ui'
-const { endpoint } = useIrisSessions()
+const { endpoint, icon } = useIrisSessions()
 
 
 definePageMeta({
@@ -161,6 +170,7 @@ const utilityItems = ref<TabsItem[]>([
 const utilityTab = ref('getent')
 const file = useFileSystemAccess({ excludeAcceptAllOption: false })
 const input = ref('')
+const instance = ref<HCIE>('Test')
 
 // Base64
 const ascii = ref('')
@@ -200,7 +210,7 @@ async function getent(net = 'localhost') {
     error?: string
   }
 
-  await endpoint<response>('Test', `getent/${net}`).then((res) => {
+  await endpoint<response>(get(instance), `getent/${net}`).then((res) => {
     let result = res?.status + ': '
     if (res?.error) {
       result += res.error
