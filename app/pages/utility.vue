@@ -142,7 +142,7 @@ const utilityItems = ref<TabsItem[]>([
     label: 'DNS',
     icon: 'i-flat-color-icons-broken-link',
     slot: 'getent',
-    value: 'getnt',
+    value: 'getent',
     ui: { label: 'hover:bg-red-100' }
   },
   {
@@ -154,7 +154,7 @@ const utilityItems = ref<TabsItem[]>([
   },
 ])
 
-const utilityTab = ref('bind')
+const utilityTab = ref('getent')
 const file = useFileSystemAccess({ excludeAcceptAllOption: false })
 const input = ref('')
 
@@ -184,6 +184,7 @@ async function getent(net = 'localhost') {
   interface getent {
     ip: string
     hosts: string[]
+    nmap: string
   }
 
   interface response {
@@ -197,10 +198,14 @@ async function getent(net = 'localhost') {
 
   await endpoint<response>('Test', `getent/${net}`).then((res) => {
     let result = res?.status + ': '
-    result += res?.error + '\n'
-    if (res?.content) {
+    if (res?.error) {
+      result += res.error
+    }
+    else if (res?.content) {
       result += res.content.ip + '\n'
       result += res.content.hosts.toString()
+      result += '\n'
+      result += res.content.nmap
     }
     set(ascii, result)
   })
