@@ -29,6 +29,9 @@ const tokens = new Map<string, IRIStoken>()
 
 export interface hcieResponse<T> {
   status: string
+  hostName?: string
+  instance?: string
+  systemMode?: string
   data: T
   error?: string
 }
@@ -54,6 +57,13 @@ export interface account {
 }
 // const Accounts: Ref<account[]>
 //  = ref({ Live: [], Test: [], Dev: [] })
+
+//  GET|DELETE|UPDATE https://vip/api/hcie/gpg/[:id]
+export interface gpg {
+  id: string
+  name: string
+  trust: string
+}
 
 //  GET https://vip/api/hcie/user/:id
 export interface User {

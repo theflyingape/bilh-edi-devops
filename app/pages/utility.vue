@@ -50,7 +50,7 @@
                 <div class="flex flex-col gap-2 items-justify">
                   <UInput v-model="input" class="m-2 w-120" placeholder="hostname or ip address" />
                   <div class="w-120">
-                    <b>DNS</b> (<i>Domain Name System</i>) is the phonebook of the internet". It is a hierarchical and distributed naming system that translates human-friendly domain names (<i>like</i> google.com) into the numerical IP addresses (<i>like</i> 142.250.190.46) that computers use to locate each other on a network. 
+                    <b>DNS</b> (<i>Domain Name System</i>) is the "<b>phonebook of the internet</b>". It is a hierarchical and distributed naming system that translates human-friendly domain names (<i>like</i> google.com) into the numerical IP addresses (<i>like</i> 142.250.190.46) that computers use to locate each other on a network. 
                   </div>
                 </div>
                 <div class="flex flex-col gap-2 items-end">
@@ -68,6 +68,11 @@
               </div>
             </template>
           </UCard>
+        </template>
+        <template #gpg>
+          <div class="m-2 w-full">
+            <LinuxGPG />
+          </div>
         </template>
         <template #sftp>
           <UCard class="m-2" variant="subtle">
@@ -157,6 +162,13 @@ const utilityItems = ref<TabsItem[]>([
     slot: 'getent',
     value: 'getent',
     ui: { label: 'hover:bg-red-100' }
+  },
+  {
+    label: 'GPG',
+    icon: 'flat-color-icons:data-encryption',
+    slot: 'gpg',
+    value: 'gpg',
+    ui: { label: 'hover:bg-blue-100' }
   },
   {
     label: 'SFTP',
