@@ -9,7 +9,7 @@
         </div>
         <div class="flex nowrap">
           <UIcon :name="icon(instance!)" class="align-middle size-8" />
-          <IrisSelect v-model="instance" :epic="false" />
+          <IrisSelect v-model="instance" :epic="false" @change.prevent="loadKeys()" />
         </div>
         <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
           th: 'p-1',
