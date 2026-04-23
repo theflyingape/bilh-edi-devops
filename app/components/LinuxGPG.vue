@@ -39,11 +39,6 @@
         </UTable>
       </div>
     </template>
-    <template #footer>
-      <div class="flex font-mono text-stone-600 text-sm text-start text-nowrap justify-end">
-        {{ now.toString().split(' ')[0] }} {{ now.toLocaleString() }}
-      </div>
-    </template>
   </UCard>
 </template>
 
@@ -80,7 +75,6 @@ const columns: TableColumn<gpg>[] = [
   }
 ]
 const rowSelection = ref<gpg>()
-const now = useNow()
 
 function getDropdownActions(): DropdownMenuItem[][] {
   return [
