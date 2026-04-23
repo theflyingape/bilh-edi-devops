@@ -3,17 +3,13 @@
 <template>
   <UCard variant="subtle">
     <template #default>
-      <div class="flex flex-row gap-2 items-start justify-between">
-        <div class="flex flex-col gap-2 items-end">
-          <div class="flex nowrap">
-            <UIcon :name="icon(instance!)" class="align-middle size-8" />
-            <IrisSelect v-model="instance" :epic="false" />
-          </div>
-          <div class="w-120">
-            <b>GPG</b> (GNU Privacy Guard) is a free, open-source cryptographic tool used to encrypt and sign data and
-            communications. It is an implementation of the OpenPGP standard and serves as a compatible alternative to
-            Symantec’s proprietary PGP software.
-          </div>
+      <div class="flex flex-col gap-2 items-start">
+        <div class="w-5/6">
+          <b>GPG</b> (GNU Privacy Guard) is a free, open-source cryptographic tool used to encrypt and sign data and communications. It is an implementation of the OpenPGP standard and serves as a compatible alternative to Symantec’s proprietary PGP software.
+        </div>
+        <div class="flex nowrap">
+          <UIcon :name="icon(instance!)" class="align-middle size-8" />
+          <IrisSelect v-model="instance" :epic="false" />
         </div>
         <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
           th: 'p-1',
@@ -21,7 +17,7 @@
           td: 'p-2'
         }" @hover="onRowSelect">
           <template #id-cell="{ row }">
-            <p class="font-mono text-lg">
+            <p class="font-mono">
               {{ row.original.id }}
             </p>
           </template>
