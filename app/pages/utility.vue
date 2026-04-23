@@ -52,6 +52,10 @@
                   <UButton class="h-12 w-24" color="info" variant="subtle" icon="i-vscode-icons-file-type-search-result" loading-auto @click.prevent="getent(input)">Lookup</UButton>
                 </div>
                 <UTextarea v-model="ascii" class="font-mono w-5/6" color="neutral" autoresize :rows="10" :maxrows="25" placeholder="DNS lookup with any port scan results …" />
+                <div class="flex flex-col justify-start">
+                  <UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="link" @click="ascii=''" />
+                  <UButton :color="cAscii ? 'success' : 'neutral'" :icon="cAscii ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="copy(ascii, 'ascii')" />
+                </div>
               </div>
             </template>
           </UCard>
