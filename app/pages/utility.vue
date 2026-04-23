@@ -192,7 +192,7 @@ async function getent(net = 'localhost') {
     hostName: string
     instance: string
     systemMode: string
-    content?: getent
+    result?: getent
     error?: string
   }
 
@@ -201,11 +201,11 @@ async function getent(net = 'localhost') {
     if (res?.error) {
       result += res.error
     }
-    else if (res?.content) {
-      result += res.content.ip + '\n'
-      result += res.content.hosts.toString()
+    else if (res?.result) {
+      result += res.result.ip + '\n'
+      result += res.result.hosts.toString()
       result += '\n'
-      result += res.content.nmap
+      result += res.result.nmap
     }
     set(ascii, result)
   })
