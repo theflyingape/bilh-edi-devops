@@ -31,7 +31,7 @@
                   <div>&nbsp;</div>
                   <div class="flex flex-row justify-start">
                     <div class="w-full">
-                      <UTextarea v-model="b64" class="font-mono w-full" color="info" autoresize :rows="5" :maxrows="20" placeholder="base64 encoded ..." disabled />
+                      <UTextarea v-model="b64" class="font-mono w-full" color="info" autoresize :rows="5" :maxrows="20" placeholder="base64 encoded …" disabled />
                     </div>
                     <div class="flex flex-col justify-start">
                       <UButton size="sm" icon="i-lucide-clipboard-x" color="neutral" variant="link" @click="ascii=''" />
@@ -51,7 +51,7 @@
                 <div>
                   <UButton class="h-12 w-24" color="info" variant="subtle" icon="i-vscode-icons-file-type-search-result" loading-auto @click.prevent="getent(input)">Lookup</UButton>
                 </div>
-                <UTextarea v-model="ascii" class="font-mono w-5/6" color="neutral" autoresize :rows="5" :maxrows="10" placeholder="DNS lookup result" />
+                <UTextarea v-model="ascii" class="font-mono w-5/6" color="neutral" autoresize :rows="10" :maxrows="25" placeholder="DNS lookup with any port scan results …" />
               </div>
             </template>
           </UCard>
@@ -204,7 +204,7 @@ async function getent(net = 'localhost') {
     else if (res?.result) {
       result += res.result.ip + '\n'
       result += res.result.hosts.toString()
-      result += '\n'
+      result += '\n==================\n'
       result += res.result.nmap
     }
     set(ascii, result)
