@@ -21,7 +21,6 @@ const { infrastructure, Instances } = useIrisSessions()
 const items = ref(Instances)
 
 Object.entries(infrastructure).forEach(([key, value]) => {
-  console.log(key, value)
   if (value.app == 'Epic' && !props.epic) items.value = items.value.filter(i => i !== key)
   if (value.app == 'Health Connect' && !props.hcie) items.value = items.value.filter(i => i !== key)
 })

@@ -71,7 +71,7 @@
         </template>
         <template #gpg>
           <div class="m-2 w-full">
-            <LinuxGPG />
+            <LinuxGPG hcie="Test" />
           </div>
         </template>
         <template #sftp>

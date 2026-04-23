@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/first-attribute-linebreak -->
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <UCard variant="subtle">
