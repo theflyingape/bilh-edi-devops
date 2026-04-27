@@ -25,9 +25,11 @@
           </template>
           <template #name-cell="{ row }">
             <p class="font-medium text-highlighted">
-              {{ row.original.name }} ({{ row.original.alias || 'missing' }})
+              {{ row.original.name }} ({{ row.original.alias || '- missing -' }})
             </p>
-            {{ row.original.email }}
+            <p class="font-mono">
+              {{ row.original.email || '- missing -' }}
+            </p>
           </template>
           <template #trust-cell="{ row }">
             <p class="text-highlighted">
