@@ -47,7 +47,7 @@
     "@xterm/xterm": "^6.0.0",
     "better-sqlite3": "^12.9.0",
     "html-to-image": "^1.11.13",
-    "jose": "^6.2.2",
+    "jose": "^6.2.3",
     "modern-syslog": "^1.2.0",
     "node-pty": "^1.1.0",
     "nuxt-file-storage": "^0.3.2",
@@ -58,7 +58,7 @@
   "devDependencies": {
     "@types/node": "^25.6.0",
     "eslint": "^10.2.1",
-    "nuxi": "^3.35.0",
+    "nuxi": "^3.35.1",
     "nuxt": "^4.4.2",
     "typescript": "^5.9.3"
   }
