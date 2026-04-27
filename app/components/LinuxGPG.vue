@@ -10,6 +10,8 @@
         <div class="flex nowrap">
           <UIcon :name="icon(instance!)" class="align-middle size-8" />
           <IrisSelect v-model="instance" :epic="false" @change.prevent="loadKeys()" />
+          &nbsp;
+          <UButton label="Import" icon="i-lucide-import" color="action" />
         </div>
         <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
           th: 'p-1',
@@ -23,8 +25,9 @@
           </template>
           <template #name-cell="{ row }">
             <p class="font-medium text-highlighted">
-              {{ row.original.name }}
+              {{ row.original.name }} ({{ row.original.alias || 'missing' }})
             </p>
+            {{ row.original.email }}
           </template>
           <template #trust-cell="{ row }">
             <p class="text-highlighted">
@@ -58,17 +61,15 @@ const data = ref<gpg[]>([])
 const columns: TableColumn<gpg>[] = [
   {
     accessorKey: 'id',
-    header: 'id',
-    cell: ({ row }) => `${row.getValue('id')}`
+    header: 'key id'
   },
   {
-    header: 'name',
-    cell: ({ row }) => `${row.getValue('name')}`
+    accessorKey: 'name',
+    header: 'name (alias) / email'
   },
   {
     accessorKey: 'trust',
-    header: 'trust',
-    cell: ({ row }) => `${ago(row.getValue('lastlogin'))}`
+    header: 'trust'
   },
   {
     header: 'action'
@@ -80,16 +81,17 @@ function getDropdownActions(): DropdownMenuItem[][] {
   return [
     [
       {
-        label: 'Edit',
-        icon: 'i-lucide-user-pen',
+        label: 'Export',
+        icon: 'i-lucide-file-output',
+        color: 'info',
         async onSelect(_e) {
           await loadKeys()
         }
       },
       {
-        label: 'Delete',
-        icon: 'i-lucide-trash',
-        color: 'error',
+        label: 'Expire',
+        icon: 'i-lucide-git-pull-request-closed',
+        color: 'neutral',
         async onSelect(_e) {
           await queryModal(`OK to delete ${get(rowSelection)?.id} from ${get(instance)}?`, `Edit to remove any ACTIVE roles first, as this drops the IRIS user's cached storage only. Dropping the account is useful for trouble-shooting an issue and for security hygiene.`)
           if (get(response)) {
@@ -116,7 +118,7 @@ function onRowSelect(e: Event, row: TableRow<gpg> | null) {
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ id: 'FFEEDDCC00112233', name: 'BILH IT (HCIETEST)', trust: 'u' }])
+    set(data, [{ id: 'FFEEDDCC00112233', name: 'BILH IT', alias: 'HCIETEST', email: 'nobody@mail.com', trust: 'u' }])
   } else {
     const hcie = get(instance)!
     await endpoint<hcieResponse<gpg[]>>(hcie, 'gpg').then((res) => {

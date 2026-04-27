@@ -62,6 +62,8 @@ export interface account {
 export interface gpg {
   id: string
   name: string
+  alias?: string
+  email?: string
   trust: string
 }
 
