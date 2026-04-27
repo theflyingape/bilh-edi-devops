@@ -48,6 +48,7 @@
 </template>
 
 <script setup lang="ts">
+import { LinuxGPGView } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
 import type { gpg, hcieResponse } from '~/composables/useIrisSessions'
@@ -55,9 +56,10 @@ import type { gpg, hcieResponse } from '~/composables/useIrisSessions'
 const props = defineProps<{
   hcie: HCIE
 }>()
-const { ago, queryModal, response } = useDevOps()
+const { queryModal, response } = useDevOps()
 const { icon, endpoint } = useIrisSessions()
 const instance = defineModel<HCIE>('instance', { required: false })
+
 const table = useTemplateRef('table')
 const data = ref<gpg[]>([])
 const columns: TableColumn<gpg>[] = [
@@ -87,7 +89,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-file-output',
         color: 'info',
         async onSelect(_e) {
-          await loadKeys()
+          await viewKey(get(rowSelection)!.id)
         }
       },
       {
@@ -95,9 +97,9 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-git-pull-request-closed',
         color: 'neutral',
         async onSelect(_e) {
-          await queryModal(`OK to delete ${get(rowSelection)?.id} from ${get(instance)}?`, `Edit to remove any ACTIVE roles first, as this drops the IRIS user's cached storage only. Dropping the account is useful for trouble-shooting an issue and for security hygiene.`)
+          await queryModal(`OK to expire ${get(rowSelection)?.name} from ${get(instance)}?`, `The key is not removed, but only marked as expired.`)
           if (get(response)) {
-            await endpoint(get(instance)!, `gpg/${get(rowSelection)?.id}`, 'DELETE')
+            await endpoint(get(instance)!, `gpg/${get(rowSelection)?.id}`, 'UPDATE')
             await loadKeys()
           }
         }
@@ -129,6 +131,25 @@ async function loadKeys() {
       }
     })
   }
+}
+
+const pubKey = ref('')
+
+async function viewKey(id: string) {
+  interface getKey {
+    id: string
+    pubKey: string
+  }
+  await endpoint<hcieResponse<getKey>>(get(instance)!, `gpg/${id}`).then(async (result) => {
+    set(pubKey, result?.data.pubKey || 'got this instead')
+    await useOverlay().create(LinuxGPGView, {
+      props: {
+        title: `${get(instance)} :: Public key ${get(rowSelection)?.id}`,
+        pubkey: get(pubKey)
+      },
+      destroyOnClose: true
+    }).open()
+  })
 }
 
 onMounted(async () => {

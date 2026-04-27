@@ -1,11 +1,4 @@
-<script setup lang="ts">
-defineProps<{
-  title: string
-}>()
-
-const emit = defineEmits<{ close: [boolean] }>()
-</script>
-
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <UModal :close="{ onClick: () => emit('close', false) }" :title="`${title}`">
     <template #footer>
@@ -15,3 +8,11 @@ const emit = defineEmits<{ close: [boolean] }>()
     </template>
   </UModal>
 </template>
+
+<script setup lang="ts">
+defineProps<{
+  title: string
+}>()
+
+const emit = defineEmits<{ close: [boolean] }>()
+</script>
