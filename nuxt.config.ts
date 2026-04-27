@@ -146,7 +146,7 @@ export default defineNuxtConfig({
       type: 'local',
       endpoints: {
       // signIn: { path: '/login', method: 'post' },
-        signOut: { path: '/logout', method: 'post' },
+      // signOut: { path: '/logout', method: 'post' },
         signUp: false
       // getSession: { path: '/session', method: 'get' },
       },

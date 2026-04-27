@@ -186,9 +186,7 @@ async function login() {
 
 async function logout() {
   await endSession('Dev').then(async () => {
-    user.value.enabled = false
-    user.value.scope = []
-    await signOut({ callbackUrl: 'logout', external: true })
+    await signOut({ callbackUrl: 'logout', external: false })
   })
 }
 

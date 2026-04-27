@@ -24,5 +24,8 @@
 
 <script setup lang="ts">
 definePageMeta({ auth: false })
+const { user } = useIrisSessions()
+user.value.enabled = false
+user.value.scope = []
 // reloadNuxtApp()
 </script>
