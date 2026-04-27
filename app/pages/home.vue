@@ -69,7 +69,7 @@
     <UCard class="drop-shadow-2xl" variant="subtle">
       <template #header>
         <div class="flex justify-end text-xl">
-          <i>"Welcome. Click top-right ellipsis</i>&nbsp; <UKbd size="lg" value="…" /> &nbsp;<i>button to identify yourself."</i> &nbsp;
+          <i>"Welcome. Click top-right ellipsis</i>&nbsp; <UKbd size="lg" value="⋯" /> &nbsp;<i>button to identify yourself."</i> &nbsp;
           <UIcon name="i-vscode-icons-file-type-robots" class="align-middle size-12" />
         </div>
       </template>
