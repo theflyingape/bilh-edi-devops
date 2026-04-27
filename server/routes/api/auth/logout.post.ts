@@ -17,5 +17,5 @@ export default defineEventHandler(async (event) => {
     log('LOG_NOTICE', `${session.id} ${event}`)
   }
 
-  return ({ status: 'OK' })
+  setResponseStatus(event, 200, 'logged out')
 })
