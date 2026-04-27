@@ -65,7 +65,7 @@
       </UTabs>
     </div>
   </div>
-  <div v-else class="flex flex-col items-center justify-center h-lvh -mt-48">
+  <div v-else class="flex flex-col items-center justify-center h-lvh -mt-24">
     <UCard class="drop-shadow-2xl" variant="subtle">
       <template #header>
         <div class="flex justify-end text-xl">
@@ -97,7 +97,7 @@
         </div>
       </template>
       <template #footer>
-        <div class="text-start text-nowrap font-mono">{{ now }}</div>
+        <div class="text-center text-nowrap font-mono">{{ now }}</div>
       </template>
     </UCard>
   </div>
