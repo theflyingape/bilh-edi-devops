@@ -60,11 +60,12 @@ export interface account {
 
 //  GET|DELETE|UPDATE https://vip/api/hcie/gpg/[:id]
 export interface gpg {
-  id: string
-  name: string
+  id?: string
+  fingerprint?: string
+  name?: string
   alias?: string
   email?: string
-  trust: string
+  trust?: string
   pubkey?: string
 }
 

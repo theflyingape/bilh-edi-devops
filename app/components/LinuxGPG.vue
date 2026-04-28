@@ -3,14 +3,14 @@
 <template>
   <UCard variant="subtle">
     <template #default>
-      <div class="flex flex-col gap-2 items-start">
+      <div class="flex flex-col gap-4 items-start">
         <div class="flex items-end nowrap">
           <UIcon :name="icon(instance!)" class="align-middle size-8" />
           <IrisSelect v-model="instance" :epic="false" @change.prevent="loadKeys()" />
           &nbsp;
-          <UButton label="Import" icon="i-lucide-import" color="action" />
-          <USeparator class="h-12 mb-3 ml-8 mr-4" color="neutral" orientation="vertical" size="lg" />
-          <div class="w-1/2">
+          <UButton label="Import" icon="i-lucide-import" color="action" @click.prevent="editKey(true)" />
+          <USeparator class="h-16 ml-4 mr-2" color="neutral" orientation="vertical" size="lg" />
+          <div class="max-w-1/2">
             <b>GPG</b> (GNU Privacy Guard) is a free, open-source cryptographic tool used to encrypt and sign data and communications. It is an implementation of the OpenPGP standard and serves as a compatible alternative to Symantec’s proprietary PGP software.
           </div>
         </div>
@@ -68,7 +68,10 @@ const data = ref<gpg[]>([])
 const columns: TableColumn<gpg>[] = [
   {
     accessorKey: 'id',
-    header: 'key id'
+    header: 'public key id'
+  },
+  {
+    accessorKey: 'fingerprint'
   },
   {
     accessorKey: 'name',
@@ -92,7 +95,8 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-notebook-pen',
         color: 'secondary',
         async onSelect(_e) {
-          await editKey(get(rowSelection)!.id)
+          await editKey()
+          await loadKeys()
         }
       },
       {
@@ -135,8 +139,9 @@ function onRowSelect(e: Event, row: TableRow<gpg> | null) {
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ id: 'FFEEDDCC00112233', name: 'BILH IT', alias: 'HCIETEST', email: 'nobody@mail.com', trust: 'u' }])
+    set(data, [{ id: 'FFEEDDCC00112233', fingerprint: '12345678ABCDEF90', name: 'BILH IT', alias: 'HCIETEST', email: 'nobody@mail.com', trust: 'u' }])
   } else {
+    set(data, [])
     const hcie = get(instance)!
     await endpoint<hcieResponse<gpg[]>>(hcie, 'gpg').then((res) => {
       if (res && res.status == 'OK') {
@@ -146,23 +151,26 @@ async function loadKeys() {
   }
 }
 
-const pubKey = ref('')
-
-async function editKey(id: string) {
-  interface getKey {
-    id: string
-    pubKey: string
+async function editKey(generate = false) {
+  let key: gpg = {}
+  if (!generate) key = {
+    id: get(rowSelection)?.id,
+    fingerprint: get(rowSelection)?.fingerprint,
+    name: get(rowSelection)?.name,
+    alias: get(rowSelection)?.alias,
+    email: get(rowSelection)?.alias,
+    trust: get(rowSelection)?.trust,
+    pubkey: get(rowSelection)?.pubkey
   }
-  await endpoint<hcieResponse<getKey>>(get(instance)!, `gpg/${id}`).then(async (result) => {
-    set(pubKey, result?.data.pubKey || 'got this instead')
-    await useOverlay().create(LinuxGPGEdit, {
-      props: {
-        title: `${get(instance)} :: Public key ${get(rowSelection)?.id}`,
-        pubkey: get(pubKey)
-      },
-      destroyOnClose: true
-    }).open()
-  })
+
+  await useOverlay().create(LinuxGPGEdit, {
+    props: {
+      title: `${get(instance)} :: GPG Public key`,
+      description: key.id || 'import',
+      gpg: key
+    },
+    destroyOnClose: true
+  }).open()
 }
 
 onMounted(async () => {
