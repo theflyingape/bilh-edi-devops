@@ -20,11 +20,11 @@
           </UFormField>
         </div>
         <div class="flex gap-x-4">
-          <UFormField label="Name">
+          <UFormField label="Name" help="minimum of 5 characters" required>
             <UInput v-model="gpg.name" class="w-120" placeholder="free text identifier" icon="i-lucide-building-2" minlength="5" />
           </UFormField>
-          <UFormField label="Email">
-            <UInput v-model="gpg.email" class="w-88" placeholder="valid business contact" icon="i-lucide-at-sign" />
+          <UFormField label="Email" help="optional, but must be valid">
+            <UInput v-model="gpg.email" type="email" class="w-88" placeholder="valid business contact" icon="i-lucide-at-sign" />
           </UFormField>
         </div>
         <div class="self-center">

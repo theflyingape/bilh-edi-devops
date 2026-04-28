@@ -114,7 +114,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-git-pull-request-closed',
         color: 'error',
         async onSelect(_e) {
-          await queryModal(`OK to delete ${get(rowSelection)?.name} (${get(rowSelection)?.comment}) from ${get(instance)}?`, `Any Secret key paired with this must be removed first by a root administrator. This attempts to drop the Public key from the ring.`)
+          await queryModal(`OK to delete ${get(rowSelection)?.name} (${get(rowSelection)?.comment}) from ${get(instance)}?`, `Any Secret key paired with this will be removed first! Then, this attempts to drop the Public key from the ring.`)
           if (get(response)) {
             await endpoint(get(instance)!, `gpg/${get(rowSelection)?.fingerprint || get(rowSelection)?.id}`, 'DELETE')
             await loadKeys()
