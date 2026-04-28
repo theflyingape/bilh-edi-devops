@@ -116,7 +116,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         async onSelect(_e) {
           await queryModal(`OK to expire ${get(rowSelection)?.name} from ${get(instance)}?`, `The key is not removed -- only marked as expired.`)
           if (get(response)) {
-            await endpoint(get(instance)!, `gpg/${get(rowSelection)?.id}`, 'UPDATE')
+            await endpoint(get(instance)!, `gpg/${get(rowSelection)?.fingerprint || get(rowSelection)?.id}`, 'DELETE')
             await loadKeys()
           }
         }
