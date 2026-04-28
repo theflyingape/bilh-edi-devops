@@ -110,11 +110,11 @@ function getDropdownActions(): DropdownMenuItem[][] {
         }
       },
       {
-        label: 'Expire',
+        label: 'Delete',
         icon: 'i-lucide-git-pull-request-closed',
-        color: 'neutral',
+        color: 'error',
         async onSelect(_e) {
-          await queryModal(`OK to expire ${get(rowSelection)?.name} from ${get(instance)}?`, `The key is not removed -- only marked as expired.`)
+          await queryModal(`OK to delete ${get(rowSelection)?.name} (${get(rowSelection)?.comment}) from ${get(instance)}?`, `Any Secret key paired with this must be removed first by a root administrator. This attempts to drop the Public key from the ring.`)
           if (get(response)) {
             await endpoint(get(instance)!, `gpg/${get(rowSelection)?.fingerprint || get(rowSelection)?.id}`, 'DELETE')
             await loadKeys()
