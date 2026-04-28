@@ -32,7 +32,7 @@
         </div>
         <div class="flex gap-x-2 justify-end">
           <div>
-            <UButton :label="`${gpg.fingerprint ? 'UPDATE' : 'ADD'}`" color="action" size="lg" variant="subtle" loading-auto @click.prevent="() => {
+            <UButton :label="`${props.gpg.fingerprint ? 'UPDATE' : 'ADD'}`" color="action" size="lg" variant="subtle" loading-auto icon="i-lucide-shield-plus" @click.prevent="() => {
               endpoint<hcieResponse<gpg[]>>(hcie, gpg.fingerprint ? `gpg/${gpg.fingerprint}` : 'gpg', gpg.fingerprint ? 'UPDATE' : 'POST', gpg).then((res) => {
                 if (res && res.status == 'ERR') {
                   console.error('gpg key failure:', res.error)
