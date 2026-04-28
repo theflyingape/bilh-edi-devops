@@ -28,7 +28,7 @@
           </UFormField>
         </div>
         <div class="self-center">
-          <UTextarea v-model="gpg.pubkey" class="font-mono" color="neutral" autoresize :cols="80" :rows="10" :maxrows="20" placeholder="… supply PGP public key block here, else a new keypair generates …" />
+          <UTextarea v-model="gpg.pubkey" class="font-mono" color="neutral" autoresize :cols="65" :rows="10" :maxrows="20" placeholder="… supply PGP public key block here, else a new keypair generates …" />
         </div>
         <div class="flex gap-x-2 justify-end">
           <div>

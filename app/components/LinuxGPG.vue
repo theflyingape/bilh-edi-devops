@@ -104,7 +104,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-file-output',
         color: 'primary',
         async onSelect(_e) {
-          const fpr = `Fingerprint: ${get(rowSelection)!.id}`
+          const fpr = `Fingerprint: ${get(rowSelection)!.fingerprint}`
           navigator.clipboard.writeText(`${fpr}\n\n` + (get(rowSelection)!.pubkey || '- no public key exported -\n'))
           toast.add({ title: `Public key copied`, description: `${fpr}` })
         }
