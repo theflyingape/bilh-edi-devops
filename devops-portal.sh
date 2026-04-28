@@ -9,7 +9,7 @@
 # flush any transition files for download
 rm -fv files/*
 
-NODE_VERSION=$( cat .nvmrc ) NODE_ENV=production .nvm/nvm-exec npm run build
+NODE_OPTIONS="--max-old-space-size=2560" NODE_VERSION=$( cat .nvmrc ) NODE_ENV=production .nvm/nvm-exec npm run build
 
 # this hack works, but found mechanism in nitro to have it included
 #rsync -a node_modules/node-pty/ .output/server/node_modules/node-pty/

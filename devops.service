@@ -12,12 +12,12 @@ WorkingDirectory=/opt/devops
 EnvironmentFile=/opt/devops/.env
 ExecStart=/bin/sh /opt/devops/devops-portal.sh
 ExecStartPre=-/usr/bin/rm -rf /opt/devops/.output
-ExecStopPost=/usr/bin/sleep 12
+ExecStopPost=/usr/bin/sleep 2
 KillMode=control-group
 Restart=on-failure
-RestartSec=24
+RestartSec=12
 SendSIGKILL=no
-TimeoutStopSec=24
+TimeoutStopSec=12
 
 [Install]
 WantedBy=multi-user.target
