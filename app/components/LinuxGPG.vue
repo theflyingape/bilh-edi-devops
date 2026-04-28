@@ -4,14 +4,15 @@
   <UCard variant="subtle">
     <template #default>
       <div class="flex flex-col gap-2 items-start">
-        <div class="w-5/6">
-          <b>GPG</b> (GNU Privacy Guard) is a free, open-source cryptographic tool used to encrypt and sign data and communications. It is an implementation of the OpenPGP standard and serves as a compatible alternative to Symantec’s proprietary PGP software.
-        </div>
-        <div class="flex nowrap">
+        <div class="flex items-end nowrap">
           <UIcon :name="icon(instance!)" class="align-middle size-8" />
           <IrisSelect v-model="instance" :epic="false" @change.prevent="loadKeys()" />
           &nbsp;
           <UButton label="Import" icon="i-lucide-import" color="action" />
+          <USeparator class="h-12 mb-3 ml-8 mr-4" color="neutral" orientation="vertical" size="lg" />
+          <div class="w-1/2">
+            <b>GPG</b> (GNU Privacy Guard) is a free, open-source cryptographic tool used to encrypt and sign data and communications. It is an implementation of the OpenPGP standard and serves as a compatible alternative to Symantec’s proprietary PGP software.
+          </div>
         </div>
         <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
           th: 'p-1',
@@ -99,8 +100,9 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-file-output',
         color: 'primary',
         async onSelect(_e) {
-          navigator.clipboard.writeText(get(rowSelection)!.pubkey || '-no public key-')
-          toast.add({ title: `Fingerprint ${get(rowSelection)!.id}`, description: `Public key copied` })
+          const fpr = `Fingerprint: ${get(rowSelection)!.id}`
+          navigator.clipboard.writeText(`${fpr}\n\n` + (get(rowSelection)!.pubkey || '- no public key exported -\n'))
+          toast.add({ title: `Public key copied`, description: `${fpr}` })
         }
       },
       {

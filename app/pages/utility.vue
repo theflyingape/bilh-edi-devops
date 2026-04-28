@@ -70,7 +70,7 @@
           </UCard>
         </template>
         <template #gpg>
-          <div class="m-2 w-full">
+          <div class="m-2">
             <LinuxGPG hcie="Test" />
           </div>
         </template>
