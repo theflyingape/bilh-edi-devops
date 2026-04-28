@@ -65,6 +65,7 @@ export interface gpg {
   alias?: string
   email?: string
   trust: string
+  pubkey?: string
 }
 
 //  GET https://vip/api/hcie/user/:id

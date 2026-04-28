@@ -11,11 +11,13 @@ SyslogIdentifier=DevOps
 WorkingDirectory=/opt/devops
 EnvironmentFile=/opt/devops/.env
 ExecStart=/bin/sh /opt/devops/devops-portal.sh
+ExecStartPre=-/usr/bin/rm -rf /opt/devops/.output
+ExecStopPost=/usr/bin/sleep 6
 KillMode=control-group
 Restart=on-failure
-RestartSec=60
+RestartSec=30
 SendSIGKILL=no
-TimeoutStopSec=60
+TimeoutStopSec=30
 
 [Install]
 WantedBy=multi-user.target

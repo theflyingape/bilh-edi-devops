@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { LinuxGPGView } from '#components'
+import { LinuxGPGEdit } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
 import type { gpg, hcieResponse } from '~/composables/useIrisSessions'
@@ -56,9 +56,11 @@ import type { gpg, hcieResponse } from '~/composables/useIrisSessions'
 const props = defineProps<{
   hcie: HCIE
 }>()
+
 const { queryModal, response } = useDevOps()
 const { icon, endpoint } = useIrisSessions()
 const instance = defineModel<HCIE>('instance', { required: false })
+const toast = useToast()
 
 const table = useTemplateRef('table')
 const data = ref<gpg[]>([])
@@ -85,11 +87,20 @@ function getDropdownActions(): DropdownMenuItem[][] {
   return [
     [
       {
+        label: 'Edit',
+        icon: 'i-lucide-notebook-pen',
+        color: 'secondary',
+        async onSelect(_e) {
+          await editKey(get(rowSelection)!.id)
+        }
+      },
+      {
         label: 'Export',
         icon: 'i-lucide-file-output',
-        color: 'info',
+        color: 'primary',
         async onSelect(_e) {
-          await viewKey(get(rowSelection)!.id)
+          navigator.clipboard.writeText(get(rowSelection)!.pubkey || '-no public key-')
+          toast.add({ title: `Fingerprint ${get(rowSelection)!.id}`, description: `Public key copied` })
         }
       },
       {
@@ -97,7 +108,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-git-pull-request-closed',
         color: 'neutral',
         async onSelect(_e) {
-          await queryModal(`OK to expire ${get(rowSelection)?.name} from ${get(instance)}?`, `The key is not removed, but only marked as expired.`)
+          await queryModal(`OK to expire ${get(rowSelection)?.name} from ${get(instance)}?`, `The key is not removed -- only marked as expired.`)
           if (get(response)) {
             await endpoint(get(instance)!, `gpg/${get(rowSelection)?.id}`, 'UPDATE')
             await loadKeys()
@@ -135,14 +146,14 @@ async function loadKeys() {
 
 const pubKey = ref('')
 
-async function viewKey(id: string) {
+async function editKey(id: string) {
   interface getKey {
     id: string
     pubKey: string
   }
   await endpoint<hcieResponse<getKey>>(get(instance)!, `gpg/${id}`).then(async (result) => {
     set(pubKey, result?.data.pubKey || 'got this instead')
-    await useOverlay().create(LinuxGPGView, {
+    await useOverlay().create(LinuxGPGEdit, {
       props: {
         title: `${get(instance)} :: Public key ${get(rowSelection)?.id}`,
         pubkey: get(pubKey)
