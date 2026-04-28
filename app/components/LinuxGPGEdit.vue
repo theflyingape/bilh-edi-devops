@@ -15,8 +15,8 @@
           <UFormField label="Fingerprint">
             <UInput v-model="gpg.fingerprint" class="w-94" disabled icon="i-lucide-fingerprint-pattern" variant="soft" />
           </UFormField>
-          <UFormField label="Alias" help="hint: best used as a unique mnemonic in CAPS to identify this key">
-            <UInput v-model="gpg.alias" class="w-72" placeholder="shorter text identifier" icon="i-lucide-id-card" />
+          <UFormField label="Comment" help="hint: best used as a unique mnemonic in CAPS to identify this key">
+            <UInput v-model="gpg.comment" class="w-72" placeholder="shorter text identifier" icon="i-lucide-id-card" />
           </UFormField>
         </div>
         <div class="flex gap-x-4">

@@ -26,7 +26,7 @@
           </template>
           <template #name-cell="{ row }">
             <p class="font-medium text-highlighted">
-              {{ row.original.name }} ({{ row.original.alias || '- missing -' }})
+              {{ row.original.name }} ({{ row.original.comment || '- missing -' }})
             </p>
             <p class="font-mono">
               {{ row.original.email || '- missing -' }}
@@ -75,7 +75,7 @@ const columns: TableColumn<gpg>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'name (alias) / email'
+    header: 'name (comment) / email'
   },
   {
     accessorKey: 'trust',
@@ -139,7 +139,7 @@ function onRowSelect(e: Event, row: TableRow<gpg> | null) {
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ id: 'FFEEDDCC00112233', fingerprint: '12345678ABCDEF90', name: 'BILH IT', alias: 'HCIETEST', email: 'nobody@mail.com', trust: 'u' }])
+    set(data, [{ id: 'FFEEDDCC00112233', fingerprint: '12345678ABCDEF90', name: 'BILH IT', comment: 'HCIETEST', email: 'nobody@mail.com', trust: 'u' }])
   } else {
     set(data, [])
     const hcie = get(instance)!
@@ -157,8 +157,8 @@ async function editKey(generate = false) {
     id: get(rowSelection)?.id,
     fingerprint: get(rowSelection)?.fingerprint,
     name: get(rowSelection)?.name,
-    alias: get(rowSelection)?.alias,
-    email: get(rowSelection)?.alias,
+    comment: get(rowSelection)?.comment,
+    email: get(rowSelection)?.email,
     trust: get(rowSelection)?.trust,
     pubkey: get(rowSelection)?.pubkey
   }
