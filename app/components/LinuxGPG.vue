@@ -11,14 +11,15 @@
           <UButton label="Import" icon="i-lucide-import" color="action" @click.prevent="editKey(true)" />
           <USeparator class="h-16 ml-4 mr-2" color="neutral" orientation="vertical" size="lg" />
           <div class="max-w-1/2">
-            <b>GPG</b> (GNU Privacy Guard) is a free, open-source cryptographic tool used to encrypt and sign data and communications. It is an implementation of the OpenPGP standard and serves as a compatible alternative to Symantec’s proprietary PGP software.
+            <b>GPG</b> (GNU Privacy Guard) is a free, open-source cryptographic tool used to encrypt and sign data and communications. It is an implementation of the OpenPGP standard and serves as a compatible alternative to Symantec's proprietary PGP software.
           </div>
         </div>
         <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
           th: 'p-1',
           tr: 'even:bg-olive-50 odd:bg-taupe',
           td: 'p-2'
-        }" @hover="onRowSelect">
+        }" @hover="onRowSelect"
+        >
           <template #id-cell="{ row }">
             <p class="font-mono">
               {{ row.original.id }}
@@ -96,7 +97,6 @@ function getDropdownActions(): DropdownMenuItem[][] {
         color: 'secondary',
         async onSelect(_e) {
           await editKey()
-          await loadKeys()
         }
       },
       {
@@ -172,6 +172,7 @@ async function editKey(generate = false) {
     },
     destroyOnClose: true
   }).open()
+  await loadKeys()
 }
 
 onMounted(async () => {
