@@ -33,12 +33,12 @@
         <div class="flex gap-x-2 justify-end">
           <div>
             <UButton :label="`${gpg.fingerprint ? 'UPDATE' : 'ADD'}`" color="action" size="lg" variant="subtle" loading-auto @click.prevent="async () => {
-              await endpoint<hcieResponse<gpg[]>>(hcie, 'gpg', gpg.fingerprint ? 'UPDATE' : 'POST', gpg).then((res) => {
+              await endpoint<hcieResponse<gpg[]>>(hcie, gpg.fingerprint ? `gpg/${gpg.fingerprint}` : 'gpg', gpg.fingerprint ? 'UPDATE' : 'POST', gpg).then((res) => {
                 if (res && res.status == 'ERR') {
                   console.error('gpg key failure:', res.error)
                 }
+                emit('close', true)
               })
-              emit('close', true)
             }"
             />
           </div>
