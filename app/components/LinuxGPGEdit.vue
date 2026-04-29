@@ -11,20 +11,20 @@
   >
     <template #body>
       <div class="flex flex-col gap-y-4">
-        <div class="flex gap-x-4">
-          <UFormField label="Fingerprint">
-            <UInput v-model="gpg.fingerprint" class="w-94" disabled icon="i-lucide-fingerprint-pattern" variant="soft" />
+        <div class="flex justify-between">
+          <UFormField class="w-1/2" label="Fingerprint">
+            <UInput v-model="gpg.fingerprint" class="w-full" disabled icon="i-lucide-fingerprint-pattern" variant="soft" />
           </UFormField>
-          <UFormField label="Comment" help="hint: best used as a unique mnemonic in CAPS to identify this key">
-            <UInput v-model="gpg.comment" class="w-72" placeholder="shorter text identifier" icon="i-lucide-id-card" />
+          <UFormField class="w-5/12" label="Comment" help="hint: best used as a unique mnemonic in CAPS to identify this key">
+            <UInput v-model="gpg.comment" class="w-full" placeholder="shorter text identifier" icon="i-lucide-id-card" />
           </UFormField>
         </div>
-        <div class="flex gap-x-4">
-          <UFormField label="Name" help="minimum of 5 characters" required>
-            <UInput v-model="gpg.name" class="w-120" placeholder="free text identifier" icon="i-lucide-building-2" minlength="5" />
+        <div class="flex justify-between">
+          <UFormField class="w-1/2" label="Name" help="minimum of 5 characters" required>
+            <UInput v-model="gpg.name" class="w-full" placeholder="free text identifier" icon="i-lucide-building-2" minlength="5" />
           </UFormField>
-          <UFormField label="Email" help="optional, but must be valid">
-            <UInput v-model="gpg.email" type="email" class="w-88" placeholder="valid business contact" icon="i-lucide-at-sign" />
+          <UFormField class="w-5/12" label="Email" help="optional, but must be valid">
+            <UInput v-model="gpg.email" type="email" class="w-full" placeholder="valid business contact" icon="i-lucide-at-sign" />
           </UFormField>
         </div>
         <div class="self-center">
