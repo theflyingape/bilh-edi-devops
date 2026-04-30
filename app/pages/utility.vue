@@ -90,7 +90,7 @@
                     <template #start>
                       <Placeholder class="aspect-video">
                         <div class="flex flex-row justify-center">
-                          <IrisProduction v-model:instance="Instance" v-model:production="Production" />
+                          <IrisProduction :hcie="Instance" :production="Production" />
                           <UCard class="grid grid-flow-row auto-rows-max max-w-1/4">
                             <template #header>
                               Client connection requirements
@@ -252,7 +252,7 @@ const items: StepperItem[] = [
   }
 ]
 
-const Instance = ref<HCIE>()
+const Instance = ref<HCIE | undefined>()
 const Production = ref('')
 const sftpEndpoint = ref('')
 const sftpEndpoints = ref<string[]>([])

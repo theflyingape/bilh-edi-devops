@@ -21,13 +21,13 @@
 import { get, set } from '@vueuse/core'
 
 const props = defineProps<{
-  hcie: HCIE
+  hcie?: HCIE
   production?: string
 }>()
 
 const { Productions, loadProductions } = useIrisSessions()
 const hcie = ref(props.hcie)
-const production = ref<string>(props.production || '')
+const production = ref(props.production)
 const items = ref([])
 
 watch(hcie, async () => {
@@ -35,9 +35,10 @@ watch(hcie, async () => {
 })
 
 async function loadItems() {
-  if (get(hcie)) {
-    await loadProductions(get(hcie)).then(() => {
-      set(items, Productions.get(get(hcie))!.productions)
+  const instance = get(hcie)
+  if (instance) {
+    await loadProductions(instance).then(() => {
+      set(items, Productions.get(instance)!.productions)
       set(production, get(items).length ? get(items)[0] : '')
     })
   }
