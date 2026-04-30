@@ -1,35 +1,46 @@
 <template>
-  <IrisSelect
-    v-model="instance"
-    :epic="false"
-    @change.prevent="loadProductions(instance)"
-  />
-  <USelect
-    v-model="production"
-    placeholder="select production"
-    :items="items"
-    class="max-h-fit"
-    :ui="{ content: 'min-w-fit' }"
-  />
+  <div class="flex nowrap">
+    <IrisSelect
+      v-model="hcie"
+      placeholder="instance"
+      :epic="false"
+      @change.prevent="loadProductions(hcie)"
+    />
+    &nbsp;
+    <USelect
+      v-model="production"
+      placeholder="production"
+      :items="items"
+      class="max-h-fit"
+      :ui="{ content: 'min-w-fit' }"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { get, set } from '@vueuse/core'
 
+const props = defineProps<{
+  hcie: HCIE
+  production?: string
+}>()
+
 const { Productions, loadProductions } = useIrisSessions()
-const instance = defineModel<HCIE>('instance', { required: true })
-const production = defineModel<string>('production')
+const hcie = ref(props.hcie)
+const production = ref<string>(props.production || '')
 const items = ref([])
 
-watch(instance, async () => {
+watch(hcie, async () => {
   await loadItems()
 })
 
 async function loadItems() {
-  await loadProductions(instance.value).then(() => {
-    set(items, Productions.get(instance.value)!.productions)
-    set(production, get(items).length ? get(items)[0] : '')
-  })
+  if (get(hcie)) {
+    await loadProductions(get(hcie)).then(() => {
+      set(items, Productions.get(get(hcie))!.productions)
+      set(production, get(items).length ? get(items)[0] : '')
+    })
+  }
 }
 
 onMounted(async () => {

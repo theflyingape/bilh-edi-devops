@@ -13,7 +13,7 @@
       <div class="flex flex-col gap-y-4">
         <div class="flex justify-between">
           <UFormField class="w-7/12" label="Fingerprint">
-            <UBadge class="w-full" :label="gpg.fingerprint" icon="i-lucide-fingerprint-pattern" color="neutral" variant="soft" />
+            <UBadge class="w-full" :label="gpg.fingerprint" icon="i-lucide-fingerprint-pattern" color="neutral" size="lg" variant="soft" />
           </UFormField>
           <UFormField class="w-2/5" label="Comment" help="hint: best used as a unique mnemonic in CAPS to identify this key">
             <UInput v-model="gpg.comment" class="w-full" placeholder="shorter text identifier" icon="i-lucide-id-card" />

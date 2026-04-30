@@ -50,7 +50,7 @@
                 <div class="flex flex-col gap-2 items-justify">
                   <UInput v-model="input" class="m-2 w-120" placeholder="hostname or ip address" />
                   <div class="w-120">
-                    <b>DNS</b> (<i>Domain Name System</i>) is the "<b>phonebook of the internet</b>". It is a hierarchical and distributed naming system that translates human-friendly domain names (<i>like</i> google.com) into the numerical IP addresses (<i>like</i> 142.250.190.46) that computers use to locate each other on a network. 
+                    <b>DNS</b> (<i>Domain Name System</i>) is the "<b>phonebook of the internet</b>". It is a hierarchical and distributed naming system that translates human-friendly domain names (<i>like</i> google.com) into the numerical IP addresses (<i>like</i> 142.250.190.46) that computers use to locate each other on a network.
                   </div>
                 </div>
                 <div class="flex flex-col gap-2 items-end">
@@ -136,16 +136,15 @@
 </template>
 
 <script setup lang="ts">
-import type { TabsItem } from '@nuxt/ui'
+import type { RadioGroupItem, RadioGroupValue, StepperItem, TabsItem } from '@nuxt/ui'
 import { get, set, useFileSystemAccess } from '@vueuse/core'
-import type { InputMenuItem, RadioGroupItem, RadioGroupValue, StepperItem } from '@nuxt/ui'
-const { endpoint, icon } = useIrisSessions()
-
 
 definePageMeta({
   auth: false,
   pageTransition: { name: 'page', mode: 'out-in' }
 })
+
+const { endpoint, icon } = useIrisSessions()
 
 //  UTILITY navigation tabs
 const utilityItems = ref<TabsItem[]>([
@@ -176,7 +175,7 @@ const utilityItems = ref<TabsItem[]>([
     slot: 'sftp',
     value: 'sftp',
     ui: { label: 'hover:bg-amber-100' }
-  },
+  }
 ])
 
 const utilityTab = ref('getent')
@@ -226,8 +225,7 @@ async function getent(net = 'localhost') {
     let result = res?.status + ': '
     if (res?.error) {
       result += res.error
-    }
-    else if (res?.result) {
+    } else if (res?.result) {
       result += res.result.ip + '\n'
       result += res.result.hosts.toString()
       result += '\n==================\n'
@@ -254,17 +252,16 @@ const items: StepperItem[] = [
   }
 ]
 
-const { InstanceDefault } = useIrisSessions()
-const Instance = ref(InstanceDefault)
+const Instance = ref<HCIE>()
 const Production = ref('')
 const sftpEndpoint = ref('')
-const sftpEndpoints = ref(<string[]>[])
+const sftpEndpoints = ref<string[]>([])
 const sftpUsername = ref('')
-const sftpUsernames = ref(<string[]>[])
+const sftpUsernames = ref<string[]>([])
 const sftpPassword = ref('')
-const sftpPasswords = ref(<string[]>[])
+const sftpPasswords = ref<string[]>([])
 const sftpKeyfile = ref('')
-const sftpKeyfiles = ref(<string[]>[])
+const sftpKeyfiles = ref<string[]>([])
 
 const stepper = useTemplateRef('stepper')
 const xfers = ref<RadioGroupItem[]>(['Pick-up', 'Drop-off'])
