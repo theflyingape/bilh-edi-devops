@@ -15,9 +15,9 @@ ExecStartPre=-/usr/bin/rm -rf /opt/devops/.output
 ExecStopPost=/usr/bin/sleep 2
 KillMode=control-group
 Restart=on-failure
-RestartSec=12
+RestartSec=10
 SendSIGKILL=no
-TimeoutStopSec=12
+TimeoutStopSec=10
 
 [Install]
 WantedBy=multi-user.target

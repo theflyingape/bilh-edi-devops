@@ -104,8 +104,9 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-file-output',
         color: 'primary',
         async onSelect(_e) {
+          const label = `${get(rowSelection)!.name} ${get(rowSelection)!.comment ? '(' + get(rowSelection)!.comment + ')' : ''} ${get(rowSelection)!.email ? '<' + get(rowSelection)!.email + '>' : ''}`
           const fpr = `Fingerprint: ${get(rowSelection)!.fingerprint}`
-          navigator.clipboard.writeText(`${fpr}\n\n` + (get(rowSelection)!.pubkey || '- no public key exported -\n'))
+          navigator.clipboard.writeText(`${label}\n${fpr}\n\n` + (get(rowSelection)!.pubkey || '- no public key exported -\n'))
           toast.add({ title: `Public key copied`, description: `${fpr}` })
         }
       },

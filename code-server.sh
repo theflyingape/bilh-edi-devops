@@ -58,6 +58,7 @@ while (( alive < idle )); do
 	let alive=( now-pulse )
 	echo -n "."
 	sleep $(( ( idle-alive ) ))
+	sudo pgrep -c -f $pname -U $USER &> /dev/null || break
 done
 
 echo 
