@@ -44,7 +44,7 @@ fi
 sudo su - $USER -c "PASSWORD=$PASSWORD PORT=$PORT code-server	\
 	-an 'EDI DevOps' --i18n /files/.code-server/custom.json		\
 	--auth password --disable-telemetry --disable-update-check	\
-	--reconnection-grace-time 1200000							\
+	--idle-timeout-seconds $IDLE								\
 	--extensions-dir /files/.code-server/extensions" &
 
 echo "`date`  Launched ... "
@@ -58,7 +58,7 @@ while (( alive < idle )); do
 	pulse=$( sudo date +%s -r "${HB}" )
 	let alive=( now-pulse )
 	echo -n "."
-	sleep $(( ( idle-alive ) ))
+	sleep 200
 	sudo pgrep -c -f $pname -U $USER &> /dev/null || break
 done
 
