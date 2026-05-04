@@ -130,6 +130,11 @@
             </template>
           </UCard>
         </template>
+        <template #ssh>
+          <div class="m-2">
+            <LinuxSSH hcie="Test" />
+          </div>
+        </template>
       </UTabs>
     </div>
   </div>
@@ -175,6 +180,13 @@ const utilityItems = ref<TabsItem[]>([
     slot: 'sftp',
     value: 'sftp',
     ui: { label: 'hover:bg-amber-100' }
+  },
+  {
+    label: 'SSH',
+    icon: 'i-flat-color-icons-data-protection',
+    slot: 'ssh',
+    value: 'ssh',
+    ui: { label: 'hover:bg-violet-100' }
   }
 ])
 

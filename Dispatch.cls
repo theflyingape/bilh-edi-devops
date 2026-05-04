@@ -10,6 +10,8 @@ Class API.Dispatch Extends %CSP.REST
 
 Parameter CHARSET = "utf-8";
 
+Parameter GNUPGHOME = "env GNUPGHOME=/files/etc/gpg";
+
 /// web session is preserved across REST calls must be DISABLED
 Parameter UseSession As Integer = 0;
 
@@ -35,7 +37,13 @@ XData UrlMap [ XMLNamespace = "https://hciedev.laheyhealth.org/api/hcie/urlmap" 
 	<Route Url="/processes" Method="GET" Call="Processes" Cors="false" />
 	<Route Url="/productions" Method="GET" Call="Productions" Cors="false" />
 	<Route Url="/interfaces/:namespace" Method="GET" Call="BusinessHosts" Cors="false" />
+	<Route Url="/fastfetch" Method="GET" Call="FastFetch" Cors="false" />
 	<Route Url="/filestat" Method="POST" Call="FileStat" Cors="false" />
+	<Route Url="/getent/:net" Method="GET" Call="getent" Cors="false" />
+	<Route Url="/gpg" Method="GET" Call="gpg" Cors="false" />
+	<Route Url="/gpg" Method="POST" Call="gpg" Cors="false" />
+	<Route Url="/gpg/:id" Method="DELETE" Call="gpg" Cors="false" />
+	<Route Url="/gpg/:id" Method="UPDATE" Call="gpg" Cors="false" />
 </Routes>
 }
 
@@ -66,8 +74,8 @@ ClassMethod setError(exp) As %String
 {
 	// if exp.%IsA("%Exception.SQL")
 	set error = "error "_ exp.Code _" :: "_ exp.Name
-	if (exp.Data '="") set error = error _" :: "_ exp.Data
-	if (exp.Location '="") set error = error _" :: "_ exp.Location
+	if (exp.Data '= "") set error = error _" :: "_ exp.Data
+	if (exp.Location '= "") set error = error _" :: "_ exp.Location
 	quit error
 }
 
@@ -261,58 +269,43 @@ ClassMethod Account(id As %String) As %Status
 	 */
 	if $d(id) {
 		set %response.ContentType = "application/json"
-		set payload = { "status":"OK" }
-		set groups = $lb()
-		set admin = 0
-		set analyst = 0
-		set sysadm = 0
-		set shell = 0
+		set payload = { "status":"OK", "data":{} }
 
 		if $d(%request) set command = %request.CgiEnvs("REQUEST_METHOD")
 
+		//	grant Security.Roles_List Procedure to %SQL role
 		set ns = $namespace set $namespace = "%SYS"
+		set statement = ##class(%SQL.Statement).%New()
+		set status = statement.%Prepare("SELECT Name FROM Security.Roles_List() WHERE Name %MATCHES '[A-Z]*_DEV' OR Name %MATCHES '[A-Z]*_GUEST' OR Name %MATCHES '[A-Z]*_OPS' ORDER BY Name")
+		set result = statement.%Execute()
+		set interops = [], prior = ""
+		while result.%Next() {
+			set role = result.%Get("Name")
+			set hs = $p(role, "_", 1), scope = $p(role, "_", 2)
+			if (hs '= prior) {
+				set prior = hs
+				do interops.%Push({ "hs":(hs), "scope":[(scope)] })
+			}
+			else {
+				set l = interops.%Size()
+				do interops.%Get(l - 1).scope.%Push(scope)
+			}
+		}
+		do result.%Close()
+		kill result, statement
+
 		if $g(command) = "GET" {
 			if id = "@" {
+				set payload.data = {}
 				for {
 					set id = $o(^["HSCUSTOM"]AD(id)) quit:id=""
-					do access(id)
-					set user = {}
-					set user.id = id
-					set user.groups = ..ljArray(groups)
-					set user.namespace = $g(^(id, "ns"))
-					set user.admin = admin
-					set user.analyst = analyst
-					set user.sysadm = sysadm
-					set user.shell = shell
-					set status = ##class(Security.Users).Get(id, .props)
-					if (status = $$$OK) {
-						set user.name = props("FullName")
-						set user.comment = $s(props("Comment") = props("FullName"):"", 1:props("Comment"))
-						set user.enabled = props("Enabled")
-						set user.lastlogin = props("LoginDateTime")
-						if (user.namespace = "") set user.namespace = props("NameSpace")
-					}
-					else {
-						set user.name = ""
-						set user.comment = ""
-						set user.enabled = 0
-						set user.lastlogin = "never"
-						set user.namespace = ""
-					}
-					set user.admin = admin
-					set user.analyst = analyst
-					set user.sysadm = sysadm
-					set user.shell = shell
-					if (user.namespace = "") {
-						set user.namespace = "LAHEYHEALTH"
-						if (user.sysadm) set user.namespace = "%SYS"
-						if (user.admin) set user.namespace = "LAHEYHEALTH"
-						if (user.analyst) set user.namespace = "LAHEYHEALTH"
-						if (user.namespace = "" && user.shell) set user.namespace = "TRAINING"
-					}
+					set user = $$fetch(id)
 					if (user.name = "") && (user.enabled = 0) continue
-					do payload.%Set(id, user)
+					do payload.data.%Set(id, user)
 				}
+			}
+			else {
+				set payload.data = $$fetch(id)
 			}
 			write payload.%ToJSON()
 		}
@@ -323,15 +316,25 @@ ClassMethod Account(id As %String) As %Status
 					if (%request.CgiEnvs("CONTENT_LENGTH")) {
 						set sent = %request.Content.Read()
 						set content = {}.%FromJSON(sent)
-						;if $IsObject(groups) && (groups.%GetLength() > 0) {
-							;set ^["HSCUSTOM"]AD(id) = $zjoin(groups.%GetAll(), ",")
-							;set status = ##class(Security.Users).RemoveFromAllGroups(id)}
-							;set status = ##class(Security.Users).AddToMultipleGroups(id, groups.%GetAll())
-						;}
+						kill hs set roles = ""
+						; sort by hs to ensure consistent role list construction
+						for i = 0:1:content.access.%Size() - 1 {
+							set hs = content.access.%Get(i).hs, scope = content.access.%Get(i).value
+							set hs(hs) = scope
+						}
+						set hs = ""
+						for i = 0:1:content.access.%Size() - 1 {
+							set hs = $o(hs(hs)), scope = hs(hs)
+							if (scope '= "") {
+								set role = hs_"_"_scope
+								set $li(roles, *+1) = role
+							}
+						}
+						set ^["HSCUSTOM"]AD(id, "hs") = roles
 						; only allow update of LOCAL groups and HOME namespace for now
 						do access(id)
-						if (content.admin '= admin) {
-							if (content.admin) {
+						if (content.irisadm '= irisadm) {
+							if (content.irisadm) {
 								;set status = ##class(Security.Users).AddToGroup(id, "irisadm")
 								if ($zf(-1, "sudo groupmems -a " _ id _ " -g irisadm")) {
 									set payload.error = "failed to add user to irisadm group on host"
@@ -350,8 +353,8 @@ ClassMethod Account(id As %String) As %Status
 							}
 							set ^["HSCUSTOM"]AD(id) = groups
 						}
-						if (content.analyst '= analyst) {
-							if (content.analyst) {
+						if (content.irisdev '= irisdev) {
+							if (content.irisdev) {
 								;set status = ##class(Security.Users).AddToGroup(id, "irisdev")
 								if ($zf(-1, "sudo groupmems -a " _ id _ " -g irisdev")) {
 									set payload.error = "failed to add user to irisdev group on host"
@@ -422,27 +425,98 @@ ClassMethod Account(id As %String) As %Status
 		set $namespace = ns
 	}
 	else {
-			set %response.ContentType = "text/html"
-			if $d(%request) write %request.CgiEnvs("REQUEST_METHOD")," "
-			write "<b>User</b> -- missing user account id</br>",!
-		}
+		set %response.ContentType = "text/html"
+		if $d(%request) write %request.CgiEnvs("REQUEST_METHOD")," "
+		write "<b>User</b> -- missing user account id</br>",!
+	}
 	do ..Debug()
-		quit $$$OK
+	quit $$$OK
+
+	//	load all of the selectable interoperability roles
+interop()
+	set interop = ""
+	set sql = "SELECT Name FROM Security.Roles_List() WHERE Name LIKE ? ESCAPE '\'"
+	set ^["HSCUSTOM"]rob("sql")=sql
+	for scope = "DEV", "OPS", "GUEST" {
+		set statement = ##class(%SQL.Statement).%New()
+		set status = statement.%Prepare(sql)
+		set result = statement.%Execute("%\_" _scope)
+		while result.%Next() {
+			set role = result.%Get("Name")
+			set $li(interop, *+1) = role
+		}
+	}
+	quit interop
+
+	//	load an IRIS account into user
+fetch(id)
+	do access(id)
+	set user = {}
+	set user.id = id
+	set user.groups = ..ljArray(groups)
+	do user.%Set("irisdev", irisdev, "boolean")
+	do user.%Set("irisadm", irisadm, "boolean")
+	do user.%Set("sysadm", sysadm, "boolean")
+	set user.access = access
+	set user.namespace = $g(^["HSCUSTOM"]AD(id, "ns"))
+
+	set old = $namespace set $namespace = "%SYS"
+	set status = ##class(Security.Users).Get(id, .props)
+	set $namespace = old
+	if (status = $$$OK) {
+		set user.name = props("FullName")
+		set user.comment = $s(props("Comment") = props("FullName"):"", 1:props("Comment"))
+		do user.%Set("enabled", props("Enabled"), "boolean")
+		set user.lastlogin = props("LoginDateTime")
+		if (user.namespace = "") set user.namespace = props("NameSpace")
+	}
+	else {
+		set user.name = ""
+		set user.comment = ""
+		do user.%Set("enabled", 0, "boolean")
+		set user.lastlogin = "never"
+		set user.namespace = ""
+	}
+	if (user.namespace = "") {
+		set user.namespace = "USER"
+	}
+	quit user
 
 access(id)
 	try {
-		set groups = ^["HSCUSTOM"]AD(id)
-		set admin = $lf(groups, "irisadm") > 0
-		set analyst = $lf(groups, "irisdev") > 0
+		set groups = $g(^["HSCUSTOM"]AD(id))
+		;
+		set irisdev = $lf(groups, "irisdev") > 0
+		set irisadm = $lf(groups, "irisadm") > 0
 		set sysadm = $lf(groups, "sysadm") > 0
-		set shell = admin || analyst || sysadm || $lf(groups, "grp-os-shell-access") > 0
+		;
+		set access = []
+		set hs = $g(^(id, "hs"))
+		set hsRoles = $s(hs = "":[], 1:..ljArray(hs))
+		for i = 0:1:hsRoles.%Size() - 1 {
+			set hs = $p(hsRoles.%Get(i), "_", 1)
+			set scope = $p(hsRoles.%Get(i), "_", 2)
+			do access.%Push({ "hs":(hs), "value":(scope), "items":[] })
+		}
+		for i = 0:1:interops.%Size() - 1 {
+			set hs = interops.%Get(i).hs
+			set items = interops.%Get(i).scope
+			set found = 0
+			for j = 0:1:access.%Size() - 1 {
+				if (access.%Get(j).hs = hs) {
+					set access.%Get(j).items = items
+					set found = j + 1
+				}
+			}
+			//	backfill any missing interop roles for this user
+			if 'found {
+				do access.%Push({ "hs":(hs), "value":(""), "items":(items) })
+			}
+		}
 	}
 	catch exp {
-		set groups = ""
-		set admin = 0
-		set analyst = 0
-		set sysadm = 0
-		set shell = 0
+		set payload.status = "ERR"
+		set payload.error = ..setError(exp)
 	}
 	quit
 }
@@ -509,7 +583,7 @@ ClassMethod Status() As %Status
 	 * @apiDescription returns Mirroring and Production states
 	 */
 	set %response.ContentType = "application/json"
-	set payload = { "status":"OK", "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
+	set payload = { "status":"OK", "hostName":(##class(%SYS.System).GetNodeName()), "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
 
 	if $d(%request) set command = %request.CgiEnvs("REQUEST_METHOD")
 
@@ -564,7 +638,7 @@ ClassMethod Processes() As %Status
 	 * @apiDescription summarize each Production Namespace process run state
 	 */
 	set %response.ContentType = "application/json"
-	set payload = { "status":"OK", "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
+	set payload = { "status":"OK", "hostName":(##class(%SYS.System).GetNodeName()), "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
 
 	if $d(%request) set command = %request.CgiEnvs("REQUEST_METHOD")
 
@@ -638,7 +712,7 @@ ClassMethod Productions() As %Status
 	 * @apiDescription enumerate each Production Namespace in this instance
 	 */
 	set %response.ContentType = "application/json"
-	set payload = { "status":"OK", "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
+	set payload = { "status":"OK", "hostName":(##class(%SYS.System).GetNodeName()), "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
 
 	if $d(%request) set command = %request.CgiEnvs("REQUEST_METHOD")
 
@@ -678,13 +752,14 @@ ClassMethod BusinessHosts(namespace As %String) As %Status
 	 * @apiDescription query matching criteria on business host name and/or configs
 	 */
 	set %response.ContentType = "application/json"
-	set payload = { "status":"OK", "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()), "production":(namespace) }
+	set payload = { "status":"OK", "hostName":(##class(%SYS.System).GetNodeName()), "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
 
 	if $d(%request) set command = %request.CgiEnvs("REQUEST_METHOD")
 
-	if $g(command) = "GET" {
+	if $g(command) = "POST" {
 		try {
-			new $namespace set $namespace = namespace
+			new $namespace
+			set $namespace = namespace
 			
 		}
 		catch exp {
@@ -698,17 +773,55 @@ ClassMethod BusinessHosts(namespace As %String) As %Status
 	quit $$$OK
 }
 
+ClassMethod FastFetch() As %Status
+{
+	/**
+	 * @api {get} /fastfetch
+	 * @apiName FileStat
+	 * @apiGroup Operations
+	 * @apiVersion 1.0.0
+	 * @apiDescription retrieve fastfetch metadata off this host
+	 */
+	set %response.ContentType = "application/json"
+	set payload = { "status":"OK", "hostName":(##class(%SYS.System).GetNodeName()), "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
+
+	if $d(%request) set command = %request.CgiEnvs("REQUEST_METHOD")
+
+	if $g(command) = "GET" {
+		set content = ""
+		set fastfetch = "fastfetch --format json 2> /dev/null"
+		try {
+			open fastfetch:"qr":2 use fastfetch
+			for { read line set content = content_line_$c(10) }
+		}
+		catch exp {
+			close fastfetch
+			if (exp.Name = "<ENDOFFILE>") {
+				set payload.content = {}.%FromJSON(content)
+			}
+			else {
+				set payload.status = "ERR"
+				set payload.error = ..setError(exp)
+			}
+		}
+	}
+
+	write payload.%ToJSON()
+	do ..Debug()
+	quit $$$OK
+}
+
 ClassMethod FileStat() As %Status
 {
 	/**
-	 * @api {post} /filestat
+	 * @api {POST} /filestat
 	 * @apiName FileStat
 	 * @apiGroup Operations
 	 * @apiVersion 1.0.0
 	 * @apiDescription retrieve filesystem metadata off a name
 	 */
 	set %response.ContentType = "application/json"
-	set payload = { "status":"OK", "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
+	set payload = { "status":"OK", "hostName":(##class(%SYS.System).GetNodeName()), "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
 
 	if $d(%request) set command = %request.CgiEnvs("REQUEST_METHOD")
 
@@ -734,6 +847,226 @@ ClassMethod FileStat() As %Status
 				set payload.fileName = $p($p(metaInfo, " ", 6, *), "[[")
 				set payload.type = $p($p(metaInfo, "[[", *), "]]")
 			}
+		}
+		catch exp {
+			set payload.status = "ERR"
+			set payload.error = ..setError(exp)
+		}
+	}
+
+	write payload.%ToJSON()
+	do ..Debug()
+	quit $$$OK
+}
+
+ClassMethod getent(net As %String = "localhost") As %Status
+{
+	/**
+	 * @api {get} /getent/:net
+	 * @apiName hostname lookup
+	 * @apiGroup Operations
+	 * @apiVersion 1.0.0
+	 * @apiDescription retrieve IP and hostname against this host's resolver configuration
+	 */
+	set %response.ContentType = "application/json"
+	set payload = { "status":"OK", "hostName":(##class(%SYS.System).GetNodeName()), "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
+
+	if $d(%request) set command = %request.CgiEnvs("REQUEST_METHOD")
+
+	if $g(command) = "GET" {
+		try {
+			set lookup = "getent hosts '"_ net _"' 2> /dev/null"
+			open lookup:"qr":5
+			if $TEST use lookup read result
+			close lookup
+
+			set payload.result = {}
+			if (result '= "") {
+				set payload.result.ip = $p(result, " ")
+				set payload.result.hosts = ..ljArray($lfs($tr($ZSTRIP($p(result, " ", 2, *), "<W"), " ", ","), ","))
+			}
+
+			try {
+				set nmap = "nmap '"_ net _"' 2> /dev/null"
+				open nmap:"qr":5
+				set results = ""
+				if $TEST {
+					use nmap
+					for {
+						read line
+						set results = results_line_$c(10)
+					}
+				}
+			}
+			catch exp {
+				close nmap
+				if (exp.Name = "<ENDOFFILE>") {
+					set payload.result.nmap = results
+				}
+				else {
+					set payload.status = "ERR"
+					set payload.error = ..setError(exp)
+				}
+			}
+		}
+		catch exp {
+			close lookup
+			if (exp.Name = "<ENDOFFILE>") {
+				set payload.error = "no results from DNS lookup"
+			}
+			else {
+				set payload.status = "ERR"
+				set payload.error = ..setError(exp)
+			}
+		}
+	}
+
+	write payload.%ToJSON()
+	do ..Debug()
+	quit $$$OK
+}
+
+ClassMethod gpg(id As %String) As %Status
+{
+	/**
+	 * @api {get} /gpg
+	 * @apiName gpg key list
+	 * @apiGroup Operations
+	 * @apiVersion 1.0.0
+	 * @apiDescription retrieve GPG keys available on this host
+	 */
+	set %response.ContentType = "application/json"
+	set payload = { "status":"OK", "hostName":(##class(%SYS.System).GetNodeName()), "instance":(##class(Common.Util.EDI).#INSTANCE), "systemMode":($SYSTEM.Version.SystemMode()) }
+
+	if $d(%request) set command = %request.CgiEnvs("REQUEST_METHOD")
+
+	if $g(command) = "GET" {
+		try {
+			set payload.data = []
+			set ring = ..#GNUPGHOME _" gpg -k --with-colons 2> /dev/null | grep -A2 ^pub:u"
+			open ring:"qr":5
+			if $TEST {
+				set (id, fingerprint) = ""
+				for {
+					use ring read gpg
+					set segment = $p(gpg, ":")
+					if (segment = "pub") {
+						set trust = $p(gpg, ":", 2)
+						set id = $p(gpg, ":", 5)
+					}
+					if (segment = "fpr") {
+						set fingerprint = $p(gpg, ":", 10)
+					}
+					if (segment = "uid") && (id '= "") && (fingerprint '= "") {
+						set description = $p(gpg, ":", 10)
+						set name = $p(description, " <", 1)
+						set comment = $p($p(name, " (", 2), ")")
+						if $l(comment) set name = $p(name, " (")
+						set email =$p($p(description, " <", 2), ">")
+						set trust = $p(gpg, ":", 2)
+						set key = { "id":(id), "fingerprint":(fingerprint), "name":(name), "comment":(comment), "email":(email), "trust":(trust), "pubkey":("") }
+
+						//	fetch the public key block for this id if it's ultimately trusted and include in the response
+						try {
+							set armor = ..#GNUPGHOME _" gpg --armor --export "_ id  _" 2> /dev/null"
+							open armor:"qr":5
+							if $TEST {
+								use armor
+								for {
+									read line
+									set key.pubkey = key.pubkey_line_$c(10)
+								}
+							}
+						}
+						catch exp {
+							close armor
+							if (exp.Name '= "<ENDOFFILE>") {
+								set payload.status = "ERR"
+								set payload.error = ..setError(exp)
+							}
+						}
+
+						do payload.data.%Push(key)
+						set (id, fingerprint) = "" ; reset for next record
+					}
+				}
+			}
+		}
+		catch exp {
+			close ring
+			if (exp.Name '= "<ENDOFFILE>") {
+				set payload.status = "ERR"
+				set payload.error = ..setError(exp)
+			}
+		}
+	}
+
+	if $g(command) = "POST" {
+		try {
+			set content = {}
+			if (%request.CgiEnvs("CONTENT_LENGTH")) {
+				set sent = %request.Content.Read()
+				set content = {}.%FromJSON(sent)
+			}
+			//	if a public key block is included, attempt to import it and set trust to ultimately trusted, otherwise attempt to generate a new key with the provided name/email/comment
+			if (content.pubkey '= "") {
+				set import = ..#GNUPGHOME _" gpg --batch --import"
+				open import:"q":5
+				if $TEST {
+					use import
+					write content.pubkey, $c(4) ; EOT to signal end of key block
+					read gpg
+					close import
+					set id = $p($p(gpg, ": ", 2), "key ", 2)
+					set payload.id = id
+					set payload.result = $zf(-1, "(echo 5; echo y; echo save) | "_ ..#GNUPGHOME _" gpg --batch --command-fd 0 --edit-key """_ id _""" trust")
+					set payload.result = $zf(-1, "(echo adduid; echo '"_ content.name _"'; echo '"_ content.email _"'; echo '"_ content.comment _"'; echo O; echo uid 1; echo deluid; echo y; echo primary; echo save) | "_ ..#GNUPGHOME _" gpg --batch --command-fd 0 --edit-key """_ id _"""")
+				}
+				else {
+					set payload.status = "ERR"
+					set payload.error = "could not open gpg process for import"
+				}
+			}
+			else {
+				set import = ..#GNUPGHOME _" gpg --batch --passphrase '' --quick-gen-key """ _ content.name _" (" _ content.comment _") <"_ content.email _">"" default default never"
+				open import:"qr":5
+				if $TEST {
+					use import
+					read gpg
+					close import
+					set id = $p($p($p(gpg, ": ", 2), "key ", 2), " ")
+					set payload.id = id
+					set payload.result = gpg
+				}
+				else {
+					set payload.status = "ERR"
+					set payload.error = "could not open gpg process to generate new key"
+				}
+			}
+		}
+		catch exp {
+			if $d(import) close import
+			set payload.status = "ERR"
+			set payload.error = ..setError(exp)
+		}
+	}
+
+	if ($g(command) = "DELETE") && ($g(id) '= "") {
+		set payload.cmd = "sudo "_ ..#GNUPGHOME _" gpg --batch --yes --delete-secret-keys "_ id _" 2> /dev/null"
+		set payload.result = $zf(-1, payload.cmd)
+		set payload.cmd =..#GNUPGHOME _" gpg --batch --yes --delete-keys "_ id _" 2> /dev/null"
+		set payload.result = $zf(-1, payload.cmd)
+	}
+
+	if ($g(command) = "UPDATE") && ($g(id) '= "") {
+		try {
+			set content = {}
+			if (%request.CgiEnvs("CONTENT_LENGTH")) {
+				set sent = %request.Content.Read()
+				set content = {}.%FromJSON(sent)
+			}
+			set payload.cmd = "(echo adduid; echo '"_ content.name _"'; echo '"_ content.email _"'; echo '"_ content.comment _"'; echo O; echo uid 1; echo deluid; echo y; echo primary; echo save) | sudo "_ ..#GNUPGHOME _" gpg --batch --command-fd 0 --edit-key """_ content.fingerprint _""" 2> /dev/null"
+			set payload.result = $zf(-1, payload.cmd)
 		}
 		catch exp {
 			set payload.status = "ERR"

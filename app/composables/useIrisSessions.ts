@@ -69,6 +69,20 @@ export interface gpg {
   pubkey?: string
 }
 
+//  GET|DELETE|UPDATE https://vip/api/hcie/ssh/[:id]
+export interface ssh {
+  id?: string
+  account?: string
+  asset?: string
+  admin?: string
+  contact?: string
+  production?: string
+  comment?: string
+  who?: string
+  created?: number
+  reviewby?: number
+}
+
 //  GET https://vip/api/hcie/user/:id
 export interface User {
   id: string
