@@ -183,7 +183,7 @@ const utilityItems = ref<TabsItem[]>([
   },
   {
     label: 'SSH',
-    icon: 'i-flat-color-icons-data-protection',
+    icon: 'i-vscode-icons-file-type-key',
     slot: 'ssh',
     value: 'ssh',
     ui: { label: 'hover:bg-violet-100' }

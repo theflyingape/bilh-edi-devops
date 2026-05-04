@@ -40,6 +40,8 @@
             <p class="font-mono">
               {{ row.original.created }}
             </p>
+          </template>
+          <template #reviewby-cell="{ row }">
             <p class="font-mono">
               {{ row.original.reviewby }}
             </p>
@@ -58,7 +60,7 @@
 <script setup lang="ts">
 import { LinuxGPGEdit } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
-import { get, set } from '@vueuse/core'
+import { get, now, set } from '@vueuse/core'
 import type { ssh, hcieResponse } from '~/composables/useIrisSessions'
 
 const props = defineProps<{
@@ -79,15 +81,18 @@ const columns: TableColumn<ssh>[] = [
   },
   {
     accessorKey: 'account',
-    header: 'account / asset'
+    header: 'account @ asset'
   },
   {
     accessorKey: 'admin',
     header: 'admin: contact'
   },
   {
-    accessorKey: 'created',
-    header: 'created / review by'
+    accessorKey: 'created'
+  },
+  {
+    accessorKey: 'reviewby',
+    header: 'review by'
   },
   {
     header: 'action'
@@ -146,7 +151,7 @@ function onRowSelect(e: Event, row: TableRow<ssh> | null) {
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ id: 'GoAnywhere', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'HCIETEST', created: 0, reviewby: 0 }])
+    set(data, [{ id: 'GoAnywhere', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'HCIETEST', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
   } else {
     set(data, [])
     const hcie = get(instance)!

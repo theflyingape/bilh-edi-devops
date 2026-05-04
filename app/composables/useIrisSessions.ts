@@ -79,8 +79,8 @@ export interface ssh {
   production?: string
   comment?: string
   who?: string
-  created?: number
-  reviewby?: number
+  created?: string
+  reviewby?: string
 }
 
 //  GET https://vip/api/hcie/user/:id
