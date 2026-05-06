@@ -71,16 +71,18 @@ export interface gpg {
 
 //  GET|DELETE|UPDATE https://vip/api/hcie/ssh/[:id]
 export interface ssh {
-  id?: string
+  production?: string
+  name?: string
+  fingerprint?: string
   account?: string
   asset?: string
   admin?: string
   contact?: string
-  production?: string
   comment?: string
   who?: string
   created?: string
   reviewby?: string
+  pubkey?: string
 }
 
 //  GET https://vip/api/hcie/user/:id

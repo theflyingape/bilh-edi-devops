@@ -20,14 +20,10 @@
           td: 'p-2'
         }" @hover="onRowSelect"
         >
-          <template #id-cell="{ row }">
+          <template #name-cell="{ row }">
+            <span class="font-mono">{{ row.original.production }}</span> :: <span class="font-medium text-highlighted">{{ row.original.name }}</span>
             <p class="font-mono">
-              {{ row.original.id }}
-            </p>
-          </template>
-          <template #account-cell="{ row }">
-            <p class="font-mono">
-              {{ row.original.account }}@{{ row.original.asset }}
+              {{ row.original.fingerprint || 'legacy' }}
             </p>
           </template>
           <template #admin-cell="{ row }">
@@ -47,7 +43,7 @@
             </p>
           </template>
           <template #action-cell="{ row }">
-            <UDropdownMenu :disabled="row.original.id !== rowSelection?.id" :items="getDropdownActions()">
+            <UDropdownMenu :disabled="row.original.name !== rowSelection?.name" :items="getDropdownActions()">
               <UButton class="disabled:bg-neutral-200 disabled:text-neutral-600" icon="i-lucide-ellipsis-vertical" color="action" variant="soft" aria-label="Actions" />
             </UDropdownMenu>
           </template>
@@ -58,9 +54,9 @@
 </template>
 
 <script setup lang="ts">
-import { LinuxGPGEdit } from '#components'
+import { LinuxSSHEdit } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
-import { get, now, set } from '@vueuse/core'
+import { get, set } from '@vueuse/core'
 import type { ssh, hcieResponse } from '~/composables/useIrisSessions'
 
 const props = defineProps<{
@@ -76,12 +72,8 @@ const table = useTemplateRef('table')
 const data = ref<ssh[]>([])
 const columns: TableColumn<ssh>[] = [
   {
-    accessorKey: 'id',
-    header: 'SSH File id'
-  },
-  {
-    accessorKey: 'account',
-    header: 'account @ asset'
+    accessorKey: 'name',
+    header: 'name / fingerprint'
   },
   {
     accessorKey: 'admin',
@@ -117,7 +109,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         color: 'primary',
         async onSelect(_e) {
           const label = `${get(rowSelection)!.admin} ${get(rowSelection)!.comment ? '(' + get(rowSelection)!.comment + ')' : ''} ${get(rowSelection)!.contact ? '<' + get(rowSelection)!.contact + '>' : ''}`
-          navigator.clipboard.writeText(`${label}\n\n` + (get(rowSelection)!.id + '\n'))
+          navigator.clipboard.writeText(`${label}\n\n` + (get(rowSelection)!.name + '\n'))
           toast.add({ title: `Public key copied`, description: `` })
         }
       },
@@ -126,9 +118,9 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-git-pull-request-closed',
         color: 'error',
         async onSelect(_e) {
-          await queryModal(`OK to retire ${get(rowSelection)?.id} (${get(rowSelection)?.comment}) from ${get(instance)}?`, `The keypair is preserved if a recall is required.`)
+          await queryModal(`OK to retire ${get(rowSelection)?.name} (${get(rowSelection)?.comment}) from ${get(instance)}?`, `The keypair is preserved if a recall is required.`)
           if (get(response)) {
-            await endpoint(get(instance)!, `ssh/${get(rowSelection)?.id || get(rowSelection)?.id}`, 'DELETE')
+            await endpoint(get(instance)!, `ssh/${get(rowSelection)?.name || get(rowSelection)?.name}`, 'DELETE')
             await loadKeys()
           }
         }
@@ -151,7 +143,7 @@ function onRowSelect(e: Event, row: TableRow<ssh> | null) {
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ id: 'GoAnywhere', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'HCIETEST', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
+    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
   } else {
     set(data, [])
     const hcie = get(instance)!
@@ -166,22 +158,22 @@ async function loadKeys() {
 async function editKey(generate = false) {
   let key: ssh = {}
   if (!generate) key = {
-    id: get(rowSelection)?.id,
+    production: get(rowSelection)?.production,
+    name: get(rowSelection)?.name,
     account: get(rowSelection)?.account,
     admin: get(rowSelection)?.admin,
     contact: get(rowSelection)?.contact,
-    production: get(rowSelection)?.production,
     comment: get(rowSelection)?.comment,
     created: get(rowSelection)?.created,
     reviewby: get(rowSelection)?.reviewby
   }
 
-  await useOverlay().create(LinuxGPGEdit, {
+  await useOverlay().create(LinuxSSHEdit, {
     props: {
       title: `${get(instance)} :: SSH key`,
-      description: key.id || 'import new key',
+      description: key.name || 'import new key',
       hcie: get(instance)!,
-      gpg: key
+      ssh: key
     },
     destroyOnClose: true
   }).open()
