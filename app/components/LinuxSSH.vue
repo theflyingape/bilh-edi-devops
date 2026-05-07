@@ -7,8 +7,9 @@
         <div class="flex items-end nowrap">
           <UButton label="Import" icon="i-lucide-import" color="action" @click.prevent="editKey(true)" />
           <USeparator class="h-16 ml-4 mr-2" color="neutral" orientation="vertical" size="lg" />
-          <div class="max-w-1/2">
-            <b>SSH</b> (Secure Shell) generates and manages authentication keys. It creates a pair of cryptographic keys: a private key (stored on the client-side) and a public key (placed on the server for the client to access). This panel provides additional operations and lifecycle management tasks.
+          <div class="max-w-3/5">
+            <b>SSH</b> (Secure Shell) generates and manages authentication keys. It creates a pair of cryptographic keys: a private key (stored on the client-side) and a public key (placed on the server for the client to access).<br>
+            This panel provides additional operations and lifecycle management tasks.
           </div>
         </div>
         <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
@@ -20,7 +21,7 @@
           <template #name-cell="{ row }">
             <span class="font-mono">{{ row.original.production }}</span> :: <span class="font-medium text-highlighted">{{ row.original.name }}</span>
             <p class="text-xs">
-              {{ row.original.fingerprint?.split(' ')[1] || 'legacy' }}
+              {{ row.original.fingerprint || 'legacy' }}
             </p>
           </template>
           <template #admin-cell="{ row }">
@@ -36,7 +37,7 @@
           </template>
           <template #reviewby-cell="{ row }">
             <p class="font-mono">
-              <UChip :color="expiry(row.original.reviewby!)">
+              <UChip :color="expiry(row.original.reviewby)">
                 {{ row.original.reviewby ? useTimeAgo(row.original.reviewby) : 'never' }}
               </UChip>
             </p>
@@ -87,7 +88,7 @@ const columns: TableColumn<ssh>[] = [
 ]
 const rowSelection = ref<ssh>()
 
-function expiry(ds: string): 'neutral' | 'primary' | 'secondary' | 'warning' {
+function expiry(ds: string | undefined): 'neutral' | 'primary' | 'secondary' | 'warning' {
   if (ds) {
     const when = new Date(ds).valueOf()
     const days = Math.round((when - get(useNow()).getDate()) / 86400000)
