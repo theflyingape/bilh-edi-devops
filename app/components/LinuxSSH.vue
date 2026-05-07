@@ -22,13 +22,13 @@
         >
           <template #name-cell="{ row }">
             <span class="font-mono">{{ row.original.production }}</span> :: <span class="font-medium text-highlighted">{{ row.original.name }}</span>
-            <p class="font-mono">
+            <p class="text-xs">
               {{ row.original.fingerprint || 'legacy' }}
             </p>
           </template>
           <template #admin-cell="{ row }">
             <span class="font-medium text-highlighted">{{ row.original.admin }}</span>: {{ row.original.contact || '- missing -' }}
-            <p class="font-mono">
+            <p class="text-xs">
               {{ row.original.comment || '- missing -' }}
             </p>
           </template>
@@ -39,7 +39,9 @@
           </template>
           <template #reviewby-cell="{ row }">
             <p class="font-mono">
-              {{ row.original.reviewby }}
+              <UChip :color="expiry(row.original.reviewby!)">
+                {{ row.original.reviewby ? useTimeAgo(row.original.reviewby) : 'never' }}
+              </UChip>
             </p>
           </template>
           <template #action-cell="{ row }">
@@ -92,6 +94,17 @@ const columns: TableColumn<ssh>[] = [
 ]
 const rowSelection = ref<ssh>()
 
+function expiry(ds: string): 'neutral' | 'primary' | 'secondary' | 'warning' {
+  if (ds) {
+    const when = new Date(ds).valueOf()
+    const days = Math.round((when - get(useNow()).getDate()) / 86400000)
+    if (days < 31) return 'warning'
+    if (days < 62) return 'secondary'
+    return 'primary'
+  }
+  return 'neutral'
+}
+
 function getDropdownActions(): DropdownMenuItem[][] {
   return [
     [
@@ -143,7 +156,7 @@ function onRowSelect(e: Event, row: TableRow<ssh> | null) {
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
+    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), review: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
   } else {
     set(data, [])
     const hcie = get(instance)!
