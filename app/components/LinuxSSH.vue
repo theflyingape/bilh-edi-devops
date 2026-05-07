@@ -5,9 +5,6 @@
     <template #default>
       <div class="flex flex-col gap-4 items-start">
         <div class="flex items-end nowrap">
-          <UIcon :name="icon(instance!)" class="align-middle size-8" />
-          <IrisSelect v-model="instance" :epic="false" @change.prevent="loadKeys()" />
-          &nbsp;
           <UButton label="Import" icon="i-lucide-import" color="action" @click.prevent="editKey(true)" />
           <USeparator class="h-16 ml-4 mr-2" color="neutral" orientation="vertical" size="lg" />
           <div class="max-w-1/2">
@@ -61,15 +58,11 @@ import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
 import type { ssh, hcieResponse } from '~/composables/useIrisSessions'
 
-const props = defineProps<{
-  hcie: HCIE
-}>()
-
 const { queryModal, response } = useDevOps()
-const { icon, endpoint } = useIrisSessions()
-const instance = defineModel<HCIE>('instance', { required: false })
+const { endpoint } = useIrisSessions()
 const toast = useToast()
 
+const instance = 'Dev'
 const table = useTemplateRef('table')
 const data = ref<ssh[]>([])
 const columns: TableColumn<ssh>[] = [
@@ -131,9 +124,9 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-git-pull-request-closed',
         color: 'error',
         async onSelect(_e) {
-          await queryModal(`OK to retire ${get(rowSelection)?.name} (${get(rowSelection)?.comment}) from ${get(instance)}?`, `The keypair is preserved if a recall is required.`)
+          await queryModal(`OK to retire ${get(rowSelection)?.name} (${get(rowSelection)?.comment}) from ${instance}?`, `The keypair is preserved if a recall is required.`)
           if (get(response)) {
-            await endpoint(get(instance)!, `ssh/${get(rowSelection)?.name || get(rowSelection)?.name}`, 'DELETE')
+            await endpoint(instance, `ssh/${get(rowSelection)?.name || get(rowSelection)?.name}`, 'DELETE')
             await loadKeys()
           }
         }
@@ -156,11 +149,10 @@ function onRowSelect(e: Event, row: TableRow<ssh> | null) {
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), review: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
+    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
   } else {
     set(data, [])
-    const hcie = get(instance)!
-    await endpoint<hcieResponse<ssh[]>>(hcie, 'ssh').then((res) => {
+    await endpoint<hcieResponse<ssh[]>>(instance, 'ssh').then((res) => {
       if (res && res.status == 'OK') {
         set(data, Object.values(res.data))
       }
@@ -183,9 +175,9 @@ async function editKey(generate = false) {
 
   await useOverlay().create(LinuxSSHEdit, {
     props: {
-      title: `${get(instance)} :: SSH key`,
+      title: `SSH key`,
       description: key.name || 'import new key',
-      hcie: get(instance)!,
+      hcie: instance,
       ssh: key
     },
     destroyOnClose: true
@@ -194,7 +186,6 @@ async function editKey(generate = false) {
 }
 
 onMounted(async () => {
-  set(instance, props.hcie)
   await loadKeys()
 })
 </script>
