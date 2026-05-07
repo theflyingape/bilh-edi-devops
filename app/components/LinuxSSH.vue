@@ -20,7 +20,7 @@
           <template #name-cell="{ row }">
             <span class="font-mono">{{ row.original.production }}</span> :: <span class="font-medium text-highlighted">{{ row.original.name }}</span>
             <p class="text-xs">
-              {{ row.original.fingerprint || 'legacy' }}
+              {{ row.original.fingerprint?.split(' ')[1] || 'legacy' }}
             </p>
           </template>
           <template #admin-cell="{ row }">
