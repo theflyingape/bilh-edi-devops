@@ -14,7 +14,7 @@
             <b>GPG</b> (GNU Privacy Guard) is a free, open-source cryptographic tool used to encrypt and sign data and communications. It is an implementation of the OpenPGP standard and serves as a compatible alternative to Symantec's proprietary PGP software.
           </div>
         </div>
-        <UTable ref="table" loading loading-color="info" loading-animation="swing" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
+        <UTable ref="table" :loading="loading" loading-color="error" loading-animation="swing" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
           th: 'p-1',
           tr: 'even:bg-olive-50 odd:bg-taupe',
           td: 'p-2'
@@ -53,6 +53,7 @@
 import { LinuxGPGEdit } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
+import { fa } from 'zod/v4/locales';
 import type { gpg, hcieResponse } from '~/composables/useIrisSessions'
 
 const props = defineProps<{
@@ -64,6 +65,7 @@ const { icon, endpoint } = useIrisSessions()
 const instance = defineModel<HCIE>('instance', { required: false })
 const toast = useToast()
 
+const loading = ref(false)
 const table = useTemplateRef('table')
 const data = ref<gpg[]>([])
 const columns: TableColumn<gpg>[] = [
@@ -142,6 +144,7 @@ async function loadKeys() {
   if (useDevOps().dev) {
     set(data, [{ id: 'FFEEDDCC00112233', fingerprint: '12345678ABCDEF90', name: 'BILH IT', comment: 'HCIETEST', email: 'nobody@mail.com', trust: 'u' }])
   } else {
+    set(loading, true)
     set(data, [])
     const hcie = get(instance)!
     await endpoint<hcieResponse<gpg[]>>(hcie, 'gpg').then((res) => {
@@ -149,6 +152,7 @@ async function loadKeys() {
         set(data, Object.values(res.data))
       }
     })
+    set(loading, false)
   }
 }
 

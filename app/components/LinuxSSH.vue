@@ -13,7 +13,7 @@
             This panel provides additional operations and lifecycle management tasks.
           </div>
         </div>
-        <UTable ref="table" loading loading-color="info" loading-animation="swing" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
+        <UTable ref="table" :loading="loading" loading-color="error" loading-animation="swing" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
           th: 'p-1',
           tr: 'even:bg-olive-50 odd:bg-taupe',
           td: 'p-2'
@@ -63,6 +63,7 @@ const { endpoint } = useIrisSessions()
 const toast = useToast()
 
 const instance = 'Dev'
+const loading = ref(false)
 const table = useTemplateRef('table')
 const data = ref<ssh[]>([])
 const columns: TableColumn<ssh>[] = [
@@ -151,12 +152,14 @@ async function loadKeys() {
   if (useDevOps().dev) {
     set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
   } else {
+    set(loading, true)
     set(data, [])
     await endpoint<hcieResponse<ssh[]>>(instance, 'ssh').then((res) => {
       if (res && res.status == 'OK') {
         set(data, Object.values(res.data))
       }
     })
+    set(loading, false)
   }
   //  add any expiry decoration
   set(data, get(data).map(key => ({
