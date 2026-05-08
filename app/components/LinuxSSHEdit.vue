@@ -11,12 +11,36 @@
   >
     <template #body>
       <div class="flex flex-col gap-y-4">
-        <UFormField class="w-1/2" label="Name" help="please use a simple name based off its use" required>
-          <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="7" :disabled="ssh.fingerprint" />
-        </UFormField>
-        <UFormField class="w-full" label="Fingerprint">
-          <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
-        </UFormField>
+        <div class="flex justify-between">
+          <UFormField class="w-3/4" label="Name" help="please use a simple name based off its use" required>
+            <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="7" :disabled="ssh.fingerprint" />
+          </UFormField>
+          <UFormField class="w-1/5" label="Created">
+            <UPopover>
+              <UButton class="w-full" color="neutral" icon="i-lucide-calendar" variant="subtle">
+                {{ new Date(ssh.created).toDateString() }}
+              </UButton>
+              <template #content>
+                <UCalendar :v-model="ssh.created" disabled />
+              </template>
+            </UPopover>
+          </UFormField>
+        </div>
+        <div class="flex justify-between">
+          <UFormField class="w-3/4" label="Fingerprint">
+            <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
+          </UFormField>
+          <UFormField class="w-1/5" label="Review by">
+            <UPopover>
+              <UButton class="w-full" color="neutral" icon="i-lucide-calendar" variant="subtle">
+                {{ new Date(ssh.reviewby).toDateString() }}
+              </UButton>
+              <template #content>
+                <UCalendar v-model="reviewby" />
+              </template>
+            </UPopover>
+          </UFormField>
+        </div>
         <div class="flex justify-between">
           <UFormField class="w-4/5" label="Comment" help="the free text appended to the public key">
             <UInput v-model="ssh.comment" class="w-full" placeholder="public key comment" icon="i-lucide-id-card" />
@@ -65,6 +89,9 @@
 </template>
 
 <script setup lang="ts">
+import { CalendarDate } from '@internationalized/date'
+import { get, set } from '@vueuse/core'
+
 const props = defineProps<{
   title?: string
   description?: string
@@ -74,4 +101,6 @@ const props = defineProps<{
 const emit = defineEmits<{ close: [boolean] }>()
 const { endpoint } = useIrisSessions()
 const ssh = ref(props.ssh)
+const ds = new Date(get(ssh).reviewby!)
+const reviewby = shallowRef(new CalendarDate(ds.getFullYear(), ds.getMonth() + 1, ds.getDate()))
 </script>

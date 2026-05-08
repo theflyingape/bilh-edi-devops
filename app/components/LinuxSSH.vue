@@ -9,8 +9,7 @@
           <USeparator class="h-16 ml-4 mr-2" color="neutral" orientation="vertical" size="lg" />
           <div class="max-w-3/5">
             <b>SSH</b> (Secure Shell) generates and manages authentication keys. It creates a pair of cryptographic
-            keys: a private key (stored on the client-side) and a public key (placed on the server for the client to
-            access).<br>
+            keys: a private key (<i>stored on the client-side</i>) and a public key (<i>placed on the server for the client to access</i>).<br>
             This panel provides additional operations and lifecycle management tasks.
           </div>
         </div>
@@ -150,7 +149,7 @@ function expiry(ds: string | undefined): 'neutral' | 'primary' | 'secondary' | '
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear())).toLocaleDateString() }])
+    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
   } else {
     set(data, [])
     await endpoint<hcieResponse<ssh[]>>(instance, 'ssh').then((res) => {
