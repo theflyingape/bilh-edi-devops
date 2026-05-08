@@ -29,8 +29,8 @@ export default function usePortal() {
     useFetch('/api/version', { immediate: true, timeout: 5678 })
       .onFetchResponse(async (response) => {
         await response.json().then((value) => {
-          console.log('version response:', JSON.stringify(value))
-          set(stale, (version !== value.version) && (buildDate !== value.buildDate))
+          console.log('reported version:', JSON.stringify(value), 'with build date:', buildDate)
+          set(stale, (version !== value.version) || (buildDate !== value.buildDate))
         })
       })
   }
