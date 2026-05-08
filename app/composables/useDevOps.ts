@@ -24,13 +24,13 @@ export default function usePortal() {
     }
   }
 
-  function isStale(version: string) {
+  function isStale(version: string, buildDate: string) {
     console.log('check version', version)
     useFetch('/api/version', { immediate: true, timeout: 5678 })
       .onFetchResponse(async (response) => {
         await response.json().then((value) => {
           console.log('version response:', JSON.stringify(value))
-          set(stale, (version !== value.version))
+          set(stale, (version !== value.version) && (buildDate !== value.buildDate))
         })
       })
   }

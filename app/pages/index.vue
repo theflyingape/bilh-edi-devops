@@ -45,5 +45,5 @@ const links = ref([
 const ts = ref(buildDate)
 const v = ref(version)
 
-isStale(version)
+isStale(version, buildDate)
 </script>

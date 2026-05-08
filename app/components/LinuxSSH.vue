@@ -13,7 +13,7 @@
             This panel provides additional operations and lifecycle management tasks.
           </div>
         </div>
-        <UTable ref="table" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
+        <UTable ref="table" loading loading-color="info" loading-animation="swing" sticky :data="data" :columns="columns" class="flex-1 max-h-[calc(72vh)]" :ui="{
           th: 'p-1',
           tr: 'even:bg-olive-50 odd:bg-taupe',
           td: 'p-2'
