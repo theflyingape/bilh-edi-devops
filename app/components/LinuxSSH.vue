@@ -176,7 +176,8 @@ async function editKey(generate = false) {
     contact: '',
     comment: '',
     created: '',
-    reviewby: ''
+    reviewby: '',
+    pubkey: ''
   }
   if (!generate) key = {
     production: get(rowSelection)?.production || '',
@@ -187,7 +188,8 @@ async function editKey(generate = false) {
     contact: get(rowSelection)?.contact || '',
     comment: get(rowSelection)?.comment || '',
     created: get(rowSelection)?.created || '',
-    reviewby: get(rowSelection)?.reviewby || ''
+    reviewby: get(rowSelection)?.reviewby || '',
+    pubkey: get(rowSelection)?.pubkey || ''
   }
 
   await useOverlay().create(LinuxSSHEdit, {
