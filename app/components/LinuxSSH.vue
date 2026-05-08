@@ -150,7 +150,7 @@ function expiry(ds: string | undefined): 'neutral' | 'primary' | 'secondary' | '
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear())).toLocaleDateString() }])
+    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear())).toLocaleDateString() }])
   } else {
     set(data, [])
     await endpoint<hcieResponse<ssh[]>>(instance, 'ssh').then((res) => {
@@ -167,17 +167,27 @@ async function loadKeys() {
 }
 
 async function editKey(generate = false) {
-  let key: ssh = {}
+  let key: ssh = {
+    production: '',
+    name: '',
+    fingerprint: '',
+    account: '',
+    admin: '',
+    contact: '',
+    comment: '',
+    created: '',
+    reviewby: ''
+  }
   if (!generate) key = {
-    production: get(rowSelection)?.production,
-    name: get(rowSelection)?.name,
-    fingerprint: get(rowSelection)?.fingerprint,
-    account: get(rowSelection)?.account,
-    admin: get(rowSelection)?.admin,
-    contact: get(rowSelection)?.contact,
-    comment: get(rowSelection)?.comment,
-    created: get(rowSelection)?.created,
-    reviewby: get(rowSelection)?.reviewby
+    production: get(rowSelection)?.production || '',
+    name: get(rowSelection)?.name || '',
+    fingerprint: get(rowSelection)?.fingerprint || '',
+    account: get(rowSelection)?.account || '',
+    admin: get(rowSelection)?.admin || '',
+    contact: get(rowSelection)?.contact || '',
+    comment: get(rowSelection)?.comment || '',
+    created: get(rowSelection)?.created || '',
+    reviewby: get(rowSelection)?.reviewby || ''
   }
 
   await useOverlay().create(LinuxSSHEdit, {

@@ -12,7 +12,7 @@
     <template #body>
       <div class="flex flex-col gap-y-4">
         <UFormField class="w-1/2" label="Name" help="please use a simple name based off its use" required>
-          <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename" icon="i-lucide-building-2" minlength="3" />
+          <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="7" :disabled="ssh.fingerprint" />
         </UFormField>
         <UFormField class="w-full" label="Fingerprint">
           <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
@@ -35,15 +35,21 @@
         </div>
         <div class="flex gap-x-2 justify-end">
           <div>
-            <UButton :label="`${props.ssh.fingerprint ? 'UPDATE' : 'ADD'}`" color="action" size="lg" variant="subtle" loading-auto icon="i-lucide-shield-plus" @click.prevent="() => {
-              endpoint<hcieResponse<ssh[]>>(hcie, ssh.fingerprint ? `ssh/${ssh.fingerprint}` : 'ssh', ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
-                if (res && res.status == 'ERR') {
-                  console.error('ssh key failure:', res.error)
-                }
-              }).finally(() => {
-                emit('close', true)
-              })
-            }"
+            <UButton
+              class="disabled:bg-neutral-400 disabled:text-neutral-600"
+              :disabled="ssh.name!.length < 7 || !ssh.name!.endsWith('.rsa')"
+              :label="`${props.ssh.fingerprint ? 'UPDATE' : 'ADD'}`"
+              color="action" variant="subtle" loading-auto
+              icon="i-lucide-shield-plus" size="lg"
+              @click.prevent="() => {
+                endpoint<hcieResponse<ssh[]>>(hcie, ssh.fingerprint ? `ssh/${ssh.fingerprint}` : 'ssh', ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
+                  if (res && res.status == 'ERR') {
+                    console.error('ssh key failure:', res.error)
+                  }
+                }).finally(() => {
+                  emit('close', true)
+                })
+              }"
             />
           </div>
           <div>

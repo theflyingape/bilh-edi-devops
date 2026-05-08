@@ -3,7 +3,9 @@
 <template>
   <UApp :toaster="{ duration: 3000, position: 'top-left' }">
     <NuxtLoadingIndicator />
+    <!--
     <UBanner id="feat3" color="success" icon="i-lucide-wand" title="Feat! added an Epic terminal instance" close close-icon="i-lucide-x-circle" />
+    -->
     <UHeader>
       <template #title>
         <ISCLogo class="h-12 w-auto" />
