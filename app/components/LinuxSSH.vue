@@ -5,10 +5,12 @@
     <template #default>
       <div class="flex flex-col gap-4 items-start">
         <div class="flex items-end nowrap">
-          <UButton label="Import" icon="i-lucide-import" color="action" @click.prevent="editKey(true)" />
+          <UButton label="Create" icon="i-lucide-import" color="action" @click.prevent="editKey(true)" />
           <USeparator class="h-16 ml-4 mr-2" color="neutral" orientation="vertical" size="lg" />
           <div class="max-w-3/5">
-            <b>SSH</b> (Secure Shell) generates and manages authentication keys. It creates a pair of cryptographic keys: a private key (stored on the client-side) and a public key (placed on the server for the client to access).<br>
+            <b>SSH</b> (Secure Shell) generates and manages authentication keys. It creates a pair of cryptographic
+            keys: a private key (stored on the client-side) and a public key (placed on the server for the client to
+            access).<br>
             This panel provides additional operations and lifecycle management tasks.
           </div>
         </div>
@@ -36,11 +38,9 @@
             </p>
           </template>
           <template #reviewby-cell="{ row }">
-            <p class="font-mono">
-              <UChip :color="expiry(row.original.reviewby)">
-                {{ row.original.reviewby ? useTimeAgo(row.original.reviewby) : 'never' }}
-              </UChip>
-            </p>
+            <UChip :color="row.original._expiry">
+              {{ row.original.reviewby ? formatTimeAgo(new Date(row.original.reviewby)) : 'never' }}
+            </UChip>
           </template>
           <template #action-cell="{ row }">
             <UDropdownMenu :disabled="row.original.name !== rowSelection?.name" :items="getDropdownActions()">
@@ -56,7 +56,7 @@
 <script setup lang="ts">
 import { LinuxSSHEdit } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
-import { get, set } from '@vueuse/core'
+import { formatTimeAgo, get, set } from '@vueuse/core'
 import type { ssh, hcieResponse } from '~/composables/useIrisSessions'
 
 const { queryModal, response } = useDevOps()
@@ -88,17 +88,6 @@ const columns: TableColumn<ssh>[] = [
 ]
 const rowSelection = ref<ssh>()
 
-function expiry(ds: string | undefined): 'neutral' | 'primary' | 'secondary' | 'warning' {
-  if (ds) {
-    const when = new Date(ds).valueOf()
-    const days = Math.round((when - get(useNow()).getDate()) / 86400000)
-    if (days < 31) return 'warning'
-    if (days < 62) return 'secondary'
-    return 'primary'
-  }
-  return 'neutral'
-}
-
 function getDropdownActions(): DropdownMenuItem[][] {
   return [
     [
@@ -125,7 +114,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-lucide-git-pull-request-closed',
         color: 'error',
         async onSelect(_e) {
-          await queryModal(`OK to retire ${get(rowSelection)?.name} (${get(rowSelection)?.comment}) from ${instance}?`, `The keypair is preserved if a recall is required.`)
+          await queryModal(`OK to retire ${get(rowSelection)?.name} (${get(rowSelection)?.comment}) from SSH keys?`, `The keypair is moved into retired if a recall is required.`)
           if (get(response)) {
             await endpoint(instance, `ssh/${get(rowSelection)?.name || get(rowSelection)?.name}`, 'DELETE')
             await loadKeys()
@@ -148,9 +137,20 @@ function onRowSelect(e: Event, row: TableRow<ssh> | null) {
   }
 }
 
+function expiry(ds: string | undefined): 'neutral' | 'primary' | 'secondary' | 'warning' {
+  if (ds) {
+    const when = new Date(ds).valueOf()
+    const days = Math.round((when - get(useNow()).valueOf()) / 86400000)
+    if (days < 31) return 'warning'
+    if (days < 62) return 'secondary'
+    return 'primary'
+  }
+  return 'neutral'
+}
+
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
+    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear())).toLocaleDateString() }])
   } else {
     set(data, [])
     await endpoint<hcieResponse<ssh[]>>(instance, 'ssh').then((res) => {
@@ -159,6 +159,11 @@ async function loadKeys() {
       }
     })
   }
+  //  add any expiry decoration
+  set(data, get(data).map(key => ({
+    ...key,
+    _expiry: expiry(key.reviewby)
+  })))
 }
 
 async function editKey(generate = false) {
@@ -166,6 +171,7 @@ async function editKey(generate = false) {
   if (!generate) key = {
     production: get(rowSelection)?.production,
     name: get(rowSelection)?.name,
+    fingerprint: get(rowSelection)?.fingerprint,
     account: get(rowSelection)?.account,
     admin: get(rowSelection)?.admin,
     contact: get(rowSelection)?.contact,
@@ -177,7 +183,7 @@ async function editKey(generate = false) {
   await useOverlay().create(LinuxSSHEdit, {
     props: {
       title: `SSH key`,
-      description: key.name || 'import new key',
+      description: key.name || 'create new key',
       hcie: instance,
       ssh: key
     },

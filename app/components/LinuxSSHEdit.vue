@@ -11,24 +11,27 @@
   >
     <template #body>
       <div class="flex flex-col gap-y-4">
+        <UFormField class="w-1/2" label="Name" help="please use a simple name based off its use" required>
+          <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename" icon="i-lucide-building-2" minlength="3" />
+        </UFormField>
+        <UFormField class="w-full" label="Fingerprint">
+          <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
+        </UFormField>
         <div class="flex justify-between">
-          <UFormField class="w-7/12" label="Fingerprint">
-            <UBadge class="w-full" :label="ssh.fingerprint" icon="i-lucide-fingerprint-pattern" color="neutral" size="lg" variant="soft" />
-          </UFormField>
-          <UFormField class="w-2/5" label="Comment" help="hint: best used as a unique mnemonic in CAPS to identify this key">
-            <UInput v-model="ssh.comment" class="w-full" placeholder="shorter text identifier" icon="i-lucide-id-card" />
+          <UFormField class="w-4/5" label="Comment" help="the free text appended to the public key">
+            <UInput v-model="ssh.comment" class="w-full" placeholder="public key comment" icon="i-lucide-id-card" />
           </UFormField>
         </div>
         <div class="flex justify-between">
-          <UFormField class="w-1/2" label="Name" help="minimum of 5 characters" required>
-            <UInput v-model="ssh.name" class="w-full" placeholder="free text identifier" icon="i-lucide-building-2" minlength="5" />
+          <UFormField class="w-11/24" label="Admin">
+            <UInput v-model="ssh.admin" type="email" class="w-full" placeholder="name" icon="i-lucide-shield-user" />
           </UFormField>
-          <UFormField class="w-11/24" label="Email" help="optional, but must be valid">
-            <UInput v-model="ssh.contact" type="email" class="w-full" placeholder="valid business contact" icon="i-lucide-at-sign" />
+          <UFormField class="w-11/24" label="Contact">
+            <UInput v-model="ssh.contact" type="email" class="w-full" placeholder="contact" icon="i-lucide-at-sign" />
           </UFormField>
         </div>
         <div class="self-center">
-          <UTextarea v-model="ssh.pubkey" class="font-mono" color="neutral" autoresize :cols="65" :rows="10" :maxrows="20" placeholder="… supply PGP public key block here, else a new keypair generates …" />
+          <UTextarea v-model="ssh.pubkey" class="font-mono" color="neutral" autoresize :cols="80" :rows="4" :maxrows="12" placeholder="… SSH Public key to use as Authorization into remote server …" />
         </div>
         <div class="flex gap-x-2 justify-end">
           <div>
