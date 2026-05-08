@@ -12,10 +12,10 @@
     <template #body>
       <div class="flex flex-col gap-y-4">
         <div class="flex justify-between">
-          <UFormField class="w-3/4" label="Name" help="please use a simple name based off its use" required>
+          <UFormField class="w-2/3" label="Name" help="please use a simple name based off its use" required>
             <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="7" :disabled="ssh.fingerprint" />
           </UFormField>
-          <UFormField class="w-1/5" label="Created">
+          <UFormField class="w-1/4" label="Created">
             <UPopover>
               <UButton class="w-full" color="neutral" icon="i-lucide-calendar" variant="subtle">
                 {{ new Date(ssh.created).toDateString() }}
@@ -27,10 +27,10 @@
           </UFormField>
         </div>
         <div class="flex justify-between">
-          <UFormField class="w-3/4" label="Fingerprint">
+          <UFormField class="w-2/3" label="Fingerprint">
             <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
           </UFormField>
-          <UFormField class="w-1/5" label="Review by">
+          <UFormField class="w-1/4" label="Review by">
             <UPopover>
               <UButton class="w-full" color="neutral" icon="i-lucide-calendar" variant="subtle">
                 {{ new Date(ssh.reviewby).toDateString() }}
@@ -42,7 +42,7 @@
           </UFormField>
         </div>
         <div class="flex justify-between">
-          <UFormField class="w-4/5" label="Comment" help="the free text appended to the public key">
+          <UFormField class="w-7/10" label="Comment" help="the free text appended to the public key">
             <UInput v-model="ssh.comment" class="w-full" placeholder="public key comment" icon="i-lucide-id-card" />
           </UFormField>
         </div>
@@ -55,7 +55,7 @@
           </UFormField>
         </div>
         <div class="self-center">
-          <UTextarea v-model="ssh.pubkey" class="font-mono" color="neutral" autoresize :cols="80" :rows="4" :maxrows="12" placeholder="… SSH Public key to use as Authorization into remote server …" />
+          <UTextarea v-model="ssh.pubkey" class="font-mono" color="neutral" icon="i-lucide-file-key" autoresize :cols="96" :rows="6" :maxrows="12" placeholder="… SSH Public key to use as Authorization into remote server …" />
         </div>
         <div class="flex gap-x-2 justify-end">
           <div>
