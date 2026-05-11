@@ -13,15 +13,15 @@
       <div class="flex flex-col gap-y-4">
         <div class="flex justify-between">
           <UFormField class="w-3/4" label="Name" help="please use a simple name based off its use" required>
-            <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="7" :disabled="ssh.fingerprint" />
+            <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="7" disabled />
           </UFormField>
           <UFormField class="w-1/6" label="Created">
             <UPopover>
               <UButton class="w-full" color="neutral" icon="i-lucide-calendar" variant="subtle">
-                {{ df.format(created.toDate(getLocalTimeZone())) }}
+                {{ created.toDate(getLocalTimeZone()).toLocaleDateString() }}
               </UButton>
               <template #content>
-                <UCalendar :v-model="ssh.created" disabled />
+                <UCalendar v-model="created" disabled />
               </template>
             </UPopover>
           </UFormField>
@@ -33,7 +33,7 @@
           <UFormField class="w-1/6" label="Review by">
             <UPopover>
               <UButton class="w-full" color="neutral" icon="i-lucide-calendar" variant="subtle">
-                {{ reviewby ? df.format(reviewby.toDate(getLocalTimeZone())) : 'Select a date' }}
+                {{ reviewby.toDate(getLocalTimeZone()).toLocaleDateString() || 'Select a date' }}
               </UButton>
               <template #content>
                 <UCalendar v-model="reviewby" />
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
+import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
 import { get, set } from '@vueuse/core'
 
 const props = defineProps<{
@@ -102,12 +102,8 @@ const emit = defineEmits<{ close: [boolean] }>()
 const { endpoint } = useIrisSessions()
 const ssh = ref(props.ssh)
 
-const df = new DateFormatter('en-US', {
-  dateStyle: 'medium'
-})
-let ds = new Date(get(ssh).created!)
-// const reviewby = shallowRef(new CalendarDate(ds.getFullYear(), ds.getMonth(), ds.getDate()).toDate(getLocalTimeZone()))
-const created = shallowRef(new CalendarDate(ds.getFullYear(), ds.getMonth(), ds.getDate()))
-ds = new Date(get(ssh).reviewby!)
-const reviewby = shallowRef(new CalendarDate(ds.getFullYear(), ds.getMonth(), ds.getDate()))
+let ds = (get(ssh).created || today(getLocalTimeZone()).toString()).split('-')
+const created = shallowRef(new CalendarDate(parseInt(ds[0]), parseInt(ds[1]), parseInt(ds[2])))
+ds = (get(ssh).reviewby || today(getLocalTimeZone()).toString()).split('-')
+const reviewby = shallowRef(new CalendarDate(parseInt(ds[0]), parseInt(ds[1]), parseInt(ds[2])))
 </script>

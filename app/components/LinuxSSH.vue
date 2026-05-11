@@ -53,6 +53,7 @@
 </template>
 
 <script setup lang="ts">
+import { getLocalTimeZone, today } from '@internationalized/date'
 import { LinuxSSHEdit } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { formatTimeAgo, get, set } from '@vueuse/core'
@@ -150,7 +151,7 @@ function expiry(ds: string | undefined): 'neutral' | 'primary' | 'secondary' | '
 
 async function loadKeys() {
   if (useDevOps().dev) {
-    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: get(useNow()).toLocaleDateString(), reviewby: new Date(get(useNow()).setFullYear(get(useNow()).getFullYear() + 1)).toLocaleDateString() }])
+    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: '2026-06-18', reviewby: '2031-07-31' }])
   } else {
     set(loading, true)
     set(data, [])
