@@ -26,7 +26,7 @@
     "@google/generative-ai": "^0.24.1",
     "@iconify-json/flat-color-icons": "^1.2.3",
     "@iconify-json/heroicons": "^1.2.3",
-    "@iconify-json/lucide": "^1.2.105",
+    "@iconify-json/lucide": "^1.2.106",
     "@iconify-json/simple-icons": "^1.2.81",
     "@iconify-json/vscode-icons": "^1.2.49",
     "@intersystems/intersystems-iris-native": "^2.0.3",
@@ -36,8 +36,8 @@
     "@nuxt/ui": "^4.7.1",
     "@nuxtjs/mdc": "^0.21.1",
     "@sidebase/nuxt-auth": "^1.2.0",
-    "@tailwindcss/postcss": "^4.2.4",
-    "@tailwindcss/vite": "^4.2.4",
+    "@tailwindcss/postcss": "^4.3.0",
+    "@tailwindcss/vite": "^4.3.0",
     "@vueuse/nuxt": "^14.3.0",
     "@xterm/addon-fit": "^0.11.0",
     "@xterm/addon-image": "^0.9.0",
@@ -58,7 +58,7 @@
   "devDependencies": {
     "@types/node": "^25.6.2",
     "eslint": "^10.3.0",
-    "nuxi": "^3.35.1",
+    "nuxi": "^3.35.2",
     "nuxt": "^4.4.2",
     "typescript": "^5.9.3"
   }

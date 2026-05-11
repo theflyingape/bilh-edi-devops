@@ -12,13 +12,13 @@
     <template #body>
       <div class="flex flex-col gap-y-4">
         <div class="flex justify-between">
-          <UFormField class="w-2/3" label="Name" help="please use a simple name based off its use" required>
+          <UFormField class="w-3/4" label="Name" help="please use a simple name based off its use" required>
             <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="7" :disabled="ssh.fingerprint" />
           </UFormField>
-          <UFormField class="w-1/4" label="Created">
+          <UFormField class="w-1/6" label="Created">
             <UPopover>
               <UButton class="w-full" color="neutral" icon="i-lucide-calendar" variant="subtle">
-                {{ new Date(ssh.created).toDateString() }}
+                {{ df.format(created.toDate(getLocalTimeZone())) }}
               </UButton>
               <template #content>
                 <UCalendar :v-model="ssh.created" disabled />
@@ -27,13 +27,13 @@
           </UFormField>
         </div>
         <div class="flex justify-between">
-          <UFormField class="w-2/3" label="Fingerprint">
+          <UFormField class="w-3/4" label="Fingerprint">
             <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
           </UFormField>
-          <UFormField class="w-1/4" label="Review by">
+          <UFormField class="w-1/6" label="Review by">
             <UPopover>
               <UButton class="w-full" color="neutral" icon="i-lucide-calendar" variant="subtle">
-                {{ new Date(ssh.reviewby).toDateString() }}
+                {{ reviewby ? df.format(reviewby.toDate(getLocalTimeZone())) : 'Select a date' }}
               </UButton>
               <template #content>
                 <UCalendar v-model="reviewby" />
@@ -42,7 +42,7 @@
           </UFormField>
         </div>
         <div class="flex justify-between">
-          <UFormField class="w-7/10" label="Comment" help="the free text appended to the public key">
+          <UFormField class="w-3/4" label="Comment" help="the free text appended to the public key">
             <UInput v-model="ssh.comment" class="w-full" placeholder="public key comment" icon="i-lucide-id-card" />
           </UFormField>
         </div>
@@ -89,7 +89,7 @@
 </template>
 
 <script setup lang="ts">
-import { CalendarDate } from '@internationalized/date'
+import { CalendarDate, DateFormatter, getLocalTimeZone } from '@internationalized/date'
 import { get, set } from '@vueuse/core'
 
 const props = defineProps<{
@@ -101,6 +101,13 @@ const props = defineProps<{
 const emit = defineEmits<{ close: [boolean] }>()
 const { endpoint } = useIrisSessions()
 const ssh = ref(props.ssh)
-const ds = new Date(get(ssh).reviewby!)
-const reviewby = shallowRef(new CalendarDate(ds.getFullYear(), ds.getMonth() + 1, ds.getDate()))
+
+const df = new DateFormatter('en-US', {
+  dateStyle: 'medium'
+})
+let ds = new Date(get(ssh).created!)
+// const reviewby = shallowRef(new CalendarDate(ds.getFullYear(), ds.getMonth(), ds.getDate()).toDate(getLocalTimeZone()))
+const created = shallowRef(new CalendarDate(ds.getFullYear(), ds.getMonth(), ds.getDate()))
+ds = new Date(get(ssh).reviewby!)
+const reviewby = shallowRef(new CalendarDate(ds.getFullYear(), ds.getMonth(), ds.getDate()))
 </script>

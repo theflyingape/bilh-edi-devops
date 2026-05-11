@@ -108,6 +108,7 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: [
+        '@internationalized/date',
         '@nuxt/ui > prosemirror-state',
         '@nuxt/ui > prosemirror-transform',
         '@nuxt/ui > prosemirror-model',

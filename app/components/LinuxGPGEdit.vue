@@ -2,7 +2,7 @@
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <UModal
-    class="max-w-fit" :title="title" :description="description" :dismissible="false" :close="{
+    class="max-w-fit" :title="title" :description="description || 'import new key'" :dismissible="false" :close="{
       icon: 'i-lucide-x',
       color: 'neutral',
       variant: 'outline',

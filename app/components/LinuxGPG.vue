@@ -171,7 +171,7 @@ async function editKey(generate = false) {
   await useOverlay().create(LinuxGPGEdit, {
     props: {
       title: `${get(instance)} :: GPG Public key`,
-      description: key.id || 'import new key',
+      description: key.id,
       hcie: get(instance)!,
       gpg: key
     },

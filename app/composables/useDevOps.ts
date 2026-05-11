@@ -25,11 +25,11 @@ export default function usePortal() {
   }
 
   function isStale(version: string, buildDate: string) {
-    console.log('check version', version, 'on', buildDate)
+    console.log('check client version', version, 'on', buildDate)
     useFetch('/api/version', { immediate: true, timeout: 5678 })
       .onFetchResponse(async (response) => {
         await response.json().then((value) => {
-          console.log('server version:', JSON.stringify(value))
+          console.log('got server', value.version, 'on', value.buildDate)
           set(stale, (version !== value.version) || (buildDate !== value.buildDate))
         })
       })
