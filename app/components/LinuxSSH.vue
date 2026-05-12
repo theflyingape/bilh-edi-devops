@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { LinuxSSHEdit } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
-import { formatTimeAgo, get, set } from '@vueuse/core'
+import { formatTimeAgo, get, set, useNow, useDateFormat } from '@vueuse/core'
 import type { ssh, hcieResponse } from '~/composables/useIrisSessions'
 
 const { queryModal, response } = useDevOps()
@@ -180,8 +180,9 @@ async function editKey(generate = false) {
     admin: '',
     contact: '',
     comment: '',
-    created: '',
-    reviewby: '',
+    who: '',
+    created: get(useDateFormat(useNow(), 'YYYY-MM-DD')),
+    reviewby: get(useDateFormat(useNow().value.valueOf() + 365 * 86400000, 'YYYY-MM-DD')),
     pubkey: ''
   }
   if (!generate) key = {

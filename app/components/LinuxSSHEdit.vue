@@ -33,8 +33,8 @@
             </UFormField>
           </div>
           <div class="flex justify-between">
-            <UFormField class="w-3/4" label="Name" help="please use a simple name based off its use" required>
-              <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="7" disabled />
+            <UFormField class="w-3/4" label="Name" help="keep name (.rsa only) simple off its targeted use" required>
+              <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="6" pattern="^.+\.rsa$" :disabled="Boolean(ssh.fingerprint?.length)" />
             </UFormField>
             <UFormField class="w-1/6" label="Created">
               <UPopover>
@@ -121,7 +121,7 @@ const items = ref([])
 const emit = defineEmits<{ close: [boolean] }>()
 const { endpoint, loadProductions, Productions } = useIrisSessions()
 const ssh = ref(props.ssh)
-const disabled = ref(computed(() => Boolean(get(ssh).name!.length < 7 || !get(ssh).name!.endsWith('.rsa'))))
+const disabled = ref(computed(() => Boolean(get(ssh).name!.length < 6 || !get(ssh).name!.endsWith('.rsa'))))
 
 let ds = (get(ssh).created || today(getLocalTimeZone()).toString()).split('-')
 const created = shallowRef(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), parseInt(ds[2]!)))
