@@ -11,7 +11,10 @@
   >
     <template #body>
       <UForm @submit.prevent="async () => {
-        await endpoint<hcieResponse<ssh[]>>(hcie, ssh.fingerprint ? `ssh/${ssh.fingerprint}` : 'ssh', ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
+        console.log(production, ssh.production)
+        ssh.production = get(production)
+        console.log(production, ssh.production)
+        await endpoint<hcieResponse<ssh[]>>(hcie, `ssh/${ssh.name}`, ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
           if (res && res.status == 'ERR') {
             console.error('ssh key failure:', res.error)
           }
@@ -121,7 +124,7 @@ const items = ref([])
 const emit = defineEmits<{ close: [boolean] }>()
 const { endpoint, loadProductions, Productions } = useIrisSessions()
 const ssh = ref(props.ssh)
-const disabled = ref(computed(() => Boolean(get(ssh).name!.length < 6 || !get(ssh).name!.endsWith('.rsa'))))
+const disabled = ref(computed(() => Boolean(!get(production) || get(ssh).name!.length < 6 || !get(ssh).name!.endsWith('.rsa'))))
 
 let ds = (get(ssh).created || today(getLocalTimeZone()).toString()).split('-')
 const created = shallowRef(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), parseInt(ds[2]!)))
@@ -134,7 +137,7 @@ async function loadItems() {
   if (instance) {
     await loadProductions(instance).then(() => {
       set(items, Productions.get(instance)!.productions)
-      set(production, get(ssh).production ? get(ssh).production : get(items).length ? get(items)[0] : '')
+      set(production, get(ssh).production || '')
     })
   }
 }

@@ -59,7 +59,7 @@ import { formatTimeAgo, get, set, useNow, useDateFormat } from '@vueuse/core'
 import type { ssh, hcieResponse } from '~/composables/useIrisSessions'
 
 const { queryModal, response } = useDevOps()
-const { endpoint } = useIrisSessions()
+const { endpoint, user } = useIrisSessions()
 const toast = useToast()
 
 const instance = 'Dev'
@@ -149,7 +149,7 @@ async function loadKeys() {
   set(loading, true)
   set(data, [])
   if (useDevOps().dev) {
-    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: '2026-06-18', reviewby: '2031-07-31' }, { production: 'BILHSFTP', name: 'BILH-TDBank.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Z', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'another key comment', created: '2026-01-03', reviewby: '2026-06-18' }])
+    set(data, [{ production: '', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: '2026-06-18', reviewby: '2031-07-31' }, { production: 'BILHSFTP', name: 'BILH-TDBank.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Z', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'another key comment', created: '2026-01-03', reviewby: '2026-06-18' }])
   } else {
     await endpoint<hcieResponse<ssh[]>>(instance, 'ssh').then((res) => {
       if (res && res.status == 'OK') {
@@ -180,7 +180,7 @@ async function editKey(generate = false) {
     admin: '',
     contact: '',
     comment: '',
-    who: '',
+    who: get(user).id,
     created: get(useDateFormat(useNow(), 'YYYY-MM-DD')),
     reviewby: get(useDateFormat(useNow().value.valueOf() + 365 * 86400000, 'YYYY-MM-DD')),
     pubkey: ''
@@ -194,6 +194,7 @@ async function editKey(generate = false) {
     contact: get(rowSelection)?.contact || '',
     comment: get(rowSelection)?.comment || '',
     created: get(rowSelection)?.created || '',
+    who: get(rowSelection)?.who || get(user).id,
     reviewby: get(rowSelection)?.reviewby || '',
     pubkey: get(rowSelection)?.pubkey || ''
   }
@@ -201,7 +202,7 @@ async function editKey(generate = false) {
   await useOverlay().create(LinuxSSHEdit, {
     props: {
       title: `SSH key`,
-      description: key.name || 'create new key',
+      description: (key.name || 'create new key') + ` per ${key.who}`,
       hcie: instance,
       ssh: key
     },
