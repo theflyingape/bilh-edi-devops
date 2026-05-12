@@ -64,7 +64,7 @@
               :disabled="ssh.name!.length < 7 || !ssh.name!.endsWith('.rsa')"
               :label="`${props.ssh.fingerprint ? 'UPDATE' : 'ADD'}`"
               color="action" variant="subtle" loading-auto
-              icon="i-lucide-shield-plus" size="lg"
+              leading-icon="i-lucide-shield-plus" size="lg"
               @click.prevent="() => {
                 endpoint<hcieResponse<ssh[]>>(hcie, ssh.fingerprint ? `ssh/${ssh.fingerprint}` : 'ssh', ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
                   if (res && res.status == 'ERR') {
@@ -98,6 +98,11 @@ const props = defineProps<{
   hcie: HCIE
   ssh: ssh
 }>()
+
+defineShortcuts({
+  escape: () => emit('close', false)
+})
+
 const emit = defineEmits<{ close: [boolean] }>()
 const { endpoint } = useIrisSessions()
 const ssh = ref(props.ssh)

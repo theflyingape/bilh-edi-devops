@@ -27,10 +27,10 @@
           </template>
           <template #name-cell="{ row }">
             <p class="font-medium text-highlighted">
-              {{ row.original.name }} ({{ row.original.comment || '- missing -' }})
+              {{ row.original.name }} ({{ row.original.comment || 'empty' }})
             </p>
             <p class="font-mono">
-              {{ row.original.email || '- missing -' }}
+              {{ row.original.email || 'empty' }}
             </p>
           </template>
           <template #trust-cell="{ row }">

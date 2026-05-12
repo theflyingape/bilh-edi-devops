@@ -65,6 +65,11 @@ const props = defineProps<{
   hcie: HCIE
   gpg: gpg
 }>()
+
+defineShortcuts({
+  escape: () => emit('close', false)
+})
+
 const emit = defineEmits<{ close: [boolean] }>()
 const { endpoint } = useIrisSessions()
 const gpg = ref(props.gpg)

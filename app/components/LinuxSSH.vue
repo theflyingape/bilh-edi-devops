@@ -28,18 +28,16 @@
           <template #admin-cell="{ row }">
             <span class="font-medium text-highlighted">{{ row.original.admin }}</span>: {{ row.original.contact || '- missing -' }}
             <p class="text-xs">
-              {{ row.original.comment || '- missing -' }}
-            </p>
-          </template>
-          <template #created-cell="{ row }">
-            <p class="font-mono">
-              {{ row.original.created }}
+              {{ row.original.comment || 'empty' }}
             </p>
           </template>
           <template #reviewby-cell="{ row }">
             <UChip :color="row.original._expiry">
               {{ row.original.reviewby ? formatTimeAgo(new Date(row.original.reviewby)) : 'never' }}
             </UChip>
+            <p class="font-mono text-xs">
+              {{ row.original.created }}
+            </p>
           </template>
           <template #action-cell="{ row }">
             <UDropdownMenu :disabled="row.original.name !== rowSelection?.name" :items="getDropdownActions()">
@@ -53,7 +51,6 @@
 </template>
 
 <script setup lang="ts">
-import { getLocalTimeZone, today } from '@internationalized/date'
 import { LinuxSSHEdit } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { formatTimeAgo, get, set } from '@vueuse/core'
@@ -75,9 +72,6 @@ const columns: TableColumn<ssh>[] = [
   {
     accessorKey: 'admin',
     header: 'admin: contact'
-  },
-  {
-    accessorKey: 'created'
   },
   {
     accessorKey: 'reviewby',
@@ -138,12 +132,12 @@ function onRowSelect(e: Event, row: TableRow<ssh> | null) {
   }
 }
 
-function expiry(ds: string | undefined): 'neutral' | 'primary' | 'secondary' | 'warning' {
+function expiry(ds: string | undefined): 'neutral' | 'primary' | 'warning' | 'error' {
   if (ds) {
     const when = new Date(ds).valueOf()
     const days = Math.round((when - get(useNow()).valueOf()) / 86400000)
-    if (days < 31) return 'warning'
-    if (days < 62) return 'secondary'
+    if (days < 31) return 'error'
+    if (days < 62) return 'warning'
     return 'primary'
   }
   return 'neutral'
