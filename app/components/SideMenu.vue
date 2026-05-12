@@ -101,7 +101,7 @@
           </div>
         </div>
         <div class="justify-items-center">
-          <div><img src="~/assets/images/footer.png" class="drop-shadow-lg" /></div>
+          <div><img src="~/assets/images/footer.png" class="drop-shadow-lg"></div>
         </div>
         <div class="justify-items-end">
           <div class="pr-16"><em>a value-add by Robert Hurst</em></div>
