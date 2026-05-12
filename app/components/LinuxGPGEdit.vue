@@ -10,8 +10,8 @@
     }"
   >
     <template #body>
-      <UForm @submit.prevent="() => {
-        endpoint<hcieResponse<gpg[]>>(hcie, gpg.id ? `gpg/${gpg.id}` : 'gpg', gpg.id ? 'UPDATE' : 'POST', gpg).then((res) => {
+      <UForm @submit.prevent="async () => {
+        await endpoint<hcieResponse<gpg[]>>(hcie, gpg.id ? `gpg/${gpg.id}` : 'gpg', gpg.id ? 'UPDATE' : 'POST', gpg).then((res) => {
           if (res && res.status == 'ERR') {
             console.error('gpg key failure:', res.error)
           }
