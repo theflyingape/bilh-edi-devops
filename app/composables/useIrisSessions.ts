@@ -86,7 +86,7 @@ export interface ssh {
   created?: string
   reviewby?: string
   pubkey?: string
-  _expiry?: string
+  _expiry?: 'primary' | 'warning' | 'error' | 'neutral'
 }
 
 //  GET https://vip/api/hcie/user/:id

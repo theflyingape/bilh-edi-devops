@@ -10,8 +10,8 @@
     }"
   >
     <template #body>
-      <UForm @submit.prevent="() => {
-        endpoint<hcieResponse<ssh[]>>(hcie, ssh.fingerprint ? `ssh/${ssh.fingerprint}` : 'ssh', ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
+      <UForm @submit.prevent="async () => {
+        await endpoint<hcieResponse<ssh[]>>(hcie, ssh.fingerprint ? `ssh/${ssh.fingerprint}` : 'ssh', ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
           if (res && res.status == 'ERR') {
             console.error('ssh key failure:', res.error)
           }
@@ -21,6 +21,17 @@
       }"
       >
         <div class="flex flex-col gap-y-4">
+          <div class="flex justify-between">
+            <UFormField label="Used in Production" required>
+              <USelect
+                v-model="production"
+                placeholder="production"
+                :items="items"
+                class="max-h-fit"
+                :ui="{ content: 'min-w-fit' }"
+              />
+            </UFormField>
+          </div>
           <div class="flex justify-between">
             <UFormField class="w-3/4" label="Name" help="please use a simple name based off its use" required>
               <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="7" disabled />
@@ -92,7 +103,7 @@
 
 <script setup lang="ts">
 import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
-import { get } from '@vueuse/core'
+import { get, set } from '@vueuse/core'
 
 const props = defineProps<{
   title?: string
@@ -105,8 +116,10 @@ defineShortcuts({
   escape: () => emit('close', false)
 })
 
+const production = ref('')
+const items = ref([])
 const emit = defineEmits<{ close: [boolean] }>()
-const { endpoint } = useIrisSessions()
+const { endpoint, loadProductions, Productions } = useIrisSessions()
 const ssh = ref(props.ssh)
 const disabled = ref(computed(() => Boolean(get(ssh).name!.length < 7 || !get(ssh).name!.endsWith('.rsa'))))
 
@@ -115,4 +128,18 @@ const created = shallowRef(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), 
 
 ds = (get(ssh).reviewby || today(getLocalTimeZone()).toString()).split('-')
 const reviewby = shallowRef(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), parseInt(ds[2]!)))
+
+async function loadItems() {
+  const instance = 'Test'
+  if (instance) {
+    await loadProductions(instance).then(() => {
+      set(items, Productions.get(instance)!.productions)
+      set(production, get(ssh).production ? get(ssh).production : get(items).length ? get(items)[0] : '')
+    })
+  }
+}
+
+onMounted(async () => {
+  await loadItems()
+})
 </script>

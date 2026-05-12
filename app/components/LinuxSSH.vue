@@ -33,7 +33,9 @@
           </template>
           <template #reviewby-cell="{ row }">
             <UChip :color="row.original._expiry">
-              {{ row.original.reviewby ? formatTimeAgo(new Date(row.original.reviewby)) : 'never' }}
+              <UBadge :color="row.original._expiry" :variant="row.original._expiry == 'primary' ? 'ghost' : 'soft'">
+                <span class="font-medium text-highlighted">{{ row.original.reviewby ? formatTimeAgo(new Date(row.original.reviewby)) : 'never' }}</span>
+              </UBadge>
             </UChip>
             <p class="font-mono text-xs">
               {{ row.original.created }}
