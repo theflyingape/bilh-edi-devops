@@ -11,9 +11,7 @@
   >
     <template #body>
       <UForm @submit.prevent="async () => {
-        console.log(production, ssh.production)
         ssh.production = get(production)
-        console.log(production, ssh.production)
         await endpoint<hcieResponse<ssh[]>>(hcie, `ssh/${ssh.name}`, ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
           if (res && res.status == 'ERR') {
             console.error('ssh key failure:', res.error)
