@@ -26,8 +26,8 @@
     "@google/generative-ai": "^0.24.1",
     "@iconify-json/flat-color-icons": "^1.2.3",
     "@iconify-json/heroicons": "^1.2.3",
-    "@iconify-json/lucide": "^1.2.106",
-    "@iconify-json/simple-icons": "^1.2.81",
+    "@iconify-json/lucide": "^1.2.107",
+    "@iconify-json/simple-icons": "^1.2.82",
     "@iconify-json/vscode-icons": "^1.2.49",
     "@intersystems/intersystems-iris-native": "^2.0.3",
     "@nuxt/content": "^3.13.0",
@@ -45,7 +45,7 @@
     "@xterm/addon-unicode11": "^0.9.0",
     "@xterm/addon-webgl": "^0.19.0",
     "@xterm/xterm": "^6.0.0",
-    "better-sqlite3": "^12.9.0",
+    "better-sqlite3": "^12.10.0",
     "html-to-image": "^1.11.13",
     "jose": "^6.2.3",
     "modern-syslog": "^1.2.0",
@@ -56,7 +56,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/node": "^25.6.2",
+    "@types/node": "^25.7.0",
     "eslint": "^10.3.0",
     "nuxi": "^3.35.2",
     "nuxt": "^4.4.2",

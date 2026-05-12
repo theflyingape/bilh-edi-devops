@@ -28,7 +28,7 @@
         </div>
         <div class="flex justify-between">
           <UFormField class="w-3/4" label="Fingerprint">
-            <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
+            <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" disabled color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
           </UFormField>
           <UFormField class="w-1/6" label="Review by">
             <UPopover>
