@@ -69,7 +69,7 @@
           </div>
           <div class="flex justify-between">
             <UFormField class="w-11/24" label="Admin">
-              <UInput v-model="ssh.admin" type="email" class="w-full" placeholder="name" icon="i-lucide-shield-user" />
+              <UInput v-model="ssh.admin" class="w-full" placeholder="name" icon="i-lucide-shield-user" />
             </UFormField>
             <UFormField class="w-11/24" label="Contact">
               <UInput v-model="ssh.contact" type="email" class="w-full" placeholder="contact" icon="i-lucide-at-sign" />

@@ -146,23 +146,29 @@ function expiry(ds: string | undefined): 'neutral' | 'primary' | 'warning' | 'er
 }
 
 async function loadKeys() {
+  set(loading, true)
+  set(data, [])
   if (useDevOps().dev) {
-    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: '2026-06-18', reviewby: '2031-07-31' }])
+    set(data, [{ production: 'BILHSFTP', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: '2026-06-18', reviewby: '2031-07-31' }, { production: 'BILHSFTP', name: 'BILH-TDBank.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Z', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'another key comment', created: '2026-01-03', reviewby: '2026-06-18' }])
   } else {
-    set(loading, true)
-    set(data, [])
     await endpoint<hcieResponse<ssh[]>>(instance, 'ssh').then((res) => {
       if (res && res.status == 'OK') {
         set(data, Object.values(res.data))
       }
     })
-    set(loading, false)
   }
+  set(loading, false)
   //  add any expiry decoration
   set(data, get(data).map(key => ({
     ...key,
     _expiry: expiry(key.reviewby)
   })))
+  data.value.sort((a, b) => {
+    return (
+      a.production?.localeCompare(b.production || '')
+      || a.name?.localeCompare(b.name || '')
+    )
+  })
 }
 
 async function editKey(generate = false) {
