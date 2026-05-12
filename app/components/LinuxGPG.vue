@@ -118,7 +118,7 @@ function getDropdownActions(): DropdownMenuItem[][] {
         async onSelect(_e) {
           await queryModal(`OK to delete ${get(rowSelection)?.name} (${get(rowSelection)?.comment}) from ${get(instance)}?`, `Any Secret key paired with this will be removed first! Then, this attempts to drop the Public key from the ring.`)
           if (get(response)) {
-            await endpoint(get(instance)!, `gpg/${get(rowSelection)?.id || get(rowSelection)?.id}`, 'DELETE')
+            await endpoint(get(instance)!, `gpg/${get(rowSelection)?.id || get(rowSelection)?.id}`, 'DELETE', { id: get(rowSelection)?.id, fingerprint: get(rowSelection)?.fingerprint })
             await loadKeys()
           }
         }
