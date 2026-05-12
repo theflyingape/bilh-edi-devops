@@ -63,8 +63,11 @@ export interface gpg {
   id?: string
   fingerprint?: string
   name?: string
+  namex?: string
   comment?: string
+  commentx?: string
   email?: string
+  emailx?: string
   trust?: string
   pubkey?: string
 }

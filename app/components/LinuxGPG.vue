@@ -53,7 +53,6 @@
 import { LinuxGPGEdit } from '#components'
 import type { TableColumn, TableRow, DropdownMenuItem } from '@nuxt/ui'
 import { get, set } from '@vueuse/core'
-import { fa } from 'zod/v4/locales';
 import type { gpg, hcieResponse } from '~/composables/useIrisSessions'
 
 const props = defineProps<{
@@ -157,13 +156,16 @@ async function loadKeys() {
 }
 
 async function editKey(generate = false) {
-  let key: gpg = {}
+  let key: gpg = { name: '' }
   if (!generate) key = {
     id: get(rowSelection)?.id,
     fingerprint: get(rowSelection)?.fingerprint,
     name: get(rowSelection)?.name,
+    namex: get(rowSelection)?.namex,
     comment: get(rowSelection)?.comment,
+    commentx: get(rowSelection)?.commentx,
     email: get(rowSelection)?.email,
+    emailx: get(rowSelection)?.emailx,
     trust: get(rowSelection)?.trust,
     pubkey: get(rowSelection)?.pubkey
   }
