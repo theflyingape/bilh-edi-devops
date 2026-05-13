@@ -86,6 +86,7 @@ export interface ssh {
   created?: string
   reviewby?: string
   pubkey?: string
+  interfaces?: string[]
   _expiry?: 'primary' | 'warning' | 'error' | 'neutral'
 }
 

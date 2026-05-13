@@ -26,17 +26,23 @@
               <UBadge class="w-full" :label="gpg.fingerprint" icon="i-lucide-fingerprint-pattern" color="neutral" size="lg" variant="soft" />
             </UFormField>
             <UFormField class="w-2/5" label="Comment(s)">
-              <UInput v-model="gpg.comment" class="w-full" placeholder="encoded key comment" icon="i-lucide-shield" :disabled="Boolean(gpg.pubkey?.length)" />
+              <UTooltip arrow text="encoded in key" :content="{ side: 'left', sideOffset: 2 }">
+                <UInput v-model="gpg.comment" class="w-full" placeholder="encoded key comment" icon="i-lucide-shield" :disabled="Boolean(gpg.pubkey?.length)" />
+              </UTooltip>
               <UInput v-model="gpg.commentx" class="w-full" placeholder="external kept free text" icon="i-lucide-id-card" />
             </UFormField>
           </div>
           <div class="flex justify-between">
             <UFormField class="w-1/2" label="Name(s)" help="minimum of 5 characters" required>
-              <UInput v-model="gpg.name" class="w-full" placeholder="encoded key name" icon="i-lucide-shield" minlength="5" :disabled="Boolean(gpg.pubkey?.length)" />
+              <UTooltip arrow text="encoded in key" :content="{ side: 'left', sideOffset: 2 }">
+                <UInput v-model="gpg.name" class="w-full" placeholder="encoded key name" icon="i-lucide-shield" minlength="5" :disabled="Boolean(gpg.pubkey?.length)" />
+              </UTooltip>
               <UInput v-model="gpg.namex" class="w-full" placeholder="external kept owner id" icon="i-lucide-building-2" minlength="5" />
             </UFormField>
             <UFormField class="w-11/24" label="Email(s)" help="optional, but must be valid">
-              <UInput v-model="gpg.email" type="email" class="w-full" placeholder="encoded key email" icon="i-lucide-shield" :disabled="Boolean(gpg.pubkey?.length)" />
+              <UTooltip arrow text="encoded in key" :content="{ side: 'left', sideOffset: 2 }">
+                <UInput v-model="gpg.email" type="email" class="w-full" placeholder="encoded key email" icon="i-lucide-shield" :disabled="Boolean(gpg.pubkey?.length)" />
+              </UTooltip>
               <UInput v-model="gpg.emailx" type="email" class="w-full" placeholder="external kept contact" icon="i-lucide-at-sign" />
             </UFormField>
           </div>

@@ -33,6 +33,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       })
     }
   } catch (err) {
-    console.error(err)
+    console.error('get-session error:', err)
   }
 })

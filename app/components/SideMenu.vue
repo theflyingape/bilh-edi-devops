@@ -186,7 +186,7 @@ async function login() {
 
 async function logout() {
   await endSession('Dev').then(async () => {
-    await signOut({ callbackUrl: 'logout', external: false })
+    await signOut({ callbackUrl: 'logout', external: true })
   })
 }
 

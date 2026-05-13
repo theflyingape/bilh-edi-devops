@@ -149,7 +149,7 @@ async function loadKeys() {
   set(loading, true)
   set(data, [])
   if (useDevOps().dev) {
-    set(data, [{ production: '', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: '2026-06-18', reviewby: '2031-07-31' }, { production: 'BILHSFTP', name: 'BILH-TDBank.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Z', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'another key comment', created: '2026-01-03', reviewby: '2026-06-18' }])
+    set(data, [{ production: 'BILHWORKDAY', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: '2026-06-18', reviewby: '2031-07-31', interfaces: ['bsGoAExeterTimecardPickupSftp', 'boGoATimecardDropoffSftp'] }, { production: 'BILHSFTP', name: 'BILH-TDBank.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Z', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'another key comment', created: '2026-01-03', reviewby: '2026-06-18' }])
   } else {
     await endpoint<hcieResponse<ssh[]>>(instance, 'ssh').then((res) => {
       if (res && res.status == 'OK') {
@@ -184,7 +184,8 @@ async function editKey(generate = false) {
     who: get(user).id,
     created: get(useDateFormat(useNow(), 'YYYY-MM-DD')),
     reviewby: get(useDateFormat(useNow().value.valueOf() + 365 * 86400000, 'YYYY-MM-DD')),
-    pubkey: ''
+    pubkey: '',
+    interfaces: []
   }
   if (!generate) key = {
     production: get(rowSelection)?.production || '',
@@ -198,7 +199,8 @@ async function editKey(generate = false) {
     created: get(rowSelection)?.created || '',
     who: get(rowSelection)?.who || get(user).id,
     reviewby: get(rowSelection)?.reviewby || '',
-    pubkey: get(rowSelection)?.pubkey || ''
+    pubkey: get(rowSelection)?.pubkey || '',
+    interfaces: get(rowSelection)?.interfaces || []
   }
 
   await useOverlay().create(LinuxSSHEdit, {

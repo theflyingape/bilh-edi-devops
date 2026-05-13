@@ -1,14 +1,12 @@
 <!-- eslint-disable vue/first-attribute-linebreak -->
 <!-- eslint-disable vue/max-attributes-per-line -->
 <template>
-  <UModal
-    class="max-w-fit" :title="title" :description="description" :dismissible="false" :close="{
-      icon: 'i-lucide-x',
-      color: 'neutral',
-      variant: 'outline',
-      class: 'rounded-full'
-    }"
-  >
+  <UModal class="max-w-fit" :title="title" :description="description" :dismissible="false" :close="{
+    icon: 'i-lucide-x',
+    color: 'neutral',
+    variant: 'outline',
+    class: 'rounded-full'
+  }">
     <template #body>
       <UForm @submit.prevent="async () => {
         ssh.production = get(production)
@@ -24,14 +22,20 @@
         <div class="flex flex-col gap-y-4">
           <div class="flex justify-between">
             <UFormField label="Used in Production" required>
-              <USelect
-                v-model="production"
-                placeholder="production"
-                :items="items"
-                class="max-h-fit"
-                :ui="{ content: 'min-w-fit' }"
-              />
+              <USelect v-model="production" placeholder="production" class="max-h-fit" :ui="{ content: 'min-w-fit' }" :items="items" />
             </UFormField>
+            <UCard v-if="ssh.interfaces?.length" variant="subtle">
+              <template #header>
+                Business Hosts using this key in LIVE
+              </template>
+              <template #default>
+                <div class="grid grid-cols-2">
+                  <UBadge v-for="(name, index) in ssh.interfaces" :key="index" class="m-1" color="neutral" variant="subtle">
+                    {{ name }}
+                  </UBadge>
+                </div>
+              </template>
+            </UCard>
           </div>
           <div class="flex justify-between">
             <UFormField class="w-3/4" label="Name" help="keep name (.rsa only) simple off its targeted use" required>
@@ -64,6 +68,15 @@
             </UFormField>
           </div>
           <div class="flex justify-between">
+            <UFormField class="w-2/5" label="Account">
+              <UInput v-model="ssh.account" class="w-full" placeholder="login account name" icon="i-lucide-user" />
+            </UFormField>
+            <UFormField label="@" />
+            <UFormField class="w-2/5" label="Asset">
+              <UInput v-model="ssh.asset" class="w-full" placeholder="remote host name" icon="i-lucide-arrow-big-right-dash" />
+            </UFormField>
+          </div>
+          <div class="flex justify-between">
             <UFormField class="w-3/4" label="Comment" help="the free text appended to the public key">
               <UInput v-model="ssh.comment" class="w-full" placeholder="public key comment" icon="i-lucide-id-card" />
             </UFormField>
@@ -81,13 +94,7 @@
           </div>
           <div class="flex gap-x-2 justify-end">
             <div>
-              <UButton
-                class="disabled:bg-neutral-400 disabled:text-neutral-600"
-                :label="`${props.ssh.fingerprint ? 'UPDATE' : 'ADD'}`"
-                color="action" size="lg" variant="subtle"
-                leading-icon="i-lucide-shield-plus" loading-auto type="submit"
-                :disabled="disabled"
-              />
+              <UButton class="disabled:bg-neutral-400 disabled:text-neutral-600" :label="`${props.ssh.fingerprint ? 'UPDATE' : 'ADD'}`" color="action" size="lg" variant="subtle" leading-icon="i-lucide-shield-plus" loading-auto type="submit" :disabled="disabled" />
             </div>
             <div>
               <UButton label="Cancel" color="neutral" size="lg" variant="subtle" @click="() => {
