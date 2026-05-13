@@ -161,5 +161,6 @@ async function loadHosts(instance: HCIE, production: string) {
 
 onMounted(async () => {
   await loadItems()
+  await loadHosts('Test', get(production))
 })
 </script>
