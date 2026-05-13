@@ -87,7 +87,14 @@ export interface ssh {
   reviewby?: string
   pubkey?: string
   interfaces?: string[]
+  comments?: string[]
   _expiry?: 'primary' | 'warning' | 'error' | 'neutral'
+}
+//  GET|DELETE|UPDATE https://vip/api/hcie/ssh/?production
+export interface sshprod {
+  ns?: string
+  interfaces?: string[]
+  comments?: string[]
 }
 
 //  GET https://vip/api/hcie/user/:id

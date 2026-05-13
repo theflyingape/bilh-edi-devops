@@ -22,20 +22,21 @@
         <div class="flex flex-col gap-y-4">
           <div class="flex justify-between">
             <UFormField label="Used in Production" required>
-              <USelect v-model="production" placeholder="production" class="max-h-fit" :ui="{ content: 'min-w-fit' }" :items="items" />
+              <USelect v-model="production" placeholder="production" class="max-h-fit" :ui="{ content: 'min-w-fit' }" :items="items" @change.prevent="loadHosts('Test', production)" />
             </UFormField>
-            <UCard v-if="ssh.interfaces?.length" variant="subtle">
-              <template #header>
-                Business Hosts using this key in LIVE
-              </template>
-              <template #default>
-                <div class="grid grid-cols-2">
-                  <UBadge v-for="(name, index) in ssh.interfaces" :key="index" class="m-1" color="neutral" variant="subtle">
-                    {{ name }}
-                  </UBadge>
-                </div>
-              </template>
-            </UCard>
+            <UTooltip text="Business Hosts using this key in TEST" :content="{ side: 'top', sideOffset: 2 }">
+              <UCard v-if="ssh.interfaces?.length" variant="subtle">
+                <template #default>
+                  <div class="grid grid-cols-2">
+                    <UTooltip v-for="(name, index) in ssh.interfaces" :key="index" arrow :text="ssh.comments[index] || 'no comment'" :content="{ side: 'bottom', sideOffset: 2 }">
+                      <UBadge class="m-1" color="neutral" variant="subtle">
+                        {{ name }}
+                      </UBadge>
+                    </UTooltip>
+                  </div>
+                </template>
+              </UCard>
+            </UTooltip>
           </div>
           <div class="flex justify-between">
             <UFormField class="w-3/4" label="Name" help="keep name (.rsa only) simple off its targeted use" required>
@@ -53,8 +54,8 @@
             </UFormField>
           </div>
           <div class="flex justify-between">
-            <UFormField class="w-3/4" label="Fingerprint">
-              <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" disabled color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
+            <UFormField class="w-3/4" label="Comment">
+              <UInput v-model="ssh.comment" class="w-full" placeholder="public key comment" icon="i-lucide-id-card" />
             </UFormField>
             <UFormField class="w-1/6" label="Review by">
               <UPopover>
@@ -68,17 +69,17 @@
             </UFormField>
           </div>
           <div class="flex justify-between">
+            <UFormField class="w-3/4" label="Fingerprint">
+              <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" disabled color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
+            </UFormField>
+          </div>
+          <div class="flex justify-between">
             <UFormField class="w-2/5" label="Account">
               <UInput v-model="ssh.account" class="w-full" placeholder="login account name" icon="i-lucide-user" />
             </UFormField>
             <UFormField label="@" />
             <UFormField class="w-2/5" label="Asset">
-              <UInput v-model="ssh.asset" class="w-full" placeholder="remote host name" icon="i-lucide-arrow-big-right-dash" />
-            </UFormField>
-          </div>
-          <div class="flex justify-between">
-            <UFormField class="w-3/4" label="Comment" help="the free text appended to the public key">
-              <UInput v-model="ssh.comment" class="w-full" placeholder="public key comment" icon="i-lucide-id-card" />
+              <UInput v-model="ssh.asset" class="w-full" placeholder="remote endpoint" icon="i-lucide-arrow-big-right-dash" />
             </UFormField>
           </div>
           <div class="flex justify-between">
@@ -140,11 +141,22 @@ const reviewby = shallowRef(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!),
 async function loadItems() {
   const instance = 'Test'
   if (instance) {
-    await loadProductions(instance).then(() => {
+    await loadProductions(instance).then(async () => {
       set(items, Productions.get(instance)!.productions)
       set(production, get(ssh).production || '')
     })
   }
+}
+
+async function loadHosts(instance: HCIE, production: string) {
+  await endpoint<hcieResponse<sshprod>>(instance, `ssh/${ssh.value.name}?${production}`).then((res) => {
+    if (res && res.status == 'ERR') {
+      console.error(`ssh key lookup in ${production}:`, res.error)
+    } else {
+      ssh.value.interfaces = res?.data.interfaces
+      ssh.value.comments = res?.data.comments
+    }
+  })
 }
 
 onMounted(async () => {
