@@ -101,8 +101,18 @@ function getDropdownActions(): DropdownMenuItem[][] {
         icon: 'i-heroicons-clipboard',
         color: 'primary',
         async onSelect(_e) {
-          const label = `SSH key: ${get(rowSelection)!.name}.pub for account: ${get(rowSelection)!.account}\n\nFingerprint: ${get(rowSelection)!.fingerprint}\n\nContact info: ${get(rowSelection)!.admin} - ${get(rowSelection)!.contact}`
-          navigator.clipboard.writeText(`${label}\nPublick key:\n${get(rowSelection)!.pubkey}\n`)
+          let account = ''
+          if (get(rowSelection)!.account)
+            account += ` for account: ${get(rowSelection)!.account}`
+          let contact = ''
+          if (get(rowSelection)!.admin)
+            contact += get(rowSelection)!.admin
+          if (get(rowSelection)!.contact)
+            contact += ' ' + get(rowSelection)!.contact
+          if (contact)
+            contact = `Contact info: ${contact}\n\n`
+          const header = `SSH key: ${get(rowSelection)!.name}.pub${account}\n\nFingerprint: ${get(rowSelection)!.fingerprint}\n\n${contact}`
+          navigator.clipboard.writeText(`${header}Public key:\n${get(rowSelection)!.pubkey}\n`)
           toast.add({ title: `Public key copied`, description: `` })
         }
       },
