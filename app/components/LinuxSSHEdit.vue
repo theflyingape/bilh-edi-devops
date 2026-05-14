@@ -103,7 +103,7 @@
             </UFormField>
           </div>
           <div class="self-center">
-            <UTextarea v-model="ssh.pubkey" class="font-mono" size="sm" color="neutral" icon="i-lucide-file-key" autoresize :cols="100" :rows="6" :maxrows="12" placeholder="… SSH Public key to use as authentication into remote server …" :ui="{ trailing: 'pr-0.5' }">
+            <UTextarea v-model="ssh.pubkey" class="font-mono" size="sm" color="neutral" icon="i-lucide-file-key" disabled autoresize :cols="100" :rows="6" :maxrows="12" placeholder="… SSH Public key to use as authentication into remote server …" :ui="{ trailing: 'pr-0.5' }">
               <template v-if="ssh.pubkey?.length" #trailing>
                 <UTooltip text="Copy Public key to clipboard" :content="{ side: 'top', sideOffset: 2 }">
                   <UButton :color="pkCopied ? 'success' : 'neutral'" :icon="pkCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="acopy(ssh.pubkey, 3)" />
