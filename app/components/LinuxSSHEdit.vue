@@ -10,8 +10,8 @@
     <template #body>
       <UForm @submit.prevent="async () => {
         ssh.production = get(production)
-        ssh.created = created.toDate(getLocalTimeZone()).toLocaleDateString()
-        ssh.reviewby = reviewby.toDate(getLocalTimeZone()).toLocaleDateString()
+        ssh.created = get(useDateFormat(created.toDate(getLocalTimeZone()).toLocaleDateString(), 'YYYY-MM-DD')).toString()
+        ssh.reviewby = get(useDateFormat(reviewby.toDate(getLocalTimeZone()).toLocaleDateString(), 'YYYY-MM-DD')).toString()
         await endpoint<hcieResponse<ssh[]>>(hcie, `ssh/${ssh.name}`, ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
           if (res && res.status == 'ERR') {
             console.error('ssh key failure:', res.error)
