@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 defineProps<{
-  os: string
+  os?: string
   label?: string
   to?: string
 }>()

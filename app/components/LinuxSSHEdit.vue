@@ -43,7 +43,7 @@
               <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="6" pattern="^.+\.rsa$" :disabled="Boolean(ssh.fingerprint?.length)" :ui="{ trailing: 'pr-0.5' }">
                 <template v-if="ssh.name?.length" #trailing>
                   <UTooltip text="Copy full path to clipboard" :content="{ side: 'right', sideOffset: 2 }">
-                    <UButton :color="copied ? 'success' : 'neutral'" :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="copy(`/files/etc/ssh/${ssh.name}`)" />
+                    <UButton :color="fnCopied ? 'success' : 'neutral'" :icon="fnCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="acopy(`/files/etc/ssh/${ssh.name}`, 1)" />
                   </UTooltip>
                 </template>
               </UInput>
@@ -79,7 +79,7 @@
               <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" disabled color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="5" :ui="{ trailing: 'pr-0.5' }">
                 <template v-if="ssh.fingerprint?.length" #trailing>
                   <UTooltip text="Copy fingerprint to clipboard" :content="{ side: 'top', sideOffset: 2 }">
-                    <UButton :color="copied ? 'success' : 'neutral'" :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="copy(ssh.fingerprint)" />
+                    <UButton :color="fpCopied ? 'success' : 'neutral'" :icon="fpCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="acopy(ssh.fingerprint, 2)" />
                   </UTooltip>
                 </template>
               </UTextarea>
@@ -106,7 +106,7 @@
             <UTextarea v-model="ssh.pubkey" class="font-mono" size="sm" color="neutral" icon="i-lucide-file-key" autoresize :cols="100" :rows="6" :maxrows="12" placeholder="… SSH Public key to use as Authorization into remote server …" :ui="{ trailing: 'pr-0.5' }">
               <template v-if="ssh.pubkey?.length" #trailing>
                 <UTooltip text="Copy Public key to clipboard" :content="{ side: 'top', sideOffset: 2 }">
-                  <UButton :color="copied ? 'success' : 'neutral'" :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="copy(ssh.pubkey)" />
+                  <UButton :color="pkCopied ? 'success' : 'neutral'" :icon="pkCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="acopy(ssh.pubkey, 3)" />
                 </UTooltip>
               </template>
             </UTextarea>
@@ -130,7 +130,7 @@
 
 <script setup lang="ts">
 import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
-import { get, set, useClipboard } from '@vueuse/core'
+import { get, set } from '@vueuse/core'
 
 const props = defineProps<{
   title?: string
@@ -139,16 +139,20 @@ const props = defineProps<{
   ssh: ssh
 }>()
 
+const ssh = ref(props.ssh)
+const emit = defineEmits<{ close: [boolean] }>()
+
 defineShortcuts({
   escape: () => emit('close', false)
 })
 
-const { copy, copied } = useClipboard()
+const fnCopied = ref(false)
+const fpCopied = ref(false)
+const pkCopied = ref(false)
+
 const production = ref('')
 const items = ref([])
-const emit = defineEmits<{ close: [boolean] }>()
 const { endpoint, loadProductions, Productions } = useIrisSessions()
-const ssh = ref(props.ssh)
 const disabled = ref(computed(() => Boolean(!get(production) || get(ssh).name!.length < 6 || !get(ssh).name!.endsWith('.rsa'))))
 
 let ds = (get(ssh).created || today(getLocalTimeZone()).toString()).split('-')
@@ -156,6 +160,30 @@ const created = shallowRef(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), 
 
 ds = (get(ssh).reviewby || today(getLocalTimeZone()).toString()).split('-')
 const reviewby = shallowRef(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), parseInt(ds[2]!)))
+
+function acopy(text: string, which: number) {
+  navigator.clipboard.writeText(text)
+  switch (which) {
+    case 1:
+      set(fnCopied, true)
+      setTimeout(() => {
+        set(fnCopied, false)
+      }, 1500)
+      break
+    case 2:
+      set(fpCopied, true)
+      setTimeout(() => {
+        set(fpCopied, false)
+      }, 1500)
+      break
+    case 3:
+      set(pkCopied, true)
+      setTimeout(() => {
+        set(pkCopied, false)
+      }, 1500)
+      break
+  }
+}
 
 async function loadItems() {
   const instance = 'Test'
