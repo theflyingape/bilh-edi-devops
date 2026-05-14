@@ -39,8 +39,14 @@
             </UTooltip>
           </div>
           <div class="flex justify-between">
-            <UFormField class="w-3/4" label="Name" help="keep name (.rsa only) simple off its targeted use" required>
-              <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="6" pattern="^.+\.rsa$" :disabled="Boolean(ssh.fingerprint?.length)" />
+            <UFormField class="w-5/12" label="Name" help="keep name (.rsa only) simple off its targeted use" required>
+              <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="6" pattern="^.+\.rsa$" :disabled="Boolean(ssh.fingerprint?.length)" :ui="{ trailing: 'pr-0.5' }">
+                <template v-if="ssh.name?.length" #trailing>
+                  <UTooltip text="Copy full path to clipboard" :content="{ side: 'right', sideOffset: 2 }">
+                    <UButton :color="copied ? 'success' : 'neutral'" :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="copy(`/files/etc/ssh/${ssh.name}`)" />
+                  </UTooltip>
+                </template>
+              </UInput>
             </UFormField>
             <UFormField class="w-1/6" label="Created">
               <UPopover>
@@ -69,16 +75,22 @@
             </UFormField>
           </div>
           <div class="flex justify-between">
-            <UFormField class="w-3/4" label="Fingerprint">
-              <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" disabled color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="6" />
+            <UFormField class="w-5/6" label="Fingerprint">
+              <UTextarea v-model="ssh.fingerprint" class="font-mono" icon="i-lucide-fingerprint-pattern" disabled color="neutral" variant="soft" autoresize :cols="80" :rows="2" :maxrows="5" :ui="{ trailing: 'pr-0.5' }">
+                <template v-if="ssh.fingerprint?.length" #trailing>
+                  <UTooltip text="Copy fingerprint to clipboard" :content="{ side: 'top', sideOffset: 2 }">
+                    <UButton :color="copied ? 'success' : 'neutral'" :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="copy(ssh.fingerprint)" />
+                  </UTooltip>
+                </template>
+              </UTextarea>
             </UFormField>
           </div>
           <div class="flex justify-between">
-            <UFormField class="w-2/5" label="Account">
+            <UFormField class="w-5/12" label="Account">
               <UInput v-model="ssh.account" class="w-full" placeholder="login account name" icon="i-lucide-user" />
             </UFormField>
             <UFormField label="@" />
-            <UFormField class="w-2/5" label="Asset">
+            <UFormField class="w-11/24" label="Asset">
               <UInput v-model="ssh.asset" class="w-full" placeholder="remote endpoint" icon="i-lucide-arrow-big-right-dash" />
             </UFormField>
           </div>
@@ -91,7 +103,13 @@
             </UFormField>
           </div>
           <div class="self-center">
-            <UTextarea v-model="ssh.pubkey" class="font-mono" color="neutral" icon="i-lucide-file-key" autoresize :cols="96" :rows="6" :maxrows="12" placeholder="… SSH Public key to use as Authorization into remote server …" />
+            <UTextarea v-model="ssh.pubkey" class="font-mono" size="sm" color="neutral" icon="i-lucide-file-key" autoresize :cols="100" :rows="6" :maxrows="12" placeholder="… SSH Public key to use as Authorization into remote server …" :ui="{ trailing: 'pr-0.5' }">
+              <template v-if="ssh.pubkey?.length" #trailing>
+                <UTooltip text="Copy Public key to clipboard" :content="{ side: 'top', sideOffset: 2 }">
+                  <UButton :color="copied ? 'success' : 'neutral'" :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="copy(ssh.pubkey)" />
+                </UTooltip>
+              </template>
+            </UTextarea>
           </div>
           <div class="flex gap-x-2 justify-end">
             <div>
@@ -112,7 +130,7 @@
 
 <script setup lang="ts">
 import { CalendarDate, getLocalTimeZone, today } from '@internationalized/date'
-import { get, set } from '@vueuse/core'
+import { get, set, useClipboard } from '@vueuse/core'
 
 const props = defineProps<{
   title?: string
@@ -125,6 +143,7 @@ defineShortcuts({
   escape: () => emit('close', false)
 })
 
+const { copy, copied } = useClipboard()
 const production = ref('')
 const items = ref([])
 const emit = defineEmits<{ close: [boolean] }>()
