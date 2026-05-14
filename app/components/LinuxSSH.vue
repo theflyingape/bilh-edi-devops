@@ -222,7 +222,7 @@ async function editKey(generate = false) {
     contact: '',
     comment: '',
     who: get(user).id,
-    created: get(useDateFormat(useNow(), 'YYYY-MM-DD')),
+    created: get(useDateFormat(useNow().value.valueOf(), 'YYYY-MM-DD')),
     reviewby: get(useDateFormat(useNow().value.valueOf() + 365 * 86400000, 'YYYY-MM-DD')),
     pubkey: '',
     interfaces: [],
