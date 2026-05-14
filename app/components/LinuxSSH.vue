@@ -134,8 +134,8 @@ function getDropdownActions(): DropdownMenuItem[][] {
           const htmlString = `${header}<p><b>Public key</b>:<br><code>${get(rowSelection)!.pubkey}</code></p>`
 
           // Create blobs for both rich and plain versions
-          const blobHtml = new Blob([htmlString], { type: "text/html" })
-          const blobText = new Blob([plainString], { type: "text/plain" })
+          const blobHtml = new Blob([htmlString], { type: 'text/html' })
+          const blobText = new Blob([plainString], { type: 'text/plain' })
           // Create the ClipboardItem
           const data = [
             new ClipboardItem({
