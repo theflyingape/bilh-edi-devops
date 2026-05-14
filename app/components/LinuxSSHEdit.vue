@@ -39,8 +39,8 @@
             </UTooltip>
           </div>
           <div class="flex justify-between">
-            <UFormField class="w-5/12" label="Name" help="keep name (.rsa only) simple off its targeted use" required>
-              <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="6" pattern="^.+\.rsa$" :disabled="Boolean(ssh.fingerprint?.length)" :ui="{ trailing: 'pr-0.5' }">
+            <UFormField class="w-15/24" label="Name" help="keep name (.rsa only) simple off its targeted use" required>
+              <UInput v-model="ssh.name" class="w-full" placeholder="SSH key filename.rsa" icon="i-lucide-building-2" minlength="6" maxlength="50" pattern="^.+\.rsa$" :disabled="Boolean(ssh.fingerprint?.length)" :ui="{ trailing: 'pr-0.5' }">
                 <template v-if="ssh.name?.length" #trailing>
                   <UTooltip text="Copy full path to clipboard" :content="{ side: 'right', sideOffset: 2 }">
                     <UButton :color="fnCopied ? 'success' : 'neutral'" :icon="fnCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="acopy(`/files/etc/ssh/${ssh.name}`, 1)" />
@@ -103,7 +103,7 @@
             </UFormField>
           </div>
           <div class="self-center">
-            <UTextarea v-model="ssh.pubkey" class="font-mono" size="sm" color="neutral" icon="i-lucide-file-key" autoresize :cols="100" :rows="6" :maxrows="12" placeholder="… SSH Public key to use as Authorization into remote server …" :ui="{ trailing: 'pr-0.5' }">
+            <UTextarea v-model="ssh.pubkey" class="font-mono" size="sm" color="neutral" icon="i-lucide-file-key" autoresize :cols="100" :rows="6" :maxrows="12" placeholder="… SSH Public key to use as authentication into remote server …" :ui="{ trailing: 'pr-0.5' }">
               <template v-if="ssh.pubkey?.length" #trailing>
                 <UTooltip text="Copy Public key to clipboard" :content="{ side: 'top', sideOffset: 2 }">
                   <UButton :color="pkCopied ? 'success' : 'neutral'" :icon="pkCopied ? 'i-lucide-copy-check' : 'i-lucide-copy'" variant="link" size="sm" @click="acopy(ssh.pubkey, 3)" />

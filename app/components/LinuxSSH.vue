@@ -97,12 +97,12 @@ function getDropdownActions(): DropdownMenuItem[][] {
         }
       },
       {
-        label: 'Email',
-        icon: 'i-lucide-mail',
+        label: 'Copy',
+        icon: 'i-heroicons-clipboard',
         color: 'primary',
         async onSelect(_e) {
-          const label = `${get(rowSelection)!.admin} ${get(rowSelection)!.comment ? '(' + get(rowSelection)!.comment + ')' : ''} ${get(rowSelection)!.contact ? '<' + get(rowSelection)!.contact + '>' : ''}`
-          navigator.clipboard.writeText(`${label}\n\n` + (get(rowSelection)!.name + '\n'))
+          const label = `${get(rowSelection)!.name}.pub :: ${get(rowSelection)!.account}\n\n${get(rowSelection)!.fingerprint}\n\n${get(rowSelection)!.admin} :: ${get(rowSelection)!.contact}\n\n`
+          navigator.clipboard.writeText(`${label}\n\n${get(rowSelection)!.pubkey}\n`)
           toast.add({ title: `Public key copied`, description: `` })
         }
       },
