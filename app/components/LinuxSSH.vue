@@ -129,9 +129,9 @@ function getDropdownActions(): DropdownMenuItem[][] {
           if (contact)
             contact = `Contact info: ${contact}`
 
-          header = `<p><b>SSH key</b>: <code>${get(rowSelection)!.name}.pub</code>${account}</p><br><p><b>Fingerprint</b>: <code>${get(rowSelection)!.fingerprint}</code></p><br><p>${contact}</p>`
+          header = `<p><b>SSH key</b>: <code>${get(rowSelection)!.name}.pub</code>${account}</p><p><b>Fingerprint</b>: <code>${get(rowSelection)!.fingerprint}</code></p><p>${contact}</p>`
           //  text/html
-          const htmlString = `${header}<br><p><b>Public key</b>:<br><pre>${get(rowSelection)!.pubkey}</pre></p>`
+          const htmlString = `${header}<p><b>Public key</b>:<br><code>${get(rowSelection)!.pubkey}</code></p>`
 
           // Create blobs for both rich and plain versions
           const blobHtml = new Blob([htmlString], { type: "text/html" })
@@ -189,7 +189,7 @@ async function loadKeys() {
   set(loading, true)
   set(data, [])
   if (useDevOps().dev) {
-    set(data, [{ production: 'BILHWORKDAY', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: '2026-06-18', reviewby: '2031-07-31', interfaces: ['bsGoAExeterTimecardPickupSftp', 'boGoATimecardDropoffSftp'], comments: ['comment 1', 'comment 2'] }, { production: 'BILHSFTP', name: 'BILH-TDBank.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Z', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'another key comment', created: '2026-01-03', reviewby: '2026-06-18' }])
+    set(data, [{ production: 'BILHWORKDAY', name: 'GoAnywhere.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Y', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'key comment', created: '2026-06-18', reviewby: '2031-07-31', interfaces: ['bsGoAExeterTimecardPickupSftp', 'boGoATimecardDropoffSftp'], comments: ['comment 1', 'comment 2'], pubkey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDq58x03c52w90UGjnjQ35OU65W14XBoLEC407ShqqKqttAib8nnNP1ZC9hp64+9b354/dN0GCe2hFVc4qKyfIlm1s1ZYq2DXKvtu4ug98q4nvMf9koD7ioOsYuC7Zc69bCZu4OsLX/HjB7H/PXmvKdyHUQ43Q9Gja+XmNEkG4MoqabudN7XB3BVW+05wA+s4LQqakQFMjG1BWb9rGhF2NJkYq0FwlP7AnX3q8exqkzKibqR07YcxtFy/oSJEXmBM5fLfCD5xVQeff5wgwb4vpjC+FX9ebMcYWoT+lRCPx26awECwhfdB3HfhciT0NeHF6rqCYmK+qooWc8fSm9emF0Ys2zTdywqM8UGELeBMWxaMLn5QmP0ZWKLdeWCHxQyMTEqwVy0NP7OsasIzMQMRAha5QYL4weTFhc4fP7LjfrXux80APtuIhkGdEfwaAPnSUL3J7xLG9Y6IATmSvDipC2pbcWZcGVn8VQ5SfGvQFQqd9TIj9Y0sShgkaq1B32qiyxKPLr6xb8m2xl7Wei39a1k1lWFinrMpfGFBPfvvD7cI3YcSrPxG6wsDK/m/loIxtr8RltqT/ruO9p5C0+hiCshTHuTYME9cdMkbTtJmFCo9n997/nB2ODVX1mtuicve/zpaNAgAD1TeWW3JruPS8EYpB68A1LAWWtYze35nDanQ== theflyingape@beelink' }, { production: 'BILHSFTP', name: 'BILH-TDBank.rsa', fingerprint: 'SHA256:hXxNzwhEE5OL/HXEcPUxwM5aupKm9A9ZjwheNlA2W2Z', account: 'BILH-Healthconnect', asset: 'sftp.bilh.org', admin: 'BILH IT', contact: 'nobody@mail.com', comment: 'another key comment', created: '2026-01-03', reviewby: '2026-06-18' }])
   } else {
     await endpoint<hcieResponse<ssh[]>>(instance, 'ssh').then((res) => {
       if (res && res.status == 'OK') {
