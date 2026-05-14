@@ -61,7 +61,7 @@
           </div>
           <div class="flex justify-between">
             <UFormField class="w-3/4" label="Comment">
-              <UInput v-model="ssh.comment" class="w-full" placeholder="public key comment" icon="i-lucide-id-card" />
+              <UInput v-model="ssh.comment" class="w-full" :placeholder="Boolean(ssh.fingerprint?.length) ? 'free text comment' : 'override new public key comment field'" icon="i-lucide-id-card" />
             </UFormField>
             <UFormField class="w-1/6" label="Review by">
               <UPopover>

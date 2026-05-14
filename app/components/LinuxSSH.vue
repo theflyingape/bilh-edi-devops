@@ -104,16 +104,46 @@ function getDropdownActions(): DropdownMenuItem[][] {
           let account = ''
           if (get(rowSelection)!.account)
             account += ` for account: ${get(rowSelection)!.account}`
+
           let contact = ''
           if (get(rowSelection)!.admin)
             contact += get(rowSelection)!.admin
           if (get(rowSelection)!.contact)
             contact += ' ' + get(rowSelection)!.contact
           if (contact)
-            contact = `Contact info: ${contact}\n\n`
-          const header = `SSH key: ${get(rowSelection)!.name}.pub${account}\n\nFingerprint: ${get(rowSelection)!.fingerprint}\n\n${contact}`
-          navigator.clipboard.writeText(`${header}Public key:\n${get(rowSelection)!.pubkey}\n`)
-          toast.add({ title: `Public key copied`, description: `` })
+            contact = `Contact info: ${contact}`
+
+          let header = `SSH key: ${get(rowSelection)!.name}.pub${account}\n\nFingerprint: ${get(rowSelection)!.fingerprint}\n\n${contact}`
+          //  text/plain
+          const plainString = `${header}Public key:\n${get(rowSelection)!.pubkey}\n`
+
+          account = ''
+          if (get(rowSelection)!.account)
+            account += ` <b>for account</b>: <code>${get(rowSelection)!.account}</code>`
+
+          contact = ''
+          if (get(rowSelection)!.admin)
+            contact += `<b>${get(rowSelection)!.admin}</b>`
+          if (get(rowSelection)!.contact)
+            contact += ' ' + get(rowSelection)!.contact
+          if (contact)
+            contact = `Contact info: ${contact}`
+
+          header = `<p><b>SSH key</b>: <code>${get(rowSelection)!.name}.pub</code>${account}</p><br><p><b>Fingerprint</b>: <code>${get(rowSelection)!.fingerprint}</code></p><br><p>${contact}</p>`
+          //  text/html
+          const htmlString = `${header}<br><p><b>Public key</b>:<br><pre>${get(rowSelection)!.pubkey}</pre></p>`
+
+          // Create blobs for both rich and plain versions
+          const blobHtml = new Blob([htmlString], { type: "text/html" })
+          const blobText = new Blob([plainString], { type: "text/plain" })
+          // Create the ClipboardItem
+          const data = [
+            new ClipboardItem({
+              ['text/html']: blobHtml, ['text/plain']: blobText
+            })
+          ]
+          navigator.clipboard.write(data)
+          toast.add({ title: `Public key copied`, description: `with supporting fields` })
         }
       },
       {
