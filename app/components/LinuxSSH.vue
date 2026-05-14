@@ -97,12 +97,12 @@ function getDropdownActions(): DropdownMenuItem[][] {
         }
       },
       {
-        label: 'Copy',
+        label: 'Copy fields',
         icon: 'i-heroicons-clipboard',
         color: 'primary',
         async onSelect(_e) {
-          const label = `${get(rowSelection)!.name}.pub :: ${get(rowSelection)!.account}\n\n${get(rowSelection)!.fingerprint}\n\n${get(rowSelection)!.admin} :: ${get(rowSelection)!.contact}\n\n`
-          navigator.clipboard.writeText(`${label}\n\n${get(rowSelection)!.pubkey}\n`)
+          const label = `SSH key: ${get(rowSelection)!.name}.pub for account: ${get(rowSelection)!.account}\n\nFingerprint: ${get(rowSelection)!.fingerprint}\n\nContact info: ${get(rowSelection)!.admin} - ${get(rowSelection)!.contact}`
+          navigator.clipboard.writeText(`${label}\nPublick key:\n${get(rowSelection)!.pubkey}\n`)
           toast.add({ title: `Public key copied`, description: `` })
         }
       },
