@@ -156,10 +156,10 @@ const { endpoint, loadProductions, Productions } = useIrisSessions()
 const disabled = ref(computed(() => Boolean(!get(production) || get(ssh).name!.length < 6 || !get(ssh).name!.endsWith('.rsa'))))
 
 let ds = (get(ssh).created || today(getLocalTimeZone()).toString()).split('-')
-const created = shallowRef(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), parseInt(ds[2]!)))
+const created = ref(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), parseInt(ds[2]!)))
 
 ds = (get(ssh).reviewby || today(getLocalTimeZone()).toString()).split('-')
-const reviewby = shallowRef(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), parseInt(ds[2]!)))
+const reviewby = ref(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), parseInt(ds[2]!)))
 
 function acopy(text: string, which: number) {
   navigator.clipboard.writeText(text)
