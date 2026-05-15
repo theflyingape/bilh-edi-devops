@@ -18,21 +18,19 @@
       <USeparator />
       <UTabs v-model="adminTab" orientation="vertical" :items="adminItems" size="xl" color="info" variant="link" class="items-start" :ui="{ list: 'items-start' }">
         <template #edi>
-          <div class="flex flex-wrap gap-2 justify-around">
-            <div>
-              <TokensByUser />
-            </div>
+          <div class="flex flex-wrap gap-2">
+            <TokensByUser />
           </div>
         </template>
         <template #odba>
-          <div class="flex flex-wrap gap-2 justify-around">
+          <div class="flex flex-wrap gap-2">
             <div v-for="(hcie, index) in infrastructure" :key="index">
               <IrisMirrorStatus v-if="hcie.app == 'Health Connect'" :hcie="index" />
             </div>
           </div>
         </template>
         <template #linux>
-          <div class="flex flex-wrap gap-2 justify-around">
+          <div class="flex flex-wrap gap-2">
             <div v-for="(hcie, index) in infrastructure" :key="index">
               <UCard v-if="hcie.app == 'Health Connect' || isSysOps">
                 <template #default>

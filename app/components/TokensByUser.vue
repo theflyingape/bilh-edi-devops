@@ -2,14 +2,14 @@
 <template>
   <UCard v-model="portal" variant="subtle">
     <template #default>
-      <div class="grid grid-cols-4">
-        <UChip v-for="(ts, index) in portal.logins" :key="index" :color="aging[index]" inset size="xs">
-          <UTooltip :text="ago(new Date(ts).toLocaleString()) || 'not known'" arrow :content="{ side: 'right', sideOffset: 2 }">
-            <UBadge class="rounded-full text-neutral" :color="aging[index]" variant="soft">
+      <div class="grid grid-cols-4 gap-4">
+        <UTooltip v-for="(ts, index) in portal.logins" :key="index" :text="ago(new Date(ts).toLocaleString()) || 'not known'" arrow :content="{ side: 'right', sideOffset: 2 }">
+          <UChip :color="aging[index]" inset size="xs">
+            <UBadge class="p-2 rounded-full text-neutral" :color="aging[index]" variant="soft">
               {{ portal.online[index] }}
             </UBadge>
-          </UTooltip>
-        </UChip>
+          </UChip>
+        </UTooltip>
       </div>
     </template>
     <template #footer>
