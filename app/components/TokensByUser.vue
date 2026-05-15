@@ -2,18 +2,20 @@
 <template>
   <UCard v-model="portal" variant="subtle">
     <template #default>
-      <div class="grid grid-cols-4 gap-4">
-        <UTooltip v-for="(ts, index) in portal.logins" :key="index" :text="ago(new Date(ts).toLocaleString()) || 'not known'" arrow :content="{ side: 'right', sideOffset: 2 }">
-          <UChip :color="aging[index]" inset size="xs">
-            <UBadge class="p-2 rounded-full text-neutral" :color="aging[index]" variant="soft">
-              {{ portal.online[index] }}
-            </UBadge>
-          </UChip>
-        </UTooltip>
+      <div class="grid grid-cols-8 gap-4">
+        <div v-for="(ts, index) in portal.logins" :key="index" class="col-span-2">
+          <UTooltip :text="ago(new Date(ts).toLocaleString()) || 'not known'" arrow :content="{ side: 'right', sideOffset: 2 }">
+            <UChip class="w-full" :color="aging[index]" inset size="xs">
+              <UBadge class="p-2 rounded-full justify-center text-neutral min-w-[120px] w-full" :color="aging[index]" variant="soft">
+                {{ portal.online[index] }}
+              </UBadge>
+            </UChip>
+          </UTooltip>
+        </div>
       </div>
     </template>
     <template #footer>
-      <div class="text-sm"><i>Visitors over the past 3 months</i></div>
+      <div class="justify-self-end text-sm"><i>Visitors over the past 3 months</i></div>
     </template>
   </UCard>
 </template>
@@ -27,6 +29,6 @@ const aging = shallowRef(<Array<'primary' | 'secondary' | 'neutral'>>[])
 
 onMounted(() => {
   who()
-  set(aging, get(portal).logins.map(val => (val - get(now).valueOf()) < (4 * 3600000) ? 'primary' : (val - get(now).valueOf()) < (8 * 3600000) ? 'secondary' : 'neutral'))
+  set(aging, get(portal).logins.map(val => (get(now).valueOf() - val) < (4 * 3600000) ? 'primary' : (get(now).valueOf() - val) < (8 * 3600000) ? 'secondary' : 'neutral'))
 })
 </script>
