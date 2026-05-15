@@ -2,7 +2,9 @@
 # 
 # invoked by server/routes/node-pty
 #
-let -n PORT=$(( ${@:$#} + 0 ))
+LAST="${@:$#}"
+[[ $LAST =~ ^[0-9]+$ ]] || LAST=22
+let -n PORT=$(( $LAST + 0 ))
 [ $PORT -lt 22 ] && PORT=22
 
 cd "`dirname $0`"
