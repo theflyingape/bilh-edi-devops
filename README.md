@@ -1,4 +1,4 @@
-Our [EDI DevOps](https://www.intersystems.com/lp/healthcare-interoperability-solutions/ "InterSystems Health Connect") spans multiple analysts, developers, and consultants with support from their [Technical PM](https://robert.hurst-ri.us/rob/artifacts), me. As a developer advocating **VS Code** use over the proprietary `Studio` IDE, it became imperative with the **2024** release that it was time to consolidate our KB/HOWTO, dashboards, monitors, reporting, tools, and utilities into one portal.
+Our [EDI DevOps](https://www.intersystems.com/lp/healthcare-interoperability-solutions/ "InterSystems Health Connect") spans multiple analysts, developers, and consultants with support from their [Technical PM](https://robert.hurst-us.net/rob/artifacts), me. As a developer advocating **VS Code** use over the proprietary `Studio` IDE, it became imperative with the **2024** release that it was time to consolidate our KB/HOWTO, dashboards, monitors, reporting, tools, and utilities into one portal.
 
 In steps [Code Server](https://code.visualstudio.com/docs/remote/vscode-server) to provide a centralized solution that resolves complexity for having to disparately install it on a variety of remote endpoints. Also, there are numerous activities needed to work off the host CLI, so providing a number of self "helpers" to [Xterm.js](https://xtermjs.org/) consoles is beneficial toward the team's overall technical maturity.
 
@@ -64,8 +64,8 @@ After your SSL directives within _your_ site httpd configuration, append:
     # Nuxt portal endpoint
     <Location "/devops">
         RequestHeader set X-Forwarded-Proto "https"
-        ProxyPass http://localhost:3000/devops
-        ProxyPassReverse http://localhost:3000/devops
+        ProxyPass http://localhost:6500/devops
+        ProxyPassReverse http://localhost:6500/devops
     </Location>
 ```
 
