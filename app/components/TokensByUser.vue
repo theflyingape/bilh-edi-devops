@@ -2,7 +2,7 @@
 <template>
   <UCard v-model="portal" variant="subtle">
     <template #default>
-      <div class="grid grid-cols-8 gap-4">
+      <div class="grid grid-cols-6 gap-3">
         <div v-for="(ts, index) in portal.logins" :key="index" class="col-span-2">
           <UTooltip :text="ago(new Date(ts).toLocaleString()) || 'not known'" arrow :content="{ side: 'right', sideOffset: 2 }">
             <UChip class="w-full" :color="aging[index]" inset size="xs">
@@ -24,11 +24,10 @@
 import { get, set } from '@vueuse/core'
 
 const { ago, portal, who } = useDevOps()
-const now = useNow()
 const aging = shallowRef(<Array<'primary' | 'secondary' | 'neutral'>>[])
 
 onMounted(() => {
   who()
-  set(aging, get(portal).logins.map(val => (get(now).valueOf() - val) < (4 * 3600000) ? 'primary' : (get(now).valueOf() - val) < (8 * 3600000) ? 'secondary' : 'neutral'))
+  set(aging, get(portal).logins.map(val => (Date.now() - val) < (4 * 3600000) ? 'primary' : (Date.now() - val) < (8 * 3600000) ? 'secondary' : 'neutral'))
 })
 </script>

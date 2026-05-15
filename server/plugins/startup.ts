@@ -11,12 +11,15 @@ export default defineNitroPlugin((nitroApp) => {
 
     const { tokensByUser } = useUserLogins()
     const filePath = path.join(process.cwd(), 'visitors.json')
-    const save = JSON.stringify(tokensByUser, (_, session) => {
+    const visitors = JSON.parse(JSON.stringify(tokensByUser, (_, session) => {
       if (session instanceof Map) {
         return Object.fromEntries(session)
       }
       return session.login || 0
-    }, 2)
-    fs.writeFileSync(filePath, save)
+    }))
+    fs.writeFileSync(filePath, JSON.stringify(Object.keys(visitors).sort().reduce((obj: { [key: string]: number }, user) => {
+      obj[user] = visitors[user]
+      return obj
+    }, {}), undefined, 2))
   })
 })
