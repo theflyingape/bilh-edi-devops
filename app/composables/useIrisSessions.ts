@@ -190,16 +190,41 @@ export default function useIrisTokens() {
         }
       : undefined
     if (iToken) {
-      set(user, {
-        id: get(credentials).username,
-        enabled: true,
-        groups: ['sysadm', 'irisadm', 'irisdev'],
-        roles: ['%Manager', '%Developer', '%Operator'],
-        name: 'Devlin Opster',
-        comment: 'Master Inventor',
-        loggedInAt: Date.now(),
-        scope: []
-      })
+      set(user, get(credentials).username == 'guest'
+        ? {
+            id: get(credentials).username,
+            enabled: true,
+            groups: [],
+            roles: [],
+            name: 'Visiting Guest',
+            comment: 'John Smith',
+            loggedInAt: Date.now(),
+            scope: []
+          }
+        : get(credentials).username == 'test'
+          ? {
+              id: get(credentials).username,
+              enabled: true,
+              groups: ['sysadm', 'irisadm', 'irisdev'],
+              roles: ['%Manager', '%Developer', '%Operator'],
+              name: 'Devlin Opster',
+              comment: 'Master Inventor',
+              loggedInAt: Date.now(),
+              scope: []
+            }
+          : {
+              id: '',
+              enabled: false,
+              groups: [],
+              roles: [],
+              name: '',
+              comment: '',
+              loggedInAt: 0,
+              scope: []
+            }
+      )
+      if (!get(user).enabled)
+        iToken = undefined
     } else {
       const auth = btoa(`${username}:${password}`)
       await fetch(`https://${host(hcie)}${API}/login`, {
@@ -212,7 +237,7 @@ export default function useIrisTokens() {
             iToken = tokens.get(hcie)
           })
         } catch (err) {
-          console.error(err)
+          console.error('getSession', err)
         }
       })
     }

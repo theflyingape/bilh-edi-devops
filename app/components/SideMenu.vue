@@ -38,7 +38,8 @@
                 <UInput v-model="credentials.password" type="password" placeholder="BILH password" />
               </UFormField>
             </div>
-            <div class="flex justify-end pt-8">
+            <div class="justify-self-end pt-8 text-error">
+              {{ loginError }} &nbsp;
               <SubmitButton :disabled="credentials.username.length < 3 || credentials.password.length < 6">Login</SubmitButton>
             </div>
           </UForm>
@@ -121,6 +122,7 @@ import { ModalInfo } from '#components'
 const { status, signIn, signOut } = useAuth()
 const { isAdmin } = useDevOps()
 const { credentials, user, getSession, endSession, endpoint } = useIrisSessions()
+const loginError = ref('')
 const overlay = useOverlay()
 // const toast = useToast()
 
@@ -134,53 +136,59 @@ interface irisUser {
 
 //  authenticate against the development instance and render scope off the groups returned
 async function login() {
+  set(loginError, '')
   const username = get(credentials).username
   await getSession('Dev', username, get(credentials).password).then(async (jwt) => {
-    Object.assign(get(credentials).IRIStoken, jwt)
-    await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
-      await endpoint<irisUser>('Dev', `user/${username}`).then(async (iris) => {
-        if (!get(user).enabled) {
-          if (iris?.Enabled) {
-            set(user, {
-              id: username,
-              enabled: true,
-              groups: iris.Groups,
-              roles: iris.Roles,
-              name: iris.FullName,
-              comment: iris.Comment,
-              loggedInAt: Date.now(),
-              scope: []
-            })
-          } else {
-            set(user, {
-              id: username,
-              enabled: get(user).enabled,
-              groups: [],
-              roles: [],
-              name: '',
-              comment: '',
-              loggedInAt: 0,
-              scope: []
-            })
+    if (jwt) {
+      Object.assign(get(credentials).IRIStoken, jwt)
+      await signIn(get(credentials), { callbackUrl: '/home', external: false }).then(async () => {
+        await endpoint<irisUser>('Dev', `user/${username}`).then(async (iris) => {
+          if (!get(user).enabled) {
+            if (iris?.Enabled) {
+              set(user, {
+                id: username,
+                enabled: true,
+                groups: iris.Groups,
+                roles: iris.Roles,
+                name: iris.FullName,
+                comment: iris.Comment,
+                loggedInAt: Date.now(),
+                scope: []
+              })
+            } else {
+              set(user, {
+                id: username,
+                enabled: get(user).enabled,
+                groups: [],
+                roles: [],
+                name: '',
+                comment: '',
+                loggedInAt: 0,
+                scope: []
+              })
+            }
           }
-        }
-      }).catch(async (err) => {
-        open(`${err.statusCode}: ${err.statusMessage}`)
+        }).catch(async (err) => {
+          open(`${err.statusCode}: ${err.statusMessage}`)
+        })
+        if (get(user).enabled) {
+          if (get(user).groups?.includes('sysadm') || get(user).groups?.includes('wheel')) get(user).scope.push('systems')
+          if (get(user).groups?.includes('irisadm')) get(user).scope.push('admin')
+          if (get(user).groups?.includes('irisdev')) get(user).scope.push('developer')
+          if (get(user).groups?.includes('grp-os-shell-access')) get(user).scope.push('analyst')
+          if (!get(user).scope?.length) get(user).scope.push('user')
+          // toast.add({ title: `Hello, ${get(user).scope[0]}!`, description: `logged on ${new Date().toTimeString()}` })
+        } else
+          get(user).scope.push('guest')
+        //  fini
+        setTimeout(() => {
+          set(useDevOps().sideMenu, false)
+        }, 1000)
       })
-      if (get(user).enabled) {
-        if (get(user).groups?.includes('sysadm') || get(user).groups?.includes('wheel')) get(user).scope.push('systems')
-        if (get(user).groups?.includes('irisadm')) get(user).scope.push('admin')
-        if (get(user).groups?.includes('irisdev')) get(user).scope.push('developer')
-        if (get(user).groups?.includes('grp-os-shell-access')) get(user).scope.push('analyst')
-        if (!get(user).scope?.length) get(user).scope.push('user')
-        // toast.add({ title: `Hello, ${get(user).scope[0]}!`, description: `logged on ${new Date().toTimeString()}` })
-      } else
-        get(user).scope.push('guest')
-      //  fini
-      setTimeout(() => {
-        set(useDevOps().sideMenu, false)
-      }, 1000)
-    })
+    } else {
+      credentials.value.password = ''
+      set(loginError, '? invalid login attempt')
+    }
   })
 }
 
