@@ -28,6 +28,6 @@ const aging = shallowRef(<Array<'primary' | 'secondary' | 'neutral'>>[])
 
 onMounted(() => {
   who()
-  set(aging, get(portal).logins.map(val => (Date.now() - val) < (4 * 3600000) ? 'primary' : (Date.now() - val) < (8 * 3600000) ? 'secondary' : 'neutral'))
+  set(aging, get(portal).logins.map(val => (Date.now() - val) < (6 * 60 * 60 * 1000) ? 'primary' : (Date.now() - val) < (12 * 60 * 60 * 1000) ? 'secondary' : 'neutral'))
 })
 </script>
