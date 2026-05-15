@@ -26,8 +26,7 @@
 const { ago, portal, who } = useDevOps()
 
 function aging(ts: number): 'primary' | 'secondary' | 'neutral' {
-  console.log(ts)
-  return (Date.now() - ts) < (6 * 60 * 60 * 1000) ? 'primary' : (Date.now() - ts) < (12 * 60 * 60 * 1000) ? 'secondary' : 'neutral'
+  return (Date.now() - ts) < (12 * 60 * 60 * 1000) ? 'primary' : (Date.now() - ts) < (72 * 60 * 60 * 1000) ? 'secondary' : 'neutral'
 }
 
 onMounted(() => {

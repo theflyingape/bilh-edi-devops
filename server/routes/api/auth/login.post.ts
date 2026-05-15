@@ -87,9 +87,9 @@ export default defineEventHandler(async (event) => {
       log('LOG_NOTICE', `${username} ${event} ${REFRESH_TOKEN_TTL} refresh ${ACCESS_TOKEN_TTL} access (${JSON.stringify(token)?.length} bytes)`)
       return token
     } catch (err) {
-      console.error(err)
+      console.error('login', err)
       setResponseStatus(event, 401, `${err}`)
-      log('LOG_NOTICE', `${username} ${event} ${JSON.stringify(err)}`)
+      log('LOG_ERR', `${username} ${event} ${JSON.stringify(err)}`)
     }
   }
 })

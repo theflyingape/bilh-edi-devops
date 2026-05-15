@@ -5,11 +5,12 @@ import useUserLogins from '../user-logins'
 
 export default defineEventHandler(async (event) => {
   const { SECRET, tokensByUser } = useUserLogins()
-  const authorizationHeader = getRequestHeader(event, 'Authorization')
-  const body = await readBody<{ accessToken: string, refreshToken: string }>(event)
 
   // Verify
   try {
+    const authorizationHeader = getRequestHeader(event, 'Authorization')
+    const body = await readBody<{ accessToken: string, refreshToken: string }>(event)
+
     //  const accessToken = body.accessToken
     const refreshToken = body.refreshToken
 
@@ -26,7 +27,6 @@ export default defineEventHandler(async (event) => {
     if (session.auth.id) {
       const userTokens = tokensByUser.get(session.auth.id)
       if (userTokens) {
-      //  tokensByUser.delete(session.id)
         userTokens.access = new Map()
         userTokens.refresh = new Map()
       }
@@ -35,8 +35,8 @@ export default defineEventHandler(async (event) => {
       setResponseStatus(event, 200, `${session.auth.id} logged out`)
     }
   } catch (err) {
-    console.error(err)
-    return dumpSession(`${err}`, 'refresh error')
+    console.error('logout', err)
+    return dumpSession(`${err}`, 'logout error')
   }
 
   function dumpSession(respond: string, message: string) {

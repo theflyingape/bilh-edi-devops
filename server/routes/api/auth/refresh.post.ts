@@ -5,11 +5,12 @@ import useUserLogins from '../user-logins'
 
 export default eventHandler(async (event) => {
   const { ACCESS_TOKEN_TTL, SECRET, extractToken, tokensByUser } = useUserLogins()
-  const authorizationHeader = getRequestHeader(event, 'Authorization')
-  const body = await readBody<{ accessToken: string, refreshToken: string }>(event)
 
   // Verify
   try {
+    const authorizationHeader = getRequestHeader(event, 'Authorization')
+    const body = await readBody<{ accessToken: string, refreshToken: string }>(event)
+
     //  const accessToken = body.accessToken
     const refreshToken = body.refreshToken
 
@@ -46,7 +47,7 @@ export default eventHandler(async (event) => {
     setResponseStatus(event, 200, 'refresh ok')
     return { token: { accessToken: newAccessToken, refreshToken: refreshToken } }
   } catch (err) {
-    console.error(err)
+    console.error('refresh', err)
     return dumpSession(`${err}`, 'refresh error')
   }
 
