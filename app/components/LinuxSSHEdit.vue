@@ -9,8 +9,7 @@
   }">
     <template #body>
       <UForm @submit.prevent="async () => {
-        ssh.production = get(production)
-        ssh.created = get(useDateFormat(created.toDate(getLocalTimeZone()).toLocaleDateString(), 'YYYY-MM-DD')).toString()
+        //  ssh.production = get(production)
         ssh.reviewby = get(useDateFormat(reviewby.toDate(getLocalTimeZone()).toLocaleDateString(), 'YYYY-MM-DD')).toString()
         await endpoint<hcieResponse<ssh[]>>(hcie, `ssh/${ssh.name}`, ssh.fingerprint ? 'UPDATE' : 'POST', ssh).then((res) => {
           if (res && res.status == 'ERR') {
@@ -24,7 +23,7 @@
         <div class="flex flex-col gap-y-4">
           <div class="flex justify-between">
             <UFormField label="Used in Production" required>
-              <USelect v-model="production" placeholder="production" class="max-h-fit" :ui="{ content: 'min-w-fit' }" :items="items" @change.prevent="loadHosts('Test', production)" />
+              <USelect v-model="ssh.production" placeholder="production" class="max-h-fit" :ui="{ content: 'min-w-fit' }" :items="items" @change.prevent="loadHosts('Test', ssh.production!)" />
             </UFormField>
             <UTooltip text="Business Hosts using this key in TEST" :content="{ side: 'top', sideOffset: 2 }">
               <UCard v-if="ssh.interfaces?.length" variant="subtle">
@@ -152,10 +151,10 @@ const fnCopied = ref(false)
 const fpCopied = ref(false)
 const pkCopied = ref(false)
 
-const production = ref('')
+//  const production = ref('')
 const items = ref([])
 const { endpoint, loadProductions, Productions } = useIrisSessions()
-const disabled = ref(computed(() => Boolean(!get(production) || get(ssh).name!.length < 6 || !get(ssh).name!.endsWith('.rsa'))))
+const disabled = ref(computed(() => Boolean(!get(ssh).production || get(ssh).name!.length < 6 || !get(ssh).name!.endsWith('.rsa'))))
 
 let ds = (get(ssh).created || today(getLocalTimeZone()).toString()).split('-')
 const created = ref(new CalendarDate(parseInt(ds[0]!), parseInt(ds[1]!), parseInt(ds[2]!)))
@@ -192,24 +191,28 @@ async function loadItems() {
   if (instance) {
     await loadProductions(instance).then(async () => {
       set(items, Productions.get(instance)!.productions)
-      set(production, get(ssh).production || '')
+      //  set(production, get(ssh).production || '')
     })
   }
 }
 
 async function loadHosts(instance: HCIE, production: string) {
-  await endpoint<hcieResponse<sshprod>>(instance, `ssh/${ssh.value.name}?${production}`).then((res) => {
-    if (res && res.status == 'ERR') {
-      console.error(`ssh key lookup in ${production}:`, res.error)
-    } else {
-      ssh.value.interfaces = res?.data.interfaces
-      ssh.value.comments = res?.data.comments
-    }
-  })
+  ssh.value.interfaces = []
+  ssh.value.comments = []
+  if (production) {
+    await endpoint<hcieResponse<sshprod>>(instance, `ssh/${ssh.value.name}?${production}`).then((res) => {
+      if (res && res.status == 'ERR') {
+        console.error(`ssh key lookup in ${production}:`, res.error)
+      } else {
+        ssh.value.interfaces = res?.data.interfaces
+        ssh.value.comments = res?.data.comments
+      }
+    })
+  }
 }
 
 onMounted(async () => {
   await loadItems()
-  await loadHosts('Test', get(production))
+  await loadHosts('Test', get(ssh).production!)
 })
 </script>
