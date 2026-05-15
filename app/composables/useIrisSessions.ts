@@ -264,7 +264,7 @@ export default function useIrisTokens() {
     const jwt = tokens.get(hcie)
     if (jwt && jwt.exp) {
       const secs = jwt.exp - Date.now() / 1000
-      if (secs > 2) return
+      if (secs > 3) return
     }
 
     await fetch(`https://${host(hcie)}${API}/refresh`, {
@@ -279,10 +279,11 @@ export default function useIrisTokens() {
           tokens.set(hcie, jwt)
         })
       } catch (err) {
-        console.error(err)
+        console.error(hcie, 'token', err)
+        tokens.delete(hcie)
       }
     }).catch((err) => {
-      console.error(err)
+      console.error(hcie, 'refresh', err)
       tokens.delete(hcie)
     })
   }
@@ -322,7 +323,7 @@ export default function useIrisTokens() {
             console.error(err)
           }
         }).catch((err) => {
-          console.error(err)
+          console.error('IRIS refresh', err)
         })
       })
     }
